@@ -11,11 +11,10 @@
     "url": "https://github.com/mohebifar/5to6"
   },
   "keywords": [
-    "es6",
-    "es-next",
-    "next",
     "es5",
-    "convertor"
+    "es6",
+    "transpiler",
+    "transpile"
   ],
   "author": "Mohamad Mohebifar <mohamad@mohebifar.com>",
   "license": "MIT",
