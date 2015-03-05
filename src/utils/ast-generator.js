@@ -40,3 +40,8 @@ export function read(js, options) {
   return acorn(js, options);
 
 }
+
+export default {
+  read: read,
+  readFile: readFile
+};

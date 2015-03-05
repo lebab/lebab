@@ -17,7 +17,6 @@ class Identifier extends BaseSyntax {
     super('Identifier');
 
     this.name = '';
-    this.body = new ClassBody();
   }
 
 }

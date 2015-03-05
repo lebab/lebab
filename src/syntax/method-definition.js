@@ -1,5 +1,6 @@
 import BaseSyntax from './base.js';
 import FunctionExpression from './function-expression.js';
+import Identifier from './identifier.js';
 
 /**
  * The class to define the MethodDefinition syntax
@@ -19,7 +20,7 @@ class MethodDefinition extends BaseSyntax {
 
     super('MethodDefinition');
 
-    this.key = {type: 'Identifier', name: ''};
+    this.key = new Identifier();
     this.class = _class;
     this.static = false;
     this.computed = false;
@@ -41,6 +42,14 @@ class MethodDefinition extends BaseSyntax {
 
   get body() {
     return this.value.body;
+  }
+
+  set params(params) {
+    this.value.params = params;
+  }
+
+  get params() {
+    return this.value.params;
   }
 
 }
