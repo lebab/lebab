@@ -26,6 +26,10 @@
     "acorn": "^0.11.0",
     "escodegen": "^1.6.1",
     "estraverse": "^1.9.1",
-    "esutils": "^1.1.6"
+    "esutils": "^1.1.6",
+    "lodash": "^3.3.1"
+  },
+  "devDependencies": {
+    "grunt-babel": "^4.0.0"
   }
 }
