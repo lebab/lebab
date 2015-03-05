@@ -13,6 +13,15 @@ var someClass = function () {
 someClass.prototype.someMethod = function (someParam) {
   console.log('The parameter is : ' + someParam);
 };
+
+Object.defineProperty(someClass.prototype, 'someAccessor', {
+  get: function () {
+    return this._some;
+  },
+  set: function (value) {
+    this._some = value;
+  }
+});
 ```
 
 ## Usage
@@ -36,6 +45,12 @@ class someClass {
     }
     someMethod(someParam) {
         console.log('The parameter is : ' + someParam);
+    }
+    get someAccessor() {
+        return this._some;
+    }
+    set someAccessor(value) {
+        this._some = value;
     }
 }
 ```

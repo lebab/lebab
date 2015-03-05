@@ -11,7 +11,8 @@ class Transformer {
 
   readFile(filename) {
     this.ast = astGenerator.readFile(filename, {
-      sync: true
+      sync: true,
+      ecmaVersion: 6
     });
   }
 
