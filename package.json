@@ -1,6 +1,6 @@
 {
   "name": "xto6",
-  "version": "1.0.0-alpha",
+  "version": "1.0.1-alpha",
   "description": "Turn your ES5 code into readable ES6",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "url": "https://github.com/mohebifar/5to6"
   },
   "bin": {
-    "xto6": "./bin"
+    "xto6": "./bin/index.js"
   },
   "keywords": [
     "es5",

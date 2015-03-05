@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var program = require('commander');
 var fs = require("fs");
 var each = require("lodash/collection/each");
