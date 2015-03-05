@@ -23,30 +23,23 @@ var functions = [];
 
 
 function functionDetector(node, parent) {
-  var lastIdentifier;
+  var lastIdentifier, id;
 
-  if (node.type === 'VariableDeclarator' && node.init && node.init.type === 'FunctionExpression') {
-
-    lastIdentifier = node.id;
-
-  } else if (node.type === 'FunctionDeclaration') {
-
-    var id;
-
-    if (node.id) {
-      id = node.id;
-    } else if (lastIdentifier) {
-      id = lastIdentifier;
-    }
-
-    if (id !== null) {
-      functions.push({
-        id: id,
-        parent: parent,
-        node: node
-      });
-    }
-
+  if (node.type === 'FunctionDeclaration') {
+    id = node.id;
+    functions.push({
+      id: id,
+      parent: parent,
+      node: node
+    });
+  } else if (node.type === 'VariableDeclarator' && node.init.type === 'FunctionExpression') {
+    parent._replace = node.init;
+    id = node.id;
+    functions.push({
+      id: id,
+      parent: parent,
+      node: node.init
+    });
   }
 
 }
@@ -64,10 +57,16 @@ function classMaker(node, parent) {
         if (_function.id.name === functionName) {
           if (typeof _function.class === 'undefined') {
             let createdClass = new ClassDeclaration();
+            let constructor = new MethodDefinition();
+            constructor.name = 'constructor';
+            constructor.body = _function.node.body;
+
             createdClass.name = functionName;
 
             _function.class = createdClass;
             _function.node._class = createdClass;
+
+            createdClass.body.addMethod(constructor, true);
           }
 
           let method = node.right;
@@ -92,15 +91,11 @@ function classMaker(node, parent) {
 }
 
 function classReplacement(node, parent) {
-  if (typeof node._class !== 'undefined') {
-    let constructor = new MethodDefinition();
-    constructor.name = 'constructor';
-    constructor.body = node.body;
-
-    node._class.body.addMethod(constructor, true);
-
+  if (node._class) {
     return node._class;
   } else if (node._remove) {
     this.remove();
+  } else if (node._replace) {
+    return node._replace._class;
   }
 }
