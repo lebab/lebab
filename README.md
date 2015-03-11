@@ -10,8 +10,12 @@ var someClass = function () {
   console.log('This is the constructor.');
 };
 
-someClass.prototype.someMethod = function (someParam) {
-  console.log('The parameter is : ' + someParam);
+someClass.prototype.someOuterMethod = someFunction;
+
+someClass.prototype.someInnerMethod = function (s, o, m, e, a, r, g) {
+  var result = s + o + m + e + a + r + g;
+  console.log(result);
+  return result;
 };
 
 Object.defineProperty(someClass.prototype, 'someAccessor', {
@@ -22,6 +26,10 @@ Object.defineProperty(someClass.prototype, 'someAccessor', {
     this._some = value;
   }
 });
+
+function someFunction(a, b) {
+  return a + b;
+}
 ```
 
 ## Usage
@@ -40,17 +48,30 @@ And the result for the above code is :
 
 ```js
 class someClass {
-    constructor() {
-        console.log('This is the constructor.');
-    }
-    someMethod(someParam) {
-        console.log('The parameter is : ' + someParam);
-    }
-    get someAccessor() {
-        return this._some;
-    }
-    set someAccessor(value) {
-        this._some = value;
-    }
+  constructor() {
+    console.log('This is the constructor.');
+  }
+
+  someOuterMethod() {
+    return someFunction.apply(this, arguments);
+  }
+
+  someInnerMethod(s, o, m, e, a, r, g) {
+    var result = s + o + m + e + a + r + g;
+    console.log(result);
+    return result;
+  }
+
+  get someAccessor() {
+    return this._some;
+  }
+
+  set someAccessor(value) {
+    this._some = value;
+  }
+}
+
+function someFunction(a, b) {
+  return a + b;
 }
 ```
