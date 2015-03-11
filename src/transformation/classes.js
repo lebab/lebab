@@ -1,8 +1,14 @@
 import estraverse from 'estraverse';
 import utils from 'util';
-import MethodDefinition from './../syntax/method-definition';
-import ClassBody from './../syntax/class-body';
+import MethodDefinition from './../syntax/method-definition.js';
+import ClassBody from './../syntax/class-body.js';
 import ClassDeclaration from './../syntax/class-declaration.js';
+import FunctionExpression from './../syntax/function-expression.js';
+import Identifier from './../syntax/identifier.js';
+import ThisExpression from './../syntax/this-expression.js';
+import MemberExpression from './../syntax/member-expression.js';
+import CallExpression from './../syntax/call-expression.js';
+import ReturnStatement from './../syntax/return-statement.js';
 
 export default
   function (ast) {
@@ -47,7 +53,7 @@ function functionDetector(node, parent) {
       parent: parent,
       node: node
     });
-  } else if (node.type === 'VariableDeclarator' && node.init.type === 'FunctionExpression') {
+  } else if (node.type === 'VariableDeclarator' && node.init && node.init.type === 'FunctionExpression') {
     parent._replace = node.init;
     id = node.id;
     functions.push({
@@ -64,7 +70,7 @@ function classMaker(node, parent) {
 
     if (node.left.object && node.left.object.property && node.left.object.property.name === 'prototype') {
 
-      var functionName = node.left.object.object.name;
+      let functionName = node.left.object.object.name;
 
       for (let i = 0; i < functions.length; i++) {
         let _function = functions[i];
@@ -75,8 +81,26 @@ function classMaker(node, parent) {
           let method = node.right;
           let createdMethod = new MethodDefinition();
 
-          createdMethod.body = method.body;
-          createdMethod.params = method.params;
+          if (method.type === 'Identifier') {
+
+            createdMethod.body =
+              new ReturnStatement(
+                new CallExpression(
+                  new MemberExpression(
+                    node.right,
+                    new Identifier('apply')
+                  ), [
+                    new ThisExpression(),
+                    new Identifier('arguments')
+                  ]
+                )
+              );
+
+          } else {
+            createdMethod.body = method.body;
+            createdMethod.params = method.params;
+          }
+
           createdMethod.name = node.left.property.name;
 
           _function.class.body.addMethod(createdMethod);
@@ -90,16 +114,13 @@ function classMaker(node, parent) {
 
     }
   } else if (
-    node.type === 'CallExpression' && node.callee && node.callee.type === 'MemberExpression'
-    && node.callee.object.name === 'Object'
-    && node.callee.property.name === 'defineProperty'
-    && node.arguments[0].type === 'MemberExpression'
-    && node.arguments[0].property.name === 'prototype'
-    && node.arguments[1].type === 'Literal'
+    node.type === 'CallExpression' && node.callee
+    && node.callee.type === 'MemberExpression' && node.callee.object.name === 'Object'
+    && node.callee.property.name === 'defineProperty' && node.arguments[0].type === 'MemberExpression'
+    && node.arguments[0].property.name === 'prototype' && node.arguments[1].type === 'Literal'
     && node.arguments[2].type === 'ObjectExpression'
   ) {
-    var functionName = node.arguments[0].object.name;
-
+    let functionName = node.arguments[0].object.name;
 
     for (let i = 0; i < functions.length; i++) {
       let _function = functions[i];
@@ -111,7 +132,7 @@ function classMaker(node, parent) {
         for (var j = 0; j < properties.length; j++) {
           let property = properties[j];
 
-          if(property.key.name !== 'get' && property.key.name !== 'set') {
+          if (property.key.name !== 'get' && property.key.name !== 'set') {
             continue;
           }
 
