@@ -1,9 +1,10 @@
 import BaseSyntax from './base.js';
+import BlockStatement from './block-statement.js';
 
 /**
- * The class to define the ClassBody syntax
+ * The class to define the FunctionExpression syntax
  *
- * @class ClassBody
+ * @class FunctionExpression
  */
 export default
 class FunctionExpression extends BaseSyntax {
@@ -16,12 +17,16 @@ class FunctionExpression extends BaseSyntax {
     constructor() {
     super('FunctionExpression');
 
-    this.body = [];
+    this.body = new BlockStatement();
     this.params = [];
     this.defaults = [];
     this.rest = null;
     this.generator = false;
     this.id = null;
+  }
+
+  appendToBody(statement) {
+    this.body.appendToBody(statement);
   }
 
 }

@@ -1,6 +1,7 @@
 import BaseSyntax from './base.js';
 import FunctionExpression from './function-expression.js';
 import Identifier from './identifier.js';
+import BlockStatement from './block-statement.js';
 
 /**
  * The class to define the MethodDefinition syntax
@@ -37,7 +38,13 @@ class MethodDefinition extends BaseSyntax {
   }
 
   set body(body) {
-    this.value.body = body;
+    if(BlockStatement.is(body)) {
+      this.value.body = body;
+    } else if(body instanceof Array) {
+      this.value.body.body = body;
+    } else {
+      this.value.body.body = [body];
+    }
   }
 
   get body() {

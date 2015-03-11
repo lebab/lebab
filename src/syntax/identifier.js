@@ -13,10 +13,10 @@ class Identifier extends BaseSyntax {
    *
    * @constructor
    */
-    constructor() {
+    constructor(name) {
     super('Identifier');
 
-    this.name = '';
+    this.name = name;
   }
 
 }
