@@ -1,9 +1,9 @@
 # xto6
 
-**xto6** transpiles your ES5 code to ES6.
+**xto6** transpiles your ES5 code to ES6. It works like other available transpilers (like babel and traceur) but in reverse order!
 
 ## Why ?
-Still coding in this way ? **Think twice !**
+Still coding this way ? Think twice !
 
 ```js
 var someClass = function () {
