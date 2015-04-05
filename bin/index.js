@@ -14,7 +14,7 @@ program.parse(process.argv);
 var errors = [],
   filenames = program.args;
 
-if(filenames.length === 0) {
+if (filenames.length === 0) {
   errors.push('File name is required.');
 }
 each(filenames, function (filename) {
@@ -23,7 +23,7 @@ each(filenames, function (filename) {
   }
 });
 
-if(! program.outFile) {
+if (!program.outFile) {
   program.outFile = 'output.js';
 }
 
