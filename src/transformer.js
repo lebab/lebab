@@ -29,8 +29,8 @@ class Transformer {
    *
    * @param string
    */
-  read(string) {
-    this.ast = astGenerator.read(string);
+  read(string, options = {}) {
+    this.ast = astGenerator.read(string, options);
   }
 
   /**

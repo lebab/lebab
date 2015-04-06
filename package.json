@@ -27,6 +27,7 @@
   "homepage": "https://github.com/mohebifar/xto6",
   "dependencies": {
     "acorn": "^0.11.0",
+    "coffee-script": "^1.9.1",
     "commander": "^2.6.0",
     "escodegen": "^1.6.1",
     "estraverse": "^1.9.1",

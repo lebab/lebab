@@ -1,5 +1,6 @@
 import acorn from 'acorn';
 import fs from 'fs';
+import coffee from 'coffee-script';
 
 /**
  * This function reads a js file and transforms it into AST
@@ -12,16 +13,17 @@ import fs from 'fs';
 export function readFile(file, options) {
   var ast;
 
+  if (typeof options.coffee === 'undefined') {
+    options.coffee = /\.coffee$/.test(file);
+  }
+
   if (options.sync) {
     var js = fs.readFileSync(file);
-    ast = acorn.parse(js, options);
-    return ast;
+    return read(js, options);
   } else {
     fs.readFile(function (js) {
-      ast = acorn.parse(js, options);
-
       if (options.callback) {
-        options.callback(ast);
+        options.callback(read(js, options));
       }
     });
   }
@@ -36,6 +38,10 @@ export function readFile(file, options) {
  * @returns {Object}
  */
 export function read(js, options) {
+
+  if (options.coffee) {
+    js = coffee.compile(js);
+  }
 
   return acorn.parse(js, options);
 
