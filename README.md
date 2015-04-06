@@ -2,6 +2,8 @@
 
 # xto6
 
+[![Join the chat at https://gitter.im/mohebifar/xto6](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mohebifar/xto6?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 **xto6** transpiles your ES5 code to ES6. It works like other available transpilers (like babel and traceur) but in reverse order!
 
 ## Why ?
