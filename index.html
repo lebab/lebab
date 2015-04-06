@@ -66,28 +66,28 @@
         <div class="try-live">
             <div class="col-md-6">
                 <pre id="editor">var someClass = function () {
-  console.log('This is the constructor.');
+    console.log('This is the constructor.');
 };
 
 someClass.prototype.someOuterMethod = someFunction;
 
 someClass.prototype.someInnerMethod = function (s, t) {
-  var result = s + t;
-  console.log(result);
-  return result;
+    var result = s + t;
+    console.log(result);
+    return result;
 };
 
 Object.defineProperty(someClass.prototype, 'someAccessor', {
-  get: function () {
-    return this._some;
-  },
-  set: function (value) {
-    this._some = value;
-  }
+    get: function () {
+      return this._some;
+    },
+    set: function (value) {
+      this._some = value;
+    }
 });
 
 function someFunction(a, b) {
-  return a + b;
+    return a + b;
 }</pre>
 
                 <p class="text-right">
