@@ -16,7 +16,7 @@ describe('Class transformation', function () {
     done();
   });
 
-  it('should not convert functions with prototype assignment to class', function (done) {
+  it('should convert functions with prototype assignment to class', function (done) {
     var script = "function someClass() {\n}\nsomeClass.prototype.someMethod = function(a, b) {\n}";
 
     transformer.read(script);
