@@ -44,7 +44,7 @@ Transpile your old-fashioned code using the `xto6` cli tool.
 xto6 es5.js -o es6.js
 ```
 
-And the result for the above code is :
+And the result for the code above is :
 
 ```js
 class someClass {
