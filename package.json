@@ -4,7 +4,7 @@
   "description": "Turn your ES5 code into readable ES6",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
