@@ -55,6 +55,7 @@ class Transformer {
    * Writes the code on file
    *
    * @param filename
+   * @param callback
    */
   writeFile(filename, callback) {
     const code = this.out();
