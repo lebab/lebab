@@ -3,7 +3,7 @@
 # xto6
 ![xto6](https://raw.githubusercontent.com/mohebifar/xto6-logo/master/logo.png)
 
-**xto6** transpiles your ES5 code to ES6. It works like other available transpilers (like babel and traceur) but in reverse order! If you want to understand what xto6 exactly does, [try the live demo](https://mohebifar.github.io/xto6/#try-live).
+**xto6** transpiles your ES5 code to ES6. It does exactly the opposite of what other transpilers do (like babel and traceur)! If you want to understand what xto6 exactly does, [try the live demo](https://mohebifar.github.io/xto6/#try-live).
 
 ## Why ?
 Still coding this way ? Think twice !
