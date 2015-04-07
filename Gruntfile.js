@@ -35,7 +35,16 @@ grunt.initConfig({
   },
   clean: {
     js: ["lib/**/*.js"]
+  },
+  mochaTest: {
+    test: {
+      options: {
+        reporter: 'spec'
+      },
+      src: ['test/**/*.js']
+    }
   }
 });
 
 grunt.registerTask('default', ['clean', 'babel']);
+grunt.registerTask('test', ['mochaTest']);
