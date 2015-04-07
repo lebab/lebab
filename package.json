@@ -1,6 +1,6 @@
 {
   "name": "xto6",
-  "version": "1.0.5-alpha",
+  "version": "1.0.6-alpha",
   "description": "Turn your ES5 code into readable ES6",
   "main": "index.js",
   "scripts": {
