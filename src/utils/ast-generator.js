@@ -37,7 +37,7 @@ export function readFile(file, options) {
  */
 export function read(js, options) {
 
-  return acorn(js, options);
+  return acorn.parse(js, options);
 
 }
 
