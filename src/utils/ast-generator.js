@@ -11,19 +11,18 @@ import coffee from 'coffee-script';
  * @returns {Object}
  */
 export function readFile(file, options) {
-  var ast;
 
   if (typeof options.coffee === 'undefined') {
     options.coffee = /\.coffee$/.test(file);
   }
 
   if (options.sync) {
-    var js = fs.readFileSync(file);
-    return read(js, options);
+    let js = fs.readFileSync(file);
+    return this.read(js, options);
   } else {
-    fs.readFile(function (js) {
+    fs.readFile(file, (js) => {
       if (options.callback) {
-        options.callback(read(js, options));
+        options.callback(this.read(js, options));
       }
     });
   }
@@ -35,6 +34,7 @@ export function readFile(file, options) {
  *
  * @author Mohamad Mohebifar
  * @param js
+ * @param options
  * @returns {Object}
  */
 export function read(js, options) {

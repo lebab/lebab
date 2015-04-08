@@ -1,6 +1,10 @@
-import astGenerator from './utils/ast-generator.js';
-import codeGenerator from 'escodegen';
 import fs from 'fs';
+import merge from 'lodash/object/merge.js';
+import codeGenerator from 'escodegen';
+import astGenerator from './utils/ast-generator.js';
+
+// Transformers
+import classTransformation from './transformation/classes.js';
 
 export default
 class Transformer {
@@ -8,8 +12,33 @@ class Transformer {
   /**
    * @constructor
    */
-  constructor() {
+  constructor(options = {}) {
+
     this.ast = {};
+    this.options = merge(this.constructor.defaultOptions, options);
+    this.transformations = [];
+
+    this.prepareTransformations();
+
+  }
+
+  /**
+   * Prepare transformations array by give options
+   */
+  prepareTransformations() {
+
+    let shouldTransform = (key) => {
+      return typeof this.options.transformers[key] !== 'undefined' && this.options.transformers[key];
+    };
+
+    let doTransform = (key, transformation) => {
+      if(shouldTransform(key)) {
+        this.transformations.push(transformation);
+      }
+    };
+
+    doTransform('classes', classTransformation);
+
   }
 
   /**
@@ -18,10 +47,12 @@ class Transformer {
    * @param filename
    */
   readFile(filename) {
+
     this.ast = astGenerator.readFile(filename, {
       sync: true,
       ecmaVersion: 6
     });
+
   }
 
   /**
@@ -29,8 +60,10 @@ class Transformer {
    *
    * @param string
    */
-  read(string, options = {}) {
-    this.ast = astGenerator.read(string, options);
+  read(string) {
+
+    this.ast = astGenerator.read(string, this.options);
+
   }
 
   /**
@@ -39,7 +72,20 @@ class Transformer {
    * @param transformation
    */
   applyTransformation(transformation) {
+
     transformation(this.ast);
+
+  }
+
+  /**
+   * Apply All transformations
+   */
+  applyTransformations() {
+
+    for (let transformation of this.transformations) {
+      this.applyTransformation(transformation);
+    }
+
   }
 
   /**
@@ -58,6 +104,7 @@ class Transformer {
    * @param callback
    */
   writeFile(filename, callback) {
+
     const code = this.out();
 
     if(typeof callback === 'function') {
@@ -65,6 +112,15 @@ class Transformer {
     } else {
       fs.writeFileSync(filename, code);
     }
+
   }
 
 }
+
+Transformer.defaultOptions = {
+  transformers: {
+    classes: true,
+    stringTemplates: true,
+    arrowFunctions: true
+  }
+};

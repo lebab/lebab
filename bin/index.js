@@ -6,6 +6,7 @@ var keys = require("lodash/object/keys");
 var pkg = require("../package.json");
 
 program.option("-o, --out-file [out]", "Compile into a single file");
+program.option("--no-classes", "Don't convert function/prototypes into classes");
 program.description(pkg.description);
 program.version(pkg.version);
 program.usage("[options] <file>");
