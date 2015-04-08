@@ -15,9 +15,8 @@ var SomeClass = function () {
 
 SomeClass.prototype.someOuterMethod = someFunction;
 
-SomeClass.prototype.someInnerMethod = function (s, o, m, e, a, r, g) {
-  var result = s + o + m + e + a + r + g;
-  console.log(result);
+SomeClass.prototype.someInnerMethod = function (birthYear) {
+  var result = 'Your Age is : ' + (2015 - birthYear) + ' and you were born in ' + birthYear;
   return result;
 };
 
@@ -59,9 +58,8 @@ class SomeClass {
     return someFunction.apply(this, arguments);
   }
 
-  someInnerMethod(s, o, m, e, a, r, g) {
-    var result = s + o + m + e + a + r + g;
-    console.log(result);
+  someInnerMethod(birthYear) {
+    var result = `Your Age is : ${ 2015 - birthYear } and you were born in ${ birthYear }`
     return result;
   }
 
