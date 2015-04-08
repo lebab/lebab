@@ -1,6 +1,5 @@
 var expect = require('chai').expect;
 var
-  classTransformation = require('./../../lib/transformation/classes'),
   Transformer = require('./../../lib/transformer'),
   transformer = new Transformer();
 
@@ -10,7 +9,7 @@ describe('Class transformation', function () {
     var script = "function someClass() {\n}";
 
     transformer.read(script);
-    transformer.applyTransformation(classTransformation);
+    transformer.applyTransformations();
 
     expect(transformer.out()).to.equal(script);
     done();
@@ -20,7 +19,7 @@ describe('Class transformation', function () {
     var script = "function someClass() {\n}\nsomeClass.prototype.someMethod = function(a, b) {\n}";
 
     transformer.read(script);
-    transformer.applyTransformation(classTransformation);
+    transformer.applyTransformations();
     var result = transformer.out();
 
     expect(result).to.include('class someClass');
@@ -32,7 +31,7 @@ describe('Class transformation', function () {
     var script = "function someClass() {\n}\nsomeClass.prototype.someMethod = someMethod\nfunction someMethod(a, b) {\n}";
 
     transformer.read(script);
-    transformer.applyTransformation(classTransformation);
+    transformer.applyTransformations();
     var result = transformer.out();
 
     expect(result).to.include('class someClass');
@@ -45,7 +44,7 @@ describe('Class transformation', function () {
     var script = "function someClass() {\n}\nsomeClass.prototype.someMethod = function (a, b) {\n}\nObject.defineProperty(someClass.prototype, 'someAccessor', {\nget: function () {\nreturn this._some;\n},\nset: function (value) {\nthis._some = value;\n}\n});";
 
     transformer.read(script);
-    transformer.applyTransformation(classTransformation);
+    transformer.applyTransformations();
     var result = transformer.out();
 
     expect(result).to.include('class someClass');
