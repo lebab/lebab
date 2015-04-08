@@ -44,10 +44,9 @@ function createClass(_function) {
 }
 
 function functionDetector(node, parent) {
-  var lastIdentifier, id;
 
   if (node.type === 'FunctionDeclaration') {
-    id = node.id;
+    let id = node.id;
     functions.push({
       id: id,
       parent: parent,
@@ -55,7 +54,7 @@ function functionDetector(node, parent) {
     });
   } else if (node.type === 'VariableDeclarator' && node.init && node.init.type === 'FunctionExpression') {
     parent._replace = node.init;
-    id = node.id;
+    let id = node.id;
     functions.push({
       id: id,
       parent: parent,
@@ -66,14 +65,14 @@ function functionDetector(node, parent) {
 }
 
 function classMaker(node, parent) {
+
   if (node.type === 'AssignmentExpression') {
 
     if (node.left.object && node.left.object.property && node.left.object.property.name === 'prototype') {
 
       let functionName = node.left.object.object.name;
 
-      for (let i = 0; i < functions.length; i++) {
-        let _function = functions[i];
+      for (let _function of functions) {
 
         if (_function.id.name === functionName) {
           createClass(_function);
@@ -108,11 +107,13 @@ function classMaker(node, parent) {
           parent._remove = true;
 
           this.skip();
+
         }
 
       }
 
     }
+
   } else if (
     node.type === 'CallExpression' && node.callee
     && node.callee.type === 'MemberExpression' && node.callee.object.name === 'Object'
@@ -120,6 +121,7 @@ function classMaker(node, parent) {
     && node.arguments[0].property.name === 'prototype' && node.arguments[1].type === 'Literal'
     && node.arguments[2].type === 'ObjectExpression'
   ) {
+
     let functionName = node.arguments[0].object.name;
 
     for (let i = 0; i < functions.length; i++) {
@@ -151,11 +153,11 @@ function classMaker(node, parent) {
         this.skip();
       }
     }
-
   }
+
 }
 
-function classReplacement(node, parent) {
+function classReplacement(node) {
   if (node._class) {
     return node._class;
   } else if (node._remove) {
