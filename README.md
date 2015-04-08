@@ -9,19 +9,19 @@
 Still coding this way ? Think twice !
 
 ```js
-var someClass = function () {
+var SomeClass = function () {
   console.log('This is the constructor.');
 };
 
-someClass.prototype.someOuterMethod = someFunction;
+SomeClass.prototype.someOuterMethod = someFunction;
 
-someClass.prototype.someInnerMethod = function (s, o, m, e, a, r, g) {
+SomeClass.prototype.someInnerMethod = function (s, o, m, e, a, r, g) {
   var result = s + o + m + e + a + r + g;
   console.log(result);
   return result;
 };
 
-Object.defineProperty(someClass.prototype, 'someAccessor', {
+Object.defineProperty(SomeClass.prototype, 'someAccessor', {
   get: function () {
     return this._some;
   },
@@ -50,7 +50,7 @@ xto6 es5.js -o es6.js
 And the result for the code above is :
 
 ```js
-class someClass {
+class SomeClass {
   constructor() {
     console.log('This is the constructor.');
   }
