@@ -34,4 +34,3 @@ if (errors.length) {
   var fn = require('./file');
   fn(program, filenames);
 }
-
