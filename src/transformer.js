@@ -5,6 +5,7 @@ import astGenerator from './utils/ast-generator.js';
 
 // Transformers
 import classTransformation from './transformation/classes.js';
+import templateStringTransformation from './transformation/template-string.js';
 
 export default
 class Transformer {
@@ -38,6 +39,7 @@ class Transformer {
     };
 
     doTransform('classes', classTransformation);
+    doTransform('stringTemplates', templateStringTransformation);
 
   }
 
@@ -82,8 +84,10 @@ class Transformer {
    */
   applyTransformations() {
 
-    for (let transformation of this.transformations) {
+    for (let i = 0; i < this.transformations.length; i++) {
+      let transformation = this.transformations[i];
       this.applyTransformation(transformation);
+
     }
 
   }
