@@ -12,6 +12,7 @@ export default
   }
 
 function callBackToArrow(node, parent) {
+
   if (node.type === 'FunctionExpression' && parent.type === "CallExpression"
       && !hasThis(node)) {
     let arrow = new ArrowExpression();
@@ -24,11 +25,13 @@ function callBackToArrow(node, parent) {
 
     return arrow;
   }
+
 }
 
 const objectProps = ['body', 'expression', 'left', 'right', 'object'];
 
 function hasThis(node) {
+
   if (_.isArray(node)) {
     for(let sub of node) {
       let result = hasThis(sub);
@@ -36,9 +39,15 @@ function hasThis(node) {
     }
     return false;
   }
-  if (node.type === "ThisExpression") return true;
+
+  if (node.type === "ThisExpression") {
+    return true;
+  }
+
   for (let prop of objectProps) {
     if (node[prop]) return hasThis(node[prop]);
   }
+
   return false;
+
 }

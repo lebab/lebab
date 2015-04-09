@@ -6,7 +6,7 @@ import astGenerator from './utils/ast-generator.js';
 // Transformers
 import classTransformation from './transformation/classes.js';
 import templateStringTransformation from './transformation/template-string.js';
-import arrowFunctionTransformation from './transformation/callback-to-arrow.js';
+import arrowFunctionTransformation from './transformation/arrow-functions.js';
 
 export default
 class Transformer {

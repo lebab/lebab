@@ -30,7 +30,7 @@ describe('Callback to Arrow transformation', function () {
     transformer.applyTransformations();
 
     expect(transformer.out()).to.equal('a((b, c) => {\n    return b;\n});');
-  })
+  });
 
 
   it('shouldn\'t convert other forms of functions', function () {
@@ -50,4 +50,5 @@ describe('Callback to Arrow transformation', function () {
 
     expect(transformer.out()).to.equal(script);
   });
+
 });
