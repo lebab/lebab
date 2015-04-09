@@ -59,7 +59,7 @@ class SomeClass {
   }
 
   someInnerMethod(birthYear) {
-    var result = `Your Age is : ${ 2015 - birthYear } and you were born in ${ birthYear }`
+    var result = `Your Age is : ${ 2015 - birthYear } and you were born in ${ birthYear }`;
     return result;
   }
 
