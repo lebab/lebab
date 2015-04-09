@@ -1,21 +1,25 @@
-var editor = ace.edit("editor");
-editor.setTheme("ace/theme/github");
-editor.getSession().setMode("ace/mode/javascript");
+// var editor = ace.edit("editor");
+// editor.setTheme("ace/theme/github");
+// editor.getSession().setMode("ace/mode/javascript");
 
-var resultElement = document.getElementById('result');
+var result = document.getElementById('result'),
+    source = document.getElementById('source');
 var transformer = new Transform();
 
 function transpile() {
-  transformer.read(editor.getSession().getValue());
+  transformer.read(source.textContent);
   transformer.applyTransformations();
-  resultElement.innerHTML = transformer.out();
-  hljs.highlightBlock(resultElement);
+  result.innerHTML = transformer.out();
+  // hljs.highlightBlock(result);
 }
 
-document.getElementById('transpile').addEventListener('click', function (e) {
-  e.preventDefault();
-
-  transpile();
+var timeout = false;
+source.addEventListener('keyup', function(e) {
+  if (timeout) clearTimeout(timeout);
+  timeout = setTimeout(function() {
+    transpile();
+    timeout = false;
+  }, 500);
 });
 
 transpile();

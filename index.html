@@ -4,68 +4,67 @@
     <meta charset="UTF-8">
     <title>xto6 - Transpile your codes to next-generation JavaScript</title>
     <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/8.5/styles/default.min.css">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.4/css/bootstrap.css"/>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles/main.css"/>
     <link rel="icon" href="favicon.png" type="image/png">
 </head>
 <body>
 <header>
-    <div class="container">
-        <nav class="navbar navbar-xto6">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                            data-target="#bs-example-navbar-collapse-1">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="https://mohebifar.github.io/xto6">xto6</a>
-                </div>
+    <img src="favicon.png" height="80">
+    <a href="#start">Getting Started</a>
+    <a href="#repl">Try it</a>
+    <a href="#faq">FAQ</a>
 
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="https://mohebifar.github.io/xto6/">Home</a></li>
-                        <li><a href="#try-live">Try Live !</a></li>
-                    </ul>
-
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="https://github.com/mohebifar/xto6">Github</a></li>
-                        <li><a href="https://gitter.im/mohebifar/xto6">Support</a></li>
-                    </ul>
-                </div>
-                <!-- /.navbar-collapse -->
-            </div>
-            <!-- /.container-fluid -->
-        </nav>
-    </div>
+   <a href="https://github.com/mohebifar/xto6" class="push-right">Github</a>
+   <a href="https://gitter.im/mohebifar/xto6" class="push-right">Support</a>
 </header>
 
-<section class="jumbotron">
-    <div class="container">
-        <h1>xto6 is a JavaScript transpiler</h1>
+<section class="top">
+    <!-- <h1>xto6</h1> -->
 
-        <p>It helps you to keep your JavaScript codes up-to-date !</p>
+    <h1>Upgrade your ES5 code to ES6</h1>
 
-        <p>
-            <iframe class="github-star"
-                    src="https://ghbtns.com/github-btn.html?user=mohebifar&repo=xto6&type=star&count=true&size=small"
-                    frameborder="0"></iframe>
-        </p>
-    </div>
+    <p>
+        <iframe class="github-star"
+                src="https://ghbtns.com/github-btn.html?user=mohebifar&repo=xto6&type=star&count=true&size=small"
+                frameborder="0"></iframe>
+    </p>
+
+    <i>ES6</i>
+    <div class='hat'><img src="favicon.png" height="110"></div>
+    <div class='stick'></div>
+
 </section>
 
-<section class="transpile-live">
-    <a name="try-live"></a>
-    <div class="container">
+<section name="start" class="start">
+    <h1>Getting Started</h1>
 
-        <h2>Transpile ES5 code into ES6 live !</h2>
+    <p>xto6 transpiles ES5 code into ES6 code. It acts like <a href="http://babeljs.io/">Babel</a> but in reverse order! (you can call it lebab if you like)</p>
+    <p>Install and use <code>xto6</code> CLI using npm:</p>
 
-        <div class="try-live">
-            <div class="col-md-6">
-                <pre id="editor">var someClass = function () {
+    <pre>
+        <code>npm install -g xto6
+
+xto6 es5.js -o es6.js
+        </code>
+    </pre>
+
+    <div class='clear'></div>
+    <h3 class='push-left'>Currently these ES6 features are supported</h3>
+    <ul class='push-right'>
+        <li><i class='fa fa-check'></i>Classes</li>
+        <li><i class='fa fa-check'></i>Callbacks to Arrow functions</li>
+        <li><i class='fa fa-check'></i>String concatenating to String Templates</li>
+        <li><i class='fa fa-check'></i>More to come soon!</li>
+    </ul>
+</section>
+
+<section class="repl" name="repl">
+    <h1>Try it now!</h1>
+
+    <pre>
+        <code id="source" contenteditable>
+var someClass = function () {
     console.log('This is the constructor.');
 };
 
@@ -88,43 +87,18 @@ Object.defineProperty(someClass.prototype, 'someAccessor', {
 
 function someFunction(a, b) {
     return a + b;
-}</pre>
+}
+        </code>
+    </pre>
 
-                <p class="text-right">
-                    <a class="btn btn-success btn-sm" href="#" id="transpile">Transpile my code <i
-                            class="glyphicon glyphicon-chevron-right"></i></a>
-                </p>
-            </div>
-
-            <div class="col-md-6">
-                <pre id="result"></pre>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-<section class="usage">
-    <div class="container">
-        <h2>Usage</h2>
-
-        <p>
-            <strong>xto6</strong> transpiles your ES5 code to ES6. It works like other available transpilers (like babel
-            and traceur) but
-            in reverse order!
-        </p>
-
-        <p>Install it using npm :</p>
-        <pre>$ npm install -g xto6</pre>
-
-        <p>Transpile your old-fashioned code using the <code>xto6</code> cli tool.</p>
-
-        <pre>xto6 es5.js -o es6.js</pre>
-    </div>
+    <pre>
+        <code id="result">
+        </code>
+    </pre>
 </section>
 
 <footer>
-    XTO6 - <a href="http://mohebifar.mit-license.org/">MIT License</a>
+    Made with &lt;3 by <a href="http://mohebifar.com/">Mohammad</a> and <a href="http://dibaiee.ir">Mahdi</a>.
 </footer>
 
 <script src="//cdn.jsdelivr.net/ace/1.1.9/min/ace.js"></script>
