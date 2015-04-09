@@ -6,6 +6,7 @@ import astGenerator from './utils/ast-generator.js';
 // Transformers
 import classTransformation from './transformation/classes.js';
 import templateStringTransformation from './transformation/template-string.js';
+import arrowFunctionTransformation from './transformation/callback-to-arrow.js';
 
 export default
 class Transformer {
@@ -40,7 +41,7 @@ class Transformer {
 
     doTransform('classes', classTransformation);
     doTransform('stringTemplates', templateStringTransformation);
-
+    doTransform('arrowFunctions', arrowFunctionTransformation);
   }
 
   /**
