@@ -1,4 +1,4 @@
-#[![Build Status](https://img.shields.io/travis/mohebifar/xto6.svg)](http://travis-ci.org/mohebifar/xto6) [![License](http://img.shields.io/:license-mit-brightgreen.svg?style=flat)](http://mohebifar.mit-license.org) 
+#[![Build Status](https://img.shields.io/travis/mohebifar/xto6.svg)](http://travis-ci.org/mohebifar/xto6) [![License](http://img.shields.io/:license-mit-brightgreen.svg?style=flat)](http://mohebifar.mit-license.org)
 
 # xto6
 ![xto6](https://raw.githubusercontent.com/mohebifar/xto6-logo/master/logo.png)
@@ -76,3 +76,9 @@ function someFunction(a, b) {
   return a + b;
 }
 ```
+
+## Supported Features
+
+* Classes
+* Callback to Arrow functions
+* String concatenation to Template Strings
