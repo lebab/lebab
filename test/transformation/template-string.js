@@ -3,7 +3,7 @@ var
   Transformer = require('./../../lib/transformer'),
   transformer = new Transformer();
 
-describe('Class transformation', function () {
+describe('Template string transformation', function () {
 
   it('should not convert non-concatenated strings', function (done) {
     var script = "var result = 'test';";
