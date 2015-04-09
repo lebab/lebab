@@ -1,9 +1,10 @@
 {
   "name": "xto6",
-  "version": "1.0.6-alpha",
+  "version": "1.0.7-alpha",
   "description": "Turn your ES5 code into readable ES6",
   "main": "index.js",
   "scripts": {
+    "prepublish": "node node_modules/babel/bin/babel src --out-dir lib",
     "test": "grunt test"
   },
   "repository": {
@@ -35,6 +36,7 @@
     "lodash": "^3.3.1"
   },
   "devDependencies": {
+    "babel": "^5.0.12",
     "chai": "^2.2.0",
     "grunt": "^0.4.5",
     "grunt-babel": "^4.0.0",
