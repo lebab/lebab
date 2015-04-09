@@ -1,4 +1,5 @@
-.idea
 *.log
 *.cache
+.*
+Gruntfile.js
 /src
