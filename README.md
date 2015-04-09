@@ -79,6 +79,6 @@ function someFunction(a, b) {
 
 ## Supported Features
 
-* Classes
+* Function/Prototypes to Classes
 * Callback to Arrow functions
 * String concatenation to Template Strings
