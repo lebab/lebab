@@ -5,6 +5,7 @@ a {
 
 .fa {
     margin-right: 10px;
+    margin-left: 10px;
 }
 
 a:visited {
@@ -240,9 +241,8 @@ pre code {
     float: left;
 }
 
-.heart {
-    position: relative;
-    top: 5px;
+.fa-heart::before {
+    color: #F25F54;
 }
 
 footer {
