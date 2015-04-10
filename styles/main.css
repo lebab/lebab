@@ -26,6 +26,10 @@ body {
     box-sizing: border-box;
 }
 
+iframe {
+    width: 100px;
+}
+
 header {
     background-color: #323330;
     color: #f0db4f;
