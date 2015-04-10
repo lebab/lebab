@@ -4,7 +4,7 @@
 
 var result = document.getElementById('result'),
     source = document.getElementById('source');
-var transformer = new Transform();
+var transformer = new Transformer();
 
 function transpile() {
   transformer.read(source.textContent);

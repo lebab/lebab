@@ -235,6 +235,7 @@ pre {
     margin: 20px auto;
     display: inline-block;
     overflow: scroll;
+    line-height: 17px;
 }
 
 pre code {

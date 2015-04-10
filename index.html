@@ -91,6 +91,13 @@ Object.defineProperty(someClass.prototype, 'someAccessor', {
 function someFunction(a, b) {
     return a + b;
 }
+
+setTimeout(function(a) {
+    console.log('Arrow functions rock!');
+}, 1000);
+
+var GREETING = 'Hi';
+var sentence = GREETING + ', ES6';
         </code>
     </pre>
 
@@ -104,9 +111,9 @@ function someFunction(a, b) {
     Made with <i class='fa fa-heart'></i> by <a href="http://mohebifar.com/">Mohammad</a> and <a href="http://dibaiee.ir">Mahdi</a>.
 </footer>
 
-<script src="//cdn.jsdelivr.net/ace/1.1.9/min/ace.js"></script>
+<!-- <script src="//cdn.jsdelivr.net/ace/1.1.9/min/ace.js"></script>
 <script src="//cdn.jsdelivr.net/highlight.js/8.5/highlight.min.js"></script>
-<script src="scripts/xto6.min.js"></script>
+ --><script src="scripts/xto6.min.js"></script>
 <script src="scripts/main.js"></script>
 </body>
 </html>
