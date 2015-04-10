@@ -171,6 +171,7 @@ ul {
 .start {
     background: #323330;
     color: white;
+    height: 650px;
 }
 
 @media (max-width: 990px) {
