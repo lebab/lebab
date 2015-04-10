@@ -207,6 +207,11 @@ pre code {
     float: left;
 }
 
+.heart {
+    position: relative;
+    top: 5px;
+}
+
 footer {
     text-align: center;
     line-height: 50px;
