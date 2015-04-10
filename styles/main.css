@@ -3,6 +3,10 @@ a {
     color: white;
 }
 
+.fa {
+    margin-right: 10px;
+}
+
 a:visited {
     color: #DADADA;
 }
@@ -70,7 +74,7 @@ header a:hover {
 section {
     text-align: center;
     width: 100%;
-    height: 80%;
+    height: 600px;
     padding: 80px 20%;
     color: #323330;
     box-sizing: border-box;
@@ -87,7 +91,7 @@ ul {
 }
 
 .top {
-    height: 110%;
+    height: 700px;
 }
 
 .top i {
@@ -168,9 +172,38 @@ ul {
     color: white;
 }
 
+@media (max-width: 990px) {
+    .start {
+        height: 700px;
+    }
+    .start .push-left, .start .push-right {
+        float: none;
+    }
+
+    .start .push-right {
+        margin-left: 30%;
+    }
+}
+
+@media (max-width: 850px) {
+    section p {
+        width: 90%;
+    }
+    section {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+}
+
+.start .fa {
+    color: #7FE286;
+}
+
 .repl {
     background: #f0db4f;
     color: #323330;
+    padding-left: 5%;
+    padding-right: 5%;
 }
 
 .repl pre {
