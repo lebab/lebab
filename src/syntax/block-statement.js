@@ -13,7 +13,7 @@ class BlockStatement extends BaseSyntax {
    *
    * @constructor
    */
-    constructor(callee, args) {
+    constructor() {
     super('BlockStatement');
     this.body = [];
   }
