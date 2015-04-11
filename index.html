@@ -3,117 +3,142 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>xto6 - Transpile your codes to next-generation JavaScript</title>
-    <!-- <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'> -->
-    <link rel='stylesheet' href='styles/font-awesome.min.css'/>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/8.5/styles/default.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.4/css/bootstrap.css"/>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/icono/1.3.0/icono.min.css"/>
     <link rel="stylesheet" href="styles/main.css"/>
     <link rel="icon" href="favicon.png" type="image/png">
 </head>
 <body>
 <header>
-    <img src="favicon.png" height="80" alt="xto6-logo">
-    <a href="#start">Getting Started</a>
-    <a href="#repl">Try it</a>
-    <!-- <a href="#faq">FAQ</a> -->
+    <nav class="navbar navbar-xto6">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="https://xto6.js.org">xto6</a>
+            </div>
 
-   <a href="https://github.com/mohebifar/xto6" class="push-right">Github</a>
-   <a href="https://gitter.im/mohebifar/xto6" class="push-right">Support</a>
+            <ul class="nav navbar-nav">
+                <li><a href="#try-live">Try it Live !</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#usage">Usage</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://github.com/mohebifar/xto6">Github</a></li>
+                <li><a href="https://gitter.im/mohebifar/xto6">Support</a></li>
+            </ul>
+        </div>
+    </nav>
 </header>
 
-<section class="top">
-    <!-- <h1>xto6</h1> -->
+<section class="jumbotron">
+    <div class="container">
+        <h1>xto6 modernizes your JavaScript code</h1>
 
-    <h1>Upgrade your ES5 code to ES6</h1>
+        <p>It helps you to keep your JavaScript codes up-to-date !</p>
 
-    <p>
-        <iframe class="github-star"
-                src="https://ghbtns.com/github-btn.html?user=mohebifar&repo=xto6&type=star&count=true&size=small"
-                frameborder="0"></iframe>
-    </p>
-
-    <i>ES6</i>
-    <div class='hat'><img src="favicon.png" height="110"></div>
-    <div class='stick'></div>
-
+        <p>
+            <iframe class="github-star"
+                    src="https://ghbtns.com/github-btn.html?user=mohebifar&repo=xto6&type=star&count=true&size=small"
+                    frameborder="0"></iframe>
+        </p>
+    </div>
 </section>
 
-<section name="start" class="start">
-    <h1>Getting Started</h1>
+<section class="transpile-live" id="try-live">
 
-    <p>xto6 transpiles ES5 code into ES6 code. It acts like <a href="http://babeljs.io/">Babel</a> but in reverse order! (you can call it lebab if you like)</p>
-    <p>Install and use <code>xto6</code> CLI using npm:</p>
+    <div class="container">
 
-    <pre>
-        <code>npm install -g xto6
+        <h2>Transpile ES5 code into ES6 live !</h2>
 
-xto6 es5.js -o es6.js
-        </code>
-    </pre>
-
-    <div class='clear'></div>
-    <h3 class='push-left'>Currently these ES6 features are supported</h3>
-    <ul class='push-right'>
-        <li><i class='fa fa-check'></i>Classes</li>
-        <li><i class='fa fa-check'></i>Arrow functions</li>
-        <li><i class='fa fa-check'></i>String Templates</li>
-        <li><i class='fa fa-check'></i>Modules (soon)</li>
-        <li><i class='fa fa-check'></i>let, const (soon)</li>
-        <li><i class='fa fa-check'></i>for of (soon)</li>
-        <li><i class='fa fa-check'></i><a href='https://github.com/mohebifar/xto6/issues'>You tell us!</a></li>
-    </ul>
-</section>
-
-<section class="repl" name="repl">
-    <h1>Try it now!</h1>
-
-    <pre>
-        <code id="source" contenteditable>
-var someClass = function () {
-    console.log('This is the constructor.');
+        <div class="try-live-container">
+            <div class="col-md-6">
+                <pre id="editor">var SomeClass = function () {
+  console.log('This is the constructor.');
 };
 
-someClass.prototype.someOuterMethod = someFunction;
+SomeClass.prototype.someOuterMethod = someFunction;
 
-someClass.prototype.someInnerMethod = function (s, t) {
-    var result = s + t;
-    console.log(result);
-    return result;
+SomeClass.prototype.someInnerMethod = function (birthYear) {
+  var result = 'Your Age is : ' + (2015 - birthYear) + ' and you were born in ' + birthYear;
+  return result;
 };
 
-Object.defineProperty(someClass.prototype, 'someAccessor', {
-    get: function () {
-      return this._some;
-    },
-    set: function (value) {
-      this._some = value;
-    }
+Object.defineProperty(SomeClass.prototype, 'someAccessor', {
+  get: function () {
+    return this._some;
+  },
+  set: function (value) {
+    this._some = value;
+  }
 });
 
 function someFunction(a, b) {
-    return a + b;
-}
+  return a + b;
+}</pre>
+            </div>
 
-setTimeout(function(a) {
-    console.log('Arrow functions rock!');
-}, 1000);
+            <div class="col-md-6">
+                <pre id="result"></pre>
+            </div>
+        </div>
 
-var GREETING = 'Hi';
-var sentence = GREETING + ', ES6';
-        </code>
-    </pre>
+    </div>
+</section>
 
-    <pre>
-        <code id="result">
-        </code>
-    </pre>
+<section id="features">
+
+    <div class="container">
+        <div class="col-md-6">
+            <h2>Features</h2>
+            <p>Currently xto6 supports these features</p>
+            <ul>
+                <li><i class="icono-checkCircle"></i> Function/Prototype to Class</li>
+                <li><i class="icono-checkCircle"></i> String concatenation to Template string</li>
+                <li><i class="icono-checkCircle"></i> Anonymous callbacks to Arrow functions</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h2>Road map</h2>
+            <p>These features will be added soon :</p>
+            <ul>
+                <li><i class="icono-plusCircle"></i> Convert commonjs module definitions</li>
+                <li><i class="icono-plusCircle"></i> Convert var to let/const</li>
+                <li><i class="icono-plusCircle"></i> For of loops</li>
+                <li><i class="icono-plusCircle"></i> Convert arguments to rest parameters</li>
+                <li><i class="icono-plusCircle"></i> Remove _this=this for arrow functions</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section id="usage">
+
+    <div class="container">
+        <h2>Usage</h2>
+
+        <p>
+            <strong>xto6</strong> transpiles your ES5 code to ES6. It does exactly the opposite of what other
+            transpilers do (like babel and traceur).
+        </p>
+
+        <p>Install it using npm :</p>
+        <pre>$ npm install -g xto6</pre>
+
+        <p>Transpile your boring code using the <code>xto6</code> cli tool.</p>
+
+        <pre>xto6 es5.js -o es6.js</pre>
+    </div>
 </section>
 
 <footer>
-    Made with <i class='fa fa-heart'></i> by <a href="http://mohebifar.com/">Mohammad</a> and <a href="http://dibaiee.ir">Mahdi</a>.
+    XTO6 - <a href="http://mohebifar.mit-license.org/">MIT License</a>
 </footer>
 
-<!-- <script src="//cdn.jsdelivr.net/ace/1.1.9/min/ace.js"></script>
+<script src="//cdn.jsdelivr.net/ace/1.1.9/min/ace.js"></script>
 <script src="//cdn.jsdelivr.net/highlight.js/8.5/highlight.min.js"></script>
- --><script src="scripts/xto6.min.js"></script>
+<script src="scripts/xto6.min.js"></script>
 <script src="scripts/main.js"></script>
 </body>
 </html>
