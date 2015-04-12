@@ -1,7 +1,5 @@
 import BaseSyntax from './base.js';
 import TemplateElement from './template-element.js';
-import esutils from 'esutils/lib/ast.js';
-import utils from 'util';
 
 /**
  * The class to define the TemplateLiteral syntax
@@ -26,18 +24,17 @@ class TemplateLiteral extends BaseSyntax {
   }
 
   createFromArray(parts) {
-    let isString = (node) => {
-      return typeof node !== 'undefined' && node.type === 'Literal' && typeof node.value === 'string';
+
+    let isLiteral = (node) => {
+      return typeof node !== 'undefined' && node.type === 'Literal';
     };
 
-    let isExpression = (node) => {
-      return typeof node !== 'undefined' && esutils.isExpression(node);
+    let isString = (node) => {
+      return isLiteral(node) && typeof node.value === 'string';
     };
 
     for (let i = 0; i < parts.length; i++) {
       let curr = parts[i];
-
-      //console.log(curr);
 
       if (isString(curr)) {
         let element = new TemplateElement();
@@ -47,10 +44,10 @@ class TemplateLiteral extends BaseSyntax {
           curr += parts[i].value;
         }
 
+        i--;
+
         element.setValue(curr);
         this.quasis.push(element);
-
-        i--;
       } else {
         if (i === 0) {
           let element = new TemplateElement();
@@ -58,21 +55,18 @@ class TemplateLiteral extends BaseSyntax {
           this.quasis.push(element);
         }
 
-        if (typeof parts[i + 1] === 'undefined') {
-          let element = new TemplateElement();
-          element.tail = true;
-          this.quasis.push(element);
-        } else if (parts[i + 1] .type !== 'Literal') {
+        if (! isLiteral(parts[i + 1])) {
           let element = new TemplateElement();
           this.quasis.push(element);
-          //console.log(parts[i + 1]);
+
+          if(typeof parts[i + 1] === 'undefined') {
+            element.tail = true;
+          }
         }
 
         this.expressions.push(curr);
       }
     }
-
-    //console.log(JSON.stringify(this));
 
   }
 

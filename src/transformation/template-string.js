@@ -1,7 +1,7 @@
 import estraverse from 'estraverse';
 import esutils from 'esutils/lib/ast.js';
 import TemplateLiteral from './../syntax/template-literal.js';
-import _ from 'lodash/index.js'
+import _ from 'lodash';
 
 export default
   function (ast) {

@@ -1,5 +1,4 @@
 import BaseSyntax from './base.js';
-import esutils from 'esutils/lib/ast.js';
 
 /**
  * The class to define the TemplateElement syntax

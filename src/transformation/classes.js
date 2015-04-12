@@ -1,9 +1,6 @@
 import estraverse from 'estraverse';
-import utils from 'util';
 import MethodDefinition from './../syntax/method-definition.js';
-import ClassBody from './../syntax/class-body.js';
 import ClassDeclaration from './../syntax/class-declaration.js';
-import FunctionExpression from './../syntax/function-expression.js';
 import Identifier from './../syntax/identifier.js';
 import ThisExpression from './../syntax/this-expression.js';
 import MemberExpression from './../syntax/member-expression.js';
@@ -115,11 +112,11 @@ function classMaker(node, parent) {
     }
 
   } else if (
-    node.type === 'CallExpression' && node.callee
-    && node.callee.type === 'MemberExpression' && node.callee.object.name === 'Object'
-    && node.callee.property.name === 'defineProperty' && node.arguments[0].type === 'MemberExpression'
-    && node.arguments[0].property.name === 'prototype' && node.arguments[1].type === 'Literal'
-    && node.arguments[2].type === 'ObjectExpression'
+    node.type === 'CallExpression' && node.callee &&
+    node.callee.type === 'MemberExpression' && node.callee.object.name === 'Object' &&
+    node.callee.property.name === 'defineProperty' && node.arguments[0].type === 'MemberExpression' &&
+    node.arguments[0].property.name === 'prototype' && node.arguments[1].type === 'Literal' &&
+    node.arguments[2].type === 'ObjectExpression'
   ) {
 
     let functionName = node.arguments[0].object.name;
