@@ -1,0 +1,23 @@
+{
+  "name": "xto6-page",
+  "version": "1.0.0",
+  "homepage": "https://github.com/mohebifar/xto6",
+  "authors": [
+    "Mohamad Mohebifar <mohamad@mohebifar.com>"
+  ],
+  "license": "private",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ace-builds": "https://github.com/ajaxorg/ace-builds.git#~1.1.9",
+    "bootstrap": "~3.3.4",
+    "icono": "~1.3.0",
+    "highlightjs": "~8.5.0"
+  }
+}

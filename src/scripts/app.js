@@ -1,8 +1,7 @@
 var editor = ace.edit("editor");
-editor.setTheme("ace/theme/github");
-editor.getSession().setMode("ace/mode/javascript");
 
 var resultElement = document.getElementById('result');
+
 var transformer = new Transformer();
 
 function transpile() {

@@ -2,3 +2,5 @@
 node_modules
 lib
 *.log
+.tmp
+src/bower_components

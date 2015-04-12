@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="xto6 transpiles your boring ES5 code into readable ES6.">
+    <meta name="keywords" content="ES6, JavaScript, Transpiler, Code modernizer">
+    <meta name="author" content="Mohamad Mohebifar">
+    <title>xto6 - Transpile your codes to next-generation JavaScript</title>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+    <!-- build:css assets/css/vendor.css -->
+    <link rel="stylesheet" href="bower_components/highlightjs/styles/default.css">
+    <link rel="stylesheet" href="bower_components/icono/build/icono.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <!-- endbuild -->
+
+    <!-- build:css assets/css/app.css -->
+    <link rel="stylesheet" href="styles/app.css"/>
+    <!-- endbuild -->
+
+    <link rel="icon" href="favicon.png" type="image/png">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-xto6">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="https://xto6.js.org">xto6</a>
+            </div>
+
+            <ul class="nav navbar-nav">
+                <li><a href="#try-live">Try it Live !</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#usage">Usage</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://github.com/mohebifar/xto6">Github</a></li>
+                <li><a href="https://gitter.im/mohebifar/xto6">Support</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<section class="jumbotron">
+    <div class="container">
+        <h1>xto6 modernizes your JavaScript code</h1>
+
+        <p>It helps you to keep your JavaScript codes up-to-date !</p>
+
+        <p>
+            <iframe class="github-star"
+                    src="https://ghbtns.com/github-btn.html?user=mohebifar&repo=xto6&type=star&count=true&size=small"
+                    frameborder="0"></iframe>
+        </p>
+    </div>
+</section>
+
+<section class="transpile-live" id="try-live">
+
+    <div class="container">
+
+        <h2>Transpile ES5 code into ES6 live !</h2>
+
+        <div class="try-live-container">
+            <div class="col-md-6">
+                <pre id="editor">var SomeClass = function () {
+  console.log('This is the constructor.');
+};
+
+SomeClass.prototype.someOuterMethod = someFunction;
+
+SomeClass.prototype.someInnerMethod = function (birthYear) {
+  var result = 'Your Age is : ' + (2015 - birthYear) + ' and you were born in ' + birthYear;
+  return result;
+};
+
+Object.defineProperty(SomeClass.prototype, 'someAccessor', {
+  get: function () {
+    return this._some;
+  },
+  set: function (value) {
+    this._some = value;
+  }
+});
+
+function someFunction(a, b) {
+  return a + b;
+}</pre>
+            </div>
+
+            <div class="col-md-6">
+                <pre id="result"></pre>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section id="features">
+
+    <div class="container">
+        <div class="col-md-6">
+            <h2>Features</h2>
+            <p>Currently xto6 supports these features</p>
+            <ul>
+                <li><i class="icono-checkCircle"></i> Function/Prototype to Class</li>
+                <li><i class="icono-checkCircle"></i> String concatenation to Template string</li>
+                <li><i class="icono-checkCircle"></i> Anonymous callbacks to Arrow functions</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h2>Road map</h2>
+            <p>These features will be added soon :</p>
+            <ul>
+                <li><i class="icono-plusCircle"></i> Convert commonjs module definitions</li>
+                <li><i class="icono-plusCircle"></i> Convert var to let/const</li>
+                <li><i class="icono-plusCircle"></i> For of loops</li>
+                <li><i class="icono-plusCircle"></i> Convert arguments to rest parameters</li>
+                <li><i class="icono-plusCircle"></i> Remove _this=this for arrow functions</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section id="usage">
+
+    <div class="container">
+        <h2>Usage</h2>
+
+        <p>
+            <strong>xto6</strong> transpiles your ES5 code to ES6. It does exactly the opposite of what other
+            transpilers do (like babel and traceur).
+        </p>
+
+        <p>Install it using npm :</p>
+        <pre>$ npm install -g xto6</pre>
+
+        <p>Transpile your boring code using the <code>xto6</code> cli tool.</p>
+
+        <pre>xto6 es5.js -o es6.js</pre>
+    </div>
+</section>
+
+<footer>
+    XTO6 - <a href="http://mohebifar.mit-license.org/">MIT License</a>
+</footer>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-42543494-3', 'auto');
+    ga('send', 'pageview');
+</script>
+
+<!-- build:js assets/js/vendor.js -->
+<script src="bower_components/ace-builds/src/ace.js"></script>
+<script src="bower_components/ace-builds/src/theme-github.js"></script>
+<script src="bower_components/ace-builds/src/mode-javascript.js"></script>
+<script src="bower_components/highlightjs/highlight.pack.js"></script>
+<!-- endbuild -->
+
+
+<!-- build:js assets/js/app.js -->
+<script src="scripts/xto6.js"></script>
+<script src="scripts/app.js"></script>
+<!-- endbuild -->
+</body>
+</html>
