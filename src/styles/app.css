@@ -61,8 +61,20 @@ section.jumbotron h1 {
     height: 25px;
 }
 
+#try-live {
+    position: relative;
+}
+
 #try-live h2 {
     text-align: center;
+}
+
+.convert-arrow {
+    position: absolute;
+    left: 50%;
+    margin: -9px;
+    top: 55%;
+    color: #2669F9;
 }
 
 #editor, #result {

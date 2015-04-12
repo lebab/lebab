@@ -2,41 +2,50 @@ var grunt = require('grunt');
 require('load-grunt-tasks')(grunt);
 
 grunt.initConfig({
+  configs: {
+    src: 'src',
+    bower: 'src/bower_components',
+    concat: '.tmp/concat',
+    scripts: 'src/scripts',
+    styles: 'src/styles',
+    tmp: 'src/tmp',
+    assets: 'assets'
+  },
   clean: {
     build: ['.tmp', 'assets']
   },
   copy: {
     dist: {
       files: [
-        {src: 'src/index.html', dest: 'index.html'},
-        {src: 'src/favicon.png', dest: 'favicon.png'}
+        {src: '<%= configs.src %>/index.html', dest: 'index.html'},
+        {src: '<%= configs.src %>/favicon.png', dest: 'favicon.png'}
       ]
     }
   },
   useminPrepare: {
     html: 'index.html',
     options: {
-      dest: '.tmp'
+      dest: '<%= configs.tmp %>'
     }
   },
   concat: {
     generated: {
       files: [
         {
-          dest: '.tmp/concat/js/app.js',
-          src: ['src/scripts/xto6.js', 'src/scripts/app.js']
+          dest: '<%= configs.concat %>/js/app.js',
+          src: ['<%= configs.scripts %>/xto6.js', '<%= configs.scripts %>/app.js']
         },
         {
-          dest: '.tmp/concat/js/vendor.js',
-          src: ['src/bower_components/ace-builds/src/ace.js', 'bower_components/ace-builds/src/theme-github.js', 'bower_components/ace-builds/src/mode-javascript.js', 'src/bower_components/highlightjs/highlight.pack.js']
+          dest: '<%= configs.concat %>/js/vendor.js',
+          src: ['<%= configs.bower %>/ace-builds/src/ace.js', '<%= configs.bower %>/ace-builds/src/theme-monokai.js', '<%= configs.bower %>/ace-builds/src/mode-javascript.js', '<%= configs.bower %>/ace-builds/src/worker-javascript.js', '<%= configs.bower %>/highlightjs/highlight.pack.js']
         },
         {
-          dest: '.tmp/concat/css/app.css',
-          src: ['src/styles/app.css']
+          dest: '<%= configs.concat %>/css/app.css',
+          src: ['<%= configs.styles %>/app.css']
         },
         {
-          dest: '.tmp/concat/css/vendor.css',
-          src: ['src/bower_components/highlight.js/src/styles/default.css', 'src/bower_components/icono/build/icono.css', 'src/bower_components/bootstrap/dist/css/bootstrap.css']
+          dest: '<%= configs.concat %>/css/vendor.css',
+          src: ['<%= configs.bower %>/highlightjs/styles/monokai.css', '<%= configs.bower %>/icono/build/icono.css', '<%= configs.bower %>/bootstrap/dist/css/bootstrap.css']
         }
       ]
     }
@@ -45,12 +54,12 @@ grunt.initConfig({
     generated: {
       files: [
         {
-          dest: 'assets/js/app.js',
-          src: ['.tmp/concat/js/app.js']
+          dest: '<%= configs.assets %>/js/app.js',
+          src: ['<%= configs.concat %>/js/app.js']
         },
         {
-          dest: 'assets/js/vendor.js',
-          src: ['.tmp/concat/js/vendor.js']
+          dest: '<%= configs.assets %>/js/vendor.js',
+          src: ['<%= configs.concat %>/js/vendor.js']
         }
       ]
     }
@@ -59,12 +68,12 @@ grunt.initConfig({
     generated: {
       files: [
         {
-          dest: 'assets/css/app.css',
-          src: ['.tmp/concat/css/app.css']
+          dest: '<%= configs.assets %>/css/app.css',
+          src: ['<%= configs.concat %>/css/app.css']
         },
         {
-          dest: 'assets/css/vendor.css',
-          src: ['.tmp/concat/css/vendor.css']
+          dest: '<%= configs.assets %>/css/vendor.css',
+          src: ['<%= configs.concat %>/css/vendor.css']
         }
       ]
     }

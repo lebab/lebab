@@ -11,7 +11,7 @@
     <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
     <!-- build:css assets/css/vendor.css -->
-    <link rel="stylesheet" href="bower_components/highlightjs/styles/default.css">
+    <link rel="stylesheet" href="bower_components/highlightjs/styles/monokai.css">
     <link rel="stylesheet" href="bower_components/icono/build/icono.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
     <!-- endbuild -->
@@ -64,6 +64,7 @@
 
         <h2>Transpile ES5 code into ES6 live !</h2>
 
+        <div class="icono-rightArrow hidden-sm hidden-xs convert-arrow"></div>
         <div class="try-live-container">
             <div class="col-md-6">
                 <pre id="editor">var SomeClass = function () {
@@ -73,7 +74,9 @@
 SomeClass.prototype.someOuterMethod = someFunction;
 
 SomeClass.prototype.someInnerMethod = function (birthYear) {
-  var result = 'Your Age is : ' + (2015 - birthYear) + ' and you were born in ' + birthYear;
+  var result = 'Your Age is : ' + (2015 - birthYear) +
+  ' and you were born in ' + birthYear;
+
   return result;
 };
 
