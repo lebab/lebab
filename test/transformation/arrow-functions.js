@@ -49,6 +49,7 @@ describe('Callback to Arrow transformation', function () {
     transformer.applyTransformations();
 
     expect(transformer.out()).to.equal(script);
+    transformer.read('var x = 2; x = 5');
   });
 
 });

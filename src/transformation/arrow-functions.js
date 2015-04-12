@@ -1,7 +1,5 @@
 import estraverse from 'estraverse';
-import utils from 'util';
 import ArrowExpression from './../syntax/arrow-expression.js';
-import ThisExpression from './../syntax/this-expression.js';
 import _ from 'lodash';
 
 export default
