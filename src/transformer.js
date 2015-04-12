@@ -99,7 +99,7 @@ class Transformer {
    * @returns {Object}
    */
   out() {
-    return codeGenerator.generate(this.ast);
+    return codeGenerator.generate(this.ast, {comment: true});
   }
 
   /**
