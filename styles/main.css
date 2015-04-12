@@ -65,10 +65,6 @@ section.jumbotron h1 {
     text-align: center;
 }
 
-.try-live-container {
-    height: 400px;
-}
-
 #editor, #result {
     margin: 0;
     width: 100%;
