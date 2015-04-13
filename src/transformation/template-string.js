@@ -35,7 +35,7 @@ function traverser(node) {
   }
 }
 
-function detector(node, parent) {
+function detector(node) {
 
   if (typeChecker.isBinaryExpression(node)) {
     if (node.operator === '+') {
