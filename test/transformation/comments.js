@@ -11,7 +11,7 @@ describe('Comments', function () {
     transformer.read(script);
     transformer.applyTransformations();
 
-    expect(transformer.out()).to.equal(script);
+    expect(transformer.out()).to.equal('// comment line\nconst x = 42;');
     done();
   });
 
@@ -21,7 +21,7 @@ describe('Comments', function () {
     transformer.read(script);
     transformer.applyTransformations();
 
-    expect(transformer.out()).to.equal(script);
+    expect(transformer.out()).to.equal('const x = 42;    // trailing comment\n');
     done();
   });
 

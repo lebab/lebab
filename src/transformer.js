@@ -7,6 +7,7 @@ import astGenerator from './utils/ast-generator.js';
 import classTransformation from './transformation/classes.js';
 import templateStringTransformation from './transformation/template-string.js';
 import arrowFunctionTransformation from './transformation/arrow-functions.js';
+import letTransformation from './transformation/let.js';
 
 export default
 class Transformer {
@@ -42,6 +43,7 @@ class Transformer {
     doTransform('classes', classTransformation);
     doTransform('stringTemplates', templateStringTransformation);
     doTransform('arrowFunctions', arrowFunctionTransformation);
+    doTransform('let', letTransformation);
   }
 
   /**
@@ -126,6 +128,7 @@ Transformer.defaultOptions = {
   transformers: {
     classes: true,
     stringTemplates: true,
-    arrowFunctions: true
+    arrowFunctions: true,
+    let: true
   }
 };
