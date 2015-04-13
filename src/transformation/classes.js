@@ -32,6 +32,7 @@ function createClass(_function) {
     let constructor = new MethodDefinition();
     constructor.name = 'constructor';
     constructor.body = _function.node.body;
+    constructor.leadingComments = _function.node.leadingComments;
 
     _function.class = createdClass;
     _function.node._class = createdClass;
@@ -76,6 +77,7 @@ function classMaker(node, parent) {
 
           let method = node.right;
           let createdMethod = new MethodDefinition();
+          createdMethod.leadingComments = parent.leadingComments;
 
           if (method.type === 'Identifier') {
 
