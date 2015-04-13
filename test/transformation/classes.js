@@ -5,7 +5,7 @@ var
 
 describe('Class transformation', function () {
 
-  it('should not convert functions without prototype assignment to class', function (done) {
+  it('shouldn\'t convert functions without prototype assignment to class', function (done) {
     var script = "function someClass() {\n}";
 
     transformer.read(script);
