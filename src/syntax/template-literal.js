@@ -1,5 +1,6 @@
 import BaseSyntax from './base.js';
 import TemplateElement from './template-element.js';
+import typeChecker from './../utils/type-checker.js';
 
 /**
  * The class to define the TemplateLiteral syntax
@@ -25,22 +26,14 @@ class TemplateLiteral extends BaseSyntax {
 
   createFromArray(parts) {
 
-    let isLiteral = (node) => {
-      return typeof node !== 'undefined' && node.type === 'Literal';
-    };
-
-    let isString = (node) => {
-      return isLiteral(node) && typeof node.value === 'string';
-    };
-
     for (let i = 0; i < parts.length; i++) {
       let curr = parts[i];
 
-      if (isString(curr)) {
+      if (typeChecker.isString(curr)) {
         let element = new TemplateElement();
         curr = curr.value;
 
-        while (isString(parts[++i])) {
+        while (typeChecker.isString(parts[++i])) {
           curr += parts[i].value;
         }
 
@@ -51,11 +44,10 @@ class TemplateLiteral extends BaseSyntax {
       } else {
         if (i === 0) {
           let element = new TemplateElement();
-          element.setValue('');
           this.quasis.push(element);
         }
 
-        if (! isLiteral(parts[i + 1])) {
+        if (! typeChecker.isString(parts[i + 1])) {
           let element = new TemplateElement();
           this.quasis.push(element);
 
