@@ -41,7 +41,7 @@ grunt.initConfig({
       options: {
         reporter: 'spec'
       },
-      src: ['test/**/*.js']
+      src: ['test/transformation/let.js']
     }
   }
 });

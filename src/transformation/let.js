@@ -1,5 +1,4 @@
 import estraverse from 'estraverse';
-import _ from 'lodash';
 
 export default
   function (ast) {
@@ -11,14 +10,15 @@ export default
 let declarations = {};
 
 function replaceVar(node) {
-  if (node.type === "VariableDeclaration") {
+  if (node.type === 'VariableDeclaration') {
     node.declarations.forEach(function(dec) {
-      declarations[dec.id] = node;
-      declarations[dec.id].kind = 'const';
+      declarations[dec.id.name] = node;
+      declarations[dec.id.name].kind = 'const';
     });
   }
 
-  if (node.type === "AssignmentExpression") {
-    declarations[node.left.property.name].kind = 'let';
+  if (node.type === 'AssignmentExpression') {
+    let left = node.left.name || node.left.property.name;
+    declarations[left].kind = 'let';
   }
 }

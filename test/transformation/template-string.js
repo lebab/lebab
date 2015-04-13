@@ -1,70 +1,51 @@
 var expect = require('chai').expect;
 var
   Transformer = require('./../../lib/transformer'),
+  templateTransformation = require('./../../lib/transformation/template-string'),
   transformer = new Transformer();
+
+function test(script) {
+  transformer.read(script);
+  transformer.applyTransformation(templateTransformation);
+  return transformer.out();
+}
 
 describe('Template string transformation', function () {
 
-  it('shouldn\'t convert non-concatenated strings', function (done) {
+  it('shouldn\'t convert non-concatenated strings', function () {
     var script = "var result = 'test';";
 
-    transformer.read(script);
-    transformer.applyTransformations();
-
-    expect(transformer.out()).to.equal(script);
-    done();
+    expect(test(script)).to.equal(script);
   });
 
-  it('shouldn\'t convert non-string binary expressions with + operator', function (done) {
+  it('shouldn\'t convert non-string binary expressions with + operator', function () {
     var script = "var result = 1 + 2;";
 
-    transformer.read(script);
-    transformer.applyTransformations();
-
-    expect(transformer.out()).to.equal(script);
-    done();
+    expect(test(script)).to.equal(script);
   });
 
-  it('shouldn\'t convert only string concatenation', function (done) {
+  it('shouldn\'t convert only string concatenation', function () {
     var script = "var result = 'Hello ' + ' World!';";
 
-    transformer.read(script);
-    transformer.applyTransformations();
-
-    expect(transformer.out()).to.equal('var result = `Hello  World!`;');
-    done();
+    expect(test(script)).to.equal('var result = `Hello  World!`;');
   });
 
-  it('should convert string and one variable concatenation', function (done) {
+  it('should convert string and one variable concatenation', function () {
     var script = "var result = 'Firstname: ' + firstname;";
 
-    transformer.read(script);
-    transformer.applyTransformations();
-
-    expect(transformer.out()).to.equal('var result = `Firstname: ${ firstname }`;');
-    done();
+    expect(test(script)).to.equal('var result = `Firstname: ${ firstname }`;');
   });
 
-  it('should convert string and multiple variables concatenation', function (done) {
+  it('should convert string and multiple variables concatenation', function () {
     var script = "var result = 'Fullname: ' + firstname + lastname;";
 
-    transformer.read(script);
-    transformer.applyTransformations();
-
-    expect(transformer.out()).to.equal('var result = `Fullname: ${ firstname }${ lastname }`;');
-
-    done();
+    expect(test(script)).to.equal('var result = `Fullname: ${ firstname }${ lastname }`;');
   });
 
-  it('should convert string and call expressions', function (done) {
+  it('should convert string and call expressions', function () {
     var script = "var result = 'Firstname: ' + person.getFirstname() + 'Lastname: ' + person.getLastname();";
 
-    transformer.read(script);
-    transformer.applyTransformations();
-
-    expect(transformer.out()).to.equal('var result = `Firstname: ${ person.getFirstname() }Lastname: ${ person.getLastname() }`;');
-
-    done();
+    expect(test(script)).to.equal('var result = `Firstname: ${ person.getFirstname() }Lastname: ${ person.getLastname() }`;');
   });
 
 });
