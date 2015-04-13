@@ -47,4 +47,4 @@ grunt.initConfig({
 });
 
 grunt.registerTask('default', ['clean', 'babel']);
-grunt.registerTask('test', ['jshint', 'mochaTest']);
+grunt.registerTask('test', ['jshint', 'default', 'mochaTest']);

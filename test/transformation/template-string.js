@@ -31,7 +31,7 @@ describe('Template string transformation', function () {
     transformer.read(script);
     transformer.applyTransformations();
 
-    expect(transformer.out()).to.equal(script);
+    expect(transformer.out()).to.equal('var result = `Hello  World!`;');
     done();
   });
 
