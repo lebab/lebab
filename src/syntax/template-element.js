@@ -23,8 +23,8 @@ class TemplateElement extends BaseSyntax {
   }
 
   setValue(value) {
-    this.value.raw = value;
-    this.value.cooked = value;
+    this.setRaw(value);
+    this.setCooked(value);
   }
 
   setRaw(raw) {

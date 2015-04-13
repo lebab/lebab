@@ -1,6 +1,7 @@
 import estraverse from 'estraverse';
 import esutils from 'esutils/lib/ast.js';
 import TemplateLiteral from './../syntax/template-literal.js';
+import typeChecker from './../utils/type-checker.js';
 import _ from 'lodash';
 
 export default
@@ -10,20 +11,20 @@ export default
     });
   }
 
-var operands, hasString, hasExpression;
+let operands, hasString, hasExpression, currentExpression;
 
 function traverser(node) {
   if (node.type === 'BinaryExpression' && node.operator === '+') {
 
     operands = [];
     hasString = false;
+    currentExpression = node;
 
     estraverse.traverse(node, {
       enter: detector
     });
 
-
-    if (hasString && hasExpression) {
+    if (hasString) {
       operands = _(operands).reverse().value();
 
       let templateString = new TemplateLiteral();
@@ -36,44 +37,38 @@ function traverser(node) {
 
 function detector(node) {
 
-  if (isBinaryExpression(node) && node.operator === '+') {
-    let left = node.left;
-    let right = node.right;
+  if (typeChecker.isBinaryExpression(node)) {
+    if (node.operator === '+') {
+      let left = node.left;
+      let right = node.right;
 
-    addOperand(right);
+      addOperand(right);
 
-    if (!isBinaryExpression(left)) {
-      addOperand(left);
+      if (!typeChecker.isBinaryExpression(left)) {
+        addOperand(left);
 
+        this.skip();
+      }
+    } else {
+      addOperand(node);
       this.skip();
     }
-  } else if (isBinaryExpression(node)) {
-    addOperand(node);
-    this.skip();
   }
 
 }
 
 function addOperand(node) {
-  operands.push(node);
 
-  if (isString(node)) {
-    hasString = true;
+  if (operands.indexOf(node) === -1) {
+    if (typeChecker.isString(node)) {
+      hasString = true;
+    }
+
+    if (esutils.isExpression(node) && !typeChecker.isLiteral(node)) {
+      hasExpression = true;
+    }
+
+    operands.push(node);
   }
 
-  if(esutils.isExpression(node) && node.type !== 'Literal') {
-    hasExpression = true;
-  }
-}
-
-function isLiteral(node) {
-  return /Literal/.test(node.type);
-}
-
-function isString(node) {
-  return isLiteral(node) && typeof node.value === 'string';
-}
-
-function isBinaryExpression(node) {
-  return /BinaryExpression/.test(node.type);
 }

@@ -5,7 +5,7 @@ var
 
 describe('Template string transformation', function () {
 
-  it('should not convert non-concatenated strings', function (done) {
+  it('shouldn\'t convert non-concatenated strings', function (done) {
     var script = "var result = 'test';";
 
     transformer.read(script);
@@ -15,7 +15,7 @@ describe('Template string transformation', function () {
     done();
   });
 
-  it('should not convert non-string binary expressions with + operator', function (done) {
+  it('shouldn\'t convert non-string binary expressions with + operator', function (done) {
     var script = "var result = 1 + 2;";
 
     transformer.read(script);
@@ -25,13 +25,13 @@ describe('Template string transformation', function () {
     done();
   });
 
-  it('should not convert only string concatenation', function (done) {
+  it('shouldn\'t convert only string concatenation', function (done) {
     var script = "var result = 'Hello ' + ' World!';";
 
     transformer.read(script);
     transformer.applyTransformations();
 
-    expect(transformer.out()).to.equal(script);
+    expect(transformer.out()).to.equal('var result = `Hello  World!`;');
     done();
   });
 
