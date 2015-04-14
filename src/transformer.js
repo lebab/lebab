@@ -145,13 +145,5 @@ Transformer.defaultOptions = {
     defaultArguments: true,
     objectMethods: true
   },
-  formatter: {
-    lineBreak: {
-      before: {
-      },
-      after: {
-        MethodDefinition: 2
-      }
-    }
-  }
+  formatter: false
 };
