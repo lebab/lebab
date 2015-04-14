@@ -106,7 +106,11 @@ class Transformer {
     out() {
     let result;
     result = codeGenerator.generate(this.ast, {comment: true});
-    result = formatter.format(result, this.options.formatter);
+
+    if(this.options.formatter !== false) {
+      result = formatter.format(result, this.options.formatter);
+    }
+
     return result;
   }
 
