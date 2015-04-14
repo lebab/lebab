@@ -2,7 +2,7 @@ var expect = require('chai').expect;
 var
   Transformer = require('./../../lib/transformer'),
   letTransformation = require('./../../lib/transformation/let'),
-  transformer = new Transformer();
+  transformer = new Transformer({formatter: false});
 
 function test(script) {
   transformer.read(script);

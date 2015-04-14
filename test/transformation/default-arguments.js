@@ -2,7 +2,7 @@ var expect = require('chai').expect;
 var
   Transformer = require('./../../lib/transformer'),
   defaultArgsTransformation = require('./../../lib/transformation/default-arguments'),
-  transformer = new Transformer();
+  transformer = new Transformer({formatter: false});
 
 function test(script) {
   transformer.read(script);

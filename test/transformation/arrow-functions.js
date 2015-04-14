@@ -2,7 +2,7 @@ var expect = require('chai').expect;
 var
   Transformer = require('./../../lib/transformer'),
   arrowTransformation = require('./../../lib/transformation/arrow-functions'),
-  transformer = new Transformer();
+  transformer = new Transformer({formatter: false});
 
 function test(script) {
   transformer.read(script);
