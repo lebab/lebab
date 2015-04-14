@@ -84,3 +84,4 @@ function someFunction(a, b) {
 * String concatenation to Template Strings
 * Using `let` and `const` instead of `var`
 * Default arguments instead of `a = a || 2`
+* Function properties in objects to Object methods
