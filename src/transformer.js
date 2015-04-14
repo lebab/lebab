@@ -1,6 +1,7 @@
 import fs from 'fs';
 import merge from 'lodash/object/merge.js';
 import codeGenerator from 'escodegen';
+import formatter from 'esformatter';
 import astGenerator from './utils/ast-generator.js';
 
 // Transformers
@@ -102,8 +103,11 @@ class Transformer {
    *
    * @returns {Object}
    */
-  out() {
-    return codeGenerator.generate(this.ast, {comment: true});
+    out() {
+    let result;
+    result = codeGenerator.generate(this.ast, {comment: true});
+    result = formatter.format(result, this.options.formatter);
+    return result;
   }
 
   /**
@@ -133,5 +137,14 @@ Transformer.defaultOptions = {
     arrowFunctions: true,
     let: true,
     defaultArguments: true
+  },
+  formatter: {
+    lineBreak: {
+      before: {
+      },
+      after: {
+        MethodDefinition: 2
+      }
+    }
   }
 };
