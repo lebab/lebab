@@ -8,6 +8,7 @@ import classTransformation from './transformation/classes.js';
 import templateStringTransformation from './transformation/template-string.js';
 import arrowFunctionTransformation from './transformation/arrow-functions.js';
 import letTransformation from './transformation/let.js';
+import defaultArgsTransformation from './transformation/default-arguments.js';
 
 export default
 class Transformer {
@@ -44,6 +45,7 @@ class Transformer {
     doTransform('stringTemplates', templateStringTransformation);
     doTransform('arrowFunctions', arrowFunctionTransformation);
     doTransform('let', letTransformation);
+    doTransform('defaultArguments', defaultArgsTransformation);
   }
 
   /**
@@ -129,6 +131,7 @@ Transformer.defaultOptions = {
     classes: true,
     stringTemplates: true,
     arrowFunctions: true,
-    let: true
+    let: true,
+    defaultArguments: true
   }
 };

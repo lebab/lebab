@@ -82,3 +82,5 @@ function someFunction(a, b) {
 * Function/Prototypes to Classes
 * Callback to Arrow functions
 * String concatenation to Template Strings
+* Using `let` and `const` instead of `var`
+* Default arguments instead of `a = a || 2`
