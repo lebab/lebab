@@ -8,6 +8,7 @@ grunt.initConfig({
     concat: '.tmp/concat',
     scripts: 'src/scripts',
     styles: 'src/styles',
+    modules: 'node_modules',
     tmp: 'src/tmp',
     assets: 'assets'
   },
@@ -37,7 +38,7 @@ grunt.initConfig({
         },
         {
           dest: '<%= configs.concat %>/js/vendor.js',
-          src: ['<%= configs.bower %>/ace-builds/src/ace.js', '<%= configs.bower %>/ace-builds/src/theme-monokai.js', '<%= configs.bower %>/ace-builds/src/mode-javascript.js', '<%= configs.bower %>/ace-builds/src/worker-javascript.js', '<%= configs.bower %>/highlightjs/highlight.pack.js']
+          src: ['<%= configs.modules %>/babel/node_modules/babel-core/browser-polyfill.js','<%= configs.bower %>/ace-builds/src/ace.js', '<%= configs.bower %>/ace-builds/src/theme-monokai.js', '<%= configs.bower %>/ace-builds/src/mode-javascript.js', '<%= configs.bower %>/ace-builds/src/worker-javascript.js', '<%= configs.bower %>/highlightjs/highlight.pack.js']
         },
         {
           dest: '<%= configs.concat %>/css/app.css',
