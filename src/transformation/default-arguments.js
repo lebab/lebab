@@ -27,6 +27,7 @@ function findDefaultAssignments(node) {
     node.expression._parent = node;
   }
   if (node.type === 'AssignmentExpression' &&
+      lastFunction._args &&
       lastFunction._args.indexOf(node.left.name) > -1 &&
       node.right.type === 'LogicalExpression' &&
       node.right.operator === '||' &&

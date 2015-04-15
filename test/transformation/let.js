@@ -2,7 +2,7 @@ var expect = require('chai').expect;
 var
   Transformer = require('./../../lib/transformer'),
   letTransformation = require('./../../lib/transformation/let'),
-  transformer = new Transformer({formatter: false});
+  transformer = new Transformer();
 
 function test(script) {
   transformer.read(script);
@@ -28,5 +28,11 @@ describe('Variable declaration var to let/const', function () {
     var script = 'var x = 2, y = 3; x = 5';
 
     expect(test(script)).to.equal('let x = 2, y = 3;\nx = 5;');
+  });
+
+  // Issue 31
+  it('should not throw error for variables without var keyword', function () {
+    var script = 'x = 2; this.y = 5';
+    expect(test(script)).to.equal('x = 2;\nthis.y = 5;');
   });
 });

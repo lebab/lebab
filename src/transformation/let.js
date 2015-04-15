@@ -19,6 +19,9 @@ function replaceVar(node) {
 
   if (node.type === 'AssignmentExpression') {
     let left = node.left.name || node.left.property.name;
-    declarations[left].kind = 'let';
+
+    if (declarations[left]) {
+      declarations[left].kind = 'let';
+    }
   }
 }
