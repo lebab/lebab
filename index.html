@@ -7,6 +7,7 @@ SomeClass.prototype.someOuterMethod = someFunction;
 SomeClass.prototype.someInnerMethod = function (birthYear) {
   var result = 'Your Age is : ' + (2015 - birthYear) +
   ' and you were born in ' + birthYear;
+
   return result;
 };
 
@@ -21,12 +22,4 @@ Object.defineProperty(SomeClass.prototype, 'someAccessor', {
 
 function someFunction(a, b) {
   return a + b;
-}
-
-someAsyncTask(function(results) {
-  console.log(results);
-});
-
-var x = 5;
-var equation = x + '^2 = 25';
-</pre></div><div class="col-md-6"><pre id="result"></pre></div></div></div></section><section id="features"><div class="container"><div class="col-md-6"><h2>Features</h2><p>Currently xto6 supports these features</p><ul><li><i class="icono-checkCircle"></i> Function/Prototype to Class</li><li><i class="icono-checkCircle"></i> String concatenation to Template string</li><li><i class="icono-checkCircle"></i> Anonymous callbacks to Arrow functions</li></ul></div><div class="col-md-6"><h2>Road map</h2><p>These features will be added soon :</p><ul><li><i class="icono-plusCircle"></i> Convert commonjs module definitions</li><li><i class="icono-plusCircle"></i> Convert var to let/const</li><li><i class="icono-plusCircle"></i> For of loops</li><li><i class="icono-plusCircle"></i> Convert arguments to rest parameters</li><li><i class="icono-plusCircle"></i> Remove _this=this for arrow functions</li></ul></div></div></section><section id="usage"><div class="container"><h2>Usage</h2><p><strong>xto6</strong> transpiles your ES5 code to ES6. It does exactly the opposite of what other transpilers do (like babel and traceur).</p><p>Install it using npm :</p><pre>$ npm install -g xto6</pre><p>Transpile your boring code using the <code>xto6</code> cli tool.</p><pre>xto6 es5.js -o es6.js</pre></div></section><footer>XTO6 - <a href="http://mohebifar.mit-license.org/">MIT License</a></footer><script>!function(e,a,t,n,c,o,s){e.GoogleAnalyticsObject=c,e[c]=e[c]||function(){(e[c].q=e[c].q||[]).push(arguments)},e[c].l=1*new Date,o=a.createElement(t),s=a.getElementsByTagName(t)[0],o.async=1,o.src=n,s.parentNode.insertBefore(o,s)}(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-42543494-3","auto"),ga("send","pageview");</script><script src="assets/js/vendor.js"></script><script src="assets/js/app.js"></script></body></html>
+}</pre></div><div class="col-md-6"><pre id="result"></pre></div></div></div></section><section id="features"><div class="container"><div class="col-md-6"><h2>Features</h2><p>Currently xto6 supports these features</p><ul><li><i class="icono-checkCircle"></i> Function/Prototype to Class</li><li><i class="icono-checkCircle"></i> String concatenation to Template string</li><li><i class="icono-checkCircle"></i> Anonymous callbacks to Arrow functions</li></ul></div><div class="col-md-6"><h2>Road map</h2><p>These features will be added soon :</p><ul><li><i class="icono-plusCircle"></i> Convert commonjs module definitions</li><li><i class="icono-plusCircle"></i> Convert var to let/const</li><li><i class="icono-plusCircle"></i> For of loops</li><li><i class="icono-plusCircle"></i> Convert arguments to rest parameters</li><li><i class="icono-plusCircle"></i> Remove _this=this for arrow functions</li></ul></div></div></section><section id="usage"><div class="container"><h2>Usage</h2><p><strong>xto6</strong> transpiles your ES5 code to ES6. It does exactly the opposite of what other transpilers do (like babel and traceur).</p><p>Install it using npm :</p><pre>$ npm install -g xto6</pre><p>Transpile your boring code using the <code>xto6</code> cli tool.</p><pre>xto6 es5.js -o es6.js</pre></div></section><footer>XTO6 - <a href="http://mohebifar.mit-license.org/">MIT License</a></footer><script>!function(e,a,t,n,c,o,s){e.GoogleAnalyticsObject=c,e[c]=e[c]||function(){(e[c].q=e[c].q||[]).push(arguments)},e[c].l=1*new Date,o=a.createElement(t),s=a.getElementsByTagName(t)[0],o.async=1,o.src=n,s.parentNode.insertBefore(o,s)}(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-42543494-3","auto"),ga("send","pageview");</script><script src="assets/js/vendor.js"></script><script src="assets/js/app.js"></script></body></html>
