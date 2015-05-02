@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require('babel/polyfill');
 var program = require('commander');
 var fs = require("fs");
 var each = require("lodash/collection/each");
