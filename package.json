@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/mohebifar/xto6",
   "dependencies": {
+    "babel": "^5.0.12",
     "acorn": "^0.11.0",
     "coffee-script": "^1.9.1",
     "commander": "^2.6.0",
@@ -40,7 +41,6 @@
     "lodash": "^3.3.1"
   },
   "devDependencies": {
-    "babel": "^5.0.12",
     "chai": "^2.2.0",
     "grunt": "^0.4.5",
     "grunt-babel": "^4.0.0",
