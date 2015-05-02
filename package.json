@@ -1,11 +1,14 @@
 {
   "name": "xto6",
-  "version": "1.1.0-alpha",
+  "version": "1.1.1-alpha",
   "description": "Turn your ES5 code into readable ES6",
   "main": "index.js",
   "scripts": {
     "prepublish": "node node_modules/babel/bin/babel src --out-dir lib",
     "test": "grunt test"
+  },
+  "engines": {
+    "node": ">=0.12"
   },
   "repository": {
     "type": "git",
