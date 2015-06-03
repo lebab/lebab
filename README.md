@@ -5,8 +5,8 @@
 
 **xto6** transpiles your ES5 code to ES6. It does exactly the opposite of what other transpilers do (like babel and traceur)! If you want to understand what xto6 exactly does, [try the live demo](http://xto6.js.org/#try-live).
 
-## Why ?
-Still coding this way ? Think twice !
+## Why?
+Still coding this way? Think twice!
 
 ```js
 var SomeClass = function () {
