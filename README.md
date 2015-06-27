@@ -77,6 +77,13 @@ function someFunction(a, b) {
 }
 ```
 
+Want to convert your whole project to ES6 syntax for even greater awesomeness? No problem!
+
+```
+$ find . -name "*.js" | xargs -0 -I % xto6 % -o %
+```
+
+
 ## Supported Features
 
 * Function/Prototypes to Classes
