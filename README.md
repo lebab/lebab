@@ -83,6 +83,9 @@ Want to convert your whole project to ES6 syntax for even greater awesomeness? N
 $ find . -type f -not -path "*node_modules*" -name "*.js" -print0 | xargs -0 -I % xto6 % -o %
 ```
 
+## Libraries
+- [gulp-xto6 - gulp plugin for xto6](https://github.com/yudppp/gulp-xto6)
+
 
 ## Supported Features
 
