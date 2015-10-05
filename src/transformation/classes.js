@@ -33,6 +33,7 @@ function createClass(_function) {
     constructor.name = 'constructor';
     constructor.body = _function.node.body;
     constructor.leadingComments = _function.node.leadingComments;
+    constructor.params = _function.node.params;
 
     _function.class = createdClass;
     _function.node._class = createdClass;

@@ -48,4 +48,13 @@ describe('Class transformation', function () {
     expect(result).to.include('set someAccessor(value)');
   });
 
+  it('should not forget to copy over Class constructor arguments after transforming', function () {
+    var script = 'function someClass(a, b) {\n}\nsomeClass.prototype.someMethod = function(ma, mb) {\n}';
+
+    var result = test(script);
+
+    expect(result).to.include('constructor(a, b)');
+    expect(result).to.include('someMethod(ma, mb)');
+  });
+
 });
