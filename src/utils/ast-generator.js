@@ -19,6 +19,7 @@ export function readFile(file, options) {
 
   if (options.sync) {
     let js = fs.readFileSync(file);
+
     return this.read(js, options);
   } else {
     fs.readFile(file, (js) => {
@@ -39,6 +40,11 @@ export function readFile(file, options) {
  * @returns {Object}
  */
 export function read(js, options) {
+  let hashbang = js.indexOf('#!');
+  if (hashbang > -1) {
+    js = js.slice(0, hashbang) + js.slice(js.indexOf('\n', hashbang));
+  }
+
   let comments = [];
   let tokens = [];
 
