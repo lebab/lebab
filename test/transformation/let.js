@@ -35,4 +35,9 @@ describe('Variable declaration var to let/const', function () {
     var script = 'x = 2; this.y = 5';
     expect(test(script)).to.equal('x = 2;\nthis.y = 5;');
   });
+
+  it('should use let for updated variables', function () {
+    var script = 'var i = 0; i++;'
+    expect(test(script)).to.equal('let i = 0;\ni++;');
+  });
 });

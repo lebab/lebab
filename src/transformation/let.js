@@ -23,5 +23,10 @@ function replaceVar(node) {
     if (declarations[left]) {
       declarations[left].kind = 'let';
     }
+  } else if (node.type === 'UpdateExpression') {
+    let name = node.argument.name;
+    if (declarations[name]) {
+      declarations[name].kind = 'let';
+    }
   }
 }
