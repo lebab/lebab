@@ -1,6 +1,6 @@
 import fs from 'fs';
 import merge from 'lodash/object/merge.js';
-import codeGenerator from 'escodegen';
+import recast from 'recast';
 import formatter from 'esformatter';
 import astGenerator from './utils/ast-generator.js';
 
@@ -105,9 +105,8 @@ class Transformer {
    *
    * @returns {Object}
    */
-    out() {
-    let result;
-    result = codeGenerator.generate(this.ast, {comment: true});
+  out() {
+    let result = recast.print(this.ast).code;
 
     if(this.options.formatter !== false) {
       result = formatter.format(result, this.options.formatter);
