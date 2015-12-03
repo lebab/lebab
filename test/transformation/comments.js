@@ -19,9 +19,9 @@ describe('Comments', function () {
   });
 
   it("shouldn't convert trailing comment", function (done) {
-    var script = 'var x = 42;    // trailing comment\n';
+    var script = 'var x = 42; // trailing comment';
 
-    expect(test(script)).to.equal('const x = 42;    // trailing comment\n');
+    expect(test(script)).to.equal('const x = 42; // trailing comment');
     done();
   });
 

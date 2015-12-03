@@ -13,35 +13,34 @@ function test(script) {
 describe('Callback to Arrow transformation', function () {
 
   it('should convert simple callbacks', function () {
-    var script = 'setTimeout(function() { return 2 })';
+    var script = 'setTimeout(function() { return 2; });';
 
-    expect(test(script)).to.equal('setTimeout(() => {\n    return 2;\n});');
+    expect(test(script)).to.equal('setTimeout(() => { return 2; });');
   });
 
   it('should convert callbacks with a single argument', function () {
-    var script = 'a(function(b) { return b });';
+    var script = 'a(function(b) { return b; });';
 
-    expect(test(script)).to.equal('a(b => {\n    return b;\n});');
+    expect(test(script)).to.equal('a(b => { return b; });');
   });
 
   it('should convert callbacks with a single argument', function () {
-    var script = 'a(function(b, c) { return b });';
+    var script = 'a(function(b, c) { return b; });';
 
-    expect(test(script)).to.equal('a((b, c) => {\n    return b;\n});');
+    expect(test(script)).to.equal('a((b, c) => { return b; });');
   });
 
 
   it('shouldn\'t convert other forms of functions', function () {
-    var script = 'var x = function () {\n};';
+    var script = 'var x = function () {};';
 
     expect(test(script)).to.equal(script);
   });
 
   it('shouldn\'t convert functions using `this` keyword', function () {
-    var script = 'a(function (b) {\n    this.x = 2;\n});';
+    var script = 'a(function (b) { this.x = 2; });';
 
     expect(test(script)).to.equal(script);
-    transformer.read('var x = 2; x = 5');
   });
 
 });

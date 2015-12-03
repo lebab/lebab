@@ -33,19 +33,19 @@ describe('Template string transformation', function () {
   it('should convert string and one variable concatenation', function () {
     var script = "var result = 'Firstname: ' + firstname;";
 
-    expect(test(script)).to.equal('var result = `Firstname: ${ firstname }`;');
+    expect(test(script)).to.equal('var result = `Firstname: ${firstname}`;');
   });
 
   it('should convert string and multiple variables concatenation', function () {
     var script = "var result = 'Fullname: ' + firstname + lastname;";
 
-    expect(test(script)).to.equal('var result = `Fullname: ${ firstname }${ lastname }`;');
+    expect(test(script)).to.equal('var result = `Fullname: ${firstname}${lastname}`;');
   });
 
   it('should convert string and call expressions', function () {
     var script = "var result = 'Firstname: ' + person.getFirstname() + 'Lastname: ' + person.getLastname();";
 
-    expect(test(script)).to.equal('var result = `Firstname: ${ person.getFirstname() }Lastname: ${ person.getLastname() }`;');
+    expect(test(script)).to.equal('var result = `Firstname: ${person.getFirstname()}Lastname: ${person.getLastname()}`;');
   });
 
 });
