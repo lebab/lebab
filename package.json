@@ -1,6 +1,6 @@
 {
-  "name": "xto6",
-  "version": "1.2.0-alpha",
+  "name": "lebab",
+  "version": "1.2.1-alpha",
   "description": "Turn your ES5 code into readable ES6",
   "main": "index.js",
   "scripts": {
@@ -12,10 +12,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mohebifar/xto6"
+    "url": "https://github.com/mohebifar/lebab"
   },
   "bin": {
-    "xto6": "./bin/index.js"
+    "lebab": "./bin/index.js"
   },
   "keywords": [
     "es5",
@@ -26,9 +26,9 @@
   "author": "Mohamad Mohebifar <mohamad@mohebifar.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mohebifar/xto6/issues"
+    "url": "https://github.com/mohebifar/lebab/issues"
   },
-  "homepage": "https://github.com/mohebifar/xto6",
+  "homepage": "https://github.com/mohebifar/lebab",
   "dependencies": {
     "babel": "^5.0.12",
     "coffee-script": "^1.9.1",
