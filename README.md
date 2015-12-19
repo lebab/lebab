@@ -1,9 +1,9 @@
 [![Build Status](https://img.shields.io/travis/mohebifar/xto6.svg?style=flat-square)](http://travis-ci.org/mohebifar/xto6) [![License](http://img.shields.io/:license-mit-brightgreen.svg?style=flat-square)](http://mohebifar.mit-license.org) [![JS.ORG](https://img.shields.io/badge/js.org-xto6-ffb400.svg?style=flat-square)](http://js.org)
 
-# xto6
+# Lebab
 ![xto6](https://raw.githubusercontent.com/mohebifar/xto6-logo/master/logo.png)
 
-**xto6** transpiles your ES5 code to ES6. It does exactly the opposite of what other transpilers do (like babel and traceur)! If you want to understand what xto6 exactly does, [try the live demo](http://xto6.js.org/#try-live).
+**lebab** transpiles your ES5 code to ES6. It does exactly the opposite of what other transpilers do (like babel and traceur)! If you want to understand what lebab exactly does, [try the live demo](http://xto6.js.org/#try-live).
 
 ## Why?
 Still coding this way? Think twice!
@@ -38,12 +38,12 @@ function someFunction(a, b) {
 Install it using npm :
 
 ```bash
-$ npm install -g xto6
+$ npm install -g lebab
 ```
 
-Transpile your old-fashioned code using the `xto6` cli tool.
+Transpile your old-fashioned code using the `lebab` cli tool.
 ```bash
-xto6 es5.js -o es6.js
+lebab es5.js -o es6.js
 ```
 
 And the result for the code above is :
@@ -76,13 +76,6 @@ function someFunction(a, b) {
   return a + b;
 }
 ```
-
-Want to convert your whole project to ES6 syntax for even greater awesomeness? No problem!
-
-```
-$ find . -type f -not -path "*node_modules*" -name "*.js" -print0 | xargs -0 -I % xto6 % -o %
-```
-
 
 ## Supported Features
 
