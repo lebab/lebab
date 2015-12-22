@@ -9,29 +9,27 @@
 Still coding this way? Think twice!
 
 ```js
-var SomeClass = function () {
-  console.log('This is the constructor.');
+var Employee = function Employee() {
+  this.alive = true;
 };
 
-SomeClass.prototype.someOuterMethod = someFunction;
-
-SomeClass.prototype.someInnerMethod = function (birthYear) {
-  var result = 'Your Age is : ' + (2015 - birthYear) + ' and you were born in ' + birthYear;
-  return result;
+Employee.prototype.setSkills = function(skills) {
+  skills = skills || [];
+  var defaultSkills = ['JavaScript'];
+  this.skills = skills.concat(defaultSkills);
 };
 
-Object.defineProperty(SomeClass.prototype, 'someAccessor', {
-  get: function () {
-    return this._some;
-  },
-  set: function (value) {
-    this._some = value;
+Employee.prototype.sayHello = function() {
+  window.setTimeout(function() {
+    console.log('Hello World!');
+  }, 2000);
+};
+
+Object.defineProperty(Employee.prototype, 'name', {
+  get: function() {
+    return this.firstName + ' ' + this.lastName;
   }
 });
-
-function someFunction(a, b) {
-  return a + b;
-}
 ```
 
 ## Usage
@@ -49,31 +47,25 @@ lebab es5.js -o es6.js
 And the result for the code above is :
 
 ```js
-class SomeClass {
+class Employee {
   constructor() {
-    console.log('This is the constructor.');
+    this.alive = true;
   }
 
-  someOuterMethod() {
-    return someFunction.apply(this, arguments);
+  setSkills(skills=[]) {
+    const defaultSkills = ['JavaScript'];
+    this.skills = skills.concat(defaultSkills);
   }
 
-  someInnerMethod(birthYear) {
-    var result = `Your Age is : ${ 2015 - birthYear } and you were born in ${ birthYear }`;
-    return result;
+  sayHello() {
+    window.setTimeout(() => {
+      console.log('Hello World!');
+    }, 2000);
   }
 
-  get someAccessor() {
-    return this._some;
+  get name() {
+    return `${this.firstName} ${this.lastName}`;
   }
-
-  set someAccessor(value) {
-    this._some = value;
-  }
-}
-
-function someFunction(a, b) {
-  return a + b;
 }
 ```
 
