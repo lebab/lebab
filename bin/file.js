@@ -3,35 +3,33 @@ var _ = require('lodash');
 
 module.exports = function (program, file) {
   // Enable all transformers by default
-  var options = {
-    transformers: {
-      classes: true,
-      stringTemplates: true,
-      arrowFunctions: true,
-      let: true,
-      defaultArguments: true,
-      objectMethods: true
-    }
+  var transformers = {
+    classes: true,
+    stringTemplates: true,
+    arrowFunctions: true,
+    let: true,
+    defaultArguments: true,
+    objectMethods: true
   };
 
   // When --no-classes used, disable classes transformer
   if(! program.classes) {
-    options.transformers.classes = false;
+    transformers.classes = false;
   }
 
   // When --transformers used turn off everything besides the specified tranformers
   if (program.transformers) {
-    options.transformers = _.mapValues(options.transformers, _.constant(false));
+    transformers = _.mapValues(transformers, _.constant(false));
 
     program.transformers.forEach(function (name) {
-      if (!options.transformers.hasOwnProperty(name)) {
+      if (!transformers.hasOwnProperty(name)) {
         console.error("Unknown transformer '" + name + "'.");
       }
-      options.transformers[name] = true;
+      transformers[name] = true;
     });
   }
 
-  var transformer = new Transformer(options);
+  var transformer = new Transformer({transformers: transformers});
   transformer.readFile(file[0]);
   transformer.applyTransformations();
   transformer.writeFile(program.outFile);
