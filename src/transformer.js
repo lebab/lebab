@@ -1,5 +1,5 @@
 import fs from 'fs';
-import merge from 'lodash/object/merge.js';
+import _ from 'lodash';
 import recast from 'recast';
 import formatter from 'esformatter';
 import astGenerator from './utils/ast-generator.js';
@@ -12,6 +12,15 @@ import letTransformation from './transformation/let.js';
 import defaultArgsTransformation from './transformation/default-arguments.js';
 import objectMethodsTransformation from './transformation/object-methods.js';
 
+const tranformersMap = {
+  classes: classTransformation,
+  stringTemplates: templateStringTransformation,
+  arrowFunctions: arrowFunctionTransformation,
+  let: letTransformation,
+  defaultArguments: defaultArgsTransformation,
+  objectMethods: objectMethodsTransformation,
+};
+
 export default
 class Transformer {
 
@@ -21,34 +30,13 @@ class Transformer {
   constructor(options = {}) {
 
     this.ast = {};
-    this.options = merge(this.constructor.defaultOptions, options);
-    this.transformations = [];
+    this.options = options;
 
-    this.prepareTransformations();
+    this.transformations = _(options.transformers)
+      .pick(enabled => enabled)
+      .map((enabled, key) => tranformersMap[key])
+      .value();
 
-  }
-
-  /**
-   * Prepare transformations array by give options
-   */
-  prepareTransformations() {
-
-    let shouldTransform = (key) => {
-      return typeof this.options.transformers[key] !== 'undefined' && this.options.transformers[key];
-    };
-
-    let doTransform = (key, transformation) => {
-      if(shouldTransform(key)) {
-        this.transformations.push(transformation);
-      }
-    };
-
-    doTransform('classes', classTransformation);
-    doTransform('stringTemplates', templateStringTransformation);
-    doTransform('arrowFunctions', arrowFunctionTransformation);
-    doTransform('let', letTransformation);
-    doTransform('defaultArguments', defaultArgsTransformation);
-    doTransform('objectMethods', objectMethodsTransformation);
   }
 
   /**
@@ -108,7 +96,7 @@ class Transformer {
   out() {
     let result = recast.print(this.ast).code;
 
-    if(this.options.formatter !== false) {
+    if(this.options.formatter) {
       result = formatter.format(result, this.options.formatter);
     }
 
@@ -134,15 +122,3 @@ class Transformer {
   }
 
 }
-
-Transformer.defaultOptions = {
-  transformers: {
-    classes: true,
-    stringTemplates: true,
-    arrowFunctions: true,
-    let: true,
-    defaultArguments: true,
-    objectMethods: true
-  },
-  formatter: false
-};

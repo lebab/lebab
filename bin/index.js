@@ -6,8 +6,13 @@ var each = require("lodash/collection/each");
 var keys = require("lodash/object/keys");
 var pkg = require("../package.json");
 
+function list(val) {
+  return val.split(',');
+}
+
 program.option("-o, --out-file [out]", "Compile into a single file");
 program.option("--no-classes", "Don't convert function/prototypes into classes");
+program.option("-t, --transformers [a,b,c]", "Perform only specified transforms", list);
 program.description(pkg.description);
 program.version(pkg.version);
 program.usage("[options] <file>");
