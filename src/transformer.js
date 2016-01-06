@@ -120,5 +120,23 @@ class Transformer {
     }
 
   }
+  /**
+   *  Outputs the Result the STDOUT
+   * @param callback 
+   */
+  
+  writeToStdout(callback){
+      var code  = this.out();
+      var err = null;
+      if(process.stdout.isTTY){
+        process.stdout.write(code + '\n');
+      }
+      else {
+        err = 'Undefined TTY Context';
+      }
+      if(typeof callback === 'function'){
+        return callback(err);
+      }
+    }
 
 }
