@@ -132,7 +132,7 @@ class Transformer {
         process.stdout.write(code + '\n');
       }
       else {
-        err = "Undefined TTY Context";
+        err = 'Undefined TTY Context';
       }
       if(typeof callback === 'function'){
         return callback(err);
