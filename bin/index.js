@@ -30,7 +30,7 @@ each(filenames, function (filename) {
   }
 });
 
-if (!program.outFile) {
+if (!program.outFile || program.outFile === true) {
   program.outFile = 'output.js';
 }
 
