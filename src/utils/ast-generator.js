@@ -11,9 +11,11 @@ import coffee from 'coffee-script';
  */
 export function readFile(file) {
 
-  return this.read(fs.readFileSync(file), {
-    coffee: /\.coffee$/.test(file)
-  });
+  let code = fs.readFileSync(file);
+
+  let js = /\.coffee$/.test(file) ? coffee.compile(code.toString()) : code;
+
+  return this.read(js);
 
 }
 
@@ -22,17 +24,12 @@ export function readFile(file) {
  *
  * @author Mohamad Mohebifar
  * @param js
- * @param options
  * @returns {Object}
  */
-export function read(js, options) {
-  if (options.coffee) {
-    js = coffee.compile(js);
-  }
+export function read(js) {
 
-  let ast = recast.parse(js).program;
+  return recast.parse(js).program;
 
-  return ast;
 }
 
 export default {

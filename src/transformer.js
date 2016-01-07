@@ -56,7 +56,7 @@ class Transformer {
    */
   read(string) {
 
-    this.ast = astGenerator.read(string, this.options);
+    this.ast = astGenerator.read(string);
 
   }
 
