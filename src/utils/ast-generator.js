@@ -16,17 +16,7 @@ export function readFile(file, options) {
     options.coffee = /\.coffee$/.test(file);
   }
 
-  if (options.sync) {
-    let js = fs.readFileSync(file);
-
-    return this.read(js, options);
-  } else {
-    fs.readFile(file, (js) => {
-      if (options.callback) {
-        options.callback(this.read(js, options));
-      }
-    });
-  }
+  return this.read(fs.readFileSync(file), options);
 
 }
 

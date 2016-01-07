@@ -47,7 +47,6 @@ class Transformer {
   readFile(filename) {
 
     this.ast = astGenerator.readFile(filename, {
-      sync: true,
       ecmaVersion: 6
     });
 
@@ -104,20 +103,13 @@ class Transformer {
   }
 
   /**
-   * Writes the code on file
+   * Writes the code in file
    *
    * @param filename
-   * @param callback
    */
-  writeFile(filename, callback) {
+  writeFile(filename) {
 
-    const code = this.out();
-
-    if(typeof callback === 'function') {
-      fs.writeFile(filename, code, callback);
-    } else {
-      fs.writeFileSync(filename, code);
-    }
+    fs.writeFileSync(filename, this.out());
 
   }
 
