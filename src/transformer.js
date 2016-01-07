@@ -1,7 +1,6 @@
 import fs from 'fs';
 import _ from 'lodash';
 import recast from 'recast';
-import formatter from 'esformatter';
 import astGenerator from './utils/ast-generator.js';
 
 // Transformers
@@ -91,13 +90,9 @@ class Transformer {
    * @returns {Object}
    */
   out() {
-    let result = recast.print(this.ast).code;
 
-    if(this.options.formatter) {
-      result = formatter.format(result, this.options.formatter);
-    }
+    return recast.print(this.ast).code;
 
-    return result;
   }
 
   /**
