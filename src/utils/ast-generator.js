@@ -7,16 +7,13 @@ import coffee from 'coffee-script';
  *
  * @author Mohamad Mohebifar
  * @param file
- * @param options
  * @returns {Object}
  */
-export function readFile(file, options) {
+export function readFile(file) {
 
-  if (typeof options.coffee === 'undefined') {
-    options.coffee = /\.coffee$/.test(file);
-  }
-
-  return this.read(fs.readFileSync(file), options);
+  return this.read(fs.readFileSync(file), {
+    coffee: /\.coffee$/.test(file)
+  });
 
 }
 

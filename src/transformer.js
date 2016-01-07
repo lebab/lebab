@@ -46,9 +46,7 @@ class Transformer {
    */
   readFile(filename) {
 
-    this.ast = astGenerator.readFile(filename, {
-      ecmaVersion: 6
-    });
+    this.ast = astGenerator.readFile(filename);
 
   }
 
