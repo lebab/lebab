@@ -13,6 +13,7 @@ function list(val) {
 program.option("-o, --out-file [out]", "Compile into a single file");
 program.option("--no-classes", "Don't convert function/prototypes into classes");
 program.option("-t, --transformers [a,b,c]", "Perform only specified transforms", list);
+program.option("--stdout","Outputs results to STDOUT");
 program.description(pkg.description);
 program.version(pkg.version);
 program.usage("[options] <file>");
