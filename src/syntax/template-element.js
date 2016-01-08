@@ -23,7 +23,9 @@ class TemplateElement extends BaseSyntax {
   }
 
   setValue(value) {
-    this.setRaw(value);
+    // The raw version is as it looks in source, with escapes added
+    this.setRaw(value.replace(/`/g, '\\`'));
+    // The cooked varsion is the actual value
     this.setCooked(value);
   }
 

@@ -48,4 +48,9 @@ describe('Template string transformation', function () {
     expect(test(script)).to.equal('var result = `Firstname: ${person.getFirstname()}Lastname: ${person.getLastname()}`;');
   });
 
+  it('should escape ` characters', function () {
+    var script = "var result = 'Firstname: `' + firstname + '`';";
+
+    expect(test(script)).to.equal('var result = `Firstname: \\`${firstname}\\``;');
+  });
 });
