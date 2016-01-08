@@ -40,4 +40,15 @@ describe('Variable declaration var to let/const', function () {
     var script = 'var i = 0; i++;';
     expect(test(script)).to.equal('let i = 0; i++;');
   });
+
+  // Issue 53
+  it('should use const when similarly-named property is assigned to', function () {
+    var script = 'var a = 0; b.a += 1;';
+    expect(test(script)).to.equal('const a = 0; b.a += 1;');
+  });
+
+  it('should use const when similarly-named property is updated', function () {
+    var script = 'var a = 0; b.a++;';
+    expect(test(script)).to.equal('const a = 0; b.a++;');
+  });
 });

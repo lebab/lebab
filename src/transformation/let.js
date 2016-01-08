@@ -17,13 +17,13 @@ function replaceVar(node) {
     });
   }
 
-  if (node.type === 'AssignmentExpression') {
-    let left = node.left.name || node.left.property.name;
+  if (node.type === 'AssignmentExpression' && node.left.type === 'Identifier') {
+    let left = node.left.name;
 
     if (declarations[left]) {
       declarations[left].kind = 'let';
     }
-  } else if (node.type === 'UpdateExpression') {
+  } else if (node.type === 'UpdateExpression' && node.argument.type === 'Identifier') {
     let name = node.argument.name;
     if (declarations[name]) {
       declarations[name].kind = 'let';
