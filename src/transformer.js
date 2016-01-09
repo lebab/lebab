@@ -11,6 +11,7 @@ import arrowFunctionTransformation from './transformation/arrow-functions.js';
 import letTransformation from './transformation/let.js';
 import defaultArgsTransformation from './transformation/default-arguments.js';
 import objectMethodsTransformation from './transformation/object-methods.js';
+import objectShorthandsTransformation from './transformation/object-shorthands.js';
 
 const tranformersMap = {
   classes: classTransformation,
@@ -19,6 +20,7 @@ const tranformersMap = {
   let: letTransformation,
   defaultArguments: defaultArgsTransformation,
   objectMethods: objectMethodsTransformation,
+  objectShorthands: objectShorthandsTransformation,
 };
 
 export default
