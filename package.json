@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/mohebifar/lebab",
   "dependencies": {
-    "babel": "^5.0.12",
+    "babel": "^5.8.34",
     "coffee-script": "^1.9.1",
     "commander": "^2.6.0",
     "esformatter": "^0.6.1",
