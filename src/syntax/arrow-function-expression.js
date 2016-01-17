@@ -1,5 +1,4 @@
 import BaseSyntax from './base.js';
-import BlockStatement from './block-statement.js';
 
 /**
  * The class to define the ArrowFunctionExpression syntax
@@ -13,14 +12,19 @@ class ArrowFunctionExpression extends BaseSyntax {
    * The constructor of ArrowFunctionExpression
    *
    * @constructor
+   * @param {Object} cfg
+   * @param {Node} cfg.body
+   * @param {Node[]} cfg.params
+   * @param {Node[]} cfg.defaults
+   * @param {Node|null} cfg.rest
    */
-  constructor() {
+  constructor({body, params, defaults, rest}) {
     super('ArrowFunctionExpression');
 
-    this.body = new BlockStatement();
-    this.params = [];
-    this.defaults = [];
-    this.rest = null;
+    this.body = body;
+    this.params = params;
+    this.defaults = defaults;
+    this.rest = rest;
     this.generator = false;
     this.id = null;
   }
