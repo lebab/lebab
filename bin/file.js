@@ -34,7 +34,12 @@ module.exports = function (program, file) {
   var transformer = new Transformer({transformers: transformers});
   transformer.readFile(file[0]);
   transformer.applyTransformations();
-  transformer.writeFile(program.outFile);
+  if(program.stdout){
+    transformer.writeToStdout();
+  }
+  else {
+    transformer.writeFile(program.outFile);
+    console.log('The file "' + program.outFile + '" has been written.');
+  }
 
-  console.log('The file "' + program.outFile + '" has been written.');
 };
