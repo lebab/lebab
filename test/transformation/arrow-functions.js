@@ -79,6 +79,10 @@ describe('Callback to Arrow transformation', function () {
     expectNoChange('f = function fact(n) { return n * fact(n-1); };');
   });
 
+  it('should not convert generators', function () {
+    expectNoChange('f = function* (n) { };');
+  });
+
   it('should not convert functions using `this` keyword', function () {
     expectNoChange('a(function () { this; });');
     expectNoChange('a(function () { this.x = 2; });');

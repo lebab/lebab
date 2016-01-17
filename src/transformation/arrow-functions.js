@@ -10,13 +10,12 @@ export default
 
 function callBackToArrow(node) {
 
-  if (node.type === 'FunctionExpression' && !node.id && !hasThis(node.body)) {
+  if (node.type === 'FunctionExpression' && !node.id && !node.generator && !hasThis(node.body)) {
     let arrow = new ArrowExpression();
     arrow.body = extractArrowBody(node.body);
     arrow.params = node.params;
     arrow.rest = node.rest;
     arrow.defaults = node.defaults;
-    arrow.generator = node.generator;
 
     return arrow;
   }
