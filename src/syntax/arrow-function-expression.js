@@ -29,8 +29,4 @@ class ArrowFunctionExpression extends BaseSyntax {
     this.id = null;
   }
 
-  appendToBody(statement) {
-    this.body.appendToBody(statement);
-  }
-
 }

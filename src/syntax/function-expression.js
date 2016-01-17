@@ -25,8 +25,4 @@ class FunctionExpression extends BaseSyntax {
     this.id = null;
   }
 
-  appendToBody(statement) {
-    this.body.appendToBody(statement);
-  }
-
 }
