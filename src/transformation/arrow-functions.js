@@ -23,7 +23,8 @@ function isFunctionConvertableToArrow(node) {
   return node.type === 'FunctionExpression' &&
     !node.id &&
     !node.generator &&
-    !hasThis(node.body);
+    !hasThis(node.body) &&
+    !hasArguments(node.body);
 }
 
 function hasThis(ast) {
@@ -42,6 +43,24 @@ function hasThis(ast) {
   });
 
   return thisFound;
+}
+
+function hasArguments(ast) {
+  let argumentsFound = false;
+
+  estraverse.traverse(ast, {
+    enter: function (node) {
+      if (node.type === 'Identifier' && node.name === 'arguments') {
+        argumentsFound = true;
+        this.break();
+      }
+      if (node.type === 'FunctionExpression' || node.type === 'FunctionDeclaration') {
+        this.skip();
+      }
+    }
+  });
+
+  return argumentsFound;
 }
 
 function extractArrowBody(block) {

@@ -58,6 +58,12 @@ describe('Callback to Arrow transformation', function () {
     expect(test(script)).to.equal('a(() => function() { this; });');
   });
 
+  it('should convert functions using `arguments` inside a nested function', function () {
+    var script = 'a(function () { return function() { arguments; }; });';
+
+    expect(test(script)).to.equal('a(() => function() { arguments; });');
+  });
+
   it('should preserve default parameters', function () {
     var script = 'foo(function (a=1, b=2, c) { });';
 
@@ -92,6 +98,14 @@ describe('Callback to Arrow transformation', function () {
     expectNoChange('a(function () { return this; });');
     expectNoChange('a(function () { if (x) foo(this); });');
     expectNoChange('a(function () { for (x of foo) { bar(this); } });');
+  });
+
+  it('should not convert functions using `arguments`', function () {
+    expectNoChange('a(function () { arguments; });');
+    expectNoChange('a(function () { foo(arguments); });');
+    expectNoChange('a(function () { return arguments[0] + 1; });');
+    expectNoChange('a(function () { return Array.slice.apply(arguments); });');
+    expectNoChange('a(function () { if (x) foo(arguments); });');
   });
 
 });
