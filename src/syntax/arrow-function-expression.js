@@ -2,15 +2,15 @@ import BaseSyntax from './base.js';
 import BlockStatement from './block-statement.js';
 
 /**
- * The class to define the ArrowExpression syntax
+ * The class to define the ArrowFunctionExpression syntax
  *
- * @class ArrowExpression
+ * @class ArrowFunctionExpression
  */
 export default
-class ArrowExpression extends BaseSyntax {
+class ArrowFunctionExpression extends BaseSyntax {
 
   /**
-   * The constructor of ArrowExpression
+   * The constructor of ArrowFunctionExpression
    *
    * @constructor
    */

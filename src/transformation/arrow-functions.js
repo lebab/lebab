@@ -1,5 +1,5 @@
 import estraverse from 'estraverse';
-import ArrowExpression from './../syntax/arrow-expression.js';
+import ArrowFunctionExpression from './../syntax/arrow-function-expression.js';
 
 export default
   function (ast) {
@@ -10,7 +10,7 @@ export default
 
 function callBackToArrow(node) {
   if (isFunctionConvertableToArrow(node)) {
-    let arrow = new ArrowExpression();
+    let arrow = new ArrowFunctionExpression();
     arrow.body = extractArrowBody(node.body);
     arrow.params = node.params;
     arrow.rest = node.rest;
