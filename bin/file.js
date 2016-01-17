@@ -11,6 +11,7 @@ module.exports = function (program, file) {
     defaultArguments: true,
     objectMethods: true,
     objectShorthands: true,
+    noStrict: true,
   };
 
   // When --no-classes used, disable classes transformer
