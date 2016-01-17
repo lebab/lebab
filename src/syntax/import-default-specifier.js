@@ -6,7 +6,7 @@ import BaseSyntax from './base.js';
  * @class ImportDefaultSpecifier
  */
 export default
-class CallExpression extends BaseSyntax {
+class ImportDefaultSpecifier extends BaseSyntax {
 
   /**
    * @param {Identifier} local  The local variable where to import
