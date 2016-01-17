@@ -12,6 +12,7 @@ import letTransformation from './transformation/let.js';
 import defaultArgsTransformation from './transformation/default-arguments.js';
 import objectMethodsTransformation from './transformation/object-methods.js';
 import objectShorthandsTransformation from './transformation/object-shorthands.js';
+import noStrictTransformation from './transformation/no-strict.js';
 
 const tranformersMap = {
   classes: classTransformation,
@@ -21,6 +22,7 @@ const tranformersMap = {
   defaultArguments: defaultArgsTransformation,
   objectMethods: objectMethodsTransformation,
   objectShorthands: objectShorthandsTransformation,
+  noStrict: noStrictTransformation,
 };
 
 export default
