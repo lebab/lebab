@@ -28,30 +28,22 @@ function isFunctionConvertableToArrow(node) {
 }
 
 function hasThis(ast) {
-  let thisFound = false;
-
-  estraverse.traverse(ast, {
-    enter: function (node) {
-      if (node.type === 'ThisExpression') {
-        thisFound = true;
-        this.break();
-      }
-      if (node.type === 'FunctionExpression' || node.type === 'FunctionDeclaration') {
-        this.skip();
-      }
-    }
-  });
-
-  return thisFound;
+  return hasInFunctionBody(ast, node => node.type === 'ThisExpression');
 }
 
 function hasArguments(ast) {
-  let argumentsFound = false;
+  return hasInFunctionBody(ast, node => node.type === 'Identifier' && node.name === 'arguments');
+}
+
+// Returns true when predicate matches any node in given function body,
+// excluding any nested functions
+function hasInFunctionBody(ast, predicate) {
+  let found = false;
 
   estraverse.traverse(ast, {
     enter: function (node) {
-      if (node.type === 'Identifier' && node.name === 'arguments') {
-        argumentsFound = true;
+      if (predicate(node)) {
+        found = true;
         this.break();
       }
       if (node.type === 'FunctionExpression' || node.type === 'FunctionDeclaration') {
@@ -60,7 +52,7 @@ function hasArguments(ast) {
     }
   });
 
-  return argumentsFound;
+  return found;
 }
 
 function extractArrowBody(block) {
