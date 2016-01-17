@@ -12,7 +12,7 @@ function callBackToArrow(node) {
 
   if (node.type === 'FunctionExpression' && !hasThis(node.body)) {
     let arrow = new ArrowExpression();
-    arrow.body = node.body;
+    arrow.body = extractArrowBody(node.body);
     arrow.params = node.params;
     arrow.rest = node.rest;
     arrow.defaults = node.defaults;
@@ -40,4 +40,12 @@ function hasThis(ast) {
   });
 
   return thisFound;
+}
+
+function extractArrowBody(block) {
+  if (block.body[0] && block.body[0].type === 'ReturnStatement') {
+    return block.body[0].argument;
+  } else {
+    return block;
+  }
 }

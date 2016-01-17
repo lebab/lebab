@@ -19,19 +19,19 @@ describe('Callback to Arrow transformation', function () {
   it('should convert simple callbacks', function () {
     var script = 'setTimeout(function() { return 2; });';
 
-    expect(test(script)).to.equal('setTimeout(() => { return 2; });');
+    expect(test(script)).to.equal('setTimeout(() => 2);');
   });
 
   it('should convert callbacks with a single argument', function () {
     var script = 'a(function(b) { return b; });';
 
-    expect(test(script)).to.equal('a(b => { return b; });');
+    expect(test(script)).to.equal('a(b => b);');
   });
 
   it('should convert callbacks with multiple arguments', function () {
     var script = 'a(function(b, c) { return b; });';
 
-    expect(test(script)).to.equal('a((b, c) => { return b; });');
+    expect(test(script)).to.equal('a((b, c) => b);');
   });
 
   it('should convert function assignment', function () {
@@ -55,7 +55,7 @@ describe('Callback to Arrow transformation', function () {
   it('should convert functions using `this` keyword inside a nested function', function () {
     var script = 'a(function () { return function() { this; }; });';
 
-    expect(test(script)).to.equal('a(() => { return function() { this; }; });');
+    expect(test(script)).to.equal('a(() => function() { this; });');
   });
 
 
