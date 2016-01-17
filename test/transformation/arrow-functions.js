@@ -10,6 +10,10 @@ function test(script) {
   return transformer.out();
 }
 
+function expectNoChange(script) {
+  expect(test(script)).to.equal(script);
+}
+
 describe('Callback to Arrow transformation', function () {
 
   it('should convert simple callbacks', function () {
@@ -31,16 +35,12 @@ describe('Callback to Arrow transformation', function () {
   });
 
 
-  it('shouldn\'t convert other forms of functions', function () {
-    var script = 'var x = function () {};';
-
-    expect(test(script)).to.equal(script);
+  it('should not convert other forms of functions', function () {
+    expectNoChange('var x = function () {};');
   });
 
-  it('shouldn\'t convert functions using `this` keyword', function () {
-    var script = 'a(function (b) { this.x = 2; });';
-
-    expect(test(script)).to.equal(script);
+  it('should not convert functions using `this` keyword', function () {
+    expectNoChange('a(function (b) { this.x = 2; });');
   });
 
 });
