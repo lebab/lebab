@@ -58,6 +58,18 @@ describe('Callback to Arrow transformation', function () {
     expect(test(script)).to.equal('a(() => function() { this; });');
   });
 
+  it('should preserve default parameters', function () {
+    var script = 'foo(function (a=1, b=2, c) { });';
+
+    expect(test(script)).to.equal('foo((a=1, b=2, c) => { });');
+  });
+
+  it('should preserve rest parameters', function () {
+    var script = 'foo(function (x, ...xs) { });';
+
+    expect(test(script)).to.equal('foo((x, ...xs) => { });');
+  });
+
 
   it('should not convert function declarations', function () {
     expectNoChange('function foo() {};');
