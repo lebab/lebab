@@ -1,6 +1,5 @@
 import estraverse from 'estraverse';
 import ArrowExpression from './../syntax/arrow-expression.js';
-import _ from 'lodash';
 
 export default
   function (ast) {
@@ -11,7 +10,7 @@ export default
 
 function callBackToArrow(node, parent) {
 
-  if (node.type === 'FunctionExpression' && parent.type === 'CallExpression' && !hasThis(node)) {
+  if (node.type === 'FunctionExpression' && parent.type === 'CallExpression' && !hasThis(node.body)) {
     let arrow = new ArrowExpression();
     arrow.body = node.body;
     arrow.params = node.params;
@@ -25,31 +24,20 @@ function callBackToArrow(node, parent) {
 
 }
 
-const objectProps = ['body', 'expression', 'left', 'right', 'object'];
+function hasThis(ast) {
+  var thisFound = false;
 
-function hasThis(node) {
-
-  if (_.isArray(node)) {
-    for (let sub of node) {
-      let result = hasThis(sub);
-      if (result) {
-        return result;
+  estraverse.traverse(ast, {
+    enter: function (node) {
+      if (node.type === 'ThisExpression') {
+        thisFound = true;
+        this.break();
+      }
+      if (node.type === 'FunctionExpression' || node.type === 'FunctionDeclaration') {
+        this.skip();
       }
     }
+  });
 
-    return false;
-  }
-
-  if (node.type === 'ThisExpression') {
-    return true;
-  }
-
-  for (let prop of objectProps) {
-    if (node[prop]) {
-      return hasThis(node[prop]);
-    }
-  }
-
-  return false;
-
+  return thisFound;
 }
