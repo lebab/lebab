@@ -11,7 +11,7 @@ export default
   }
 
 function traverse(node, parent) {
-  if (isVarWithRequireCalls(node)) {
+  if (isVarWithRequireCalls(node) && parent.type === 'Program') {
     const declarations = node.declarations.map(dec => {
       if (isRequireDeclaration(dec)) {
         return new ImportDeclaration(dec.id, dec.init.arguments[0]);

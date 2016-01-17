@@ -40,4 +40,12 @@ describe('Export CommonJS', function () {
     expectNoChange('module["exports"] = function() {};');
   });
 
+  it('should ignore module.exports inside statements', function () {
+    expectNoChange(
+      'if (true) {\n' +
+      '  module.exports = function() {};\n' +
+      '}'
+    );
+  });
+
 });

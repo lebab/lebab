@@ -8,8 +8,8 @@ export default
     });
   }
 
-function traverse(node) {
-  if (isModuleExportsAssignment(node)) {
+function traverse(node, parent) {
+  if (isModuleExportsAssignment(node) && parent.type === 'Program') {
     return new ExportDefaultDeclaration(node.expression.right);
   }
 }

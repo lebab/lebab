@@ -78,6 +78,14 @@ describe('Import CommonJS', function () {
     );
   });
 
+  it('should ignore require calls inside statements', function () {
+    expectNoChange(
+      'if (true) {\n' +
+      '  var foo = require("foo");\n' +
+      '}'
+    );
+  });
+
   // Not yet supported things...
 
   it('should not convert assignment of require() call', function () {
