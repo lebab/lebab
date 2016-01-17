@@ -63,6 +63,10 @@ describe('Callback to Arrow transformation', function () {
     expectNoChange('function foo() {};');
   });
 
+  it('should not convert named function expressions', function () {
+    expectNoChange('f = function fact(n) { return n * fact(n-1); };');
+  });
+
   it('should not convert functions using `this` keyword', function () {
     expectNoChange('a(function () { this; });');
     expectNoChange('a(function () { this.x = 2; });');
