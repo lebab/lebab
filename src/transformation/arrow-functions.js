@@ -25,7 +25,7 @@ function callBackToArrow(node) {
 }
 
 function hasThis(ast) {
-  var thisFound = false;
+  let thisFound = false;
 
   estraverse.traverse(ast, {
     enter: function (node) {
