@@ -9,8 +9,7 @@ export default
   }
 
 function callBackToArrow(node) {
-
-  if (node.type === 'FunctionExpression' && !node.id && !node.generator && !hasThis(node.body)) {
+  if (isFunctionConvertableToArrow(node)) {
     let arrow = new ArrowExpression();
     arrow.body = extractArrowBody(node.body);
     arrow.params = node.params;
@@ -19,7 +18,13 @@ function callBackToArrow(node) {
 
     return arrow;
   }
+}
 
+function isFunctionConvertableToArrow(node) {
+  return node.type === 'FunctionExpression' &&
+    !node.id &&
+    !node.generator &&
+    !hasThis(node.body);
 }
 
 function hasThis(ast) {
