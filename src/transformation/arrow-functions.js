@@ -8,9 +8,9 @@ export default
     });
   }
 
-function callBackToArrow(node, parent) {
+function callBackToArrow(node) {
 
-  if (node.type === 'FunctionExpression' && parent.type === 'CallExpression' && !hasThis(node.body)) {
+  if (node.type === 'FunctionExpression' && !hasThis(node.body)) {
     let arrow = new ArrowExpression();
     arrow.body = node.body;
     arrow.params = node.params;

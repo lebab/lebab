@@ -34,6 +34,24 @@ describe('Callback to Arrow transformation', function () {
     expect(test(script)).to.equal('a((b, c) => { return b; });');
   });
 
+  it('should convert function assignment', function () {
+    var script = 'x = function () { foo(); };';
+
+    expect(test(script)).to.equal('x = () => { foo(); };');
+  });
+
+  it('should convert immediate function invocation', function () {
+    var script = '(function () { foo(); }());';
+
+    expect(test(script)).to.equal('((() => { foo(); })());');
+  });
+
+  it('should convert returning of a function', function () {
+    var script = 'function foo () { return function() { foo(); }; }';
+
+    expect(test(script)).to.equal('function foo () { return () => { foo(); }; }');
+  });
+
   it('should convert functions using `this` keyword inside a nested function', function () {
     var script = 'a(function () { return function() { this; }; });';
 
@@ -41,8 +59,8 @@ describe('Callback to Arrow transformation', function () {
   });
 
 
-  it('should not convert other forms of functions', function () {
-    expectNoChange('var x = function () {};');
+  it('should not convert function declarations', function () {
+    expectNoChange('function foo() {};');
   });
 
   it('should not convert functions using `this` keyword', function () {
