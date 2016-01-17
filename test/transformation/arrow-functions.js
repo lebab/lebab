@@ -24,7 +24,7 @@ describe('Callback to Arrow transformation', function () {
     expect(test(script)).to.equal('a(b => { return b; });');
   });
 
-  it('should convert callbacks with a single argument', function () {
+  it('should convert callbacks with multiple arguments', function () {
     var script = 'a(function(b, c) { return b; });';
 
     expect(test(script)).to.equal('a((b, c) => { return b; });');
