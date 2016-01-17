@@ -18,10 +18,6 @@ class BlockStatement extends BaseSyntax {
     this.body = [];
   }
 
-  appendToBody(statement) {
-    this.body.push(statement);
-  }
-
   /**
    * Check if an object is representing a BlockStatement
    *

@@ -1,6 +1,5 @@
 import estraverse from 'estraverse';
-import ArrowExpression from './../syntax/arrow-expression.js';
-import _ from 'lodash';
+import ArrowFunctionExpression from './../syntax/arrow-function-expression.js';
 
 export default
   function (ast) {
@@ -9,47 +8,57 @@ export default
     });
   }
 
-function callBackToArrow(node, parent) {
-
-  if (node.type === 'FunctionExpression' && parent.type === 'CallExpression' && !hasThis(node)) {
-    let arrow = new ArrowExpression();
-    arrow.body = node.body;
-    arrow.params = node.params;
-    arrow.rest = node.rest;
-    arrow.defaults = node.defaults;
-    arrow.generator = node.generator;
-    arrow.id = node.id;
-
-    return arrow;
+function callBackToArrow(node) {
+  if (isFunctionConvertableToArrow(node)) {
+    return new ArrowFunctionExpression({
+      body: extractArrowBody(node.body),
+      params: node.params,
+      defaults: node.defaults,
+      rest: node.rest,
+    });
   }
-
 }
 
-const objectProps = ['body', 'expression', 'left', 'right', 'object'];
+function isFunctionConvertableToArrow(node) {
+  return node.type === 'FunctionExpression' &&
+    !node.id &&
+    !node.generator &&
+    !hasThis(node.body) &&
+    !hasArguments(node.body);
+}
 
-function hasThis(node) {
+function hasThis(ast) {
+  return hasInFunctionBody(ast, node => node.type === 'ThisExpression');
+}
 
-  if (_.isArray(node)) {
-    for (let sub of node) {
-      let result = hasThis(sub);
-      if (result) {
-        return result;
+function hasArguments(ast) {
+  return hasInFunctionBody(ast, node => node.type === 'Identifier' && node.name === 'arguments');
+}
+
+// Returns true when predicate matches any node in given function body,
+// excluding any nested functions
+function hasInFunctionBody(ast, predicate) {
+  let found = false;
+
+  estraverse.traverse(ast, {
+    enter: function (node) {
+      if (predicate(node)) {
+        found = true;
+        this.break();
+      }
+      if (node.type === 'FunctionExpression' || node.type === 'FunctionDeclaration') {
+        this.skip();
       }
     }
+  });
 
-    return false;
+  return found;
+}
+
+function extractArrowBody(block) {
+  if (block.body[0] && block.body[0].type === 'ReturnStatement') {
+    return block.body[0].argument;
+  } else {
+    return block;
   }
-
-  if (node.type === 'ThisExpression') {
-    return true;
-  }
-
-  for (let prop of objectProps) {
-    if (node[prop]) {
-      return hasThis(node[prop]);
-    }
-  }
-
-  return false;
-
 }
