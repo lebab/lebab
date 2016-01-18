@@ -31,15 +31,18 @@ class TemplateLiteral extends BaseSyntax {
 
       if (typeChecker.isString(curr)) {
         let element = new TemplateElement();
-        curr = curr.value;
+        let currVal = curr.value;
+        let currRaw = this.escapeForTemplate(curr.raw);
 
         while (typeChecker.isString(parts[++i])) {
-          curr += parts[i].value;
+          currVal += parts[i].value;
+          currRaw += this.escapeForTemplate(parts[i].raw);
         }
 
         i--;
 
-        element.setValue(curr);
+        element.setCooked(currVal);
+        element.setRaw(currRaw);
         this.quasis.push(element);
       } else {
         if (i === 0) {
@@ -60,6 +63,14 @@ class TemplateLiteral extends BaseSyntax {
       }
     }
 
+  }
+
+  // Strip surrounding quotes, escape backticks and unescape escaped quotes
+  escapeForTemplate(raw) {
+    return raw
+      .replace(/^['"]|['"]$/g, '')
+      .replace(/`/g, '\\`')
+      .replace(/\\(['"])/g, '$1');
   }
 
 }
