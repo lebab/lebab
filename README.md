@@ -26,3 +26,8 @@ lebab es5.js -o es6.js
 * Using `let` and `const` instead of `var`
 * Default arguments instead of `a = a || 2`
 * Function properties in objects to Object methods
+
+## Roadmap
+- [ ] For of loops
+- [ ] Convert arguments to rest parameters
+- [ ] Lexical this for arrow functions
