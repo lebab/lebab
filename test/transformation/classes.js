@@ -8,49 +8,99 @@ function test(script) {
 
 describe('Class transformation', function () {
 
-  it('shouldn\'t convert functions without prototype assignment to class', function () {
+  it('should not convert functions without prototype assignment to class', function () {
     var script = "function someClass() {\n}";
 
     expect(test(script)).to.equal(script);
   });
 
   it('should convert functions with prototype assignment to class', function () {
-    var script = "function someClass() {\n}\nsomeClass.prototype.someMethod = function(a, b) {\n}";
-
-    var result = test(script);
-
-    expect(result).to.include('class someClass');
-    expect(result).to.include('someMethod(a, b)');
+    expect(test(
+      "function someClass() {\n" +
+      "}\n" +
+      "someClass.prototype.someMethod = function(a, b) {\n" +
+      "};"
+    )).to.equal(
+      "class someClass {\n" +
+      "  constructor() {\n" +
+      "  }\n" +
+      "\n" +
+      "  someMethod(a, b) {\n" +
+      "  }\n" +
+      "}"
+    );
   });
 
   it('should apply non-anonymous functions to methods', function () {
-    var script = "function someClass() {\n}\nsomeClass.prototype.someMethod = someMethod\nfunction someMethod(a, b) {\n}";
-
-    var result = test(script);
-
-    expect(result).to.include('class someClass');
-    expect(result).to.include('someMethod(a, b)');
-    expect(result).to.include('someMethod.apply(this, arguments)');
+    expect(test(
+      "function someClass() {\n" +
+      "}\n" +
+      "someClass.prototype.someMethod = someMethod;\n" +
+      "function someMethod(a, b) {\n" +
+      "}"
+    )).to.equal(
+      "class someClass {\n" +
+      "  constructor() {\n" +
+      "  }\n" +
+      "\n" +
+      "  someMethod() {\n" +
+      "    return someMethod.apply(this, arguments);\n" +
+      "  }\n" +
+      "}\n" +
+      "\n" +
+      "function someMethod(a, b) {\n" +
+      "}"
+    );
   });
 
   it('should convert Object.defineProperty to setters and getters', function () {
-    var script = "function someClass() {\n}\nsomeClass.prototype.someMethod = function (a, b) {\n}\nObject.defineProperty(someClass.prototype, 'someAccessor', {\nget: function () {\nreturn this._some;\n},\nset: function (value) {\nthis._some = value;\n}\n});";
-
-    var result = test(script);
-
-    expect(result).to.include('class someClass');
-    expect(result).to.include('someMethod(a, b)');
-    expect(result).to.include('get someAccessor()');
-    expect(result).to.include('set someAccessor(value)');
+    expect(test(
+      "function someClass() {\n" +
+      "}\n" +
+      "someClass.prototype.someMethod = function(a, b) {\n" +
+      "};\n" +
+      "Object.defineProperty(someClass.prototype, 'someAccessor', {\n" +
+      "  get: function () {\n" +
+      "    return this._some;\n" +
+      "  },\n" +
+      "  set: function (value) {\n" +
+      "    this._some = value;\n" +
+      "  }\n" +
+      "});"
+    )).to.equal(
+      "class someClass {\n" +
+      "  constructor() {\n" +
+      "  }\n" +
+      "\n" +
+      "  someMethod(a, b) {\n" +
+      "  }\n" +
+      "\n" +
+      "  get someAccessor() {\n" +
+      "    return this._some;\n" +
+      "  }\n" +
+      "\n" +
+      "  set someAccessor(value) {\n" +
+      "    this._some = value;\n" +
+      "  }\n" +
+      "}"
+    );
   });
 
   it('should not forget to copy over Class constructor arguments after transforming', function () {
-    var script = 'function someClass(a, b) {\n}\nsomeClass.prototype.someMethod = function(ma, mb) {\n}';
-
-    var result = test(script);
-
-    expect(result).to.include('constructor(a, b)');
-    expect(result).to.include('someMethod(ma, mb)');
+    expect(test(
+      "function someClass(a, b) {\n" +
+      "}\n" +
+      "someClass.prototype.someMethod = function(ma, mb) {\n" +
+      "};"
+    )).to.equal(
+      "class someClass {\n" +
+      "  constructor(a, b) {\n" +
+      "  }\n" +
+      "\n" +
+      "  someMethod(ma, mb) {\n" +
+      "  }\n" +
+      "}"
+    );
   });
 
 });
