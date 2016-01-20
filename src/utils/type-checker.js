@@ -11,7 +11,4 @@ export default {
   isString(node) {
     return this.isLiteral(node) && typeof node.value === 'string';
   },
-  isES6Function(node) {
-    return node.type === 'FunctionExpression' || node.type === 'FunctionDeclaration';
-  },
 };

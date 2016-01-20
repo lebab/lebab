@@ -1,66 +1,154 @@
-import estraverse from 'estraverse';
 import _ from 'lodash';
-import typeChecker from '../utils/type-checker.js';
+import estraverse from 'estraverse';
+import * as functionType from '../utils/function-type.js';
+import * as variableType from '../utils/variable-type.js';
+import ScopeManager from '../scope/scope-manager.js';
+import VariableMarker from '../scope/variable-marker.js';
+import FunctionHoister from '../scope/function-hoister.js';
+import VariableDeclaration from '../syntax/variable-declaration.js';
+
+let scopeManager;
+let variableMarker;
 
 export default
   function (ast) {
+    scopeManager = new ScopeManager();
+    variableMarker = new VariableMarker(scopeManager);
+
     estraverse.traverse(ast, {
-      enter: function(node) {
-        if (node.type === 'Program' || typeChecker.isES6Function(node)) {
-          return enterFunctionScope(node);
+      enter(node, parent) {
+        if (node.type === 'Program') {
+          enterProgram(node);
         }
-        if (node.type === 'VariableDeclaration') {
-          return enterVariableDeclaration(node);
+        else if (functionType.isFunctionDeclaration(node)) {
+          enterFunctionDeclaration(node);
         }
-        if (node.type === 'AssignmentExpression' && node.left.type === 'Identifier') {
-          return enterAssignmentExpression(node);
+        else if (functionType.isFunctionExpression(node)) {
+          enterFunctionExpression(node);
         }
-        if (node.type === 'UpdateExpression' && node.argument.type === 'Identifier') {
-          return enterUpdateExpression(node);
+        else if (node.type === 'BlockStatement') {
+          scopeManager.enterBlock();
+        }
+        else if (node.type === 'VariableDeclarator') {
+          variableMarker.markDeclared(node.id.name);
+          // Uninitialized variables can never be const
+          if (node.init === null) {
+            variableMarker.markModified(node.id.name);
+          }
+        }
+        else if (variableType.isAssignment(node)) {
+          variableMarker.markModified(node.left.name);
+        }
+        else if (variableType.isUpdate(node)) {
+          variableMarker.markModified(node.argument.name);
+        }
+        else if (variableType.isReference(node, parent)) {
+          variableMarker.markReferenced(node.name);
         }
       },
-      leave: function(node) {
-        if (node.type === 'Program' || typeChecker.isES6Function(node)) {
-          return leaveFunctionScope(node);
+      leave(node) {
+        if (node.type === 'Program') {
+          leaveProgram();
+        }
+        else if (functionType.isFunction(node)) {
+          leaveFunction();
+        }
+        else if (node.type === 'BlockStatement') {
+          scopeManager.leaveScope();
         }
       },
     });
   }
 
-const functionScopeStack = [];
-
-function enterFunctionScope() {
-  functionScopeStack.push({});
+// Program node works almost like a function:
+// it hoists all variables which can be tranformed to block-scoped let/const.
+// It just doesn't have name and parameters.
+// So we create an implied FunctionScope and BlockScope.
+function enterProgram(node) {
+  scopeManager.enterFunction();
+  hoistFunction({body: node});
+  scopeManager.enterBlock();
 }
 
-function leaveFunctionScope() {
-  functionScopeStack.pop();
+// FunctionDeclaration has it's name visible outside the function,
+// so we first register it in surrounding block-scope and
+// after that enter new FunctionScope.
+function enterFunctionDeclaration(func) {
+  if (func.id) {
+    getScope().register(
+      func.id.name,
+      getScope().findFunctionScoped(func.id.name)
+    );
+  }
+
+  scopeManager.enterFunction();
+
+  hoistFunction({params: func.params, body: func.body});
 }
 
-function enterVariableDeclaration(node) {
-  const currentScope = _.last(functionScopeStack);
+// FunctionExpression has it's name visible only inside the function,
+// so we first enter new FunctionScope and
+// hoist function name and params variables inside it.
+function enterFunctionExpression(func) {
+  scopeManager.enterFunction();
 
-  node.declarations.forEach(dec => {
-    const varName = dec.id.name;
+  hoistFunction({id: func.id, params: func.params, body: func.body});
+}
 
-    currentScope[varName] = node;
-    currentScope[varName].kind = 'const';
+function hoistFunction(cfg) {
+  new FunctionHoister(getScope()).hoist(cfg);
+}
+
+// Exits the implied BlockScope and FunctionScope of Program node
+function leaveProgram() {
+  scopeManager.leaveScope();
+  leaveFunction();
+}
+
+// Exits FunctionScope but first transforms all variables inside it
+function leaveFunction() {
+  transformVarsToLetOrConst();
+  scopeManager.leaveScope();
+}
+
+// This is where the actual transformation happens
+function transformVarsToLetOrConst() {
+  getFunctionVariableGroups().forEach(group => {
+    const commonKind = group.getCommonKind();
+    if (commonKind) {
+      // When all variables in group are of the same kind,
+      // just set appropriate `kind` value for the existing
+      // VariableDeclaration node.
+      group.getNode().kind = commonKind;
+    }
+    else {
+      // When some variables are of a different kind,
+      // create separate VariableDeclaration nodes for each
+      // VariableDeclarator and set their `kind` value appropriately.
+      const varNodes = group.getVariables().map(v => {
+        return new VariableDeclaration(v.getKind(), [v.getNode()]);
+      });
+
+      replaceStatement(group.getParentNode(), group.getNode(), varNodes);
+    }
   });
 }
 
-function enterAssignmentExpression(node) {
-  const varName = node.left.name;
-  findVar(varName).kind = 'let';
+// Returns all VariableGroups of variables in current function scope,
+// including from all the nested block-scopes (but not the nested
+// functions).
+function getFunctionVariableGroups() {
+  return _(getScope().getVariables())
+    .map(v => v.getGroup())
+    .uniq()
+    .compact()
+    .value();
 }
 
-function enterUpdateExpression(node) {
-  const varName = node.argument.name;
-  findVar(varName).kind = 'let';
+function replaceStatement(parentNode, node, replacementNodes) {
+  parentNode.body.splice(parentNode.body.indexOf(node), 1, ...replacementNodes);
 }
 
-// Looks up variable starting from current scope and
-// traveling up to the outermost scope
-function findVar(varName) {
-  const scope = _(functionScopeStack).findLast(varName);
-  return scope ? scope[varName] : {};
+function getScope() {
+  return scopeManager.getScope();
 }
