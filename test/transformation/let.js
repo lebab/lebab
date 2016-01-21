@@ -51,4 +51,28 @@ describe('Variable declaration var to let/const', function () {
     var script = 'var a = 0; b.a++;';
     expect(test(script)).to.equal('const a = 0; b.a++;');
   });
+
+  // Issue 75
+  it('should consider variables function-scoped', function () {
+    expect(test(
+      'var a = 0;\n' +
+      'function foo() { var a = 1; }\n' +
+      'a = 2;'
+    )).to.equal(
+      'let a = 0;\n' +
+      'function foo() { const a = 1; }\n' +
+      'a = 2;'
+    );
+  });
+
+  it('should find variables from outer scope', function () {
+    expect(test(
+      'var a = 0;\n' +
+      'function foo() { a = 1; }'
+    )).to.equal(
+      'let a = 0;\n' +
+      'function foo() { a = 1; }'
+    );
+  });
+
 });
