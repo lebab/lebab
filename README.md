@@ -18,16 +18,19 @@ Transpile your old-fashioned code using the `lebab` cli tool.
 lebab es5.js -o es6.js
 ```
 
-## Supported Features
-
-* Function/Prototypes to Classes
-* Callback to Arrow functions
-* String concatenation to Template Strings
-* Using `let` and `const` instead of `var`
-* Default arguments instead of `a = a || 2`
-* Function properties in objects to Object methods
-
 ## Roadmap
+- [x] Function/prototypes to classes
+- [x] CommonJS module definition to ES6 moloops
+- [x] Callbacks to arrow functions
+- [x] `var` to `let`/`const`
+- [x] Template strings
+- [x] Object methods
+- [x] Object shorthands
+- [x] Default arguments instead of `a = a || 2`
 - [ ] For of loops
 - [ ] Convert arguments to rest parameters
 - [ ] Lexical this for arrow functions
+- [ ] Rest parameters
+- [ ] Named parameters
+- [ ] Destructing arrays
+- [ ] Destructing objects
