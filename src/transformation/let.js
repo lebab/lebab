@@ -2,6 +2,7 @@ import _ from 'lodash';
 import estraverse from 'estraverse';
 import * as functionType from '../utils/function-type.js';
 import * as variableType from '../utils/variable-type.js';
+import multiReplaceStatement from '../utils/multi-replace-statement.js';
 import ScopeManager from '../scope/scope-manager.js';
 import VariableMarker from '../scope/variable-marker.js';
 import FunctionHoister from '../scope/function-hoister.js';
@@ -129,7 +130,7 @@ function transformVarsToLetOrConst() {
         return new VariableDeclaration(v.getKind(), [v.getNode()]);
       });
 
-      replaceStatement(group.getParentNode(), group.getNode(), varNodes);
+      multiReplaceStatement(group.getParentNode(), group.getNode(), varNodes);
     }
   });
 }
@@ -143,10 +144,6 @@ function getFunctionVariableGroups() {
     .uniq()
     .compact()
     .value();
-}
-
-function replaceStatement(parentNode, node, replacementNodes) {
-  parentNode.body.splice(parentNode.body.indexOf(node), 1, ...replacementNodes);
 }
 
 function getScope() {
