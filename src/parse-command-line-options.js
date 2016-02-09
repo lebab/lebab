@@ -24,7 +24,7 @@ export default function parseCommandLineOptions(argv) {
   program.parse(argv);
   return {
     inFile: getInputFile(),
-    outFile: getOutputFile(),
+    outFile: program.outFile,
     transformers: getTransformers(),
   };
 }
@@ -33,22 +33,10 @@ function getInputFile() {
   if (program.args.length > 1) {
     throw 'Only one input file allowed, but ' + program.args.length + ' given instead.';
   }
-  if (program.args.length === 0) {
-    throw 'Input file name is required.';
-  }
-  if (!fs.existsSync(program.args[0])) {
+  if (program.args[0] && !fs.existsSync(program.args[0])) {
     throw 'File ' + program.args[0] + ' does not exist.';
   }
   return program.args[0];
-}
-
-function getOutputFile() {
-  if (!program.outFile) {
-    return 'output.js';
-  }
-  else {
-    return program.outFile;
-  }
 }
 
 function getTransformers() {

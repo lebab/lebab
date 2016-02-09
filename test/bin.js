@@ -34,11 +34,27 @@ describe('Smoke test for the executable script', function () {
     });
   });
 
-  describe('when no input file given', function () {
+  describe('when no input/output files given', function () {
+    it('reads STDIN and writes STDOUT', function (done) {
+      exec('node ./bin/index.js < test/test-data.js > test/output.js', function (error, stdout, stderr) {
+        expect(error).to.equal(null);
+        expect(stderr).to.equal('');
+        expect(stdout).to.equal('');
+
+        expect(fs.readFileSync('test/output.js').toString()).to.equal(
+          'const foo = 10;\n' +
+          '[1, 2, 3].map(x => x*x);'
+        );
+        done();
+      });
+    });
+  });
+
+  describe('when invalid transform name given', function () {
     it('exits with error message', function (done) {
-      exec('node ./bin/index.js', function (error, stdout, stderr) {
+      exec('node ./bin/index.js -t blah test/test-data.js', function (error, stdout, stderr) {
         expect(error).not.to.equal(null);
-        expect(stderr).to.equal('Input file name is required.\n');
+        expect(stderr).to.equal('Unknown transformer "blah".\n');
         expect(stdout).to.equal('');
 
         expect(fs.existsSync('test/output.js')).to.equal(false);
@@ -46,5 +62,4 @@ describe('Smoke test for the executable script', function () {
       });
     });
   });
-
 });
