@@ -2,8 +2,6 @@
 require('babel/polyfill');
 var program = require('commander');
 var fs = require("fs");
-var each = require("lodash/collection/each");
-var keys = require("lodash/object/keys");
 var pkg = require("../package.json");
 
 function list(val) {
@@ -25,7 +23,8 @@ var errors = [],
 if (filenames.length === 0) {
   errors.push('File name is required.');
 }
-each(filenames, function (filename) {
+
+filenames.forEach(function (filename) {
   if (!fs.existsSync(filename)) {
     errors.push(filename + ' doesn\'t exist');
   }
