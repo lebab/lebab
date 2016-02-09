@@ -1,4 +1,3 @@
-import fs from 'fs';
 import _ from 'lodash';
 import recast from 'recast';
 import astGenerator from './utils/ast-generator.js';
@@ -47,17 +46,6 @@ class Transformer {
   }
 
   /**
-   * Prepare the abstract syntax tree for given file
-   *
-   * @param filename
-   */
-  readFile(filename) {
-
-    this.ast = astGenerator.readFile(filename);
-
-  }
-
-  /**
    * Prepare an abstract syntax tree for given code in string
    *
    * @param string
@@ -100,17 +88,6 @@ class Transformer {
   out() {
 
     return recast.print(this.ast).code;
-
-  }
-
-  /**
-   * Writes the code in file
-   *
-   * @param filename
-   */
-  writeFile(filename) {
-
-    fs.writeFileSync(filename, this.out());
 
   }
 

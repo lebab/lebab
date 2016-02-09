@@ -1,20 +1,4 @@
 import recast from 'recast';
-import fs from 'fs';
-
-/**
- * This function reads a js file and transforms it into AST
- *
- * @author Mohamad Mohebifar
- * @param file
- * @returns {Object}
- */
-export function readFile(file) {
-
-  let code = fs.readFileSync(file);
-
-  return this.read(code.toString());
-
-}
 
 /**
  * This function reads a js string and transforms it into AST
@@ -31,5 +15,4 @@ export function read(js) {
 
 export default {
   read: read,
-  readFile: readFile
 };
