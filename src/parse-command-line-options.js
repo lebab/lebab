@@ -1,6 +1,7 @@
 var program = require('commander');
 var pkg = require('../package.json');
 var fs = require('fs');
+var _ = require('lodash');
 
 program.usage('[options] <file>');
 program.description(pkg.description);
@@ -24,9 +25,7 @@ export default function parseCommandLineOptions(argv) {
   return {
     inFile: getInputFile(),
     outFile: getOutputFile(),
-    classes: program.classes,
-    transformers: program.transformers,
-    module: program.module,
+    transformers: getTransformers(),
   };
 }
 
@@ -50,4 +49,48 @@ function getOutputFile() {
   else {
     return program.outFile;
   }
+}
+
+function getTransformers() {
+  // All enabled by default
+  var transformers = {
+    classes: true,
+    stringTemplates: true,
+    arrowFunctions: true,
+    let: true,
+    defaultArguments: true,
+    objectMethods: true,
+    objectShorthands: true,
+    noStrict: true,
+    importCommonjs: false,
+    exportCommonjs: false,
+  };
+
+  // When --no-classes used, disable classes transformer
+  if (!program.classes) {
+    transformers.classes = false;
+  }
+
+  // When --transformers used turn off everything besides the specified tranformers
+  if (program.transformers) {
+    transformers = _.mapValues(transformers, _.constant(false));
+
+    program.transformers.forEach(function (name) {
+      if (!transformers.hasOwnProperty(name)) {
+        throw 'Unknown transformer "' + name + '".';
+      }
+      transformers[name] = true;
+    });
+  }
+
+  // When --module=commonjs used, enable CommonJS Transformers
+  if (program.module === 'commonjs') {
+    transformers.importCommonjs = true;
+    transformers.exportCommonjs = true;
+  }
+  else if (program.module) {
+    throw 'Unsupported module system "' + program.module + '".';
+  }
+
+  return transformers;
 }
