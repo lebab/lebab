@@ -3,9 +3,15 @@ require('babel/polyfill');
 var program = require('commander');
 var fs = require("fs");
 var pkg = require("../package.json");
+var transformFile = require('./file');
 
 function list(val) {
   return val.split(',');
+}
+
+function exitWithError(msg) {
+  console.error(msg);
+  process.exit(2);
 }
 
 program.option("-o, --out-file [out]", "Compile into a single file");
@@ -17,27 +23,20 @@ program.version(pkg.version);
 program.usage("[options] <file>");
 program.parse(process.argv);
 
-var errors = [],
-  filenames = program.args;
-
-if (filenames.length === 0) {
-  errors.push('File name is required.');
+if (program.args.length > 1) {
+  exitWithError('Only one input file allowed, but ' + program.args.length + ' given instead.');
 }
+var filename = program.args[0];
 
-filenames.forEach(function (filename) {
-  if (!fs.existsSync(filename)) {
-    errors.push(filename + ' doesn\'t exist');
-  }
-});
+if (!filename) {
+  exitWithError('Input file name is required.');
+}
+if (!fs.existsSync(filename)) {
+  exitWithError('File ' + filename + ' does not exist.');
+}
 
 if (!program.outFile || program.outFile === true) {
   program.outFile = 'output.js';
 }
 
-if (errors.length) {
-  console.error(errors.join(". "));
-  process.exit(2);
-} else {
-  var fn = require('./file');
-  fn(program, filenames);
-}
+transformFile(program, filename);

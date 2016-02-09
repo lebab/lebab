@@ -43,7 +43,7 @@ module.exports = function (program, file) {
   }
 
   var transformer = new Transformer({transformers: transformers});
-  transformer.readFile(file[0]);
+  transformer.readFile(file);
   transformer.applyTransformations();
   transformer.writeFile(program.outFile);
 
