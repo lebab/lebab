@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 require('babel/polyfill');
 var parseCommandLineOptions = require("../lib/parse-command-line-options");
-var transformFile = require('./file');
+var Transformer = require('./../lib/transformer');
 var options;
 
 try {
@@ -12,4 +12,9 @@ catch (error) {
   process.exit(2);
 }
 
-transformFile(options);
+var transformer = new Transformer({transformers: options.transformers});
+transformer.readFile(options.inFile);
+transformer.applyTransformations();
+transformer.writeFile(options.outFile);
+
+console.log('The file "' + options.outFile + '" has been written.');
