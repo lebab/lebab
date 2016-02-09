@@ -12,6 +12,8 @@ import defaultArgsTransformation from './transformation/default-arguments.js';
 import objectMethodsTransformation from './transformation/object-methods.js';
 import objectShorthandsTransformation from './transformation/object-shorthands.js';
 import noStrictTransformation from './transformation/no-strict.js';
+import importCommonjsTransformation from './transformation/import-commonjs.js';
+import exportCommonjsTransformation from './transformation/export-commonjs.js';
 
 const tranformersMap = {
   classes: classTransformation,
@@ -22,6 +24,8 @@ const tranformersMap = {
   objectMethods: objectMethodsTransformation,
   objectShorthands: objectShorthandsTransformation,
   noStrict: noStrictTransformation,
+  importCommonjs: importCommonjsTransformation,
+  exportCommonjs: exportCommonjsTransformation,
 };
 
 export default

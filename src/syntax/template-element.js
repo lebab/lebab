@@ -22,15 +22,12 @@ class TemplateElement extends BaseSyntax {
 
   }
 
-  setValue(value) {
-    this.setRaw(value);
-    this.setCooked(value);
-  }
-
+  // The raw version is as it looks in source, with escapes added
   setRaw(raw) {
     this.value.raw = raw;
   }
 
+  // The cooked varsion is the actual value
   setCooked(cooked) {
     this.value.cooked = cooked;
   }

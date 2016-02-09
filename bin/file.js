@@ -12,6 +12,8 @@ module.exports = function (program, file) {
     objectMethods: true,
     objectShorthands: true,
     noStrict: true,
+    importCommonjs: false,
+    exportCommonjs: false,
   };
 
   // When --no-classes used, disable classes transformer
@@ -29,6 +31,15 @@ module.exports = function (program, file) {
       }
       transformers[name] = true;
     });
+  }
+
+  // When --module=commonjs used, enable CommonJS Transformers
+  if (program.module === 'commonjs') {
+    transformers.importCommonjs = true;
+    transformers.exportCommonjs = true;
+  }
+  else if (program.module) {
+    console.error("Unsupported module system '" + program.module + "'.");
   }
 
   var transformer = new Transformer({transformers: transformers});
