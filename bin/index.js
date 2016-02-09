@@ -17,5 +17,3 @@ var transformer = new Transformer({transformers: options.transformers});
 transformer.read(io.read(options.inFile));
 transformer.applyTransformations();
 io.write(options.outFile, transformer.out());
-
-console.log('The file "' + options.outFile + '" has been written.');

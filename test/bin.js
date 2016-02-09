@@ -23,7 +23,7 @@ describe('Smoke test for the executable script', function () {
       exec('node ./bin/index.js test/test-data.js -o test/output.js', function (error, stdout, stderr) {
         expect(error).to.equal(null);
         expect(stderr).to.equal('');
-        expect(stdout).to.equal('The file "test/output.js" has been written.\n');
+        expect(stdout).to.equal('');
 
         expect(fs.readFileSync('test/output.js').toString()).to.equal(
           'const foo = 10;\n' +
