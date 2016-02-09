@@ -1,6 +1,5 @@
 import recast from 'recast';
 import fs from 'fs';
-import coffee from 'coffee-script';
 
 /**
  * This function reads a js file and transforms it into AST
@@ -13,9 +12,7 @@ export function readFile(file) {
 
   let code = fs.readFileSync(file);
 
-  let js = /\.coffee$/.test(file) ? coffee.compile(code.toString()) : code;
-
-  return this.read(js);
+  return this.read(code.toString());
 
 }
 
