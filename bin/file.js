@@ -1,7 +1,7 @@
 var Transformer = require('./../lib/transformer');
 var _ = require('lodash');
 
-module.exports = function (program) {
+module.exports = function (options) {
   // Enable all transformers by default
   var transformers = {
     classes: true,
@@ -17,15 +17,15 @@ module.exports = function (program) {
   };
 
   // When --no-classes used, disable classes transformer
-  if(! program.classes) {
+  if (!options.classes) {
     transformers.classes = false;
   }
 
   // When --transformers used turn off everything besides the specified tranformers
-  if (program.transformers) {
+  if (options.transformers) {
     transformers = _.mapValues(transformers, _.constant(false));
 
-    program.transformers.forEach(function (name) {
+    options.transformers.forEach(function (name) {
       if (!transformers.hasOwnProperty(name)) {
         console.error("Unknown transformer '" + name + "'.");
       }
@@ -34,18 +34,18 @@ module.exports = function (program) {
   }
 
   // When --module=commonjs used, enable CommonJS Transformers
-  if (program.module === 'commonjs') {
+  if (options.module === 'commonjs') {
     transformers.importCommonjs = true;
     transformers.exportCommonjs = true;
   }
-  else if (program.module) {
-    console.error("Unsupported module system '" + program.module + "'.");
+  else if (options.module) {
+    console.error("Unsupported module system '" + options.module + "'.");
   }
 
   var transformer = new Transformer({transformers: transformers});
-  transformer.readFile(program.inFile);
+  transformer.readFile(options.inFile);
   transformer.applyTransformations();
-  transformer.writeFile(program.outFile);
+  transformer.writeFile(options.outFile);
 
-  console.log('The file "' + program.outFile + '" has been written.');
+  console.log('The file "' + options.outFile + '" has been written.');
 };
