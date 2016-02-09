@@ -1,7 +1,7 @@
 var Transformer = require('./../lib/transformer');
 var _ = require('lodash');
 
-module.exports = function (program, file) {
+module.exports = function (program) {
   // Enable all transformers by default
   var transformers = {
     classes: true,
@@ -43,7 +43,7 @@ module.exports = function (program, file) {
   }
 
   var transformer = new Transformer({transformers: transformers});
-  transformer.readFile(file);
+  transformer.readFile(program.inFile);
   transformer.applyTransformations();
   transformer.writeFile(program.outFile);
 
