@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import recast from 'recast';
-import astGenerator from './utils/ast-generator.js';
 
 // Transformers
 import classTransformation from './transformation/classes.js';
@@ -52,7 +51,7 @@ class Transformer {
    */
   read(string) {
 
-    this.ast = astGenerator.read(string);
+    this.ast = recast.parse(string).program;
 
   }
 
