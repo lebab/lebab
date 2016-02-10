@@ -1,8 +1,5 @@
-import fs from 'fs';
 import _ from 'lodash';
 import recast from 'recast';
-import formatter from 'esformatter';
-import astGenerator from './utils/ast-generator.js';
 
 // Transformers
 import classTransformation from './transformation/classes.js';
@@ -48,27 +45,13 @@ class Transformer {
   }
 
   /**
-   * Prepare the abstract syntax tree for given file
-   *
-   * @param filename
-   */
-  readFile(filename) {
-
-    this.ast = astGenerator.readFile(filename, {
-      sync: true,
-      ecmaVersion: 6
-    });
-
-  }
-
-  /**
    * Prepare an abstract syntax tree for given code in string
    *
    * @param string
    */
   read(string) {
 
-    this.ast = astGenerator.read(string, this.options);
+    this.ast = recast.parse(string).program;
 
   }
 
@@ -102,30 +85,8 @@ class Transformer {
    * @returns {Object}
    */
   out() {
-    let result = recast.print(this.ast).code;
 
-    if(this.options.formatter) {
-      result = formatter.format(result, this.options.formatter);
-    }
-
-    return result;
-  }
-
-  /**
-   * Writes the code on file
-   *
-   * @param filename
-   * @param callback
-   */
-  writeFile(filename, callback) {
-
-    const code = this.out();
-
-    if(typeof callback === 'function') {
-      fs.writeFile(filename, code, callback);
-    } else {
-      fs.writeFileSync(filename, code);
-    }
+    return recast.print(this.ast).code;
 
   }
 

@@ -1,44 +1,19 @@
 #!/usr/bin/env node
 require('babel/polyfill');
-var program = require('commander');
-var fs = require("fs");
-var each = require("lodash/collection/each");
-var keys = require("lodash/object/keys");
-var pkg = require("../package.json");
+var parseCommandLineOptions = require("../lib/parse-command-line-options");
+var Transformer = require('./../lib/transformer');
+var io = require('./../lib/io');
+var options;
 
-function list(val) {
-  return val.split(',');
+try {
+  options = parseCommandLineOptions(process.argv);
 }
-
-program.option("-o, --out-file [out]", "Compile into a single file");
-program.option("--no-classes", "Don't convert function/prototypes into classes");
-program.option("-t, --transformers [a,b,c]", "Perform only specified transforms", list);
-program.option("--module [commonjs]", "Transform CommonJS module syntax");
-program.description(pkg.description);
-program.version(pkg.version);
-program.usage("[options] <file>");
-program.parse(process.argv);
-
-var errors = [],
-  filenames = program.args;
-
-if (filenames.length === 0) {
-  errors.push('File name is required.');
-}
-each(filenames, function (filename) {
-  if (!fs.existsSync(filename)) {
-    errors.push(filename + ' doesn\'t exist');
-  }
-});
-
-if (!program.outFile || program.outFile === true) {
-  program.outFile = 'output.js';
-}
-
-if (errors.length) {
-  console.error(errors.join(". "));
+catch (error) {
+  console.error(error);
   process.exit(2);
-} else {
-  var fn = require('./file');
-  fn(program, filenames);
 }
+
+var transformer = new Transformer({transformers: options.transformers});
+transformer.read(io.read(options.inFile));
+transformer.applyTransformations();
+io.write(options.outFile, transformer.out());
