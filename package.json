@@ -33,7 +33,6 @@
     "babel": "^5.8.34",
     "coffee-script": "^1.10.0",
     "commander": "^2.9.0",
-    "esformatter": "^0.6.1",
     "estraverse": "^4.1.1",
     "esutils": "^2.0.2",
     "lodash": "^3.10.1",

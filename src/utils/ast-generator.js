@@ -7,26 +7,15 @@ import coffee from 'coffee-script';
  *
  * @author Mohamad Mohebifar
  * @param file
- * @param options
  * @returns {Object}
  */
-export function readFile(file, options) {
+export function readFile(file) {
 
-  if (typeof options.coffee === 'undefined') {
-    options.coffee = /\.coffee$/.test(file);
-  }
+  let code = fs.readFileSync(file);
 
-  if (options.sync) {
-    let js = fs.readFileSync(file);
+  let js = /\.coffee$/.test(file) ? coffee.compile(code.toString()) : code;
 
-    return this.read(js, options);
-  } else {
-    fs.readFile(file, (js) => {
-      if (options.callback) {
-        options.callback(this.read(js, options));
-      }
-    });
-  }
+  return this.read(js);
 
 }
 
@@ -35,17 +24,12 @@ export function readFile(file, options) {
  *
  * @author Mohamad Mohebifar
  * @param js
- * @param options
  * @returns {Object}
  */
-export function read(js, options) {
-  if (options.coffee) {
-    js = coffee.compile(js);
-  }
+export function read(js) {
 
-  let ast = recast.parse(js).program;
+  return recast.parse(js).program;
 
-  return ast;
 }
 
 export default {
