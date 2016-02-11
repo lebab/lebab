@@ -1,12 +1,11 @@
 var expect = require('chai').expect;
 var Transformer = require('./../../lib/transformer');
-var noStrictTransformation = require('./../../lib/transformation/no-strict');
 
-var transformer = new Transformer({});
+var transformer = new Transformer({noStrict: true});
 
 function test(script) {
   transformer.read(script);
-  transformer.applyTransformation(noStrictTransformation);
+  transformer.applyTransformations();
   return transformer.out();
 }
 

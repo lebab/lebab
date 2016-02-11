@@ -1,12 +1,11 @@
 var expect = require('chai').expect;
 var Transformer = require('./../../lib/transformer');
-var objectShorthandsTransformation = require('./../../lib/transformation/object-shorthands');
 
-var transformer = new Transformer({});
+var transformer = new Transformer({objectShorthands: true});
 
 function test(script) {
   transformer.read(script);
-  transformer.applyTransformation(objectShorthandsTransformation);
+  transformer.applyTransformations();
   return transformer.out();
 }
 

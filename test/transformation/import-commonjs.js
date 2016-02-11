@@ -1,12 +1,11 @@
 var expect = require('chai').expect;
 var Transformer = require('./../../lib/transformer');
-var importCommonJsTransformation = require('./../../lib/transformation/import-commonjs');
 
-var transformer = new Transformer({});
+var transformer = new Transformer({importCommonjs: true});
 
 function test(script) {
   transformer.read(script);
-  transformer.applyTransformation(importCommonJsTransformation);
+  transformer.applyTransformations();
   return transformer.out();
 }
 

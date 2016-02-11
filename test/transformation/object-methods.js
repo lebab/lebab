@@ -1,12 +1,11 @@
 var expect = require('chai').expect;
 var
   Transformer = require('./../../lib/transformer'),
-  objectMethodsTransformation = require('./../../lib/transformation/object-methods'),
-  transformer = new Transformer();
+  transformer = new Transformer({objectMethods: true});
 
 function test(script) {
   transformer.read(script);
-  transformer.applyTransformation(objectMethodsTransformation);
+  transformer.applyTransformations();
   return transformer.out();
 }
 
