@@ -28,12 +28,10 @@ const tranformersMap = {
 
 export default
 class Transformer {
-
   /**
    * @constructor
    */
   constructor(options = {}) {
-
     this.ast = {};
     this.options = options;
 
@@ -41,7 +39,6 @@ class Transformer {
       .pick(enabled => enabled)
       .map((enabled, key) => tranformersMap[key])
       .value();
-
   }
 
   /**
@@ -50,9 +47,7 @@ class Transformer {
    * @param string
    */
   read(string) {
-
     this.ast = recast.parse(string).program;
-
   }
 
   /**
@@ -61,22 +56,17 @@ class Transformer {
    * @param transformation
    */
   applyTransformation(transformation) {
-
     transformation(this.ast);
-
   }
 
   /**
    * Apply All transformations
    */
   applyTransformations() {
-
     for (let i = 0; i < this.transformations.length; i++) {
       let transformation = this.transformations[i];
       this.applyTransformation(transformation);
-
     }
-
   }
 
   /**
@@ -85,9 +75,6 @@ class Transformer {
    * @returns {Object}
    */
   out() {
-
     return recast.print(this.ast).code;
-
   }
-
 }
