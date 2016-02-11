@@ -29,13 +29,12 @@ const tranformersMap = {
 export default
 class Transformer {
   /**
-   * @constructor
+   * @param {Object} transformers List of transformers to enable
    */
-  constructor(options = {}) {
+  constructor(transformers={}) {
     this.ast = {};
-    this.options = options;
 
-    this.transformations = _(options.transformers)
+    this.transformations = _(transformers)
       .pick(enabled => enabled)
       .map((enabled, key) => tranformersMap[key])
       .value();

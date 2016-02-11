@@ -1,7 +1,18 @@
 var expect = require('chai').expect;
 var
   Transformer = require('./../../lib/transformer'),
-  transformer = new Transformer({transformers: {let: true}});
+  transformer = new Transformer({
+    classes: true,
+    stringTemplates: true,
+    arrowFunctions: true,
+    let: true,
+    defaultArguments: true,
+    objectMethods: true,
+    objectShorthands: true,
+    noStrict: true,
+    importCommonjs: true,
+    exportCommonjs: true,
+  });
 
 function test(script) {
   transformer.read(script);

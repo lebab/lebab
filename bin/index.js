@@ -13,7 +13,7 @@ catch (error) {
   process.exit(2);
 }
 
-var transformer = new Transformer({transformers: options.transformers});
+var transformer = new Transformer(options.transformers);
 transformer.read(io.read(options.inFile));
 transformer.applyTransformations();
 io.write(options.outFile, transformer.out());
