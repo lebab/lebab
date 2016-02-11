@@ -1,5 +1,6 @@
 import estraverse from 'estraverse';
 import typeChecker from '../utils/type-checker.js';
+import multiReplaceStatement from '../utils/multi-replace-statement.js';
 import ImportDeclaration from '../syntax/import-declaration.js';
 import VariableDeclaration from '../syntax/variable-declaration.js';
 
@@ -20,7 +21,7 @@ function traverse(node, parent) {
       }
     });
 
-    parent.body.splice(parent.body.indexOf(node), 1, ...declarations);
+    multiReplaceStatement(parent, node, declarations);
   }
 }
 
