@@ -4,9 +4,7 @@ var
   transformer = new Transformer({classes: true});
 
 function test(script) {
-  transformer.read(script);
-  transformer.applyTransformations();
-  return transformer.out();
+  return transformer.run(script);
 }
 
 describe('Class transformation', function () {

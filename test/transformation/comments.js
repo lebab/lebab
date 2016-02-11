@@ -15,9 +15,7 @@ var
   });
 
 function test(script) {
-  transformer.read(script);
-  transformer.applyTransformations();
-  return transformer.out();
+  return transformer.run(script);
 }
 
 describe('Comments', function () {

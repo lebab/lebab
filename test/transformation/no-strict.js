@@ -4,9 +4,7 @@ var Transformer = require('./../../lib/transformer');
 var transformer = new Transformer({noStrict: true});
 
 function test(script) {
-  transformer.read(script);
-  transformer.applyTransformations();
-  return transformer.out();
+  return transformer.run(script);
 }
 
 describe('Removal of "use strict"', function () {

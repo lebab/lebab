@@ -26,54 +26,34 @@ const tranformersMap = {
   exportCommonjs: exportCommonjsTransformation,
 };
 
+/**
+ * Runs transformers on code.
+ */
 export default
 class Transformer {
   /**
    * @param {Object} transformers List of transformers to enable
    */
   constructor(transformers={}) {
-    this.ast = {};
-
-    this.transformations = _(transformers)
+    this.transformers = _(transformers)
       .pick(enabled => enabled)
       .map((enabled, key) => tranformersMap[key])
       .value();
   }
 
   /**
-   * Prepare an abstract syntax tree for given code in string
+   * Tranforms code using all configured transformers.
    *
-   * @param string
+   * @param {String} code Input ES5 code
+   * @return {String} Output ES6 code
    */
-  read(string) {
-    this.ast = recast.parse(string).program;
-  }
+  run(code) {
+    const ast = recast.parse(code).program;
 
-  /**
-   * Apply a transformation on the AST
-   *
-   * @param transformation
-   */
-  applyTransformation(transformation) {
-    transformation(this.ast);
-  }
+    this.transformers.forEach(transformer => {
+      transformer(ast);
+    });
 
-  /**
-   * Apply All transformations
-   */
-  applyTransformations() {
-    for (let i = 0; i < this.transformations.length; i++) {
-      let transformation = this.transformations[i];
-      this.applyTransformation(transformation);
-    }
-  }
-
-  /**
-   * Returns the code string
-   *
-   * @returns {Object}
-   */
-  out() {
-    return recast.print(this.ast).code;
+    return recast.print(ast).code;
   }
 }

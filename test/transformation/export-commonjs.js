@@ -4,9 +4,7 @@ var Transformer = require('./../../lib/transformer');
 var transformer = new Transformer({exportCommonjs: true});
 
 function test(script) {
-  transformer.read(script);
-  transformer.applyTransformations();
-  return transformer.out();
+  return transformer.run(script);
 }
 
 function expectNoChange(script) {

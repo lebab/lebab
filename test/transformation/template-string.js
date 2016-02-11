@@ -4,9 +4,7 @@ var
   transformer = new Transformer({stringTemplates: true});
 
 function test(script) {
-  transformer.read(script);
-  transformer.applyTransformations();
-  return transformer.out();
+  return transformer.run(script);
 }
 
 describe('Template string transformation', function () {
