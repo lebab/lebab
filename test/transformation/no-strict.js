@@ -1,6 +1,5 @@
 var expect = require('chai').expect;
 var Transformer = require('./../../lib/transformer');
-
 var transformer = new Transformer({noStrict: true});
 
 function test(script) {
