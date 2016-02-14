@@ -48,12 +48,22 @@ class Transformer {
    * @return {String} Output ES6 code
    */
   run(code) {
-    const ast = recast.parse(code);
+    return this.ignoringHashBangComment(code, (js) => {
+      const ast = recast.parse(js);
 
-    this.transformers.forEach(transformer => {
-      transformer(ast.program);
+      this.transformers.forEach(transformer => {
+        transformer(ast.program);
+      });
+
+      return recast.print(ast).code;
     });
+  }
 
-    return recast.print(ast).code;
+  // strips hashBang comment,
+  // invokes callback with normal js,
+  // then re-adds the hashBang comment back
+  ignoringHashBangComment(code, callback) {
+    const [all, hashBang, js] = code.match(/^(\s*#!.*?\r?\n|)([\s\S]*)$/); // jshint ignore:line
+    return hashBang + callback(js);
   }
 }

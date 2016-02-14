@@ -53,4 +53,30 @@ describe('Comments', function () {
     );
   });
 
+  it("ignores #! comment at the beginning of file", function () {
+    expect(test(
+      '#!/usr/bin/env node\n' +
+      'var x = 42;'
+    )).to.equal(
+      '#!/usr/bin/env node\n' +
+      'const x = 42;'
+    );
+  });
+
+  it("ignores #! comment almost at the beginning of file", function () {
+    expect(test(
+      '\n' +
+      '#!/usr/local/bin/node\n' +
+      'if (true) {\n' +
+      '  var foo = 42;\n' +
+      '}'
+    )).to.equal(
+      '\n' +
+      '#!/usr/local/bin/node\n' +
+      'if (true) {\n' +
+      '  const foo = 42;\n' +
+      '}'
+    );
+  });
+
 });
