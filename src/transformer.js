@@ -48,10 +48,10 @@ class Transformer {
    * @return {String} Output ES6 code
    */
   run(code) {
-    const ast = recast.parse(code).program;
+    const ast = recast.parse(code);
 
     this.transformers.forEach(transformer => {
-      transformer(ast);
+      transformer(ast.program);
     });
 
     return recast.print(ast).code;

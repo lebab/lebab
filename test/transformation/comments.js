@@ -33,4 +33,20 @@ describe('Comments', function () {
     done();
   });
 
+  it("shouldn't eliminate leading newlines", function () {
+    expect(test(
+      '\n\nvar x = 42;'
+    )).to.equal(
+      '\n\nconst x = 42;'
+    );
+  });
+
+  it("shouldn't eliminate trailing newlines", function () {
+    expect(test(
+      'var x = 42;\n\n'
+    )).to.equal(
+      'const x = 42;\n\n'
+    );
+  });
+
 });
