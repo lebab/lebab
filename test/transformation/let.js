@@ -1,13 +1,9 @@
 var expect = require('chai').expect;
-var
-  Transformer = require('./../../lib/transformer'),
-  letTransformation = require('./../../lib/transformation/let'),
-  transformer = new Transformer();
+var Transformer = require('./../../lib/transformer');
+var transformer = new Transformer({let: true});
 
 function test(script) {
-  transformer.read(script);
-  transformer.applyTransformation(letTransformation);
-  return transformer.out();
+  return transformer.run(script);
 }
 
 function expectNoChange(script) {

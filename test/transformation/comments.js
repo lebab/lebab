@@ -1,28 +1,56 @@
 var expect = require('chai').expect;
-var
-  Transformer = require('./../../lib/transformer'),
-  transformer = new Transformer({transformers: {let: true}});
+var Transformer = require('./../../lib/transformer');
+var transformer = new Transformer({
+  classes: true,
+  stringTemplates: true,
+  arrowFunctions: true,
+  let: true,
+  defaultArguments: true,
+  objectMethods: true,
+  objectShorthands: true,
+  noStrict: true,
+  importCommonjs: true,
+  exportCommonjs: true,
+});
 
 function test(script) {
-  transformer.read(script);
-  transformer.applyTransformations();
-  return transformer.out();
+  return transformer.run(script);
 }
 
 describe('Comments', function () {
 
-  it("shouldn't convert comment line", function (done) {
-    var script = '// comment line\nvar x = 42;';
-
-    expect(test(script)).to.equal('// comment line\nconst x = 42;');
-    done();
+  it("shouldn't convert comment line", function () {
+    expect(test(
+      '// comment line\n' +
+      'var x = 42;'
+    )).to.equal(
+      '// comment line\n' +
+      'const x = 42;'
+    );
   });
 
-  it("shouldn't convert trailing comment", function (done) {
-    var script = 'var x = 42; // trailing comment';
+  it("shouldn't convert trailing comment", function () {
+    expect(test(
+      'var x = 42; // trailing comment'
+    )).to.equal(
+      'const x = 42; // trailing comment'
+    );
+  });
 
-    expect(test(script)).to.equal('const x = 42; // trailing comment');
-    done();
+  it("shouldn't eliminate leading newlines", function () {
+    expect(test(
+      '\n\nvar x = 42;'
+    )).to.equal(
+      '\n\nconst x = 42;'
+    );
+  });
+
+  it("shouldn't eliminate trailing newlines", function () {
+    expect(test(
+      'var x = 42;\n\n'
+    )).to.equal(
+      'const x = 42;\n\n'
+    );
   });
 
 });

@@ -1,13 +1,9 @@
 var expect = require('chai').expect;
-var
-  Transformer = require('./../../lib/transformer'),
-  arrowTransformation = require('./../../lib/transformation/arrow-functions'),
-  transformer = new Transformer();
+var Transformer = require('./../../lib/transformer');
+var transformer = new Transformer({arrowFunctions: true});
 
 function test(script) {
-  transformer.read(script);
-  transformer.applyTransformation(arrowTransformation);
-  return transformer.out();
+  return transformer.run(script);
 }
 
 function expectNoChange(script) {

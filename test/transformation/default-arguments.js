@@ -1,13 +1,9 @@
 var expect = require('chai').expect;
-var
-  Transformer = require('./../../lib/transformer'),
-  defaultArgsTransformation = require('./../../lib/transformation/default-arguments'),
-  transformer = new Transformer();
+var Transformer = require('./../../lib/transformer');
+var transformer = new Transformer({defaultArguments: true});
 
 function test(script) {
-  transformer.read(script);
-  transformer.applyTransformation(defaultArgsTransformation);
-  return transformer.out();
+  return transformer.run(script);
 }
 
 describe('Default Arguments', function () {

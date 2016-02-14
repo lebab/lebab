@@ -1,13 +1,9 @@
 var expect = require('chai').expect;
-var
-  Transformer = require('./../../lib/transformer'),
-  classTransformation = require('./../../lib/transformation/classes'),
-  transformer = new Transformer();
+var Transformer = require('./../../lib/transformer');
+var transformer = new Transformer({classes: true});
 
 function test(script) {
-  transformer.read(script);
-  transformer.applyTransformation(classTransformation);
-  return transformer.out();
+  return transformer.run(script);
 }
 
 describe('Class transformation', function () {

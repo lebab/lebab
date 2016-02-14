@@ -1,13 +1,9 @@
 var expect = require('chai').expect;
 var Transformer = require('./../../lib/transformer');
-var exportCommonJsTransformation = require('./../../lib/transformation/export-commonjs');
-
-var transformer = new Transformer({});
+var transformer = new Transformer({exportCommonjs: true});
 
 function test(script) {
-  transformer.read(script);
-  transformer.applyTransformation(exportCommonJsTransformation);
-  return transformer.out();
+  return transformer.run(script);
 }
 
 function expectNoChange(script) {
