@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import multiReplaceStatement from './../utils/multi-replace-statement.js';
 
 /**
@@ -61,9 +62,13 @@ class PotentialClass {
   }
 
   createMethods() {
-    return [
-      this.constructor.toMethodDefinition(),
+    return _.compact([
+      this.createConstructor(),
       ...this.methods.map(m => m.toMethodDefinition())
-    ];
+    ]);
+  }
+
+  createConstructor() {
+    return this.constructor.isEmpty() ? undefined : this.constructor.toMethodDefinition();
   }
 }

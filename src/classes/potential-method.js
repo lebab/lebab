@@ -22,6 +22,14 @@ class PotentialMethod {
   }
 
   /**
+   * True when method body is empty.
+   * @return {Boolean}
+   */
+  isEmpty() {
+    return this.methodNode.body.body.length === 0;
+  }
+
+  /**
    * Transforms the potential method to actual MethodDefinition node.
    * @return {MethodDefinition}
    */

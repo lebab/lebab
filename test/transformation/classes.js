@@ -22,10 +22,26 @@ describe('Class transformation', function () {
       "};"
     )).to.equal(
       "class someClass {\n" +
-      "  constructor() {\n" +
+      "  someMethod(a, b) {\n" +
+      "  }\n" +
+      "}"
+    );
+  });
+
+  it('should convert non-empty function to constructor method', function () {
+    expect(test(
+      "function someClass(a, b) {\n" +
+      "  this.params = [a, b];\n" +
+      "}\n" +
+      "someClass.prototype.someMethod = function(ma, mb) {\n" +
+      "};"
+    )).to.equal(
+      "class someClass {\n" +
+      "  constructor(a, b) {\n" +
+      "    this.params = [a, b];\n" +
       "  }\n" +
       "\n" +
-      "  someMethod(a, b) {\n" +
+      "  someMethod(ma, mb) {\n" +
       "  }\n" +
       "}"
     );
@@ -63,9 +79,6 @@ describe('Class transformation', function () {
       "});"
     )).to.equal(
       "class someClass {\n" +
-      "  constructor() {\n" +
-      "  }\n" +
-      "\n" +
       "  someMethod(a, b) {\n" +
       "  }\n" +
       "\n" +
@@ -75,23 +88,6 @@ describe('Class transformation', function () {
       "\n" +
       "  set someAccessor(value) {\n" +
       "    this._some = value;\n" +
-      "  }\n" +
-      "}"
-    );
-  });
-
-  it('should not forget to copy over Class constructor arguments after transforming', function () {
-    expect(test(
-      "function someClass(a, b) {\n" +
-      "}\n" +
-      "someClass.prototype.someMethod = function(ma, mb) {\n" +
-      "};"
-    )).to.equal(
-      "class someClass {\n" +
-      "  constructor(a, b) {\n" +
-      "  }\n" +
-      "\n" +
-      "  someMethod(ma, mb) {\n" +
       "  }\n" +
       "}"
     );
