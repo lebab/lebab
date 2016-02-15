@@ -11,12 +11,14 @@ class PotentialMethod {
    *   @param {Object} cfg.methodNode
    *   @param {Object} cfg.fullNode
    *   @param {Object} cfg.parent
+   *   @param {String} cfg.kind Either 'get' or 'set' (optional)
    */
-  constructor({name, methodNode, fullNode, parent}) {
+  constructor({name, methodNode, fullNode, parent, kind}) {
     this.name = name;
     this.methodNode = methodNode;
     this.fullNode = fullNode;
     this.parent = parent;
+    this.kind = kind || 'method';
   }
 
   /**
@@ -39,7 +41,7 @@ class PotentialMethod {
         generator: false,
         expression: false,
       },
-      kind: 'method',
+      kind: this.kind,
       static: false,
     };
   }

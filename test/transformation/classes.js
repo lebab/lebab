@@ -53,7 +53,7 @@ describe('Class transformation', function () {
     );
   });
 
-  xit('should convert Object.defineProperty to setters and getters', function () {
+  it('should convert Object.defineProperty to setters and getters', function () {
     expect(test(
       "function someClass() {\n" +
       "}\n" +

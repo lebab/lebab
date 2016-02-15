@@ -46,6 +46,22 @@ function (ast) {
           }));
         }
       }
+      else if (isObjectDefinePropertyCall(node)) {
+        const clsName = node.expression.arguments[0].object.name;
+        const propName = node.expression.arguments[1].value;
+        const descriptor = node.expression.arguments[2];
+        if (potentialClasses[clsName] && _(descriptor.properties).every(isAccessorDescriptor)) {
+          descriptor.properties.forEach(prop => {
+            potentialClasses[clsName].addMethod(new PotentialMethod({
+              name: propName,
+              methodNode: prop.value,
+              fullNode: node,
+              parent,
+              kind: prop.key.name,
+            }));
+          });
+        }
+      }
     },
     leave(node) {
       if (node.type === 'Program') {
@@ -94,4 +110,59 @@ var isPrototypeAssignment = _.matches({
     },
     operator: '=',
   }
+});
+
+// Matches: Object.defineProperty(<SomeClass>.prototype, <string>, {})
+var isObjectDefinePropertyCall = _.matches({
+  type: 'ExpressionStatement',
+  expression: {
+    type: 'CallExpression',
+    callee: {
+      type: 'MemberExpression',
+      computed: false,
+      object: {
+        type: 'Identifier',
+        name: 'Object'
+      },
+      property: {
+        type: 'Identifier',
+        name: 'defineProperty'
+      }
+    },
+    arguments: [
+      {
+        type: 'MemberExpression',
+        computed: false,
+        object: {
+          type: 'Identifier',
+          // name: <SomeClass>
+        },
+        property: {
+          type: 'Identifier',
+          name: 'prototype'
+        }
+      },
+      {
+        type: 'Literal',
+        // value: <string>
+      },
+      {
+        type: 'ObjectExpression',
+      }
+    ]
+  }
+});
+
+function isAccessorDescriptor(node) {
+  return isIdentProperty(node) &&
+    (node.key.name === 'get' || node.key.name === 'set') &&
+    functionType.isFunctionExpression(node.value);
+}
+
+var isIdentProperty = _.matches({
+  type: 'Property',
+  key: {
+    type: 'Identifier',
+  },
+  computed: false,
 });
