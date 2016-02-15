@@ -31,7 +31,7 @@ describe('Class transformation', function () {
     );
   });
 
-  xit('should apply non-anonymous functions to methods', function () {
+  it('should not convert non-anonymous functions to methods', function () {
     expect(test(
       "function someClass() {\n" +
       "}\n" +
@@ -39,15 +39,9 @@ describe('Class transformation', function () {
       "function someMethod(a, b) {\n" +
       "}"
     )).to.equal(
-      "class someClass {\n" +
-      "  constructor() {\n" +
-      "  }\n" +
-      "\n" +
-      "  someMethod() {\n" +
-      "    return someMethod.apply(this, arguments);\n" +
-      "  }\n" +
+      "function someClass() {\n" +
       "}\n" +
-      "\n" +
+      "someClass.prototype.someMethod = someMethod;\n" +
       "function someMethod(a, b) {\n" +
       "}"
     );
