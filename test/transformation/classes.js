@@ -18,7 +18,7 @@ describe('Class transformation', function () {
     expect(test(script)).to.equal(script);
   });
 
-  it('should convert functions with prototype assignment to class', function () {
+  it('should convert function declarations with prototype assignment to class', function () {
     expect(test(
       "function someClass() {\n" +
       "}\n" +
@@ -27,6 +27,36 @@ describe('Class transformation', function () {
     )).to.equal(
       "class someClass {\n" +
       "  someMethod(a, b) {\n" +
+      "  }\n" +
+      "}"
+    );
+  });
+
+  it('should convert function variables with prototype assignment to class', function () {
+    expect(test(
+      "var someClass = function() {\n" +
+      "}\n" +
+      "someClass.prototype.someMethod = function() {\n" +
+      "};"
+    )).to.equal(
+      "class someClass {\n" +
+      "  someMethod() {\n" +
+      "  }\n" +
+      "}"
+    );
+  });
+
+  it('should convert arrow-function to method', function () {
+    expect(test(
+      "var someClass = function() {\n" +
+      "}\n" +
+      "someClass.prototype.someMethod = (a, b) => {\n" +
+      "  return a + b;\n" +
+      "};"
+    )).to.equal(
+      "class someClass {\n" +
+      "  someMethod(a, b) {\n" +
+      "    return a + b;\n" +
       "  }\n" +
       "}"
     );
@@ -61,12 +91,29 @@ describe('Class transformation', function () {
     );
   });
 
+  it('should ignore non-function assignments to prototype', function () {
+    expect(test(
+      "function someClass() {\n" +
+      "}\n" +
+      "someClass.prototype.count = 10;\n" +
+      "someClass.prototype.someMethod = function() {\n" +
+      "};\n" +
+      "someClass.prototype.hash = {foo: 'bar'};"
+    )).to.equal(
+      "class someClass {\n" +
+      "  someMethod() {\n" +
+      "  }\n" +
+      "}\n" +
+      "\n" +
+      "someClass.prototype.count = 10;\n" +
+      "someClass.prototype.hash = {foo: 'bar'};"
+    );
+  });
+
   it('should convert Object.defineProperty to setters and getters', function () {
     expect(test(
       "function someClass() {\n" +
       "}\n" +
-      "someClass.prototype.someMethod = function(a, b) {\n" +
-      "};\n" +
       "Object.defineProperty(someClass.prototype, 'someAccessor', {\n" +
       "  get: function () {\n" +
       "    return this._some;\n" +
@@ -77,9 +124,6 @@ describe('Class transformation', function () {
       "});"
     )).to.equal(
       "class someClass {\n" +
-      "  someMethod(a, b) {\n" +
-      "  }\n" +
-      "\n" +
       "  get someAccessor() {\n" +
       "    return this._some;\n" +
       "  }\n" +
@@ -88,6 +132,18 @@ describe('Class transformation', function () {
       "    this._some = value;\n" +
       "  }\n" +
       "}"
+    );
+  });
+
+  it('should ignore Object.defineProperty of non-function property', function () {
+    expectNoChange(
+      "function someClass() {\n" +
+      "}\n" +
+      "Object.defineProperty(someClass.prototype, 'propName', {\n" +
+      "  value: 10,\n" +
+      "  configurable: true,\n" +
+      "  writable: true\n" +
+      "});"
     );
   });
 
