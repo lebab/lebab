@@ -6,6 +6,10 @@ function test(script) {
   return transformer.run(script);
 }
 
+function expectNoChange(script) {
+  expect(test(script)).to.equal(script);
+}
+
 describe('Class transformation', function () {
 
   it('should not convert functions without prototype assignment to class', function () {
@@ -48,13 +52,7 @@ describe('Class transformation', function () {
   });
 
   it('should not convert non-anonymous functions to methods', function () {
-    expect(test(
-      "function someClass() {\n" +
-      "}\n" +
-      "someClass.prototype.someMethod = someMethod;\n" +
-      "function someMethod(a, b) {\n" +
-      "}"
-    )).to.equal(
+    expectNoChange(
       "function someClass() {\n" +
       "}\n" +
       "someClass.prototype.someMethod = someMethod;\n" +
