@@ -63,8 +63,8 @@ function (ast) {
         const clsName = node.expression.arguments[0].object.name;
         const propName = node.expression.arguments[1].value;
         const descriptor = node.expression.arguments[2];
-        if (potentialClasses[clsName] && _(descriptor.properties).every(isAccessorDescriptor)) {
-          descriptor.properties.forEach(prop => {
+        if (potentialClasses[clsName]) {
+          descriptor.properties.filter(isAccessorDescriptor).forEach(prop => {
             potentialClasses[clsName].addMethod(new PotentialMethod({
               name: propName,
               methodNode: prop.value,

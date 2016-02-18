@@ -174,6 +174,26 @@ describe('Classes', function () {
     );
   });
 
+  it('should ignore other options of Object.defineProperty when converting get/set', function () {
+    expect(test(
+      "function MyClass() {\n" +
+      "}\n" +
+      "Object.defineProperty(MyClass.prototype, 'someAccessor', {\n" +
+      "  configurable: true,\n" +
+      "  enumerable: true,\n" +
+      "  set: function (value) {\n" +
+      "    this._some = value;\n" +
+      "  }\n" +
+      "});"
+    )).to.equal(
+      "class MyClass {\n" +
+      "  set someAccessor(value) {\n" +
+      "    this._some = value;\n" +
+      "  }\n" +
+      "}"
+    );
+  });
+
   it('should ignore Object.defineProperty of non-function property', function () {
     expectNoChange(
       "function MyClass() {\n" +
