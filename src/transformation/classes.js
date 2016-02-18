@@ -2,7 +2,11 @@ import _ from 'lodash';
 import estraverse from 'estraverse';
 import PotentialClass from './../classes/potential-class.js';
 import PotentialMethod from './../classes/potential-method.js';
-import * as functionType from './../utils/function-type.js';
+import matchFunctionDeclaration from './../classes/match-function-declaration.js';
+import matchFunctionVar from './../classes/match-function-var.js';
+import matchPrototypeFunctionAssignment from './../classes/match-prototype-function-assignment.js';
+import matchPrototypeObjectAssignment from './../classes/match-prototype-object-assignment.js';
+import matchObjectDefinePropertyCall from './../classes/match-object-define-property-call.js';
 
 export default
 function (ast) {
@@ -10,67 +14,61 @@ function (ast) {
 
   estraverse.traverse(ast, {
     enter(node, parent) {
-      if (functionType.isFunctionDeclaration(node)) {
-        const name = node.id.name;
-        potentialClasses[name] = new PotentialClass({
-          name,
+      let m;
+
+      if ((m = matchFunctionDeclaration(node))) {
+        potentialClasses[m.className] = new PotentialClass({
+          name: m.className,
           constructor: new PotentialMethod({
             name: 'constructor',
-            methodNode: node,
+            methodNode: m.constructorNode,
           }),
           fullNode: node,
           parent,
         });
       }
-      else if (isFunctionVariableDeclaration(node)) {
-        const name = node.declarations[0].id.name;
-        potentialClasses[name] = new PotentialClass({
-          name,
+      else if ((m = matchFunctionVar(node))) {
+        potentialClasses[m.className] = new PotentialClass({
+          name: m.className,
           constructor: new PotentialMethod({
             name: 'constructor',
-            methodNode: node.declarations[0].init,
+            methodNode: m.constructorNode,
           }),
           fullNode: node,
           parent,
         });
       }
-      else if (isPrototypeFunctionAssignment(node)) {
-        const {left, right} = node.expression;
-        const name = left.object.object.name;
-        if (potentialClasses[name]) {
-          potentialClasses[name].addMethod(new PotentialMethod({
-            name: left.property.name,
-            methodNode: right,
+      else if ((m = matchPrototypeFunctionAssignment(node))) {
+        if (potentialClasses[m.className]) {
+          potentialClasses[m.className].addMethod(new PotentialMethod({
+            name: m.methodName,
+            methodNode: m.methodNode,
             fullNode: node,
             parent,
           }));
         }
       }
-      else if (isPrototypeObjectAssignment(node)) {
-        const {left: {object: {name}}, right: {properties}} = node.expression;
-        if (potentialClasses[name] && properties.every(isFunctionProperty)) {
-          properties.forEach(prop => {
-            potentialClasses[name].addMethod(new PotentialMethod({
-              name: prop.key.name,
-              methodNode: prop.value,
+      else if ((m = matchPrototypeObjectAssignment(node))) {
+        if (potentialClasses[m.className]) {
+          m.methods.forEach(method => {
+            potentialClasses[m.className].addMethod(new PotentialMethod({
+              name: method.methodName,
+              methodNode: method.methodNode,
               fullNode: node,
               parent,
             }));
           });
         }
       }
-      else if (isObjectDefinePropertyCall(node)) {
-        const clsName = node.expression.arguments[0].object.name;
-        const propName = node.expression.arguments[1].value;
-        const descriptor = node.expression.arguments[2];
-        if (potentialClasses[clsName]) {
-          descriptor.properties.filter(isAccessorDescriptor).forEach(prop => {
-            potentialClasses[clsName].addMethod(new PotentialMethod({
-              name: propName,
-              methodNode: prop.value,
+      else if ((m = matchObjectDefinePropertyCall(node))) {
+        if (potentialClasses[m.className]) {
+          m.descriptors.forEach(desc => {
+            potentialClasses[m.className].addMethod(new PotentialMethod({
+              name: m.methodName,
+              methodNode: desc.methodNode,
               fullNode: node,
               parent,
-              kind: prop.key.name,
+              kind: desc.kind,
             }));
           });
         }
@@ -86,126 +84,3 @@ function (ast) {
     }
   });
 }
-
-// Matches: var <ident> = function () { ... }
-function isFunctionVariableDeclaration(node) {
-  return node.type === 'VariableDeclaration' &&
-    node.declarations.length === 1 &&
-    node.declarations[0].init &&
-    node.declarations[0].init.type === 'FunctionExpression';
-}
-
-// Matches: <SomeClass>.prototype.<ident> = function () { ... }
-var isPrototypeFunctionAssignment = _.matches({
-  type: 'ExpressionStatement',
-  expression: {
-    type: 'AssignmentExpression',
-    left: {
-      type: 'MemberExpression',
-      computed: false,
-      object: {
-        type: 'MemberExpression',
-        computed: false,
-        object: {
-          type: 'Identifier',
-          // name: <SomeClass>
-        },
-        property: {
-          type: 'Identifier',
-          name: 'prototype'
-        },
-      },
-      property: {
-        type: 'Identifier',
-        // name: <ident>
-      }
-    },
-    operator: '=',
-    right: {
-      type: 'FunctionExpression'
-    }
-  }
-});
-
-// Matches: <SomeClass>.prototype = { ... };
-var isPrototypeObjectAssignment = _.matches({
-  type: 'ExpressionStatement',
-  expression: {
-    type: 'AssignmentExpression',
-    left: {
-      type: 'MemberExpression',
-      computed: false,
-      object: {
-        type: 'Identifier',
-        // name: <SomeClass>
-      },
-      property: {
-        type: 'Identifier',
-        name: 'prototype'
-      },
-    },
-    operator: '=',
-    right: {
-      type: 'ObjectExpression'
-    }
-  }
-});
-
-// Matches: Object.defineProperty(<SomeClass>.prototype, <string>, {})
-var isObjectDefinePropertyCall = _.matches({
-  type: 'ExpressionStatement',
-  expression: {
-    type: 'CallExpression',
-    callee: {
-      type: 'MemberExpression',
-      computed: false,
-      object: {
-        type: 'Identifier',
-        name: 'Object'
-      },
-      property: {
-        type: 'Identifier',
-        name: 'defineProperty'
-      }
-    },
-    arguments: [
-      {
-        type: 'MemberExpression',
-        computed: false,
-        object: {
-          type: 'Identifier',
-          // name: <SomeClass>
-        },
-        property: {
-          type: 'Identifier',
-          name: 'prototype'
-        }
-      },
-      {
-        type: 'Literal',
-        // value: <string>
-      },
-      {
-        type: 'ObjectExpression',
-      }
-    ]
-  }
-});
-
-function isAccessorDescriptor(node) {
-  return isFunctionProperty(node) &&
-    (node.key.name === 'get' || node.key.name === 'set');
-}
-
-// Matches: <ident>: function() { ... }
-var isFunctionProperty = _.matches({
-  type: 'Property',
-  key: {
-    type: 'Identifier',
-    // name: <ident>
-  },
-  computed: false,
-  value: {
-    type: 'FunctionExpression'
-  }
-});
