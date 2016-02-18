@@ -46,6 +46,19 @@ function (ast) {
           }));
         }
       }
+      else if (isPrototypeObjectAssignment(node)) {
+        const {left: {object: {name}}, right: {properties}} = node.expression;
+        if (potentialClasses[name] && properties.every(isFunctionProperty)) {
+          properties.forEach(prop => {
+            potentialClasses[name].addMethod(new PotentialMethod({
+              name: prop.key.name,
+              methodNode: prop.value,
+              fullNode: node,
+              parent,
+            }));
+          });
+        }
+      }
       else if (isObjectDefinePropertyCall(node)) {
         const clsName = node.expression.arguments[0].object.name;
         const propName = node.expression.arguments[1].value;
@@ -114,6 +127,30 @@ var isPrototypeFunctionAssignment = _.matches({
   }
 });
 
+// Matches: <SomeClass>.prototype = { ... };
+var isPrototypeObjectAssignment = _.matches({
+  type: 'ExpressionStatement',
+  expression: {
+    type: 'AssignmentExpression',
+    left: {
+      type: 'MemberExpression',
+      computed: false,
+      object: {
+        type: 'Identifier',
+        // name: <SomeClass>
+      },
+      property: {
+        type: 'Identifier',
+        name: 'prototype'
+      },
+    },
+    operator: '=',
+    right: {
+      type: 'ObjectExpression'
+    }
+  }
+});
+
 // Matches: Object.defineProperty(<SomeClass>.prototype, <string>, {})
 var isObjectDefinePropertyCall = _.matches({
   type: 'ExpressionStatement',
@@ -156,15 +193,19 @@ var isObjectDefinePropertyCall = _.matches({
 });
 
 function isAccessorDescriptor(node) {
-  return isIdentProperty(node) &&
-    (node.key.name === 'get' || node.key.name === 'set') &&
-    node.value.type === 'FunctionExpression';
+  return isFunctionProperty(node) &&
+    (node.key.name === 'get' || node.key.name === 'set');
 }
 
-var isIdentProperty = _.matches({
+// Matches: <ident>: function() { ... }
+var isFunctionProperty = _.matches({
   type: 'Property',
   key: {
     type: 'Identifier',
+    // name: <ident>
   },
   computed: false,
+  value: {
+    type: 'FunctionExpression'
+  }
 });

@@ -116,6 +116,39 @@ describe('Classes', function () {
     );
   });
 
+  it('should detect methods from object assigned directly to prototype', function () {
+    expect(test(
+      "function MyClass() {\n" +
+      "}\n" +
+      "MyClass.prototype = {\n" +
+      "  methodA: function(a) {\n" +
+      "  },\n" +
+      "  methodB: function(b) {\n" +
+      "  }\n" +
+      "};"
+    )).to.equal(
+      "class MyClass {\n" +
+      "  methodA(a) {\n" +
+      "  }\n" +
+      "\n" +
+      "  methodB(b) {\n" +
+      "  }\n" +
+      "}"
+    );
+  });
+
+  it('should ignore object assigned directly to prototype when it contains non-functions', function () {
+    expectNoChange(
+      "function MyClass() {\n" +
+      "}\n" +
+      "MyClass.prototype = {\n" +
+      "  method: function(a) {\n" +
+      "  },\n" +
+      "  foo: 10\n" +
+      "};"
+    );
+  });
+
   it('should convert Object.defineProperty to setters and getters', function () {
     expect(test(
       "function MyClass() {\n" +
