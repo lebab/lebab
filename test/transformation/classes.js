@@ -46,19 +46,24 @@ describe('Class transformation', function () {
     );
   });
 
-  it('should convert arrow-function to method', function () {
-    expect(test(
-      "var someClass = function() {\n" +
-      "}\n" +
-      "someClass.prototype.someMethod = (a, b) => {\n" +
-      "  return a + b;\n" +
+  it('should not convert arrow-function to class', function () {
+    expectNoChange(
+      "var someClass = () => {\n" +
+      "  this.foo = 10;\n" +
+      "};\n" +
+      "someClass.prototype.someMethod = () => {\n" +
+      "  return this.foo;\n" +
       "};"
-    )).to.equal(
-      "class someClass {\n" +
-      "  someMethod(a, b) {\n" +
-      "    return a + b;\n" +
-      "  }\n" +
-      "}"
+    );
+  });
+
+  it('should not convert arrow-function to method', function () {
+    expectNoChange(
+      "function someClass() {\n" +
+      "}\n" +
+      "someClass.prototype.someMethod = () => {\n" +
+      "  return this.foo;\n" +
+      "};"
     );
   });
 
@@ -143,6 +148,16 @@ describe('Class transformation', function () {
       "  value: 10,\n" +
       "  configurable: true,\n" +
       "  writable: true\n" +
+      "});"
+    );
+  });
+
+  it('should ignore Object.defineProperty with arrow-function', function () {
+    expectNoChange(
+      "function someClass() {\n" +
+      "}\n" +
+      "Object.defineProperty(someClass.prototype, 'getter', {\n" +
+      "  get: () => this.something\n" +
       "});"
     );
   });

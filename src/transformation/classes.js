@@ -34,10 +34,10 @@ function (ast) {
           parent,
         });
       }
-      else if (isPrototypeAssignment(node)) {
+      else if (isPrototypeFunctionAssignment(node)) {
         const {left, right} = node.expression;
         const name = left.object.object.name;
-        if (potentialClasses[name] && functionType.isFunctionExpression(right)) {
+        if (potentialClasses[name]) {
           potentialClasses[name].addMethod(new PotentialMethod({
             name: left.property.name,
             methodNode: right,
@@ -75,16 +75,15 @@ function (ast) {
 }
 
 // Matches: var <ident> = function () { ... }
-//          var <ident> = () => ...
 function isFunctionVariableDeclaration(node) {
   return node.type === 'VariableDeclaration' &&
     node.declarations.length === 1 &&
     node.declarations[0].init &&
-    functionType.isFunctionExpression(node.declarations[0].init);
+    node.declarations[0].init.type === 'FunctionExpression';
 }
 
-// Matches: <SomeClass>.prototype.<ident> = ...
-var isPrototypeAssignment = _.matches({
+// Matches: <SomeClass>.prototype.<ident> = function () { ... }
+var isPrototypeFunctionAssignment = _.matches({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
@@ -109,6 +108,9 @@ var isPrototypeAssignment = _.matches({
       }
     },
     operator: '=',
+    right: {
+      type: 'FunctionExpression'
+    }
   }
 });
 
@@ -156,7 +158,7 @@ var isObjectDefinePropertyCall = _.matches({
 function isAccessorDescriptor(node) {
   return isIdentProperty(node) &&
     (node.key.name === 'get' || node.key.name === 'set') &&
-    functionType.isFunctionExpression(node.value);
+    node.value.type === 'FunctionExpression';
 }
 
 var isIdentProperty = _.matches({
