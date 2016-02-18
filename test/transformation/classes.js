@@ -10,23 +10,24 @@ function expectNoChange(script) {
   expect(test(script)).to.equal(script);
 }
 
-describe('Class transformation', function () {
+describe('Classes', function () {
 
   it('should not convert functions without prototype assignment to class', function () {
-    var script = "function someClass() {\n}";
-
-    expect(test(script)).to.equal(script);
+    expectNoChange(
+      "function MyClass() {\n" +
+      "}"
+    );
   });
 
   it('should convert function declarations with prototype assignment to class', function () {
     expect(test(
-      "function someClass() {\n" +
+      "function MyClass() {\n" +
       "}\n" +
-      "someClass.prototype.someMethod = function(a, b) {\n" +
+      "MyClass.prototype.method = function(a, b) {\n" +
       "};"
     )).to.equal(
-      "class someClass {\n" +
-      "  someMethod(a, b) {\n" +
+      "class MyClass {\n" +
+      "  method(a, b) {\n" +
       "  }\n" +
       "}"
     );
@@ -34,13 +35,13 @@ describe('Class transformation', function () {
 
   it('should convert function variables with prototype assignment to class', function () {
     expect(test(
-      "var someClass = function() {\n" +
-      "}\n" +
-      "someClass.prototype.someMethod = function() {\n" +
+      "var MyClass = function() {\n" +
+      "};\n" +
+      "MyClass.prototype.method = function() {\n" +
       "};"
     )).to.equal(
-      "class someClass {\n" +
-      "  someMethod() {\n" +
+      "class MyClass {\n" +
+      "  method() {\n" +
       "  }\n" +
       "}"
     );
@@ -48,10 +49,10 @@ describe('Class transformation', function () {
 
   it('should not convert arrow-function to class', function () {
     expectNoChange(
-      "var someClass = () => {\n" +
+      "var MyClass = () => {\n" +
       "  this.foo = 10;\n" +
       "};\n" +
-      "someClass.prototype.someMethod = () => {\n" +
+      "MyClass.prototype.method = () => {\n" +
       "  return this.foo;\n" +
       "};"
     );
@@ -59,9 +60,9 @@ describe('Class transformation', function () {
 
   it('should not convert arrow-function to method', function () {
     expectNoChange(
-      "function someClass() {\n" +
+      "function MyClass() {\n" +
       "}\n" +
-      "someClass.prototype.someMethod = () => {\n" +
+      "MyClass.prototype.method = () => {\n" +
       "  return this.foo;\n" +
       "};"
     );
@@ -69,18 +70,18 @@ describe('Class transformation', function () {
 
   it('should convert non-empty function to constructor method', function () {
     expect(test(
-      "function someClass(a, b) {\n" +
+      "function MyClass(a, b) {\n" +
       "  this.params = [a, b];\n" +
       "}\n" +
-      "someClass.prototype.someMethod = function(ma, mb) {\n" +
+      "MyClass.prototype.method = function(ma, mb) {\n" +
       "};"
     )).to.equal(
-      "class someClass {\n" +
+      "class MyClass {\n" +
       "  constructor(a, b) {\n" +
       "    this.params = [a, b];\n" +
       "  }\n" +
       "\n" +
-      "  someMethod(ma, mb) {\n" +
+      "  method(ma, mb) {\n" +
       "  }\n" +
       "}"
     );
@@ -88,38 +89,38 @@ describe('Class transformation', function () {
 
   it('should not convert non-anonymous functions to methods', function () {
     expectNoChange(
-      "function someClass() {\n" +
+      "function MyClass() {\n" +
       "}\n" +
-      "someClass.prototype.someMethod = someMethod;\n" +
-      "function someMethod(a, b) {\n" +
+      "MyClass.prototype.method = method;\n" +
+      "function method(a, b) {\n" +
       "}"
     );
   });
 
   it('should ignore non-function assignments to prototype', function () {
     expect(test(
-      "function someClass() {\n" +
+      "function MyClass() {\n" +
       "}\n" +
-      "someClass.prototype.count = 10;\n" +
-      "someClass.prototype.someMethod = function() {\n" +
+      "MyClass.prototype.count = 10;\n" +
+      "MyClass.prototype.method = function() {\n" +
       "};\n" +
-      "someClass.prototype.hash = {foo: 'bar'};"
+      "MyClass.prototype.hash = {foo: 'bar'};"
     )).to.equal(
-      "class someClass {\n" +
-      "  someMethod() {\n" +
+      "class MyClass {\n" +
+      "  method() {\n" +
       "  }\n" +
       "}\n" +
       "\n" +
-      "someClass.prototype.count = 10;\n" +
-      "someClass.prototype.hash = {foo: 'bar'};"
+      "MyClass.prototype.count = 10;\n" +
+      "MyClass.prototype.hash = {foo: 'bar'};"
     );
   });
 
   it('should convert Object.defineProperty to setters and getters', function () {
     expect(test(
-      "function someClass() {\n" +
+      "function MyClass() {\n" +
       "}\n" +
-      "Object.defineProperty(someClass.prototype, 'someAccessor', {\n" +
+      "Object.defineProperty(MyClass.prototype, 'someAccessor', {\n" +
       "  get: function () {\n" +
       "    return this._some;\n" +
       "  },\n" +
@@ -128,7 +129,7 @@ describe('Class transformation', function () {
       "  }\n" +
       "});"
     )).to.equal(
-      "class someClass {\n" +
+      "class MyClass {\n" +
       "  get someAccessor() {\n" +
       "    return this._some;\n" +
       "  }\n" +
@@ -142,9 +143,9 @@ describe('Class transformation', function () {
 
   it('should ignore Object.defineProperty of non-function property', function () {
     expectNoChange(
-      "function someClass() {\n" +
+      "function MyClass() {\n" +
       "}\n" +
-      "Object.defineProperty(someClass.prototype, 'propName', {\n" +
+      "Object.defineProperty(MyClass.prototype, 'propName', {\n" +
       "  value: 10,\n" +
       "  configurable: true,\n" +
       "  writable: true\n" +
@@ -154,9 +155,9 @@ describe('Class transformation', function () {
 
   it('should ignore Object.defineProperty with arrow-function', function () {
     expectNoChange(
-      "function someClass() {\n" +
+      "function MyClass() {\n" +
       "}\n" +
-      "Object.defineProperty(someClass.prototype, 'getter', {\n" +
+      "Object.defineProperty(MyClass.prototype, 'getter', {\n" +
       "  get: () => this.something\n" +
       "});"
     );
