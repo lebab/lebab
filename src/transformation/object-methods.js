@@ -1,26 +1,23 @@
+import _ from 'lodash';
 import estraverse from 'estraverse';
 
-export default
-  function (ast) {
-    estraverse.replace(ast, {
-      enter: functionToMethod
-    });
-  }
+const isTransformableProperty = _.matches({
+  type: 'Property',
+  value: {
+    type: 'FunctionExpression',
+    id: null,
+  },
+  method: false,
+  computed: false,
+  shorthand: false
+});
 
-function functionToMethod(node) {
-
-  if (node.type === 'ObjectExpression' && typeof node.properties === 'object') {
-    for (let i = 0; i < node.properties.length; i++) {
-      let property = node.properties[i];
-
-      if (property.value.type === 'FunctionExpression') {
-        property.method = true;
-        property.shorthand = false;
-        property.computed = false;
+export default function (ast) {
+  estraverse.replace(ast, {
+    enter(node) {
+      if (isTransformableProperty(node)) {
+        node.method = true;
       }
     }
-
-    this.skip();
-  }
-
+  });
 }

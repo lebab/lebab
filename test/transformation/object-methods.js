@@ -50,7 +50,7 @@ describe('Object methods', function () {
     );
   });
 
-  xit('should convert function properties in nested object literal', function () {
+  it('should convert function properties in nested object literal', function () {
     expect(test(
       '({\n' +
       '  nested: {\n' +
@@ -68,7 +68,7 @@ describe('Object methods', function () {
     );
   });
 
-  xit('should not convert named function expressions', function () {
+  it('should not convert named function expressions', function () {
     expectNoChange(
       '({\n' +
       '  foo: function foo() {\n' +
@@ -78,7 +78,7 @@ describe('Object methods', function () {
     );
   });
 
-  xit('should not convert computed properties', function () {
+  it('should not convert computed properties', function () {
     expectNoChange(
       '({\n' +
       '  ["foo" + count]: function() {\n' +
