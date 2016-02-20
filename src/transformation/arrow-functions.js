@@ -1,22 +1,19 @@
 import estraverse from 'estraverse';
 import ArrowFunctionExpression from './../syntax/arrow-function-expression.js';
 
-export default
-  function (ast) {
-    estraverse.replace(ast, {
-      enter: callBackToArrow
-    });
-  }
-
-function callBackToArrow(node, parent) {
-  if (isFunctionConvertableToArrow(node, parent)) {
-    return new ArrowFunctionExpression({
-      body: extractArrowBody(node.body),
-      params: node.params,
-      defaults: node.defaults,
-      rest: node.rest,
-    });
-  }
+export default function (ast) {
+  estraverse.replace(ast, {
+    enter(node, parent) {
+      if (isFunctionConvertableToArrow(node, parent)) {
+        return new ArrowFunctionExpression({
+          body: extractArrowBody(node.body),
+          params: node.params,
+          defaults: node.defaults,
+          rest: node.rest,
+        });
+      }
+    }
+  });
 }
 
 function isFunctionConvertableToArrow(node, parent) {
