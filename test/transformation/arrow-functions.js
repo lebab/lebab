@@ -104,4 +104,9 @@ describe('Callback to Arrow transformation', function () {
     expectNoChange('a(function () { if (x) foo(arguments); });');
   });
 
+  it('should not convert object methods', function () {
+    expectNoChange('({foo() {}});');
+    expectNoChange('({foo: function() {}});');
+  });
+
 });

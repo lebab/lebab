@@ -8,8 +8,8 @@ export default
     });
   }
 
-function callBackToArrow(node) {
-  if (isFunctionConvertableToArrow(node)) {
+function callBackToArrow(node, parent) {
+  if (isFunctionConvertableToArrow(node, parent)) {
     return new ArrowFunctionExpression({
       body: extractArrowBody(node.body),
       params: node.params,
@@ -19,8 +19,9 @@ function callBackToArrow(node) {
   }
 }
 
-function isFunctionConvertableToArrow(node) {
+function isFunctionConvertableToArrow(node, parent) {
   return node.type === 'FunctionExpression' &&
+    parent.type !== 'Property' &&
     !node.id &&
     !node.generator &&
     !hasThis(node.body) &&
