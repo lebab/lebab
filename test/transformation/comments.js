@@ -9,8 +9,7 @@ var transformer = new Transformer({
   objectMethods: true,
   objectShorthands: true,
   noStrict: true,
-  importCommonjs: true,
-  exportCommonjs: true,
+  commonjs: true,
 });
 
 function test(script) {

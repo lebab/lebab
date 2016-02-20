@@ -6,7 +6,7 @@ var _ = require('lodash');
 program.usage('[options] <file>');
 program.description(`${pkg.description}
 
-  Available transforms (+ enabled, - disabled):
+  Available transforms:
 
     + classes
     + stringTemplates
@@ -16,13 +16,11 @@ program.description(`${pkg.description}
     + objectMethods
     + objectShorthands
     + noStrict
-    - importCommonjs
-    - exportCommonjs`);
+    + commonjs`);
 program.version(pkg.version);
 program.option('-o, --out-file <out>', 'compile into a single file');
 program.option('--enable <a,b,c>', 'enable only specified transforms', v => v.split(','));
 program.option('--disable <a,b,c>', 'disable specified transforms', v => v.split(','));
-program.option('--module <commonjs>', 'transform CommonJS module syntax');
 
 /**
  * Parses and validates command line options from argv.
@@ -67,8 +65,7 @@ function getTransformers() {
     objectMethods: true,
     objectShorthands: true,
     noStrict: true,
-    importCommonjs: false,
-    exportCommonjs: false,
+    commonjs: true,
   };
 
   // When --enable used turn off everything besides the specified tranformers
@@ -81,15 +78,6 @@ function getTransformers() {
   // When --disable used, disable the specific transformers
   if (program.disable) {
     setTransformersEnabled(transformers, program.disable, false);
-  }
-
-  // When --module=commonjs used, enable CommonJS Transformers
-  if (program.module === 'commonjs') {
-    transformers.importCommonjs = true;
-    transformers.exportCommonjs = true;
-  }
-  else if (program.module) {
-    throw 'Unsupported module system "' + program.module + '".';
   }
 
   return transformers;

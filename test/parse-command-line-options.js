@@ -47,7 +47,7 @@ describe('Command Line Interface', function () {
     expect(options.outFile).to.equal('some/file.js');
   });
 
-  it('by default enables all transformers except CommonJS import/export', function() {
+  it('by default enables all transforms', function() {
     var options = parse([]);
     expect(options.transformers).to.deep.equal({
       classes: true,
@@ -58,13 +58,12 @@ describe('Command Line Interface', function () {
       objectMethods: true,
       objectShorthands: true,
       noStrict: true,
-      importCommonjs: false,
-      exportCommonjs: false,
+      commonjs: true,
     });
   });
 
-  it('when --enable=let,noStrict given, enables only these transformers', function() {
-    var options = parse(['--enable', 'let,noStrict']);
+  it('when --enable=let,noStrict,commonjs given, enables only these transformers', function() {
+    var options = parse(['--enable', 'let,noStrict,commonjs']);
     expect(options.transformers).to.deep.equal({
       classes: false,
       stringTemplates: false,
@@ -74,8 +73,7 @@ describe('Command Line Interface', function () {
       objectMethods: false,
       objectShorthands: false,
       noStrict: true,
-      importCommonjs: false,
-      exportCommonjs: false,
+      commonjs: true,
     });
   });
 
@@ -85,8 +83,8 @@ describe('Command Line Interface', function () {
     }).to.throw('Unknown transformer "unknown".');
   });
 
-  it('when --disable=let,noStrict given, disables the specified transformers', function() {
-    var options = parse(['--disable', 'let,noStrict']);
+  it('when --disable=let,noStrict,commonjs given, disables the specified transformers', function() {
+    var options = parse(['--disable', 'let,noStrict,commonjs']);
     expect(options.transformers).to.deep.equal({
       classes: true,
       stringTemplates: true,
@@ -96,8 +94,7 @@ describe('Command Line Interface', function () {
       objectMethods: true,
       objectShorthands: true,
       noStrict: false,
-      importCommonjs: false,
-      exportCommonjs: false,
+      commonjs: false,
     });
   });
 
@@ -111,28 +108,6 @@ describe('Command Line Interface', function () {
     expect(function() {
       parse(['--enable', 'let', '--disable', 'let']);
     }).to.throw('Options --enable and --disable can not be used together.');
-  });
-
-  it('when --module=commonjs given, enables CommonJS import/export transformers', function() {
-    var options = parse(['--module', 'commonjs']);
-    expect(options.transformers).to.deep.equal({
-      classes: true,
-      stringTemplates: true,
-      arrowFunctions: true,
-      let: true,
-      defaultArguments: true,
-      objectMethods: true,
-      objectShorthands: true,
-      noStrict: true,
-      importCommonjs: true,
-      exportCommonjs: true,
-    });
-  });
-
-  it('when --module=unknown given, raises error', function() {
-    expect(function() {
-      parse(['--module', 'unknown']);
-    }).to.throw('Unsupported module system "unknown".');
   });
 
 });
