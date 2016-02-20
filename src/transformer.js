@@ -13,15 +13,15 @@ import noStrictTransformation from './transformation/no-strict.js';
 import commonjsTransformation from './transformation/commonjs.js';
 
 const tranformersMap = {
-  classes: classTransformation,
-  stringTemplates: templateStringTransformation,
-  arrowFunctions: arrowFunctionTransformation,
-  let: letTransformation,
-  defaultArguments: defaultArgsTransformation,
-  objectMethods: objectMethodsTransformation,
-  objectShorthands: objectShorthandsTransformation,
-  noStrict: noStrictTransformation,
-  commonjs: commonjsTransformation,
+  'class': classTransformation,
+  'template': templateStringTransformation,
+  'arrow': arrowFunctionTransformation,
+  'let': letTransformation,
+  'default-param': defaultArgsTransformation,
+  'obj-method': objectMethodsTransformation,
+  'obj-shorthand': objectShorthandsTransformation,
+  'no-strict': noStrictTransformation,
+  'commonjs': commonjsTransformation,
 };
 
 /**

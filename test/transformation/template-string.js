@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 var Transformer = require('./../../lib/transformer');
-var transformer = new Transformer({stringTemplates: true});
+var transformer = new Transformer({'template': true});
 
 function test(script) {
   return transformer.run(script);

@@ -8,15 +8,15 @@ program.description(`${pkg.description}
 
   Available transforms:
 
-    + classes
-    + stringTemplates
-    + arrowFunctions
-    + let
-    + defaultArguments
-    + objectMethods
-    + objectShorthands
-    + noStrict
-    + commonjs`);
+    + class .......... prototype assignments to class declaration
+    + template ....... string concatenation to template string
+    + arrow .......... callback to arrow function
+    + let ............ var to let/const
+    + default-param .. use of || to default parameters
+    + obj-method ..... function values in objects to methods
+    + obj-shorthand .. {foo: foo} to {foo}
+    + no-strict ...... remove "use strict" directives
+    + commonjs ....... CommonJS module loading to import/export`);
 program.version(pkg.version);
 program.option('-o, --out-file <out>', 'compile into a single file');
 program.option('--enable <a,b,c>', 'enable only specified transforms', v => v.split(','));
@@ -57,15 +57,15 @@ function getTransformers() {
 
   // All enabled by default
   var transformers = {
-    classes: true,
-    stringTemplates: true,
-    arrowFunctions: true,
-    let: true,
-    defaultArguments: true,
-    objectMethods: true,
-    objectShorthands: true,
-    noStrict: true,
-    commonjs: true,
+    'class': true,
+    'template': true,
+    'arrow': true,
+    'let': true,
+    'default-param': true,
+    'obj-method': true,
+    'obj-shorthand': true,
+    'no-strict': true,
+    'commonjs': true,
   };
 
   // When --enable used turn off everything besides the specified tranformers

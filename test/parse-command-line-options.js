@@ -50,30 +50,30 @@ describe('Command Line Interface', function () {
   it('by default enables all transforms', function() {
     var options = parse([]);
     expect(options.transformers).to.deep.equal({
-      classes: true,
-      stringTemplates: true,
-      arrowFunctions: true,
-      let: true,
-      defaultArguments: true,
-      objectMethods: true,
-      objectShorthands: true,
-      noStrict: true,
-      commonjs: true,
+      'class': true,
+      'template': true,
+      'arrow': true,
+      'let': true,
+      'default-param': true,
+      'obj-method': true,
+      'obj-shorthand': true,
+      'no-strict': true,
+      'commonjs': true,
     });
   });
 
-  it('when --enable=let,noStrict,commonjs given, enables only these transformers', function() {
-    var options = parse(['--enable', 'let,noStrict,commonjs']);
+  it('when --enable=let,no-strict,commonjs given, enables only these transformers', function() {
+    var options = parse(['--enable', 'let,no-strict,commonjs']);
     expect(options.transformers).to.deep.equal({
-      classes: false,
-      stringTemplates: false,
-      arrowFunctions: false,
-      let: true,
-      defaultArguments: false,
-      objectMethods: false,
-      objectShorthands: false,
-      noStrict: true,
-      commonjs: true,
+      'class': false,
+      'template': false,
+      'arrow': false,
+      'let': true,
+      'default-param': false,
+      'obj-method': false,
+      'obj-shorthand': false,
+      'no-strict': true,
+      'commonjs': true,
     });
   });
 
@@ -83,18 +83,18 @@ describe('Command Line Interface', function () {
     }).to.throw('Unknown transformer "unknown".');
   });
 
-  it('when --disable=let,noStrict,commonjs given, disables the specified transformers', function() {
-    var options = parse(['--disable', 'let,noStrict,commonjs']);
+  it('when --disable=let,no-strict,commonjs given, disables the specified transformers', function() {
+    var options = parse(['--disable', 'let,no-strict,commonjs']);
     expect(options.transformers).to.deep.equal({
-      classes: true,
-      stringTemplates: true,
-      arrowFunctions: true,
-      let: false,
-      defaultArguments: true,
-      objectMethods: true,
-      objectShorthands: true,
-      noStrict: false,
-      commonjs: false,
+      'class': true,
+      'template': true,
+      'arrow': true,
+      'let': false,
+      'default-param': true,
+      'obj-method': true,
+      'obj-shorthand': true,
+      'no-strict': false,
+      'commonjs': false,
     });
   });
 
