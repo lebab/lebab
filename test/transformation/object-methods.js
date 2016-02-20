@@ -6,31 +6,85 @@ function test(script) {
   return transformer.run(script);
 }
 
+function expectNoChange(script) {
+  expect(test(script)).to.equal(script);
+}
+
 describe('Object methods', function () {
 
   it('should convert a function inside an object to method', function () {
-    var script = 'var object = {\nsomeMethod: function() {\n}\n}';
-
-    expect(test(script)).to.include('someMethod() {');
-    expect(test(script)).to.not.include('someMethod: function() {');
+    expect(test(
+      '({\n' +
+      '  someMethod: function(a, b, c) {\n' +
+      '    return a + b + c;\n' +
+      '  }\n' +
+      '});'
+    )).to.equal(
+      '({\n' +
+      '  someMethod(a, b, c) {\n' +
+      '    return a + b + c;\n' +
+      '  }\n' +
+      '});'
+    );
   });
 
-  it('should convert multiple functions inside an object to multiple methods', function () {
-    var script = 'var object = {\nfirstMethod: function() {\n},\nsecondMethod: function() {\n}\n}';
-
-    expect(test(script)).to.include('firstMethod() {');
-    expect(test(script)).to.not.include('firstMethod: function() {');
-    expect(test(script)).to.include('secondMethod() {');
-    expect(test(script)).to.not.include('secondMethod: function() {');
+  it('should ignore non-function properties of object', function () {
+    expect(test(
+      '({\n' +
+      '  foo: 123,\n' +
+      '  method1: function() {\n' +
+      '  },\n' +
+      '  bar: [],\n' +
+      '  method2: function() {\n' +
+      '  },\n' +
+      '});'
+    )).to.equal(
+      '({\n' +
+      '  foo: 123,\n' +
+      '  method1() {\n' +
+      '  },\n' +
+      '  bar: [],\n' +
+      '  method2() {\n' +
+      '  },\n' +
+      '});'
+    );
   });
 
-  it('should convert a function inside an object to a method beside other properties', function () {
-    var script = 'var object = {\nsomeMethod: function() {\n},\nsomeString: \'\',\nsomeNumber: 1372\n}';
+  it('should convert function properties in nested object literal', function () {
+    expect(test(
+      '({\n' +
+      '  nested: {\n' +
+      '    method: function() {\n' +
+      '    }\n' +
+      '  }\n' +
+      '});'
+    )).to.equal(
+      '({\n' +
+      '  nested: {\n' +
+      '    method() {\n' +
+      '    }\n' +
+      '  }\n' +
+      '});'
+    );
+  });
 
-    expect(test(script)).to.include('someMethod() {');
-    expect(test(script)).to.not.include('someMethod: function() {');
-    expect(test(script)).to.include('someString: \'\'');
-    expect(test(script)).to.include('someNumber: 1372');
+  it('should not convert named function expressions', function () {
+    expectNoChange(
+      '({\n' +
+      '  foo: function foo() {\n' +
+      '    return foo();\n' +
+      '  }\n' +
+      '});'
+    );
+  });
+
+  it('should not convert computed properties', function () {
+    expectNoChange(
+      '({\n' +
+      '  ["foo" + count]: function() {\n' +
+      '  }\n' +
+      '});'
+    );
   });
 
 });
