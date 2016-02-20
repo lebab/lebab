@@ -109,4 +109,12 @@ describe('Callback to Arrow transformation', function () {
     expectNoChange('({foo: function() {}});');
   });
 
+  it('should not convert class methods', function () {
+    expectNoChange(
+      'class Foo {\n' +
+      '  bar() {}\n' +
+      '}'
+    );
+  });
+
 });

@@ -20,6 +20,7 @@ export default function (ast) {
 function isFunctionConvertableToArrow(node, parent) {
   return node.type === 'FunctionExpression' &&
     parent.type !== 'Property' &&
+    parent.type !== 'MethodDefinition' &&
     !node.id &&
     !node.generator &&
     !hasThis(node.body) &&
