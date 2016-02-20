@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import estraverse from 'estraverse';
 import ArrowFunctionExpression from './../syntax/arrow-function-expression.js';
 
@@ -26,16 +27,17 @@ function isFunctionConvertableToArrow(node, parent) {
 }
 
 function hasThis(ast) {
-  return hasInFunctionBody(ast, node => node.type === 'ThisExpression');
+  return hasInFunctionBody(ast, {type: 'ThisExpression'});
 }
 
 function hasArguments(ast) {
-  return hasInFunctionBody(ast, node => node.type === 'Identifier' && node.name === 'arguments');
+  return hasInFunctionBody(ast, {type: 'Identifier', name: 'arguments'});
 }
 
-// Returns true when predicate matches any node in given function body,
+// Returns true when pattern matches any node in given function body,
 // excluding any nested functions
-function hasInFunctionBody(ast, predicate) {
+function hasInFunctionBody(ast, pattern) {
+  const predicate = _.matches(pattern);
   let found = false;
 
   estraverse.traverse(ast, {
