@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 var Transformer = require('./../../lib/transformer');
-var transformer = new Transformer({defaultArguments: true});
+var transformer = new Transformer({'default-param': true});
 
 function test(script) {
   return transformer.run(script);

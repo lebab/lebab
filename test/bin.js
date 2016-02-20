@@ -52,7 +52,7 @@ describe('Smoke test for the executable script', function () {
 
   describe('when invalid transform name given', function () {
     it('exits with error message', function (done) {
-      exec('node ./bin/index.js -t blah test/test-data.js', function (error, stdout, stderr) {
+      exec('node ./bin/index.js --enable blah test/test-data.js', function (error, stdout, stderr) {
         expect(error).not.to.equal(null);
         expect(stderr).to.equal('Unknown transformer "blah".\n');
         expect(stdout).to.equal('');

@@ -4,12 +4,23 @@ var fs = require('fs');
 var _ = require('lodash');
 
 program.usage('[options] <file>');
-program.description(pkg.description);
+program.description(`${pkg.description}
+
+  Available transforms:
+
+    + class .......... prototype assignments to class declaration
+    + template ....... string concatenation to template string
+    + arrow .......... callback to arrow function
+    + let ............ var to let/const
+    + default-param .. use of || to default parameters
+    + obj-method ..... function values in objects to methods
+    + obj-shorthand .. {foo: foo} to {foo}
+    + no-strict ...... remove "use strict" directives
+    + commonjs ....... CommonJS module loading to import/export`);
 program.version(pkg.version);
-program.option('-o, --out-file <out>', 'Compile into a single file');
-program.option('--no-classes', 'Don\'t convert function/prototypes into classes');
-program.option('-t, --transformers <a,b,c>', 'Perform only specified transforms', v => v.split(','));
-program.option('--module <commonjs>', 'Transform CommonJS module syntax');
+program.option('-o, --out-file <out>', 'compile into a single file');
+program.option('--enable <a,b,c>', 'enable only specified transforms', v => v.split(','));
+program.option('--disable <a,b,c>', 'disable specified transforms', v => v.split(','));
 
 /**
  * Parses and validates command line options from argv.
@@ -40,45 +51,43 @@ function getInputFile() {
 }
 
 function getTransformers() {
+  if (program.enable && program.disable) {
+    throw 'Options --enable and --disable can not be used together.';
+  }
+
   // All enabled by default
   var transformers = {
-    classes: true,
-    stringTemplates: true,
-    arrowFunctions: true,
-    let: true,
-    defaultArguments: true,
-    objectMethods: true,
-    objectShorthands: true,
-    noStrict: true,
-    importCommonjs: false,
-    exportCommonjs: false,
+    'class': true,
+    'template': true,
+    'arrow': true,
+    'let': true,
+    'default-param': true,
+    'obj-method': true,
+    'obj-shorthand': true,
+    'no-strict': true,
+    'commonjs': true,
   };
 
-  // When --no-classes used, disable classes transformer
-  if (!program.classes) {
-    transformers.classes = false;
-  }
-
-  // When --transformers used turn off everything besides the specified tranformers
-  if (program.transformers) {
+  // When --enable used turn off everything besides the specified tranformers
+  if (program.enable) {
     transformers = _.mapValues(transformers, _.constant(false));
 
-    program.transformers.forEach(function (name) {
-      if (!transformers.hasOwnProperty(name)) {
-        throw 'Unknown transformer "' + name + '".';
-      }
-      transformers[name] = true;
-    });
+    setTransformersEnabled(transformers, program.enable, true);
   }
 
-  // When --module=commonjs used, enable CommonJS Transformers
-  if (program.module === 'commonjs') {
-    transformers.importCommonjs = true;
-    transformers.exportCommonjs = true;
-  }
-  else if (program.module) {
-    throw 'Unsupported module system "' + program.module + '".';
+  // When --disable used, disable the specific transformers
+  if (program.disable) {
+    setTransformersEnabled(transformers, program.disable, false);
   }
 
   return transformers;
+}
+
+function setTransformersEnabled(transformers, names, enabled) {
+  names.forEach(function (name) {
+    if (!transformers.hasOwnProperty(name)) {
+      throw 'Unknown transformer "' + name + '".';
+    }
+    transformers[name] = enabled;
+  });
 }
