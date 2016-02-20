@@ -12,8 +12,8 @@ describe('Command Line Interface', function () {
   // we'll need to reset the state between tests.
   beforeEach(function() {
     commander.outFile = undefined;
-    commander.transformers = undefined;
-    commander.disableTransformers = undefined;
+    commander.enable = undefined;
+    commander.disable = undefined;
     commander.module = undefined;
   });
 
@@ -63,8 +63,8 @@ describe('Command Line Interface', function () {
     });
   });
 
-  it('when --transformers=let,noStrict given, enables only these transformers', function() {
-    var options = parse(['--transformers', 'let,noStrict']);
+  it('when --enable=let,noStrict given, enables only these transformers', function() {
+    var options = parse(['--enable', 'let,noStrict']);
     expect(options.transformers).to.deep.equal({
       classes: false,
       stringTemplates: false,
@@ -79,14 +79,14 @@ describe('Command Line Interface', function () {
     });
   });
 
-  it('when --transformers=unknown given, raises error', function() {
+  it('when --enable=unknown given, raises error', function() {
     expect(function() {
-      parse(['--transformers', 'unknown']);
+      parse(['--enable', 'unknown']);
     }).to.throw('Unknown transformer "unknown".');
   });
 
-  it('when --disable-transformers=let,noStrict given, disables the specified transformers', function() {
-    var options = parse(['--disable-transformers', 'let,noStrict']);
+  it('when --disable=let,noStrict given, disables the specified transformers', function() {
+    var options = parse(['--disable', 'let,noStrict']);
     expect(options.transformers).to.deep.equal({
       classes: true,
       stringTemplates: true,
@@ -101,16 +101,16 @@ describe('Command Line Interface', function () {
     });
   });
 
-  it('when --disable-transformers=unknown given, raises error', function() {
+  it('when --disable=unknown given, raises error', function() {
     expect(function() {
-      parse(['--disable-transformers', 'unknown']);
+      parse(['--disable', 'unknown']);
     }).to.throw('Unknown transformer "unknown".');
   });
 
-  it('when --transforms and --disable-transformers used together, raises error', function() {
+  it('when --enable and --disable used together, raises error', function() {
     expect(function() {
-      parse(['--transformers', 'let', '--disable-transformers', 'let']);
-    }).to.throw('Options --transformers and --disable-transformers can not be used together.');
+      parse(['--enable', 'let', '--disable', 'let']);
+    }).to.throw('Options --enable and --disable can not be used together.');
   });
 
   it('when --module=commonjs given, enables CommonJS import/export transformers', function() {

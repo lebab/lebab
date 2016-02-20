@@ -7,8 +7,8 @@ program.usage('[options] <file>');
 program.description(pkg.description);
 program.version(pkg.version);
 program.option('-o, --out-file <out>', 'Compile into a single file');
-program.option('-t, --transformers <a,b,c>', 'Perform only specified transforms', v => v.split(','));
-program.option('--disable-transformers <a,b,c>', 'Do not perform specified transforms', v => v.split(','));
+program.option('--enable <a,b,c>', 'Enable only specified transforms', v => v.split(','));
+program.option('--disable <a,b,c>', 'Disable specified transforms', v => v.split(','));
 program.option('--module <commonjs>', 'Transform CommonJS module syntax');
 
 /**
@@ -40,8 +40,8 @@ function getInputFile() {
 }
 
 function getTransformers() {
-  if (program.transformers && program.disableTransformers) {
-    throw 'Options --transformers and --disable-transformers can not be used together.';
+  if (program.enable && program.disable) {
+    throw 'Options --enable and --disable can not be used together.';
   }
 
   // All enabled by default
@@ -58,16 +58,16 @@ function getTransformers() {
     exportCommonjs: false,
   };
 
-  // When --transformers used turn off everything besides the specified tranformers
-  if (program.transformers) {
+  // When --enable used turn off everything besides the specified tranformers
+  if (program.enable) {
     transformers = _.mapValues(transformers, _.constant(false));
 
-    setTransformersEnabled(transformers, program.transformers, true);
+    setTransformersEnabled(transformers, program.enable, true);
   }
 
-  // When --disable-transformers used, disable the specific transformers
-  if (program.disableTransformers) {
-    setTransformersEnabled(transformers, program.disableTransformers, false);
+  // When --disable used, disable the specific transformers
+  if (program.disable) {
+    setTransformersEnabled(transformers, program.disable, false);
   }
 
   // When --module=commonjs used, enable CommonJS Transformers
