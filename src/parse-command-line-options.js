@@ -7,8 +7,8 @@ program.usage('[options] <file>');
 program.description(pkg.description);
 program.version(pkg.version);
 program.option('-o, --out-file <out>', 'Compile into a single file');
-program.option('--no-classes', 'Don\'t convert function/prototypes into classes');
 program.option('-t, --transformers <a,b,c>', 'Perform only specified transforms', v => v.split(','));
+program.option('--disable-transformers <a,b,c>', 'Do not perform specified transforms', v => v.split(','));
 program.option('--module <commonjs>', 'Transform CommonJS module syntax');
 
 /**
@@ -40,6 +40,10 @@ function getInputFile() {
 }
 
 function getTransformers() {
+  if (program.transformers && program.disableTransformers) {
+    throw 'Options --transformers and --disable-transformers can not be used together.';
+  }
+
   // All enabled by default
   var transformers = {
     classes: true,
@@ -54,21 +58,16 @@ function getTransformers() {
     exportCommonjs: false,
   };
 
-  // When --no-classes used, disable classes transformer
-  if (!program.classes) {
-    transformers.classes = false;
-  }
-
   // When --transformers used turn off everything besides the specified tranformers
   if (program.transformers) {
     transformers = _.mapValues(transformers, _.constant(false));
 
-    program.transformers.forEach(function (name) {
-      if (!transformers.hasOwnProperty(name)) {
-        throw 'Unknown transformer "' + name + '".';
-      }
-      transformers[name] = true;
-    });
+    setTransformersEnabled(transformers, program.transformers, true);
+  }
+
+  // When --disable-transformers used, disable the specific transformers
+  if (program.disableTransformers) {
+    setTransformersEnabled(transformers, program.disableTransformers, false);
   }
 
   // When --module=commonjs used, enable CommonJS Transformers
@@ -81,4 +80,13 @@ function getTransformers() {
   }
 
   return transformers;
+}
+
+function setTransformersEnabled(transformers, names, enabled) {
+  names.forEach(function (name) {
+    if (!transformers.hasOwnProperty(name)) {
+      throw 'Unknown transformer "' + name + '".';
+    }
+    transformers[name] = enabled;
+  });
 }
