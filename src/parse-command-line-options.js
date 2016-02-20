@@ -4,12 +4,25 @@ var fs = require('fs');
 var _ = require('lodash');
 
 program.usage('[options] <file>');
-program.description(pkg.description);
+program.description(`${pkg.description}
+
+  Available transforms (+ enabled, - disabled):
+
+    + classes
+    + stringTemplates
+    + arrowFunctions
+    + let
+    + defaultArguments
+    + objectMethods
+    + objectShorthands
+    + noStrict
+    - importCommonjs
+    - exportCommonjs`);
 program.version(pkg.version);
-program.option('-o, --out-file <out>', 'Compile into a single file');
-program.option('--enable <a,b,c>', 'Enable only specified transforms', v => v.split(','));
-program.option('--disable <a,b,c>', 'Disable specified transforms', v => v.split(','));
-program.option('--module <commonjs>', 'Transform CommonJS module syntax');
+program.option('-o, --out-file <out>', 'compile into a single file');
+program.option('--enable <a,b,c>', 'enable only specified transforms', v => v.split(','));
+program.option('--disable <a,b,c>', 'disable specified transforms', v => v.split(','));
+program.option('--module <commonjs>', 'transform CommonJS module syntax');
 
 /**
  * Parses and validates command line options from argv.
