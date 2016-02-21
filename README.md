@@ -25,6 +25,12 @@ Transpile your old-fashioned code using the `lebab` cli tool.
 $ lebab es5.js -o es6.js
 ```
 
+Or convert just the features of your choice:
+
+```bash
+$ lebab es5.js -o es6.js --enable let,arrow,commonjs
+```
+
 
 ## Roadmap
 
