@@ -31,7 +31,6 @@ lebab es5.js -o es6.js
 - [ ] For of loops
 - [ ] Convert arguments to rest parameters
 - [ ] Lexical this for arrow functions
-- [ ] Rest parameters
 - [ ] Named parameters
 - [ ] Destructing arrays
 - [ ] Destructing objects
