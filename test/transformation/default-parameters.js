@@ -6,7 +6,7 @@ function test(script) {
   return transformer.run(script);
 }
 
-describe('Default Arguments', function () {
+describe('Default parameters', function () {
 
   it('should work for simple, single argument function declarations', function () {
     var script = 'function x(a) { a = a || 2 }';
