@@ -1,26 +1,26 @@
+import _ from 'lodash';
 import estraverse from 'estraverse';
 import ArrowFunctionExpression from './../syntax/arrow-function-expression.js';
 
-export default
-  function (ast) {
-    estraverse.replace(ast, {
-      enter: callBackToArrow
-    });
-  }
-
-function callBackToArrow(node) {
-  if (isFunctionConvertableToArrow(node)) {
-    return new ArrowFunctionExpression({
-      body: extractArrowBody(node.body),
-      params: node.params,
-      defaults: node.defaults,
-      rest: node.rest,
-    });
-  }
+export default function (ast) {
+  estraverse.replace(ast, {
+    enter(node, parent) {
+      if (isFunctionConvertableToArrow(node, parent)) {
+        return new ArrowFunctionExpression({
+          body: extractArrowBody(node.body),
+          params: node.params,
+          defaults: node.defaults,
+          rest: node.rest,
+        });
+      }
+    }
+  });
 }
 
-function isFunctionConvertableToArrow(node) {
+function isFunctionConvertableToArrow(node, parent) {
   return node.type === 'FunctionExpression' &&
+    parent.type !== 'Property' &&
+    parent.type !== 'MethodDefinition' &&
     !node.id &&
     !node.generator &&
     !hasThis(node.body) &&
@@ -28,16 +28,17 @@ function isFunctionConvertableToArrow(node) {
 }
 
 function hasThis(ast) {
-  return hasInFunctionBody(ast, node => node.type === 'ThisExpression');
+  return hasInFunctionBody(ast, {type: 'ThisExpression'});
 }
 
 function hasArguments(ast) {
-  return hasInFunctionBody(ast, node => node.type === 'Identifier' && node.name === 'arguments');
+  return hasInFunctionBody(ast, {type: 'Identifier', name: 'arguments'});
 }
 
-// Returns true when predicate matches any node in given function body,
+// Returns true when pattern matches any node in given function body,
 // excluding any nested functions
-function hasInFunctionBody(ast, predicate) {
+function hasInFunctionBody(ast, pattern) {
+  const predicate = _.matches(pattern);
   let found = false;
 
   estraverse.traverse(ast, {
