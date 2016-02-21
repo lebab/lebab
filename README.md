@@ -32,17 +32,49 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
 ```
 
 
-## Features
+## Features and known limitations
 
-- **class** - function/prototypes to classes
-- **template** - string concatenation to template strings
-- **arrow** - callbacks to arrow functions
-- **let** - `var` to `let`/`const`
-- **default-param** - default parameters instead of `a = a || 2`
-- **obj-method** - function values in object to methods
-- **obj-shorthand** - `{foo: foo}` to `{foo}`
-- **no-strict** - removal of `"use strict"` directives
-- **commonjs** - CommonJS module definition to ES6 modules
+- [x] **class** - function/prototypes to classes
+    - [x] recognizes `Foo.prototype.method = function(){ ... };`
+    - [x] recognizes `Foo.prototype = { ...methods... };`
+    - [x] recognizes getters/setters defined with `Object.defineProperty()`
+    - [ ] does not recognize classes without methods
+    - [ ] does not recognize static methods
+    - [ ] no support for extending classes
+- [x] **template** - string concatenation to template strings
+    - [x] converts variables and arbitrary expressions to `${...}`
+    - [ ] BUG #88: removes indentation of multi-line strings
+- [x] **arrow** - callbacks to arrow functions
+    - [x] not applied to functions that use `this` or `arguments`
+    - [x] not applied to object properties (use `obj-method` transform)
+    - [ ] does not remove `that = this` assignments
+    - [ ] does not recognize bound functions like `function(){}.bind(this)`
+- [x] **let** - `var` to `let`/`const`
+    - [x] never modified variables are converted to `const`
+    - [x] properly recognizes block-scoping
+    - [ ] vars that conflict with block-scoping are not converted
+    - [ ] BUG #90: treats existing `let`/`const` as `var`
+    - [ ] BUG #90: does not recognize destructuring
+- [x] **default-param** - default parameters instead of `a = a || 2`
+    - [ ] BUG #90: removes existing default parameters
+    - [ ] BUG #89: re-indents long parameter lists
+- [x] **obj-method** - function values in object to methods
+    - [ ] does not convert named function expressions
+    - [ ] does not convert arrow-functions
+- [x] **obj-shorthand** - `{foo: foo}` to `{foo}`
+    - [x] ignores numeric and `NaN` properties
+    - [ ] does not convert string properties
+- [x] **no-strict** - removal of `"use strict"` directives
+    - [x] does not touch stuff like `x = "use strict";`
+- [x] **commonjs** - CommonJS module definition to ES6 modules
+    - [x] converts `var foo = require("foo")` to `import foo from "foo"`
+    - [x] converts `module.exports = function(){}` to `export default function(){}`
+    - [ ] only handles default imports and exports
+    - [ ] only handles `require()` calls in `var` declarations
+    - [ ] does not ensure that imported variable is treated as `const`
+    - [ ] does not recognize imports/exports inside nested blocks/functions
+    - [ ] does not recognize `var bar = require("foo").bar`
+    - [ ] does not recognize destructuring
 
 
 ## Roadmap
