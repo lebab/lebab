@@ -32,17 +32,21 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
 ```
 
 
+## Features
+
+- **class** - function/prototypes to classes
+- **template** - string concatenation to template strings
+- **arrow** - callbacks to arrow functions
+- **let** - `var` to `let`/`const`
+- **default-param** - default parameters instead of `a = a || 2`
+- **obj-method** - function values in object to methods
+- **obj-shorthand** - `{foo: foo}` to `{foo}`
+- **no-strict** - removal of `"use strict"` directives
+- **commonjs** - CommonJS module definition to ES6 modules
+
+
 ## Roadmap
 
-- [x] Function/prototypes to classes
-- [x] CommonJS module definition to ES6 modules
-- [x] Callbacks to arrow functions
-- [x] `var` to `let`/`const`
-- [x] Template strings
-- [x] Object methods
-- [x] Object shorthands
-- [x] Default parameters instead of `a = a || 2`
-- [x] Removal of `"use strict"`
 - [ ] For of loops
 - [ ] Convert arguments to rest parameters
 - [ ] Lexical this for arrow functions
