@@ -26,7 +26,7 @@ lebab es5.js -o es6.js
 - [x] Template strings
 - [x] Object methods
 - [x] Object shorthands
-- [x] Default arguments instead of `a = a || 2`
+- [x] Default parameters instead of `a = a || 2`
 - [x] Removal of `"use strict"`
 - [ ] For of loops
 - [ ] Convert arguments to rest parameters
