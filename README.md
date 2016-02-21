@@ -20,7 +20,7 @@ lebab es5.js -o es6.js
 
 ## Roadmap
 - [x] Function/prototypes to classes
-- [x] CommonJS module definition to ES6 moloops
+- [x] CommonJS module definition to ES6 modules
 - [x] Callbacks to arrow functions
 - [x] `var` to `let`/`const`
 - [x] Template strings
