@@ -80,9 +80,7 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
 
 ## Roadmap
 
-- [ ] For of loops
-- [ ] Convert arguments to rest parameters
-- [ ] Lexical this for arrow functions
-- [ ] Named parameters
-- [ ] Destructing arrays
-- [ ] Destructing objects
+- [ ] `for-in` loops to `for-of` loops
+- [ ] `arguments` to rest parameters
+- [ ] `that = this` detection for arrow functions
+- [ ] object/array parameters to destructuring
