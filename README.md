@@ -56,6 +56,7 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
     - [ ] BUG #90: treats existing `let`/`const` as `var`
     - [ ] BUG #90: does not recognize destructuring
 - [x] **default-param** - default parameters instead of `a = a || 2`
+    - [ ] ignores any alternative code styles like `a = a ? a : 2`
     - [ ] BUG #90: removes existing default parameters
     - [ ] BUG #89: re-indents long parameter lists
 - [x] **obj-method** - function values in object to methods
