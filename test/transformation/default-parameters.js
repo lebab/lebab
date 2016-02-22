@@ -54,7 +54,7 @@ describe('Default parameters', function () {
     );
   });
 
-  xit('should work for nested functions with similar parameter names', function () {
+  it('should work for nested functions with similar parameter names', function () {
     expect(test(
       'function x(a) {\n' +
       '  function y(a) {\n' +
@@ -63,13 +63,14 @@ describe('Default parameters', function () {
       '  a = a || 2;\n' +
       '}'
     )).to.equal(
-      'function x(a=2) {\n' +
+      'function x(a) {\n' +
       '  function y(a=3) {}\n' +
+      '  a = a || 2;\n' +
       '}'
     );
   });
 
-  xit('should ignore parameters modified before assigning default', function () {
+  it('should ignore parameters modified before assigning default', function () {
     expectNoChange(
       'function x(a) {\n' +
       '  a = foo();\n' +
@@ -78,7 +79,7 @@ describe('Default parameters', function () {
     );
   });
 
-  xit('should ignore parameters when any other code executed before assigning default', function () {
+  it('should ignore parameters when any other code executed before assigning default', function () {
     expectNoChange(
       'function x(a) {\n' +
       '  foo();\n' +
@@ -100,23 +101,24 @@ describe('Default parameters', function () {
     );
   });
 
-  xit('should work for arrow function expressions', function () {
-    expect(test(
+  // Unable to make arrow functions work (so disabling them instead)
+  // Seems to be a bug in Recast
+  // https://github.com/benjamn/recast/issues/260
+  it('should not work for arrow functions', function () {
+    expectNoChange(
       'foo((a) => {\n' +
       '  a = a || 2;\n' +
       '});'
-    )).to.equal(
-      'foo((a=2) => {});'
     );
   });
 
-  xit('should preserve existing default parameters', function () {
+  it('should preserve existing default parameters', function () {
     expectNoChange(
       'function x(a="salam", b={}, c=[]) {}'
     );
   });
 
-  xit('should not override existing default parameters', function () {
+  it('should not override existing default parameters', function () {
     expectNoChange(
       'function x(a=25) {\n' +
       '  a = a || 2;\n' +
@@ -125,7 +127,7 @@ describe('Default parameters', function () {
   });
 
   // Regression test for issue #89
-  xit('should preserve long parameter lists as is when there are no defaults', function () {
+  it('should preserve long parameter lists as is when there are no defaults', function () {
     expectNoChange(
       'function foo(variable1, variable2, variable3, variable4, variable5, variable6, variable7, variable8) {}'
     );

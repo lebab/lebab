@@ -1,46 +1,76 @@
+import _ from 'lodash';
 import estraverse from 'estraverse';
+import multiReplaceStatement from '../utils/multi-replace-statement.js';
 
-export default
-  function (ast) {
-    estraverse.replace(ast, {
-      enter: findDefaultAssignments
-    });
-    estraverse.replace(ast, {
-      enter: removeExpressions
-    });
+// Matches: <ident> = <ident> || ...;
+const isDefaultAssignment = _.matches({
+  type: 'ExpressionStatement',
+  expression: {
+    type: 'AssignmentExpression',
+    left: {
+      type: 'Identifier',
+      // name: <ident>
+    },
+    operator: '=',
+    right: {
+      type: 'LogicalExpression',
+      left: {
+        type: 'Identifier',
+        // name: <ident>
+      },
+      operator: '||',
+      right: {
+        // ...
+      }
+    }
   }
+});
 
-let lastFunction = {};
+function matchesDefaultAssignment(node) {
+  if (isDefaultAssignment(node)) {
+    const {
+      expression: {
+        left: {name: name},
+        right: {
+          left: {name: nameAgain},
+          right: value
+        }
+      }
+    } = node;
 
-function findDefaultAssignments(node) {
-  if (node.type === 'FunctionDeclaration' ||
-      node.type === 'FunctionExpression') {
-    lastFunction = node;
-    lastFunction._args = node.params.map(function(arg) {
-      return arg.name;
-    });
-    lastFunction.defaults = [];
-  }
-
-  if (node.type === 'ExpressionStatement') {
-    node.expression._parent = node;
-  }
-  if (node.type === 'AssignmentExpression' &&
-      lastFunction._args &&
-      lastFunction._args.indexOf(node.left.name) > -1 &&
-      node.right.type === 'LogicalExpression' &&
-      node.right.operator === '||' &&
-      node.right.left.name === node.left.name) {
-
-    const argIndex = lastFunction._args.indexOf(node.left.name);
-
-    lastFunction.defaults[argIndex] = node.right.right;
-    node._parent._remove = true;
+    if (name === nameAgain) {
+      return {name, value, node};
+    }
   }
 }
 
-function removeExpressions(node) {
-  if (node._remove) {
-    return this.remove();
+export default function (ast) {
+  estraverse.replace(ast, {
+    enter(node) {
+      if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
+        const detectedDefaults = findDefaults(node.body.body);
+        node.params.forEach((param, i) => {
+          const def = detectedDefaults[param.name];
+          if (!node.defaults[i] && param.type === 'Identifier' && def) {
+            node.defaults[i] = def.value;
+            multiReplaceStatement(node.body, def.node, []);
+          }
+        });
+      }
+    }
+  });
+}
+
+function findDefaults(fnBody) {
+  const defaults = {};
+
+  for (const node of fnBody) {
+    const def = matchesDefaultAssignment(node);
+    if (!def) {
+      break;
+    }
+    defaults[def.name] = def;
   }
+
+  return defaults;
 }
