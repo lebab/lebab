@@ -12,26 +12,68 @@ function expectNoChange(script) {
 
 describe('Default parameters', function () {
 
-  it('should work for simple, single parameter function declarations', function () {
-    expect(test(
-      'function x(a) {\n' +
-      '  a = a || 2;\n' +
-      '}'
-    )).to.equal(
-      'function x(a=2) {}'
-    );
+  describe('detected from or-assignment', function () {
+    it('should work for simple case', function () {
+      expect(test(
+        'function x(a) {\n' +
+        '  a = a || 2;\n' +
+        '}'
+      )).to.equal(
+        'function x(a=2) {}'
+      );
+    });
+
+    it('should work for different types of parameters', function () {
+      expect(test(
+        'function x(a, b, c) {\n' +
+        '  a = a || "salam";\n' +
+        '  b = b || {};\n' +
+        '  c = c || [];\n'+
+        '}'
+      )).to.equal(
+        'function x(a="salam", b={}, c=[]) {}'
+      );
+    });
+
+    it('should not work when variable not in left of ||', function () {
+      expectNoChange(
+        'function x(a) {\n' +
+        '  a = 10 || a;\n' +
+        '}'
+      );
+    });
   });
 
-  it('should work for different types of parameters', function () {
-    expect(test(
-      'function x(a, b, c) {\n' +
-      '  a = a || "salam";\n' +
-      '  b = b || {};\n' +
-      '  c = c || [];\n'+
-      '}'
-    )).to.equal(
-      'function x(a="salam", b={}, c=[]) {}'
-    );
+  describe('detected from ternary-assignment', function () {
+    it('should work for simple case', function () {
+      expect(test(
+        'function x(a) {\n' +
+        '  a = a ? a : 4;\n' +
+        '}'
+      )).to.equal(
+        'function x(a=4) {}'
+      );
+    });
+
+    it('should work for different types of parameters', function () {
+      expect(test(
+        'function x(a, b, c) {\n' +
+        '  a = a ? a : "salam";\n' +
+        '  b = b ? b : {};\n' +
+        '  c = c ? c : [];\n'+
+        '}'
+      )).to.equal(
+        'function x(a="salam", b={}, c=[]) {}'
+      );
+    });
+
+    it('should not work when variable in alternate position', function () {
+      expectNoChange(
+        'function x(a) {\n' +
+        '  a = a ? 5 : a;\n' +
+        '}'
+      );
+    });
   });
 
   it('should work when only some parameters have defaults', function () {

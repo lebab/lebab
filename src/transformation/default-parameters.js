@@ -1,6 +1,7 @@
 import estraverse from 'estraverse';
 import multiReplaceStatement from '../utils/multi-replace-statement.js';
 import matchOrAssignment from '../default-param/match-or-assignment.js';
+import matchTernaryAssignment from '../default-param/match-ternary-assignment.js';
 
 export default function (ast) {
   estraverse.replace(ast, {
@@ -23,7 +24,7 @@ function findDefaults(fnBody) {
   const defaults = {};
 
   for (const node of fnBody) {
-    const def = matchOrAssignment(node);
+    const def = matchDefaultAssignment(node);
     if (!def) {
       break;
     }
@@ -31,4 +32,8 @@ function findDefaults(fnBody) {
   }
 
   return defaults;
+}
+
+function matchDefaultAssignment(node) {
+  return matchOrAssignment(node) || matchTernaryAssignment(node);
 }
