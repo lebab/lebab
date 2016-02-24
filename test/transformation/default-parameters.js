@@ -76,6 +76,138 @@ describe('Default parameters', function () {
     });
   });
 
+  describe('detected from equals-undefined assignment', function () {
+    it('should work for ===', function () {
+      expect(test(
+        'function x(a) {\n' +
+        '  a = a === undefined ? 4 : a;\n' +
+        '}'
+      )).to.equal(
+        'function x(a=4) {}'
+      );
+    });
+
+    it('should work for !==', function () {
+      expect(test(
+        'function x(a) {\n' +
+        '  a = a !== undefined ? a : 4;\n' +
+        '}'
+      )).to.equal(
+        'function x(a=4) {}'
+      );
+    });
+
+    it('should work for ==', function () {
+      expect(test(
+        'function x(a) {\n' +
+        '  a = a == undefined ? 4 : a;\n' +
+        '}'
+      )).to.equal(
+        'function x(a=4) {}'
+      );
+    });
+
+    it('should work for !=', function () {
+      expect(test(
+        'function x(a) {\n' +
+        '  a = a != undefined ? a : 4;\n' +
+        '}'
+      )).to.equal(
+        'function x(a=4) {}'
+      );
+    });
+
+    it('should not work for other operators (like >)', function () {
+      expectNoChange(
+        'function x(a) {\n' +
+        '  a = a > undefined ? a : 4;\n' +
+        '}'
+      );
+    });
+
+    it('should not work for === when variable in wrong location', function () {
+      expectNoChange(
+        'function x(a) {\n' +
+        '  a = a === undefined ? a : 5;\n' +
+        '}'
+      );
+    });
+
+    it('should not work for !== when variable in wrong location', function () {
+      expectNoChange(
+        'function x(a) {\n' +
+        '  a = a !== undefined ? 5 : a;\n' +
+        '}'
+      );
+    });
+  });
+
+  describe('detected from typeof equals-undefined assignment', function () {
+    it('should work for ===', function () {
+      expect(test(
+        'function x(a) {\n' +
+        '  a = typeof a === "undefined" ? 4 : a;\n' +
+        '}'
+      )).to.equal(
+        'function x(a=4) {}'
+      );
+    });
+
+    it('should work for !==', function () {
+      expect(test(
+        'function x(a) {\n' +
+        '  a = typeof a !== "undefined" ? a : 4;\n' +
+        '}'
+      )).to.equal(
+        'function x(a=4) {}'
+      );
+    });
+
+    it('should work for ==', function () {
+      expect(test(
+        'function x(a) {\n' +
+        '  a = typeof a == "undefined" ? 4 : a;\n' +
+        '}'
+      )).to.equal(
+        'function x(a=4) {}'
+      );
+    });
+
+    it('should work for !=', function () {
+      expect(test(
+        'function x(a) {\n' +
+        '  a = typeof a != "undefined" ? a : 4;\n' +
+        '}'
+      )).to.equal(
+        'function x(a=4) {}'
+      );
+    });
+
+    it('should not work for other operators (like >)', function () {
+      expectNoChange(
+        'function x(a) {\n' +
+        '  a = typeof a > undefined ? a : 4;\n' +
+        '}'
+      );
+    });
+
+    it('should not work for === when variable in wrong location', function () {
+      expectNoChange(
+        'function x(a) {\n' +
+        '  a = typeof a === "undefined" ? a : 5;\n' +
+        '}'
+      );
+    });
+
+    it('should not work for !== when variable in wrong location', function () {
+      expectNoChange(
+        'function x(a) {\n' +
+        '  a = typeof a !== "undefined" ? 5 : a;\n' +
+        '}'
+      );
+    });
+  });
+
   it('should work when only some parameters have defaults', function () {
     expect(test(
       'function x(a, b, c) {\n' +
