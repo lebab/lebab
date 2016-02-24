@@ -1,48 +1,6 @@
-import _ from 'lodash';
 import estraverse from 'estraverse';
 import multiReplaceStatement from '../utils/multi-replace-statement.js';
-
-// Matches: <ident> = <ident> || ...;
-const isDefaultAssignment = _.matches({
-  type: 'ExpressionStatement',
-  expression: {
-    type: 'AssignmentExpression',
-    left: {
-      type: 'Identifier',
-      // name: <ident>
-    },
-    operator: '=',
-    right: {
-      type: 'LogicalExpression',
-      left: {
-        type: 'Identifier',
-        // name: <ident>
-      },
-      operator: '||',
-      right: {
-        // ...
-      }
-    }
-  }
-});
-
-function matchesDefaultAssignment(node) {
-  if (isDefaultAssignment(node)) {
-    const {
-      expression: {
-        left: {name: name},
-        right: {
-          left: {name: nameAgain},
-          right: value
-        }
-      }
-    } = node;
-
-    if (name === nameAgain) {
-      return {name, value, node};
-    }
-  }
-}
+import matchOrAssignment from '../default-param/match-or-assignment.js';
 
 export default function (ast) {
   estraverse.replace(ast, {
@@ -65,7 +23,7 @@ function findDefaults(fnBody) {
   const defaults = {};
 
   for (const node of fnBody) {
-    const def = matchesDefaultAssignment(node);
+    const def = matchOrAssignment(node);
     if (!def) {
       break;
     }
