@@ -10,9 +10,9 @@ function expectNoChange(script) {
   expect(test(script)).to.equal(script);
 }
 
-describe('Object methods', function () {
+describe('Object methods', () => {
 
-  it('should convert a function inside an object to method', function () {
+  it('should convert a function inside an object to method', () => {
     expect(test(
       '({\n' +
       '  someMethod: function(a, b, c) {\n' +
@@ -28,7 +28,7 @@ describe('Object methods', function () {
     );
   });
 
-  it('should ignore non-function properties of object', function () {
+  it('should ignore non-function properties of object', () => {
     expect(test(
       '({\n' +
       '  foo: 123,\n' +
@@ -50,7 +50,7 @@ describe('Object methods', function () {
     );
   });
 
-  it('should convert function properties in nested object literal', function () {
+  it('should convert function properties in nested object literal', () => {
     expect(test(
       '({\n' +
       '  nested: {\n' +
@@ -68,7 +68,7 @@ describe('Object methods', function () {
     );
   });
 
-  it('should not convert named function expressions', function () {
+  it('should not convert named function expressions', () => {
     expectNoChange(
       '({\n' +
       '  foo: function foo() {\n' +
@@ -78,7 +78,7 @@ describe('Object methods', function () {
     );
   });
 
-  it('should not convert computed properties', function () {
+  it('should not convert computed properties', () => {
     expectNoChange(
       '({\n' +
       '  ["foo" + count]: function() {\n' +

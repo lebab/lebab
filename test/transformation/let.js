@@ -10,10 +10,10 @@ function expectNoChange(script) {
   expect(test(script)).to.equal(script);
 }
 
-describe('Let/const transformation', function () {
+describe('Let/const transformation', () => {
 
-  describe('with uninitialized variable', function () {
-    it('should use let when never used afterwards', function () {
+  describe('with uninitialized variable', () => {
+    it('should use let when never used afterwards', () => {
       expect(test(
         'var x;'
       )).to.equal(
@@ -21,7 +21,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use let when assigned aftwerwards', function () {
+    it('should use let when assigned aftwerwards', () => {
       expect(test(
         'var x;\n' +
         'x = 6;'
@@ -32,8 +32,8 @@ describe('Let/const transformation', function () {
     });
   });
 
-  describe('with initialized variable', function () {
-    it('should use const when never used afterwards', function () {
+  describe('with initialized variable', () => {
+    it('should use const when never used afterwards', () => {
       expect(test(
         'var x = 2;'
       )).to.equal(
@@ -41,7 +41,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when only referenced afterwards', function () {
+    it('should use const when only referenced afterwards', () => {
       expect(test(
         'var x = 2;\n' +
         'foo(x);'
@@ -51,7 +51,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use let when re-assigned afterwards', function () {
+    it('should use let when re-assigned afterwards', () => {
       expect(test(
         'var x = 5;\n' +
         'x = 6;'
@@ -61,7 +61,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use let when updated aftwerwards', function () {
+    it('should use let when updated aftwerwards', () => {
       expect(test(
         'var x = 5;\n' +
         'x++;'
@@ -72,8 +72,8 @@ describe('Let/const transformation', function () {
     });
   });
 
-  describe('with multi-variable declaration', function () {
-    it('should use const when not referenced afterwards', function () {
+  describe('with multi-variable declaration', () => {
+    it('should use const when not referenced afterwards', () => {
       expect(test(
         'var x = 1, y = 2;'
       )).to.equal(
@@ -81,7 +81,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use let when assigned to afterwards', function () {
+    it('should use let when assigned to afterwards', () => {
       expect(test(
         'var x = 1, y = 2;\n' +
         'x = 3;\n' +
@@ -93,7 +93,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use let when initially unassigned but assigned afterwards', function () {
+    it('should use let when initially unassigned but assigned afterwards', () => {
       expect(test(
         'var x, y;\n' +
         'x = 3;\n' +
@@ -105,7 +105,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should split to let & const when only some vars assigned to afterwards', function () {
+    it('should split to let & const when only some vars assigned to afterwards', () => {
       expect(test(
         'var x = 1, y = 2;\n' +
         'y = 4;'
@@ -116,7 +116,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should split to let & var when only some vars are block-scoped', function () {
+    it('should split to let & var when only some vars are block-scoped', () => {
       expect(test(
         'if (true) {\n' +
         '  var x = 1, y = 2;\n' +
@@ -134,8 +134,8 @@ describe('Let/const transformation', function () {
     });
   });
 
-  describe('with nested function', function () {
-    it('should use let when variable re-declared inside it', function () {
+  describe('with nested function', () => {
+    it('should use let when variable re-declared inside it', () => {
       expect(test(
         'var a = 0;\n' +
         'function foo() { var a = 1; }\n' +
@@ -147,7 +147,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use let when variable assigned inside it', function () {
+    it('should use let when variable assigned inside it', () => {
       expect(test(
         'var a = 0;\n' +
         'function foo() { a = 1; }'
@@ -157,7 +157,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when variable referenced inside it', function () {
+    it('should use const when variable referenced inside it', () => {
       expect(test(
         'var a = 0;\n' +
         'function foo() { bar(a); }'
@@ -167,7 +167,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when variable redeclared as parameter', function () {
+    it('should use const when variable redeclared as parameter', () => {
       expect(test(
         'var a = 0;\n' +
         'function foo(a) { a = 1; }'
@@ -178,8 +178,8 @@ describe('Let/const transformation', function () {
     });
   });
 
-  describe('with nested arrow-function', function () {
-    it('should use let when variable re-declared inside it', function () {
+  describe('with nested arrow-function', () => {
+    it('should use let when variable re-declared inside it', () => {
       expect(test(
         'var a = 0;\n' +
         '() => { var a = 1; };\n' +
@@ -191,7 +191,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use let when variable assigned inside it', function () {
+    it('should use let when variable assigned inside it', () => {
       expect(test(
         'var a = 0;\n' +
         '() => { a = 1; };'
@@ -201,7 +201,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when variable referenced inside it', function () {
+    it('should use const when variable referenced inside it', () => {
       expect(test(
         'var a = 0;\n' +
         '() => { bar(a); };'
@@ -211,7 +211,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when variable redeclared as parameter', function () {
+    it('should use const when variable redeclared as parameter', () => {
       expect(test(
         'var a = 0;\n' +
         '(a) => a = 1;'
@@ -222,8 +222,8 @@ describe('Let/const transformation', function () {
     });
   });
 
-  describe('with nested block', function () {
-    it('should use let when variable assigned in it', function () {
+  describe('with nested block', () => {
+    it('should use let when variable assigned in it', () => {
       expect(test(
         'var a = 0;\n' +
         'if (true) { a = 1; }'
@@ -233,7 +233,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when variable referenced in it', function () {
+    it('should use const when variable referenced in it', () => {
       expect(test(
         'var a = 0;\n' +
         'if (true) { foo(a); }'
@@ -243,7 +243,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use let when variable only assigned inside a single block', function () {
+    it('should use let when variable only assigned inside a single block', () => {
       expect(test(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -257,7 +257,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when variable only referenced inside a single block', function () {
+    it('should use const when variable only referenced inside a single block', () => {
       expect(test(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -271,7 +271,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use let when variable assigned inside further nested block', function () {
+    it('should use let when variable assigned inside further nested block', () => {
       expect(test(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -285,7 +285,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when variable referenced inside further nested block', function () {
+    it('should use const when variable referenced inside further nested block', () => {
       expect(test(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -299,7 +299,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should ignore variable declared inside a block but assigned outside', function () {
+    it('should ignore variable declared inside a block but assigned outside', () => {
       expectNoChange(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -308,7 +308,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should ignore variable declared inside a block but referenced outside', function () {
+    it('should ignore variable declared inside a block but referenced outside', () => {
       expectNoChange(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -317,7 +317,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when variable name used in object property outside the block', function () {
+    it('should use const when variable name used in object property outside the block', () => {
       expect(test(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -333,7 +333,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when variable name used as function expression name outside the block', function () {
+    it('should use const when variable name used as function expression name outside the block', () => {
       expect(test(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -347,7 +347,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when variable name used as function parameter name outside the block', function () {
+    it('should use const when variable name used as function parameter name outside the block', () => {
       expect(test(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -361,7 +361,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when variable name used as arrow-function parameter name outside the block', function () {
+    it('should use const when variable name used as arrow-function parameter name outside the block', () => {
       expect(test(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -375,7 +375,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should ignore variable referenced in function body outside the block', function () {
+    it('should ignore variable referenced in function body outside the block', () => {
       expectNoChange(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -384,7 +384,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should ignore variable referenced in shorthand arrow-function body outside the block', function () {
+    it('should ignore variable referenced in shorthand arrow-function body outside the block', () => {
       expectNoChange(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -393,7 +393,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should ignore variable referenced in variable declaration outside the block', function () {
+    it('should ignore variable referenced in variable declaration outside the block', () => {
       expectNoChange(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -404,15 +404,15 @@ describe('Let/const transformation', function () {
   });
 
   // Variable hoisting
-  describe('with variable assigned before declared', function () {
-    it('should ignore', function () {
+  describe('with variable assigned before declared', () => {
+    it('should ignore', () => {
       expectNoChange(
         'a = 1;\n' +
         'var a = 2;'
       );
     });
 
-    it('should ignore when similar variable in outer scope', function () {
+    it('should ignore when similar variable in outer scope', () => {
       expect(test(
         'var a = 0;\n' +
         'function foo() {\n' +
@@ -429,8 +429,8 @@ describe('Let/const transformation', function () {
     });
   });
 
-  describe('with variable referenced before declared', function () {
-    it('should ignore', function () {
+  describe('with variable referenced before declared', () => {
+    it('should ignore', () => {
       expectNoChange(
         'foo(a);\n' +
         'var a = 2;'
@@ -438,15 +438,15 @@ describe('Let/const transformation', function () {
     });
   });
 
-  describe('with repeated variable declarations', function() {
-    it('should ignore', function () {
+  describe('with repeated variable declarations', () => {
+    it('should ignore', () => {
       expectNoChange(
         'var a = 1;\n' +
         'var a = 2;'
       );
     });
 
-    it('should ignore when declarations in different blocks', function () {
+    it('should ignore when declarations in different blocks', () => {
       expectNoChange(
         'if (true) {\n' +
         '  var a = 1;\n' +
@@ -458,7 +458,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should ignore when re-declaring of function parameter', function () {
+    it('should ignore when re-declaring of function parameter', () => {
       expectNoChange(
         'function foo(a) {\n' +
         '  var a = 1;\n' +
@@ -466,7 +466,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should ignore when re-declaring of function expression name', function () {
+    it('should ignore when re-declaring of function expression name', () => {
       expectNoChange(
         '(function foo(a) {\n' +
         '  var foo;\n' +
@@ -475,7 +475,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should allow re-declaring of function declaration name', function () {
+    it('should allow re-declaring of function declaration name', () => {
       expect(test(
         'function foo(a) {\n' +
         '  var foo;\n' +
@@ -491,16 +491,16 @@ describe('Let/const transformation', function () {
   });
 
   // Possible errors (Issues #31 and #53)
-  describe('regression tests', function() {
-    it('should not throw error for assignment to undeclared variable', function () {
+  describe('regression tests', () => {
+    it('should not throw error for assignment to undeclared variable', () => {
       expectNoChange('x = 2;');
     });
 
-    it('should not throw error for assignment to object property', function () {
+    it('should not throw error for assignment to object property', () => {
       expectNoChange('this.y = 5;');
     });
 
-    it('should use const when similarly-named property is assigned to', function () {
+    it('should use const when similarly-named property is assigned to', () => {
       expect(test(
         'var x = 2;\n' +
         'b.x += 1;'
@@ -510,7 +510,7 @@ describe('Let/const transformation', function () {
       );
     });
 
-    it('should use const when similarly-named property is updated', function () {
+    it('should use const when similarly-named property is updated', () => {
       expect(test(
         'var x = 2;\n' +
         'b.x++;'

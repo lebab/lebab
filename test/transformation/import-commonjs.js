@@ -10,27 +10,27 @@ function expectNoChange(script) {
   expect(test(script)).to.equal(script);
 }
 
-describe('Import CommonJS', function () {
+describe('Import CommonJS', () => {
 
-  it('should convert basic var/let/const with require()', function () {
+  it('should convert basic var/let/const with require()', () => {
     expect(test('var   foo = require("foo");')).to.equal('import foo from "foo";');
     expect(test('const foo = require("foo");')).to.equal('import foo from "foo";');
     expect(test('let   foo = require("foo");')).to.equal('import foo from "foo";');
   });
 
-  it('should do nothing with var that contains no require()', function () {
+  it('should do nothing with var that contains no require()', () => {
     expectNoChange('var foo = "bar";');
     expectNoChange('var foo;');
   });
 
-  it('should do nothing with require() that does not have a single string argument', function () {
+  it('should do nothing with require() that does not have a single string argument', () => {
     expectNoChange('var foo = require();');
     expectNoChange('var foo = require("foo", {});');
     expectNoChange('var foo = require(bar);');
     expectNoChange('var foo = require(123);');
   });
 
-  it('should convert var with multiple require() calls', function () {
+  it('should convert var with multiple require() calls', () => {
     expect(test(
       'var foo = require("foo"), bar = require("bar");'
     )).to.equal(
@@ -39,7 +39,7 @@ describe('Import CommonJS', function () {
     );
   });
 
-  it('should convert var/let/const with intermixed require() calls and normal initializations', function () {
+  it('should convert var/let/const with intermixed require() calls and normal initializations', () => {
     expect(test(
       'var foo = require("foo"), bar = 15;'
     )).to.equal(
@@ -64,7 +64,7 @@ describe('Import CommonJS', function () {
 
   // It would be nice to preserve the combined declarations,
   // but this kind of intermixed vars should really be a rare edge case.
-  it('does not need to preserve combined variable declarations', function () {
+  it('does not need to preserve combined variable declarations', () => {
     expect(test(
       'var foo = require("foo"), bar = 1, baz = 2;'
     )).to.equal(
@@ -74,7 +74,7 @@ describe('Import CommonJS', function () {
     );
   });
 
-  it('should ignore require calls inside statements', function () {
+  it('should ignore require calls inside statements', () => {
     expectNoChange(
       'if (true) {\n' +
       '  var foo = require("foo");\n' +
@@ -84,19 +84,19 @@ describe('Import CommonJS', function () {
 
   // Not yet supported things...
 
-  it('should not convert assignment of require() call', function () {
+  it('should not convert assignment of require() call', () => {
     expectNoChange('foo = require("foo");');
   });
 
-  it('should not convert unassigned require() call', function () {
+  it('should not convert unassigned require() call', () => {
     expectNoChange('require("foo");');
   });
 
-  it('should not convert require() with property extraction', function () {
+  it('should not convert require() with property extraction', () => {
     expectNoChange('var foo = require("foolib").foo;');
   });
 
-  it('should not convert require() with object destruction', function () {
+  it('should not convert require() with object destruction', () => {
     expectNoChange('var {foo} = require("foolib");');
   });
 

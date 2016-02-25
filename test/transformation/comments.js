@@ -16,9 +16,9 @@ function test(script) {
   return transformer.run(script);
 }
 
-describe('Comments', function () {
+describe('Comments', () => {
 
-  it("shouldn't convert comment line", function () {
+  it("shouldn't convert comment line", () => {
     expect(test(
       '// comment line\n' +
       'var x = 42;'
@@ -28,7 +28,7 @@ describe('Comments', function () {
     );
   });
 
-  it("shouldn't convert trailing comment", function () {
+  it("shouldn't convert trailing comment", () => {
     expect(test(
       'var x = 42; // trailing comment'
     )).to.equal(
@@ -36,7 +36,7 @@ describe('Comments', function () {
     );
   });
 
-  it("shouldn't eliminate leading newlines", function () {
+  it("shouldn't eliminate leading newlines", () => {
     expect(test(
       '\n\nvar x = 42;'
     )).to.equal(
@@ -44,7 +44,7 @@ describe('Comments', function () {
     );
   });
 
-  it("shouldn't eliminate trailing newlines", function () {
+  it("shouldn't eliminate trailing newlines", () => {
     expect(test(
       'var x = 42;\n\n'
     )).to.equal(
@@ -52,7 +52,7 @@ describe('Comments', function () {
     );
   });
 
-  it("ignores #! comment at the beginning of file", function () {
+  it("ignores #! comment at the beginning of file", () => {
     expect(test(
       '#!/usr/bin/env node\n' +
       'var x = 42;'
@@ -62,7 +62,7 @@ describe('Comments', function () {
     );
   });
 
-  it("ignores #! comment almost at the beginning of file", function () {
+  it("ignores #! comment almost at the beginning of file", () => {
     expect(test(
       '\n' +
       '#!/usr/local/bin/node\n' +

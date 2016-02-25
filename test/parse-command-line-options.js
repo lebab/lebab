@@ -6,48 +6,48 @@ function parse(argv) {
   return parseCommandLineOptions(['node', 'script.js'].concat(argv));
 }
 
-describe('Command Line Interface', function () {
+describe('Command Line Interface', () => {
   // Command line parser uses commander which has global state.
   // To be able to test different command-line combinations,
   // we'll need to reset the state between tests.
-  beforeEach(function() {
+  beforeEach(() => {
     commander.outFile = undefined;
     commander.enable = undefined;
     commander.disable = undefined;
     commander.module = undefined;
   });
 
-  it('by default reads STDIN and writes to STDOUT', function() {
+  it('by default reads STDIN and writes to STDOUT', () => {
     var options = parse([]);
     expect(options.inFile).to.equal(undefined);
     expect(options.outFile).to.equal(undefined);
   });
 
-  it('when existing <filename> given reads <filename> and writes to STDOUT', function() {
+  it('when existing <filename> given reads <filename> and writes to STDOUT', () => {
     var options = parse(['lib/io.js']);
     expect(options.inFile).to.equal('lib/io.js');
     expect(options.outFile).to.equal(undefined);
   });
 
-  it('when not-existing <filename> given raises error', function() {
-    expect(function() {
+  it('when not-existing <filename> given raises error', () => {
+    expect(() => {
       parse(['missing.js']);
     }).to.throw('File missing.js does not exist.')
   });
 
-  it('when more than one <filename> given raises error', function() {
-    expect(function() {
+  it('when more than one <filename> given raises error', () => {
+    expect(() => {
       parse(['lib/io.js', 'lib/transformer.js']);
     }).to.throw('Only one input file allowed, but 2 given instead.')
   });
 
-  it('when --out-file <filename> given writes <filename> and reads STDIN', function() {
+  it('when --out-file <filename> given writes <filename> and reads STDIN', () => {
     var options = parse(['--out-file', 'some/file.js']);
     expect(options.inFile).to.equal(undefined);
     expect(options.outFile).to.equal('some/file.js');
   });
 
-  it('by default enables all transforms', function() {
+  it('by default enables all transforms', () => {
     var options = parse([]);
     expect(options.transformers).to.deep.equal({
       'class': true,
@@ -62,7 +62,7 @@ describe('Command Line Interface', function () {
     });
   });
 
-  it('when --enable=let,no-strict,commonjs given, enables only these transformers', function() {
+  it('when --enable=let,no-strict,commonjs given, enables only these transformers', () => {
     var options = parse(['--enable', 'let,no-strict,commonjs']);
     expect(options.transformers).to.deep.equal({
       'class': false,
@@ -77,13 +77,13 @@ describe('Command Line Interface', function () {
     });
   });
 
-  it('when --enable=unknown given, raises error', function() {
-    expect(function() {
+  it('when --enable=unknown given, raises error', () => {
+    expect(() => {
       parse(['--enable', 'unknown']);
     }).to.throw('Unknown transformer "unknown".');
   });
 
-  it('when --disable=let,no-strict,commonjs given, disables the specified transformers', function() {
+  it('when --disable=let,no-strict,commonjs given, disables the specified transformers', () => {
     var options = parse(['--disable', 'let,no-strict,commonjs']);
     expect(options.transformers).to.deep.equal({
       'class': true,
@@ -98,14 +98,14 @@ describe('Command Line Interface', function () {
     });
   });
 
-  it('when --disable=unknown given, raises error', function() {
-    expect(function() {
+  it('when --disable=unknown given, raises error', () => {
+    expect(() => {
       parse(['--disable', 'unknown']);
     }).to.throw('Unknown transformer "unknown".');
   });
 
-  it('when --enable and --disable used together, raises error', function() {
-    expect(function() {
+  it('when --enable and --disable used together, raises error', () => {
+    expect(() => {
       parse(['--enable', 'let', '--disable', 'let']);
     }).to.throw('Options --enable and --disable can not be used together.');
   });

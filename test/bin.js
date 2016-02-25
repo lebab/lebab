@@ -2,8 +2,8 @@ var expect = require('chai').expect;
 var fs = require("fs");
 var exec = require('child_process').exec;
 
-describe('Smoke test for the executable script', function () {
-  beforeEach(function () {
+describe('Smoke test for the executable script', () => {
+  beforeEach(() => {
     fs.writeFileSync(
       "test/test-data.js",
       'var foo = 10;\n' +
@@ -11,16 +11,16 @@ describe('Smoke test for the executable script', function () {
     );
   });
 
-  afterEach(function () {
+  afterEach(() => {
     fs.unlinkSync("test/test-data.js");
     if (fs.existsSync("test/output.js")) {
       fs.unlinkSync("test/output.js");
     }
   });
 
-  describe('when valid input and output file given', function() {
-    it('transforms input file to output file', function (done) {
-      exec('node ./bin/index.js test/test-data.js -o test/output.js', function (error, stdout, stderr) {
+  describe('when valid input and output file given', () => {
+    it('transforms input file to output file', done => {
+      exec('node ./bin/index.js test/test-data.js -o test/output.js', (error, stdout, stderr) => {
         expect(error).to.equal(null);
         expect(stderr).to.equal('');
         expect(stdout).to.equal('');
@@ -34,9 +34,9 @@ describe('Smoke test for the executable script', function () {
     });
   });
 
-  describe('when no input/output files given', function () {
-    it('reads STDIN and writes STDOUT', function (done) {
-      exec('node ./bin/index.js < test/test-data.js > test/output.js', function (error, stdout, stderr) {
+  describe('when no input/output files given', () => {
+    it('reads STDIN and writes STDOUT', done => {
+      exec('node ./bin/index.js < test/test-data.js > test/output.js', (error, stdout, stderr) => {
         expect(error).to.equal(null);
         expect(stderr).to.equal('');
         expect(stdout).to.equal('');
@@ -50,9 +50,9 @@ describe('Smoke test for the executable script', function () {
     });
   });
 
-  describe('when invalid transform name given', function () {
-    it('exits with error message', function (done) {
-      exec('node ./bin/index.js --enable blah test/test-data.js', function (error, stdout, stderr) {
+  describe('when invalid transform name given', () => {
+    it('exits with error message', done => {
+      exec('node ./bin/index.js --enable blah test/test-data.js', (error, stdout, stderr) => {
         expect(error).not.to.equal(null);
         expect(stderr).to.equal('Unknown transformer "blah".\n');
         expect(stdout).to.equal('');
