@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var fs = require("fs");
+import fs from "fs";
 var exec = require('child_process').exec;
 
 describe('Smoke test for the executable script', () => {

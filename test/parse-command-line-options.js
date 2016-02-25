@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
-var commander = require('commander');
-var parseCommandLineOptions = require('./../lib/parse-command-line-options.js');
+import commander from 'commander';
+import parseCommandLineOptions from './../lib/parse-command-line-options.js';
 
 function parse(argv) {
   return parseCommandLineOptions(['node', 'script.js'].concat(argv));
