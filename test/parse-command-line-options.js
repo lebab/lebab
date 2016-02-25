@@ -1,4 +1,4 @@
-var expect = require('chai').expect;
+const expect = require('chai').expect;
 import commander from 'commander';
 import parseCommandLineOptions from './../lib/parse-command-line-options.js';
 
@@ -18,13 +18,13 @@ describe('Command Line Interface', () => {
   });
 
   it('by default reads STDIN and writes to STDOUT', () => {
-    var options = parse([]);
+    const options = parse([]);
     expect(options.inFile).to.equal(undefined);
     expect(options.outFile).to.equal(undefined);
   });
 
   it('when existing <filename> given reads <filename> and writes to STDOUT', () => {
-    var options = parse(['lib/io.js']);
+    const options = parse(['lib/io.js']);
     expect(options.inFile).to.equal('lib/io.js');
     expect(options.outFile).to.equal(undefined);
   });
@@ -42,13 +42,13 @@ describe('Command Line Interface', () => {
   });
 
   it('when --out-file <filename> given writes <filename> and reads STDIN', () => {
-    var options = parse(['--out-file', 'some/file.js']);
+    const options = parse(['--out-file', 'some/file.js']);
     expect(options.inFile).to.equal(undefined);
     expect(options.outFile).to.equal('some/file.js');
   });
 
   it('by default enables all transforms', () => {
-    var options = parse([]);
+    const options = parse([]);
     expect(options.transformers).to.deep.equal({
       'class': true,
       'template': true,
@@ -63,7 +63,7 @@ describe('Command Line Interface', () => {
   });
 
   it('when --enable=let,no-strict,commonjs given, enables only these transformers', () => {
-    var options = parse(['--enable', 'let,no-strict,commonjs']);
+    const options = parse(['--enable', 'let,no-strict,commonjs']);
     expect(options.transformers).to.deep.equal({
       'class': false,
       'template': false,
@@ -84,7 +84,7 @@ describe('Command Line Interface', () => {
   });
 
   it('when --disable=let,no-strict,commonjs given, disables the specified transformers', () => {
-    var options = parse(['--disable', 'let,no-strict,commonjs']);
+    const options = parse(['--disable', 'let,no-strict,commonjs']);
     expect(options.transformers).to.deep.equal({
       'class': true,
       'template': true,

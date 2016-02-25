@@ -1,6 +1,6 @@
-var expect = require('chai').expect;
+const expect = require('chai').expect;
 import Transformer from './../../lib/transformer';
-var transformer = new Transformer({commonjs: true});
+const transformer = new Transformer({commonjs: true});
 
 function test(script) {
   return transformer.run(script);

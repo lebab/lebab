@@ -1,6 +1,6 @@
-var expect = require('chai').expect;
+const expect = require('chai').expect;
 import Transformer from './../../lib/transformer';
-var transformer = new Transformer({'template': true});
+const transformer = new Transformer({'template': true});
 
 function test(script) {
   return transformer.run(script);
@@ -9,43 +9,43 @@ function test(script) {
 describe('Template string transformation', () => {
 
   it('shouldn\'t convert non-concatenated strings', () => {
-    var script = "var result = 'test';";
+    const script = "var result = 'test';";
 
     expect(test(script)).to.equal(script);
   });
 
   it('shouldn\'t convert non-string binary expressions with + operator', () => {
-    var script = "var result = 1 + 2;";
+    const script = "var result = 1 + 2;";
 
     expect(test(script)).to.equal(script);
   });
 
   it('shouldn\'t convert only string concatenation', () => {
-    var script = "var result = 'Hello ' + ' World!';";
+    const script = "var result = 'Hello ' + ' World!';";
 
     expect(test(script)).to.equal('var result = `Hello  World!`;');
   });
 
   it('should convert string and one variable concatenation', () => {
-    var script = "var result = 'Firstname: ' + firstname;";
+    const script = "var result = 'Firstname: ' + firstname;";
 
     expect(test(script)).to.equal('var result = `Firstname: ${firstname}`;');
   });
 
   it('should convert string and multiple variables concatenation', () => {
-    var script = "var result = 'Fullname: ' + firstname + lastname;";
+    const script = "var result = 'Fullname: ' + firstname + lastname;";
 
     expect(test(script)).to.equal('var result = `Fullname: ${firstname}${lastname}`;');
   });
 
   it('should convert string and call expressions', () => {
-    var script = "var result = 'Firstname: ' + person.getFirstname() + 'Lastname: ' + person.getLastname();";
+    const script = "var result = 'Firstname: ' + person.getFirstname() + 'Lastname: ' + person.getLastname();";
 
     expect(test(script)).to.equal('var result = `Firstname: ${person.getFirstname()}Lastname: ${person.getLastname()}`;');
   });
 
   it('should escape ` characters', () => {
-    var script = "var result = 'Firstname: `' + firstname + '`';";
+    const script = "var result = 'Firstname: `' + firstname + '`';";
 
     expect(test(script)).to.equal('var result = `Firstname: \\`${firstname}\\``;');
   });
