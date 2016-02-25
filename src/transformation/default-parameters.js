@@ -9,19 +9,33 @@ export default function (ast) {
   estraverse.replace(ast, {
     enter(node) {
       if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
-        const detectedDefaults = findDefaults(node.body.body);
-        node.params.forEach((param, i) => {
-          const def = detectedDefaults[param.name];
-          if (!node.defaults[i] && param.type === 'Identifier' && def) {
-            node.defaults[i] = def.value;
-            multiReplaceStatement(node.body, def.node, []);
-          }
-        });
+        transformDefaultParams(node);
       }
     }
   });
 }
 
+function transformDefaultParams(fn) {
+  const detectedDefaults = findDefaults(fn.body.body);
+
+  fn.params.forEach((param, i) => {
+    // Ignore destructoring, only work with simple variables
+    if (param.type !== 'Identifier') {
+      return;
+    }
+
+    const detected = detectedDefaults[param.name];
+    // Transform when default value detected and no existing default value
+    if (detected && !fn.defaults[i]) {
+      fn.defaults[i] = detected.value;
+      multiReplaceStatement(fn.body, detected.node, []);
+    }
+  });
+}
+
+// Looks default value assignments at the beginning of a function
+//
+// Returns a map of variable-name:{name, value, node}
 function findDefaults(fnBody) {
   const defaults = {};
 
