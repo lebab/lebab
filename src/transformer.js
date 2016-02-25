@@ -6,7 +6,7 @@ import classTransformation from './transformation/classes.js';
 import templateStringTransformation from './transformation/template-string.js';
 import arrowFunctionTransformation from './transformation/arrow-functions.js';
 import letTransformation from './transformation/let.js';
-import defaultArgsTransformation from './transformation/default-arguments.js';
+import defaultParamTransformation from './transformation/default-parameters.js';
 import objectMethodsTransformation from './transformation/object-methods.js';
 import objectShorthandsTransformation from './transformation/object-shorthands.js';
 import noStrictTransformation from './transformation/no-strict.js';
@@ -17,7 +17,7 @@ const tranformersMap = {
   'template': templateStringTransformation,
   'arrow': arrowFunctionTransformation,
   'let': letTransformation,
-  'default-param': defaultArgsTransformation,
+  'default-param': defaultParamTransformation,
   'obj-method': objectMethodsTransformation,
   'obj-shorthand': objectShorthandsTransformation,
   'no-strict': noStrictTransformation,
