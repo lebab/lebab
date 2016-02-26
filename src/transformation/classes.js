@@ -78,8 +78,7 @@ function (ast) {
       if (node.type === 'Program') {
         _(potentialClasses)
           .filter(cls => cls.isTransformable())
-          .forEach(cls => cls.transform())
-          .value();
+          .forEach(cls => cls.transform());
       }
     }
   });

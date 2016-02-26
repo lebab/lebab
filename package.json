@@ -34,7 +34,7 @@
     "commander": "^2.9.0",
     "estraverse": "^4.1.1",
     "esutils": "^2.0.2",
-    "lodash": "^3.10.1",
+    "lodash": "^4.5.1",
     "recast": "^0.11.0"
   },
   "devDependencies": {

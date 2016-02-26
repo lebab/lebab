@@ -34,7 +34,7 @@ class Transformer {
    */
   constructor(transformers={}) {
     this.transformers = _(transformers)
-      .pick(enabled => enabled)
+      .pickBy(enabled => enabled)
       .map((enabled, key) => tranformersMap[key])
       .value();
   }
