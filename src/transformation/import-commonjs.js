@@ -1,5 +1,6 @@
 import estraverse from 'estraverse';
 import typeChecker from '../utils/type-checker.js';
+import matchesAst from '../utils/matches-ast.js';
 import multiReplaceStatement from '../utils/multi-replace-statement.js';
 import ImportDeclaration from '../syntax/import-declaration.js';
 import VariableDeclaration from '../syntax/variable-declaration.js';
@@ -30,16 +31,19 @@ function isVarWithRequireCalls(node) {
     node.declarations.some(isRequireDeclaration);
 }
 
-function isRequireDeclaration(node) {
-  return node.id.type === 'Identifier' &&
-    node.init &&
-    isRequireCall(node.init);
-}
-
-function isRequireCall(node) {
-  return node.type === 'CallExpression' &&
-    node.callee.type === 'Identifier' &&
-    node.callee.name === 'require' &&
-    node.arguments.length === 1 &&
-    typeChecker.isString(node.arguments[0]);
-}
+// Matches: <ident> = require(<string>);
+var isRequireDeclaration = matchesAst({
+  type: 'VariableDeclarator',
+  id: {
+    type: 'Identifier',
+    // name: <ident>
+  },
+  init: {
+    type: 'CallExpression',
+    callee: {
+      type: 'Identifier',
+      name: 'require'
+    },
+    arguments: (args) => args.length === 1 && typeChecker.isString(args[0])
+  }
+});
