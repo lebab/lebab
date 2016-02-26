@@ -1,6 +1,6 @@
-var expect = require('chai').expect;
-var Transformer = require('./../../lib/transformer');
-var transformer = new Transformer({class: true});
+const expect = require('chai').expect;
+import Transformer from './../../lib/transformer';
+const transformer = new Transformer({class: true});
 
 function test(script) {
   return transformer.run(script);
@@ -10,16 +10,16 @@ function expectNoChange(script) {
   expect(test(script)).to.equal(script);
 }
 
-describe('Classes', function () {
+describe('Classes', () => {
 
-  it('should not convert functions without prototype assignment to class', function () {
+  it('should not convert functions without prototype assignment to class', () => {
     expectNoChange(
       "function MyClass() {\n" +
       "}"
     );
   });
 
-  it('should convert function declarations with prototype assignment to class', function () {
+  it('should convert function declarations with prototype assignment to class', () => {
     expect(test(
       "function MyClass() {\n" +
       "}\n" +
@@ -33,7 +33,7 @@ describe('Classes', function () {
     );
   });
 
-  it('should convert function variables with prototype assignment to class', function () {
+  it('should convert function variables with prototype assignment to class', () => {
     expect(test(
       "var MyClass = function() {\n" +
       "};\n" +
@@ -47,7 +47,7 @@ describe('Classes', function () {
     );
   });
 
-  it('should not convert arrow-function to class', function () {
+  it('should not convert arrow-function to class', () => {
     expectNoChange(
       "var MyClass = () => {\n" +
       "  this.foo = 10;\n" +
@@ -58,7 +58,7 @@ describe('Classes', function () {
     );
   });
 
-  it('should not convert arrow-function to method', function () {
+  it('should not convert arrow-function to method', () => {
     expectNoChange(
       "function MyClass() {\n" +
       "}\n" +
@@ -68,7 +68,7 @@ describe('Classes', function () {
     );
   });
 
-  it('should convert non-empty function to constructor method', function () {
+  it('should convert non-empty function to constructor method', () => {
     expect(test(
       "function MyClass(a, b) {\n" +
       "  this.params = [a, b];\n" +
@@ -87,7 +87,7 @@ describe('Classes', function () {
     );
   });
 
-  it('should not convert non-anonymous functions to methods', function () {
+  it('should not convert non-anonymous functions to methods', () => {
     expectNoChange(
       "function MyClass() {\n" +
       "}\n" +
@@ -97,7 +97,7 @@ describe('Classes', function () {
     );
   });
 
-  it('should ignore non-function assignments to prototype', function () {
+  it('should ignore non-function assignments to prototype', () => {
     expect(test(
       "function MyClass() {\n" +
       "}\n" +
@@ -116,7 +116,7 @@ describe('Classes', function () {
     );
   });
 
-  it('should detect methods from object assigned directly to prototype', function () {
+  it('should detect methods from object assigned directly to prototype', () => {
     expect(test(
       "function MyClass() {\n" +
       "}\n" +
@@ -137,7 +137,7 @@ describe('Classes', function () {
     );
   });
 
-  it('should ignore object assigned directly to prototype when it contains non-functions', function () {
+  it('should ignore object assigned directly to prototype when it contains non-functions', () => {
     expectNoChange(
       "function MyClass() {\n" +
       "}\n" +
@@ -149,7 +149,7 @@ describe('Classes', function () {
     );
   });
 
-  it('should convert Object.defineProperty to setters and getters', function () {
+  it('should convert Object.defineProperty to setters and getters', () => {
     expect(test(
       "function MyClass() {\n" +
       "}\n" +
@@ -174,7 +174,7 @@ describe('Classes', function () {
     );
   });
 
-  it('should ignore other options of Object.defineProperty when converting get/set', function () {
+  it('should ignore other options of Object.defineProperty when converting get/set', () => {
     expect(test(
       "function MyClass() {\n" +
       "}\n" +
@@ -194,7 +194,7 @@ describe('Classes', function () {
     );
   });
 
-  it('should ignore Object.defineProperty of non-function property', function () {
+  it('should ignore Object.defineProperty of non-function property', () => {
     expectNoChange(
       "function MyClass() {\n" +
       "}\n" +
@@ -206,7 +206,7 @@ describe('Classes', function () {
     );
   });
 
-  it('should ignore Object.defineProperty with arrow-function', function () {
+  it('should ignore Object.defineProperty with arrow-function', () => {
     expectNoChange(
       "function MyClass() {\n" +
       "}\n" +

@@ -1,6 +1,6 @@
-var expect = require('chai').expect;
-var Transformer = require('./../../lib/transformer');
-var transformer = new Transformer({arrow: true});
+const expect = require('chai').expect;
+import Transformer from './../../lib/transformer';
+const transformer = new Transformer({arrow: true});
 
 function test(script) {
   return transformer.run(script);
@@ -10,82 +10,82 @@ function expectNoChange(script) {
   expect(test(script)).to.equal(script);
 }
 
-describe('Callback to Arrow transformation', function () {
+describe('Callback to Arrow transformation', () => {
 
-  it('should convert simple callbacks', function () {
-    var script = 'setTimeout(function() { return 2; });';
+  it('should convert simple callbacks', () => {
+    const script = 'setTimeout(function() { return 2; });';
 
     expect(test(script)).to.equal('setTimeout(() => 2);');
   });
 
-  it('should convert callbacks with a single argument', function () {
-    var script = 'a(function(b) { return b; });';
+  it('should convert callbacks with a single argument', () => {
+    const script = 'a(function(b) { return b; });';
 
     expect(test(script)).to.equal('a(b => b);');
   });
 
-  it('should convert callbacks with multiple arguments', function () {
-    var script = 'a(function(b, c) { return b; });';
+  it('should convert callbacks with multiple arguments', () => {
+    const script = 'a(function(b, c) { return b; });';
 
     expect(test(script)).to.equal('a((b, c) => b);');
   });
 
-  it('should convert function assignment', function () {
-    var script = 'x = function () { foo(); };';
+  it('should convert function assignment', () => {
+    const script = 'x = function () { foo(); };';
 
     expect(test(script)).to.equal('x = () => { foo(); };');
   });
 
-  it('should convert immediate function invocation', function () {
-    var script = '(function () { foo(); }());';
+  it('should convert immediate function invocation', () => {
+    const script = '(function () { foo(); }());';
 
     expect(test(script)).to.equal('((() => { foo(); })());');
   });
 
-  it('should convert returning of a function', function () {
-    var script = 'function foo () { return function() { foo(); }; }';
+  it('should convert returning of a function', () => {
+    const script = 'function foo () { return function() { foo(); }; }';
 
     expect(test(script)).to.equal('function foo () { return () => { foo(); }; }');
   });
 
-  it('should convert functions using `this` keyword inside a nested function', function () {
-    var script = 'a(function () { return function() { this; }; });';
+  it('should convert functions using `this` keyword inside a nested function', () => {
+    const script = 'a(function () { return function() { this; }; });';
 
     expect(test(script)).to.equal('a(() => function() { this; });');
   });
 
-  it('should convert functions using `arguments` inside a nested function', function () {
-    var script = 'a(function () { return function() { arguments; }; });';
+  it('should convert functions using `arguments` inside a nested function', () => {
+    const script = 'a(function () { return function() { arguments; }; });';
 
     expect(test(script)).to.equal('a(() => function() { arguments; });');
   });
 
-  it('should preserve default parameters', function () {
-    var script = 'foo(function (a=1, b=2, c) { });';
+  it('should preserve default parameters', () => {
+    const script = 'foo(function (a=1, b=2, c) { });';
 
     expect(test(script)).to.equal('foo((a=1, b=2, c) => { });');
   });
 
-  it('should preserve rest parameters', function () {
-    var script = 'foo(function (x, ...xs) { });';
+  it('should preserve rest parameters', () => {
+    const script = 'foo(function (x, ...xs) { });';
 
     expect(test(script)).to.equal('foo((x, ...xs) => { });');
   });
 
 
-  it('should not convert function declarations', function () {
+  it('should not convert function declarations', () => {
     expectNoChange('function foo() {};');
   });
 
-  it('should not convert named function expressions', function () {
+  it('should not convert named function expressions', () => {
     expectNoChange('f = function fact(n) { return n * fact(n-1); };');
   });
 
-  it('should not convert generators', function () {
+  it('should not convert generators', () => {
     expectNoChange('f = function* (n) { };');
   });
 
-  it('should not convert functions using `this` keyword', function () {
+  it('should not convert functions using `this` keyword', () => {
     expectNoChange('a(function () { this; });');
     expectNoChange('a(function () { this.x = 2; });');
     expectNoChange('a(function () { this.bar(); });');
@@ -96,7 +96,7 @@ describe('Callback to Arrow transformation', function () {
     expectNoChange('a(function () { for (x of foo) { bar(this); } });');
   });
 
-  it('should not convert functions using `arguments`', function () {
+  it('should not convert functions using `arguments`', () => {
     expectNoChange('a(function () { arguments; });');
     expectNoChange('a(function () { foo(arguments); });');
     expectNoChange('a(function () { return arguments[0] + 1; });');
@@ -104,12 +104,12 @@ describe('Callback to Arrow transformation', function () {
     expectNoChange('a(function () { if (x) foo(arguments); });');
   });
 
-  it('should not convert object methods', function () {
+  it('should not convert object methods', () => {
     expectNoChange('({foo() {}});');
     expectNoChange('({foo: function() {}});');
   });
 
-  it('should not convert class methods', function () {
+  it('should not convert class methods', () => {
     expectNoChange(
       'class Foo {\n' +
       '  bar() {}\n' +
