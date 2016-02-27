@@ -10,7 +10,7 @@ describe('Removal of "use strict"', () => {
 
   it('should remove statement with "use strict" string', () => {
     expect(test('"use strict";')).to.equal('');
-    expect(test("'use strict';")).to.equal('');
+    expect(test('\'use strict\';')).to.equal('');
   });
 
   it('should remove the whole line where "use strict" used to be', () => {

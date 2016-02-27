@@ -1,20 +1,20 @@
 import {expect} from 'chai';
-import fs from "fs";
+import fs from 'fs';
 import {exec} from 'child_process';
 
 describe('Smoke test for the executable script', () => {
   beforeEach(() => {
     fs.writeFileSync(
-      "test/test-data.js",
+      'test/test-data.js',
       'var foo = 10;\n' +
       '[1, 2, 3].map(function(x) { return x*x });'
     );
   });
 
   afterEach(() => {
-    fs.unlinkSync("test/test-data.js");
-    if (fs.existsSync("test/output.js")) {
-      fs.unlinkSync("test/output.js");
+    fs.unlinkSync('test/test-data.js');
+    if (fs.existsSync('test/output.js')) {
+      fs.unlinkSync('test/output.js');
     }
   });
 

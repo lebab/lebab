@@ -8,17 +8,17 @@ grunt.initConfig({
     },
     dist: {
       files:  [{
-        "expand": true,
-        "cwd": "src/",
-        "src": ["**/*.js"],
-        "dest": "lib/",
-        "ext": ".js"
+        'expand': true,
+        'cwd': 'src/',
+        'src': ['**/*.js'],
+        'dest': 'lib/',
+        'ext': '.js'
       }, {
-        "expand": true,
-        "cwd": "test/",
-        "src": ["**/*.js"],
-        "dest": "test-lib/",
-        "ext": ".js"
+        'expand': true,
+        'cwd': 'test/',
+        'src': ['**/*.js'],
+        'dest': 'test-lib/',
+        'ext': '.js'
       }]
     }
   },

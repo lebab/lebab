@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 require('babel/polyfill');
-var parseCommandLineOptions = require("../lib/parse-command-line-options");
+var parseCommandLineOptions = require('../lib/parse-command-line-options');
 var Transformer = require('./../lib/transformer');
 var io = require('./../lib/io');
 var options;
