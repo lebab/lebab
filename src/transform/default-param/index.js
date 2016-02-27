@@ -1,9 +1,9 @@
 import estraverse from 'estraverse';
-import multiReplaceStatement from '../utils/multi-replace-statement';
-import matchOrAssignment from '../default-param/match-or-assignment';
-import matchTernaryAssignment from '../default-param/match-ternary-assignment';
-import matchEqualsUndefinedAssignment from '../default-param/match-equals-undefined-assignment';
-import matchTypeofUndefinedAssignment from '../default-param/match-typeof-undefined-assignment';
+import multiReplaceStatement from '../../utils/multi-replace-statement';
+import matchOrAssignment from './match-or-assignment';
+import matchTernaryAssignment from './match-ternary-assignment';
+import matchEqualsUndefinedAssignment from './match-equals-undefined-assignment';
+import matchTypeofUndefinedAssignment from './match-typeof-undefined-assignment';
 
 export default function (ast) {
   estraverse.replace(ast, {

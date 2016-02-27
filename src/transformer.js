@@ -6,7 +6,7 @@ import classTransform from './transform/class';
 import templateStringTransform from './transform/template-string';
 import arrowFunctionTransform from './transform/arrow-functions';
 import letTransform from './transform/let';
-import defaultParamTransform from './transform/default-parameters';
+import defaultParamTransform from './transform/default-param';
 import objectMethodsTransform from './transform/object-methods';
 import objectShorthandsTransform from './transform/object-shorthands';
 import noStrictTransform from './transform/no-strict';
