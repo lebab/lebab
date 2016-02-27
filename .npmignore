@@ -3,3 +3,8 @@
 .*
 Gruntfile.js
 /src
+/test
+/test-lib
+.editorconfig
+.jshintrc
+.travis.yml
