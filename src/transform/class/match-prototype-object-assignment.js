@@ -1,7 +1,7 @@
-import _ from 'lodash';
+import matchesAst from '../../utils/matches-ast';
 import isFunctionProperty from './is-function-property';
 
-const isPrototypeObjectAssignment = _.matches({
+const isPrototypeObjectAssignment = matchesAst({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
@@ -19,8 +19,8 @@ const isPrototypeObjectAssignment = _.matches({
     },
     operator: '=',
     right: {
-      type: 'ObjectExpression'
-      // properties: <properties>
+      type: 'ObjectExpression',
+      properties: (props) => props.every(isFunctionProperty)
     }
   }
 });
@@ -54,16 +54,14 @@ export default function (node) {
       }
     } = node;
 
-    if (properties.every(isFunctionProperty)) {
-      return {
-        className,
-        methods: properties.map(prop => {
-          return {
-            methodName: prop.key.name,
-            methodNode: prop.value
-          };
-        })
-      };
-    }
+    return {
+      className,
+      methods: properties.map(prop => {
+        return {
+          methodName: prop.key.name,
+          methodNode: prop.value
+        };
+      })
+    };
   }
 }
