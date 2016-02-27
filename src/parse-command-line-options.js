@@ -1,7 +1,7 @@
-var program = require('commander');
-var pkg = require('../package.json');
-var fs = require('fs');
-var _ = require('lodash');
+import program from 'commander';
+import pkg from '../package.json';
+import fs from 'fs';
+import _ from 'lodash';
 
 program.usage('[options] <file>');
 program.description(`${pkg.description}
@@ -42,10 +42,10 @@ export default function parseCommandLineOptions(argv) {
 
 function getInputFile() {
   if (program.args.length > 1) {
-    throw 'Only one input file allowed, but ' + program.args.length + ' given instead.';
+    throw `Only one input file allowed, but ${program.args.length} given instead.`;
   }
   if (program.args[0] && !fs.existsSync(program.args[0])) {
-    throw 'File ' + program.args[0] + ' does not exist.';
+    throw `File ${program.args[0]} does not exist.`;
   }
   return program.args[0];
 }
@@ -56,7 +56,7 @@ function getTransformers() {
   }
 
   // All enabled by default
-  var transformers = {
+  let transformers = {
     'class': true,
     'template': true,
     'arrow': true,
@@ -84,9 +84,9 @@ function getTransformers() {
 }
 
 function setTransformersEnabled(transformers, names, enabled) {
-  names.forEach(function (name) {
+  names.forEach(name => {
     if (!transformers.hasOwnProperty(name)) {
-      throw 'Unknown transformer "' + name + '".';
+      throw `Unknown transformer "${name}".`;
     }
     transformers[name] = enabled;
   });
