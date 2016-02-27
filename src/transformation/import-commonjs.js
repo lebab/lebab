@@ -7,34 +7,37 @@ import ImportSpecifier from '../syntax/import-specifier.js';
 import ImportDefaultSpecifier from '../syntax/import-default-specifier.js';
 import VariableDeclaration from '../syntax/variable-declaration.js';
 
-export default
-  function (ast) {
-    estraverse.replace(ast, {
-      enter: traverse
+export default function(ast) {
+  estraverse.replace(ast, {
+    enter(node, parent) {
+      if (isVarWithRequireCalls(node) && parent.type === 'Program') {
+        multiReplaceStatement(
+          parent,
+          node,
+          node.declarations.map(dec => varToImport(dec, node.kind))
+        );
+      }
+    }
+  });
+}
+
+// Converts VariableDeclarator to ImportDeclaration when we recognize it
+// as such, otherwise converts it to full VariableDeclaration (of original kind).
+function varToImport(dec, kind) {
+  if (isDefaultRequire(dec)) {
+    return new ImportDeclaration({
+      specifier: new ImportDefaultSpecifier(dec.id),
+      source: dec.init.arguments[0],
     });
   }
-
-function traverse(node, parent) {
-  if (isVarWithRequireCalls(node) && parent.type === 'Program') {
-    const declarations = node.declarations.map(dec => {
-      if (isDefaultRequire(dec)) {
-        return new ImportDeclaration({
-          specifier: new ImportDefaultSpecifier(dec.id),
-          source: dec.init.arguments[0],
-        });
-      }
-      else if (isNamedRequire(dec)) {
-        return new ImportDeclaration({
-          specifier: new ImportSpecifier({local: dec.id, imported: dec.init.property}),
-          source: dec.init.object.arguments[0],
-        });
-      }
-      else {
-        return new VariableDeclaration(node.kind, [dec]);
-      }
+  else if (isNamedRequire(dec)) {
+    return new ImportDeclaration({
+      specifier: new ImportSpecifier({local: dec.id, imported: dec.init.property}),
+      source: dec.init.object.arguments[0],
     });
-
-    multiReplaceStatement(parent, node, declarations);
+  }
+  else {
+    return new VariableDeclaration(kind, [dec]);
   }
 }
 
