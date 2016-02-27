@@ -1,5 +1,5 @@
 import estraverse from 'estraverse';
-import typeChecker from '../utils/type-checker.js';
+import typeChecker from '../utils/type-checker';
 
 export default
   function (ast) {

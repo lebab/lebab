@@ -6,7 +6,7 @@ function test(script) {
   return transformer.run(script);
 }
 
-describe('Template string transformation', () => {
+describe('Template string', () => {
 
   it('shouldn\'t convert non-concatenated strings', () => {
     const script = 'var result = "test";';

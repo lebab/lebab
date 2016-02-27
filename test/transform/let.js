@@ -10,7 +10,7 @@ function expectNoChange(script) {
   expect(test(script)).to.equal(script);
 }
 
-describe('Let/const transformation', () => {
+describe('Let/const', () => {
 
   describe('with uninitialized variable', () => {
     it('should use let when never used afterwards', () => {

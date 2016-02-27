@@ -1,5 +1,5 @@
-import BlockScope from '../scope/block-scope.js';
-import FunctionScope from '../scope/function-scope.js';
+import BlockScope from '../scope/block-scope';
+import FunctionScope from '../scope/function-scope';
 
 /**
  * Keeps track of the current function/block scope.

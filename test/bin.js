@@ -54,7 +54,7 @@ describe('Smoke test for the executable script', () => {
     it('exits with error message', done => {
       exec('node ./bin/index.js --enable blah test/test-data.js', (error, stdout, stderr) => {
         expect(error).not.to.equal(null);
-        expect(stderr).to.equal('Unknown transformer "blah".\n');
+        expect(stderr).to.equal('Unknown transform "blah".\n');
         expect(stdout).to.equal('');
 
         expect(fs.existsSync('test/output.js')).to.equal(false);

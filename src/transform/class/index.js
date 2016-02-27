@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import estraverse from 'estraverse';
-import PotentialClass from './../classes/potential-class.js';
-import PotentialMethod from './../classes/potential-method.js';
-import matchFunctionDeclaration from './../classes/match-function-declaration.js';
-import matchFunctionVar from './../classes/match-function-var.js';
-import matchPrototypeFunctionAssignment from './../classes/match-prototype-function-assignment.js';
-import matchPrototypeObjectAssignment from './../classes/match-prototype-object-assignment.js';
-import matchObjectDefinePropertyCall from './../classes/match-object-define-property-call.js';
+import PotentialClass from './potential-class';
+import PotentialMethod from './potential-method';
+import matchFunctionDeclaration from './match-function-declaration';
+import matchFunctionVar from './match-function-var';
+import matchPrototypeFunctionAssignment from './match-prototype-function-assignment';
+import matchPrototypeObjectAssignment from './match-prototype-object-assignment';
+import matchObjectDefinePropertyCall from './match-object-define-property-call';
 
 export default
 function (ast) {

@@ -1,4 +1,4 @@
-import {isFunction} from './function-type.js';
+import {isFunction} from './function-type';
 
 /**
  * True when node is variable assignment expression (like x += 1).

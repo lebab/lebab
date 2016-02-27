@@ -13,5 +13,5 @@ catch (error) {
   process.exit(2);
 }
 
-var transformer = new Transformer(options.transformers);
+var transformer = new Transformer(options.transforms);
 io.write(options.outFile, transformer.run(io.read(options.inFile)));

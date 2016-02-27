@@ -1,7 +1,7 @@
 import estraverse from 'estraverse';
-import esutils from 'esutils/lib/ast.js';
-import TemplateLiteral from './../syntax/template-literal.js';
-import typeChecker from './../utils/type-checker.js';
+import esutils from 'esutils/lib/ast';
+import TemplateLiteral from './../syntax/template-literal';
+import typeChecker from './../utils/type-checker';
 import _ from 'lodash';
 
 export default

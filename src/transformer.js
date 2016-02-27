@@ -1,46 +1,46 @@
 import _ from 'lodash';
 import recast from 'recast';
 
-// Transformers
-import classTransformation from './transformation/classes.js';
-import templateStringTransformation from './transformation/template-string.js';
-import arrowFunctionTransformation from './transformation/arrow-functions.js';
-import letTransformation from './transformation/let.js';
-import defaultParamTransformation from './transformation/default-parameters.js';
-import objectMethodsTransformation from './transformation/object-methods.js';
-import objectShorthandsTransformation from './transformation/object-shorthands.js';
-import noStrictTransformation from './transformation/no-strict.js';
-import commonjsTransformation from './transformation/commonjs.js';
+// Transforms
+import classTransform from './transform/class';
+import templateTransform from './transform/template';
+import arrowTransform from './transform/arrow';
+import letTransform from './transform/let';
+import defaultParamTransform from './transform/default-param';
+import objMethodTransform from './transform/obj-method';
+import objShorthandTransform from './transform/obj-shorthand';
+import noStrictTransform from './transform/no-strict';
+import commonjsTransform from './transform/commonjs';
 
-const tranformersMap = {
-  'class': classTransformation,
-  'template': templateStringTransformation,
-  'arrow': arrowFunctionTransformation,
-  'let': letTransformation,
-  'default-param': defaultParamTransformation,
-  'obj-method': objectMethodsTransformation,
-  'obj-shorthand': objectShorthandsTransformation,
-  'no-strict': noStrictTransformation,
-  'commonjs': commonjsTransformation,
+const transformsMap = {
+  'class': classTransform,
+  'template': templateTransform,
+  'arrow': arrowTransform,
+  'let': letTransform,
+  'default-param': defaultParamTransform,
+  'obj-method': objMethodTransform,
+  'obj-shorthand': objShorthandTransform,
+  'no-strict': noStrictTransform,
+  'commonjs': commonjsTransform,
 };
 
 /**
- * Runs transformers on code.
+ * Runs transforms on code.
  */
 export default
 class Transformer {
   /**
-   * @param {Object} transformers List of transformers to enable
+   * @param {Object} transforms List of transforms to enable
    */
-  constructor(transformers={}) {
-    this.transformers = _(transformers)
+  constructor(transforms={}) {
+    this.transforms = _(transforms)
       .pickBy(enabled => enabled)
-      .map((enabled, key) => tranformersMap[key])
+      .map((enabled, key) => transformsMap[key])
       .value();
   }
 
   /**
-   * Tranforms code using all configured transformers.
+   * Tranforms code using all configured transforms.
    *
    * @param {String} code Input ES5 code
    * @return {String} Output ES6 code
@@ -49,7 +49,7 @@ class Transformer {
     return this.ignoringHashBangComment(code, (js) => {
       const ast = recast.parse(js);
 
-      this.transformers.forEach(transformer => {
+      this.transforms.forEach(transformer => {
         transformer(ast.program);
       });
 

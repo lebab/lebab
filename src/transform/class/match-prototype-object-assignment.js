@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import isFunctionProperty from './is-function-property.js';
+import isFunctionProperty from './is-function-property';
 
 const isPrototypeObjectAssignment = _.matches({
   type: 'ExpressionStatement',

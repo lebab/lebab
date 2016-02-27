@@ -1,4 +1,4 @@
-import multiReplaceStatement from './../utils/multi-replace-statement.js';
+import multiReplaceStatement from './../../utils/multi-replace-statement';
 
 /**
  * Represents a potential class method to be created.

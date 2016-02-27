@@ -1,4 +1,4 @@
-import Scope from './scope.js';
+import Scope from './scope';
 
 /**
  * Container for block-scoped variables.

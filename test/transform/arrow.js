@@ -10,7 +10,7 @@ function expectNoChange(script) {
   expect(test(script)).to.equal(script);
 }
 
-describe('Callback to Arrow transformation', () => {
+describe('Arrow functions', () => {
 
   it('should convert simple callbacks', () => {
     const script = 'setTimeout(function() { return 2; });';

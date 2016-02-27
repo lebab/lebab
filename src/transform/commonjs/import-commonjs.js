@@ -1,11 +1,11 @@
 import estraverse from 'estraverse';
-import typeChecker from '../utils/type-checker.js';
-import matchesAst from '../utils/matches-ast.js';
-import multiReplaceStatement from '../utils/multi-replace-statement.js';
-import ImportDeclaration from '../syntax/import-declaration.js';
-import ImportSpecifier from '../syntax/import-specifier.js';
-import ImportDefaultSpecifier from '../syntax/import-default-specifier.js';
-import VariableDeclaration from '../syntax/variable-declaration.js';
+import typeChecker from '../../utils/type-checker';
+import matchesAst from '../../utils/matches-ast';
+import multiReplaceStatement from '../../utils/multi-replace-statement';
+import ImportDeclaration from '../../syntax/import-declaration';
+import ImportSpecifier from '../../syntax/import-specifier';
+import ImportDefaultSpecifier from '../../syntax/import-default-specifier';
+import VariableDeclaration from '../../syntax/variable-declaration';
 
 export default function(ast) {
   estraverse.replace(ast, {

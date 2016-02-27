@@ -36,7 +36,7 @@ export default function parseCommandLineOptions(argv) {
   return {
     inFile: getInputFile(),
     outFile: program.outFile,
-    transformers: getTransformers(),
+    transforms: getTransforms(),
   };
 }
 
@@ -50,13 +50,13 @@ function getInputFile() {
   return program.args[0];
 }
 
-function getTransformers() {
+function getTransforms() {
   if (program.enable && program.disable) {
     throw 'Options --enable and --disable can not be used together.';
   }
 
   // All enabled by default
-  let transformers = {
+  let transforms = {
     'class': true,
     'template': true,
     'arrow': true,
@@ -70,24 +70,24 @@ function getTransformers() {
 
   // When --enable used turn off everything besides the specified tranformers
   if (program.enable) {
-    transformers = _.mapValues(transformers, _.constant(false));
+    transforms = _.mapValues(transforms, _.constant(false));
 
-    setTransformersEnabled(transformers, program.enable, true);
+    setTransformsEnabled(transforms, program.enable, true);
   }
 
-  // When --disable used, disable the specific transformers
+  // When --disable used, disable the specific transforms
   if (program.disable) {
-    setTransformersEnabled(transformers, program.disable, false);
+    setTransformsEnabled(transforms, program.disable, false);
   }
 
-  return transformers;
+  return transforms;
 }
 
-function setTransformersEnabled(transformers, names, enabled) {
+function setTransformsEnabled(transforms, names, enabled) {
   names.forEach(name => {
-    if (!transformers.hasOwnProperty(name)) {
-      throw `Unknown transformer "${name}".`;
+    if (!transforms.hasOwnProperty(name)) {
+      throw `Unknown transform "${name}".`;
     }
-    transformers[name] = enabled;
+    transforms[name] = enabled;
   });
 }

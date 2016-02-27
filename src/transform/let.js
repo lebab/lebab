@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import estraverse from 'estraverse';
-import * as functionType from '../utils/function-type.js';
-import * as variableType from '../utils/variable-type.js';
-import multiReplaceStatement from '../utils/multi-replace-statement.js';
-import ScopeManager from '../scope/scope-manager.js';
-import VariableMarker from '../scope/variable-marker.js';
-import FunctionHoister from '../scope/function-hoister.js';
-import VariableDeclaration from '../syntax/variable-declaration.js';
+import * as functionType from '../utils/function-type';
+import * as variableType from '../utils/variable-type';
+import multiReplaceStatement from '../utils/multi-replace-statement';
+import ScopeManager from '../scope/scope-manager';
+import VariableMarker from '../scope/variable-marker';
+import FunctionHoister from '../scope/function-hoister';
+import VariableDeclaration from '../syntax/variable-declaration';
 
 let scopeManager;
 let variableMarker;
@@ -112,7 +112,7 @@ function leaveFunction() {
   scopeManager.leaveScope();
 }
 
-// This is where the actual transformation happens
+// This is where the actual transform happens
 function transformVarsToLetOrConst() {
   getFunctionVariableGroups().forEach(group => {
     const commonKind = group.getCommonKind();
