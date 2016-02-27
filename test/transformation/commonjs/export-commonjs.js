@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import Transformer from './../../lib/transformer';
+import Transformer from './../../../lib/transformer';
 const transformer = new Transformer({commonjs: true});
 
 function test(script) {
