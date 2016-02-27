@@ -82,6 +82,22 @@ describe('Import CommonJS', () => {
     );
   });
 
+  it('should convert foo = require().foo to named import', () => {
+    expect(test(
+      'var foo = require("foolib").foo;'
+    )).to.equal(
+      'import {foo} from "foolib";'
+    );
+  });
+
+  it('should convert bar = require().foo to aliased named import', () => {
+    expect(test(
+      'var bar = require("foolib").foo;'
+    )).to.equal(
+      'import {foo as bar} from "foolib";'
+    );
+  });
+
   // Not yet supported things...
 
   it('should not convert assignment of require() call', () => {
@@ -90,10 +106,6 @@ describe('Import CommonJS', () => {
 
   it('should not convert unassigned require() call', () => {
     expectNoChange('require("foo");');
-  });
-
-  it('should not convert require() with property extraction', () => {
-    expectNoChange('var foo = require("foolib").foo;');
   });
 
   it('should not convert require() with object destruction', () => {
