@@ -2,15 +2,15 @@ import _ from 'lodash';
 import recast from 'recast';
 
 // Transformers
-import classTransformation from './transformation/classes';
-import templateStringTransformation from './transformation/template-string';
-import arrowFunctionTransformation from './transformation/arrow-functions';
-import letTransformation from './transformation/let';
-import defaultParamTransformation from './transformation/default-parameters';
-import objectMethodsTransformation from './transformation/object-methods';
-import objectShorthandsTransformation from './transformation/object-shorthands';
-import noStrictTransformation from './transformation/no-strict';
-import commonjsTransformation from './transformation/commonjs';
+import classTransformation from './transform/classes';
+import templateStringTransformation from './transform/template-string';
+import arrowFunctionTransformation from './transform/arrow-functions';
+import letTransformation from './transform/let';
+import defaultParamTransformation from './transform/default-parameters';
+import objectMethodsTransformation from './transform/object-methods';
+import objectShorthandsTransformation from './transform/object-shorthands';
+import noStrictTransformation from './transform/no-strict';
+import commonjsTransformation from './transform/commonjs';
 
 const tranformersMap = {
   'class': classTransformation,
