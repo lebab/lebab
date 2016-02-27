@@ -49,7 +49,7 @@ describe('Command Line Interface', () => {
 
   it('by default enables all transforms', () => {
     const options = parse([]);
-    expect(options.transformers).to.deep.equal({
+    expect(options.transforms).to.deep.equal({
       'class': true,
       'template': true,
       'arrow': true,
@@ -62,9 +62,9 @@ describe('Command Line Interface', () => {
     });
   });
 
-  it('when --enable=let,no-strict,commonjs given, enables only these transformers', () => {
+  it('when --enable=let,no-strict,commonjs given, enables only these transforms', () => {
     const options = parse(['--enable', 'let,no-strict,commonjs']);
-    expect(options.transformers).to.deep.equal({
+    expect(options.transforms).to.deep.equal({
       'class': false,
       'template': false,
       'arrow': false,
@@ -80,12 +80,12 @@ describe('Command Line Interface', () => {
   it('when --enable=unknown given, raises error', () => {
     expect(() => {
       parse(['--enable', 'unknown']);
-    }).to.throw('Unknown transformer "unknown".');
+    }).to.throw('Unknown transform "unknown".');
   });
 
-  it('when --disable=let,no-strict,commonjs given, disables the specified transformers', () => {
+  it('when --disable=let,no-strict,commonjs given, disables the specified transforms', () => {
     const options = parse(['--disable', 'let,no-strict,commonjs']);
-    expect(options.transformers).to.deep.equal({
+    expect(options.transforms).to.deep.equal({
       'class': true,
       'template': true,
       'arrow': true,
@@ -101,7 +101,7 @@ describe('Command Line Interface', () => {
   it('when --disable=unknown given, raises error', () => {
     expect(() => {
       parse(['--disable', 'unknown']);
-    }).to.throw('Unknown transformer "unknown".');
+    }).to.throw('Unknown transform "unknown".');
   });
 
   it('when --enable and --disable used together, raises error', () => {

@@ -112,7 +112,7 @@ function leaveFunction() {
   scopeManager.leaveScope();
 }
 
-// This is where the actual transformation happens
+// This is where the actual transform happens
 function transformVarsToLetOrConst() {
   getFunctionVariableGroups().forEach(group => {
     const commonKind = group.getCommonKind();
