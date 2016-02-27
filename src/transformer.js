@@ -12,7 +12,7 @@ import objectShorthandsTransformation from './transform/object-shorthands';
 import noStrictTransformation from './transform/no-strict';
 import commonjsTransformation from './transform/commonjs';
 
-const tranformersMap = {
+const transformsMap = {
   'class': classTransformation,
   'template': templateStringTransformation,
   'arrow': arrowFunctionTransformation,
@@ -35,7 +35,7 @@ class Transformer {
   constructor(transformers={}) {
     this.transformers = _(transformers)
       .pickBy(enabled => enabled)
-      .map((enabled, key) => tranformersMap[key])
+      .map((enabled, key) => transformsMap[key])
       .value();
   }
 
