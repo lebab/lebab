@@ -1,4 +1,4 @@
-const expect = require('chai').expect;
+import {expect} from 'chai';
 import Transformer from './../../lib/transformer';
 const transformer = new Transformer({class: true});
 

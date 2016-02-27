@@ -1,4 +1,4 @@
-const expect = require('chai').expect;
+import {expect} from 'chai';
 import commander from 'commander';
 import parseCommandLineOptions from './../lib/parse-command-line-options.js';
 

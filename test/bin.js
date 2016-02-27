@@ -1,6 +1,6 @@
-const expect = require('chai').expect;
+import {expect} from 'chai';
 import fs from "fs";
-const exec = require('child_process').exec;
+import {exec} from 'child_process';
 
 describe('Smoke test for the executable script', () => {
   beforeEach(() => {
