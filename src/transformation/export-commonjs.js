@@ -1,5 +1,5 @@
 import estraverse from 'estraverse';
-import ExportDefaultDeclaration from '../syntax/export-default-declaration.js';
+import ExportDefaultDeclaration from '../syntax/export-default-declaration';
 
 export default
   function (ast) {

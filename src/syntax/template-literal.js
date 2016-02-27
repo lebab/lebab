@@ -1,6 +1,6 @@
-import BaseSyntax from './base.js';
-import TemplateElement from './template-element.js';
-import typeChecker from './../utils/type-checker.js';
+import BaseSyntax from './base';
+import TemplateElement from './template-element';
+import typeChecker from './../utils/type-checker';
 
 /**
  * The class to define the TemplateLiteral syntax

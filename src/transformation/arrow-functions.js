@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import estraverse from 'estraverse';
-import ArrowFunctionExpression from './../syntax/arrow-function-expression.js';
+import ArrowFunctionExpression from './../syntax/arrow-function-expression';
 
 export default function (ast) {
   estraverse.replace(ast, {

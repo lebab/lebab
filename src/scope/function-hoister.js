@@ -1,7 +1,7 @@
 import estraverse from 'estraverse';
-import * as functionType from '../utils/function-type.js';
-import Variable from '../scope/variable.js';
-import VariableGroup from '../scope/variable-group.js';
+import * as functionType from '../utils/function-type';
+import Variable from '../scope/variable';
+import VariableGroup from '../scope/variable-group';
 
 /**
  * Registers all variables defined inside a function.

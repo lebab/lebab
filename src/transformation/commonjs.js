@@ -1,5 +1,5 @@
-import importCommonjs from './import-commonjs.js';
-import exportCommonjs from './export-commonjs.js';
+import importCommonjs from './import-commonjs';
+import exportCommonjs from './export-commonjs';
 
 export default function(ast) {
   importCommonjs(ast);

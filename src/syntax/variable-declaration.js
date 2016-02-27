@@ -1,4 +1,4 @@
-import BaseSyntax from './base.js';
+import BaseSyntax from './base';
 
 /**
  * The class to define the VariableDeclaration syntax
