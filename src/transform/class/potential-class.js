@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import multiReplaceStatement from './../utils/multi-replace-statement';
+import multiReplaceStatement from './../../utils/multi-replace-statement';
 
 /**
  * Represents a potential class to be created.

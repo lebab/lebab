@@ -2,7 +2,7 @@ import _ from 'lodash';
 import recast from 'recast';
 
 // Transforms
-import classTransform from './transform/classes';
+import classTransform from './transform/class';
 import templateStringTransform from './transform/template-string';
 import arrowFunctionTransform from './transform/arrow-functions';
 import letTransform from './transform/let';
