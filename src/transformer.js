@@ -3,23 +3,23 @@ import recast from 'recast';
 
 // Transforms
 import classTransform from './transform/class';
-import templateStringTransform from './transform/template-string';
-import arrowFunctionTransform from './transform/arrow-functions';
+import templateTransform from './transform/template';
+import arrowTransform from './transform/arrow';
 import letTransform from './transform/let';
 import defaultParamTransform from './transform/default-param';
-import objectMethodsTransform from './transform/object-methods';
-import objectShorthandsTransform from './transform/object-shorthands';
+import objMethodTransform from './transform/obj-method';
+import objShorthandTransform from './transform/obj-shorthand';
 import noStrictTransform from './transform/no-strict';
 import commonjsTransform from './transform/commonjs';
 
 const transformsMap = {
   'class': classTransform,
-  'template': templateStringTransform,
-  'arrow': arrowFunctionTransform,
+  'template': templateTransform,
+  'arrow': arrowTransform,
   'let': letTransform,
   'default-param': defaultParamTransform,
-  'obj-method': objectMethodsTransform,
-  'obj-shorthand': objectShorthandsTransform,
+  'obj-method': objMethodTransform,
+  'obj-shorthand': objShorthandTransform,
   'no-strict': noStrictTransform,
   'commonjs': commonjsTransform,
 };
