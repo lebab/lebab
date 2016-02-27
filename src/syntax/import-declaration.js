@@ -2,12 +2,9 @@ import BaseSyntax from './base.js';
 
 /**
  * The class to define the ImportDeclaration syntax
- *
- * @class ImportDeclaration
  */
 export default
 class ImportDeclaration extends BaseSyntax {
-
   /**
    * @param {Object} cfg
    * @param {ImportSpecifier|ImportDefaultSpecifier} cfg.specifier
@@ -18,5 +15,4 @@ class ImportDeclaration extends BaseSyntax {
     this.specifiers = [specifier];
     this.source = source;
   }
-
 }

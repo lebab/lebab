@@ -2,16 +2,12 @@ import BaseSyntax from './base.js';
 
 /**
  * The class to define the ArrowFunctionExpression syntax
- *
- * @class ArrowFunctionExpression
  */
 export default
 class ArrowFunctionExpression extends BaseSyntax {
-
   /**
    * The constructor of ArrowFunctionExpression
    *
-   * @constructor
    * @param {Object} cfg
    * @param {Node} cfg.body
    * @param {Node[]} cfg.params
@@ -28,5 +24,4 @@ class ArrowFunctionExpression extends BaseSyntax {
     this.generator = false;
     this.id = null;
   }
-
 }

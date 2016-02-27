@@ -2,24 +2,17 @@ import BaseSyntax from './base.js';
 
 /**
  * The class to define the TemplateElement syntax
- *
- * @class TemplateElement
  */
 export default
 class TemplateElement extends BaseSyntax {
-
   /**
    * Create a template literal
-   *
-   * @constructor
    */
-    constructor() {
-
+  constructor() {
     super('TemplateElement');
 
     this.value = {raw: '', cooked: ''};
     this.tail = false;
-
   }
 
   // The raw version is as it looks in source, with escapes added
@@ -31,5 +24,4 @@ class TemplateElement extends BaseSyntax {
   setCooked(cooked) {
     this.value.cooked = cooked;
   }
-
 }

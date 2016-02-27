@@ -4,28 +4,20 @@ import typeChecker from './../utils/type-checker.js';
 
 /**
  * The class to define the TemplateLiteral syntax
- *
- * @class TemplateLiteral
  */
 export default
 class TemplateLiteral extends BaseSyntax {
-
   /**
    * Create a template literal
-   *
-   * @constructor
    */
-    constructor() {
-
+  constructor() {
     super('TemplateLiteral');
 
     this.expressions = [];
     this.quasis = [];
-
   }
 
   createFromArray(parts) {
-
     for (let i = 0; i < parts.length; i++) {
       let curr = parts[i];
 
@@ -62,7 +54,6 @@ class TemplateLiteral extends BaseSyntax {
         this.expressions.push(curr);
       }
     }
-
   }
 
   // Strip surrounding quotes, escape backticks and unescape escaped quotes
@@ -72,5 +63,4 @@ class TemplateLiteral extends BaseSyntax {
       .replace(/`/g, '\\`')
       .replace(/\\(['"])/g, '$1');
   }
-
 }
