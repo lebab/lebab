@@ -36,7 +36,10 @@ grunt.initConfig({
       jshintrc: '.jshintrc'
     },
     allFiles: [
-      'src/**/*.js'
+      'src/**/*.js',
+      'test/**/*.js',
+      'bin/*.js',
+      '*.js'
     ]
   },
   clean: {

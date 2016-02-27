@@ -10,12 +10,18 @@
   "latedef": false,
   "newcap": true,
   "noarg": true,
-  "quotmark": "single",
+  "quotmark": false,
   "regexp": true,
   "undef": true,
   "unused": true,
   "strict": false,
   "trailing": true,
   "smarttabs": true,
-  "white": true
+  "white": true,
+  "predef": [
+    "it",
+    "describe",
+    "beforeEach",
+    "afterEach"
+  ]
 }

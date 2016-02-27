@@ -32,13 +32,13 @@ describe('Command Line Interface', () => {
   it('when not-existing <filename> given raises error', () => {
     expect(() => {
       parse(['missing.js']);
-    }).to.throw('File missing.js does not exist.')
+    }).to.throw('File missing.js does not exist.');
   });
 
   it('when more than one <filename> given raises error', () => {
     expect(() => {
       parse(['lib/io.js', 'lib/transformer.js']);
-    }).to.throw('Only one input file allowed, but 2 given instead.')
+    }).to.throw('Only one input file allowed, but 2 given instead.');
   });
 
   it('when --out-file <filename> given writes <filename> and reads STDIN', () => {
