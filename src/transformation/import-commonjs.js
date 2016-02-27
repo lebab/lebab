@@ -3,6 +3,8 @@ import typeChecker from '../utils/type-checker.js';
 import matchesAst from '../utils/matches-ast.js';
 import multiReplaceStatement from '../utils/multi-replace-statement.js';
 import ImportDeclaration from '../syntax/import-declaration.js';
+import ImportSpecifier from '../syntax/import-specifier.js';
+import ImportDefaultSpecifier from '../syntax/import-default-specifier.js';
 import VariableDeclaration from '../syntax/variable-declaration.js';
 
 export default
@@ -15,9 +17,19 @@ export default
 function traverse(node, parent) {
   if (isVarWithRequireCalls(node) && parent.type === 'Program') {
     const declarations = node.declarations.map(dec => {
-      if (isRequireDeclaration(dec)) {
-        return new ImportDeclaration(dec.id, dec.init.arguments[0]);
-      } else {
+      if (isDefaultRequire(dec)) {
+        return new ImportDeclaration({
+          specifier: new ImportDefaultSpecifier(dec.id),
+          source: dec.init.arguments[0],
+        });
+      }
+      else if (isNamedRequire(dec)) {
+        return new ImportDeclaration({
+          specifier: new ImportSpecifier({local: dec.id, imported: dec.init.property}),
+          source: dec.init.object.arguments[0],
+        });
+      }
+      else {
         return new VariableDeclaration(node.kind, [dec]);
       }
     });
@@ -28,22 +40,43 @@ function traverse(node, parent) {
 
 function isVarWithRequireCalls(node) {
   return node.type === 'VariableDeclaration' &&
-    node.declarations.some(isRequireDeclaration);
+    node.declarations.some(dec => isDefaultRequire(dec) || isNamedRequire(dec));
 }
 
+// matches: require(<string>)
+var isRequireCall = matchesAst({
+  type: 'CallExpression',
+  callee: {
+    type: 'Identifier',
+    name: 'require'
+  },
+  arguments: (args) => args.length === 1 && typeChecker.isString(args[0])
+});
+
 // Matches: <ident> = require(<string>);
-var isRequireDeclaration = matchesAst({
+var isDefaultRequire = matchesAst({
+  type: 'VariableDeclarator',
+  id: {
+    type: 'Identifier',
+    // name: <ident>
+  },
+  init: isRequireCall
+});
+
+// Matches: <ident> = require(<string>).<ident>;
+var isNamedRequire = matchesAst({
   type: 'VariableDeclarator',
   id: {
     type: 'Identifier',
     // name: <ident>
   },
   init: {
-    type: 'CallExpression',
-    callee: {
+    type: 'MemberExpression',
+    computed: false,
+    object: isRequireCall,
+    property: {
       type: 'Identifier',
-      name: 'require'
-    },
-    arguments: (args) => args.length === 1 && typeChecker.isString(args[0])
+      // name: <ident>
+    }
   }
 });
