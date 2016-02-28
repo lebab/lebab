@@ -1,12 +1,12 @@
-import _ from 'lodash';
+import {matchesAst, extract} from '../../utils/matches-ast';
 
-const isTypeofUndefinedAssignment = _.matches({
+const matchTypeofUndefinedAssignment = matchesAst({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
     left: {
       type: 'Identifier',
-      // name: <name>
+      name: extract('name')
     },
     operator: '=',
     right: {
@@ -18,22 +18,18 @@ const isTypeofUndefinedAssignment = _.matches({
           operator: 'typeof',
           prefix: true,
           argument: {
-            type: 'Identifier'
-            // name: <name>
+            type: 'Identifier',
+            name: extract('name2')
           }
         },
-        // operator: <operator>
+        operator: extract('operator'),
         right: {
           type: 'Literal',
           value: 'undefined'
         }
       },
-      consequent: {
-        // <consequent>
-      },
-      alternate: {
-        // <alternate>
-      }
+      consequent: extract('consequent'),
+      alternate: extract('alternate')
     }
   }
 });
@@ -51,30 +47,14 @@ const isTypeofUndefinedAssignment = _.matches({
  * @return {Object}
  */
 export default function (node) {
-  if (isTypeofUndefinedAssignment(node)) {
-    const {
-      expression: {
-        left: {name},
-        right: {
-          test: {
-            left: {
-              argument: {name: name2}
-            },
-            operator
-          },
-          consequent,
-          alternate
-        }
-      }
-    } = node;
+  const {name, name2, operator, consequent, alternate} = matchTypeofUndefinedAssignment(node) || {};
 
-    if (name === name2) {
-      if ((operator === '===' || operator === '==') && alternate.type === 'Identifier' && alternate.name === name) {
-        return {name, value: consequent, node};
-      }
-      if ((operator === '!==' || operator === '!=') && consequent.type === 'Identifier' && consequent.name === name) {
-        return {name, value: alternate, node};
-      }
+  if (name === name2) {
+    if ((operator === '===' || operator === '==') && alternate.type === 'Identifier' && alternate.name === name) {
+      return {name, value: consequent, node};
+    }
+    if ((operator === '!==' || operator === '!=') && consequent.type === 'Identifier' && consequent.name === name) {
+      return {name, value: alternate, node};
     }
   }
 }
