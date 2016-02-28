@@ -1,7 +1,7 @@
-import _ from 'lodash';
+import matchesAst from '../utils/matches-ast';
 import estraverse from 'estraverse';
 
-const isTransformableProperty = _.matches({
+const isTransformableProperty = matchesAst({
   type: 'Property',
   value: {
     type: 'FunctionExpression',

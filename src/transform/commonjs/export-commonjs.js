@@ -1,4 +1,5 @@
 import estraverse from 'estraverse';
+import matchesAst from '../../utils/matches-ast';
 import ExportDefaultDeclaration from '../../syntax/export-default-declaration';
 
 export default
@@ -14,20 +15,23 @@ function traverse(node, parent) {
   }
 }
 
-function isModuleExportsAssignment(node) {
-  return node.type === 'ExpressionStatement' &&
-    node.expression.type === 'AssignmentExpression' &&
-    node.expression.operator === '=' &&
-    isModuleExportsMemberExpression(node.expression.left);
-}
-
-function isModuleExportsMemberExpression(node) {
-  return node.type === 'MemberExpression' &&
-    node.computed === false &&
-    isIdentifier(node.object, 'module') &&
-    isIdentifier(node.property, 'exports');
-}
-
-function isIdentifier(node, name) {
-  return node.type === 'Identifier' && node.name === name;
-}
+// Matches: module.exports = ...
+var isModuleExportsAssignment = matchesAst({
+  type: 'ExpressionStatement',
+  expression: {
+    type: 'AssignmentExpression',
+    operator: '=',
+    left: {
+      type: 'MemberExpression',
+      computed: false,
+      object: {
+        type: 'Identifier',
+        name: 'module'
+      },
+      property: {
+        type: 'Identifier',
+        name: 'exports'
+      }
+    }
+  }
+});

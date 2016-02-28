@@ -1,7 +1,7 @@
-import _ from 'lodash';
+import {matchesAst, extract} from '../../utils/matches-ast';
 import isFunctionProperty from './is-function-property';
 
-const isPrototypeObjectAssignment = _.matches({
+const matchPrototypeObjectAssignment = matchesAst({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
@@ -10,7 +10,7 @@ const isPrototypeObjectAssignment = _.matches({
       computed: false,
       object: {
         type: 'Identifier',
-        // name: <className>
+        name: extract('className')
       },
       property: {
         type: 'Identifier',
@@ -19,8 +19,8 @@ const isPrototypeObjectAssignment = _.matches({
     },
     operator: '=',
     right: {
-      type: 'ObjectExpression'
-      // properties: <properties>
+      type: 'ObjectExpression',
+      properties: extract('properties', props => props.every(isFunctionProperty))
     }
   }
 });
@@ -42,28 +42,16 @@ const isPrototypeObjectAssignment = _.matches({
  * @return {Object}
  */
 export default function (node) {
-  if (isPrototypeObjectAssignment(node)) {
-    const {
-      expression: {
-        left: {
-          object: {
-            name: className
-          }
-        },
-        right: {properties}
-      }
-    } = node;
-
-    if (properties.every(isFunctionProperty)) {
-      return {
-        className,
-        methods: properties.map(prop => {
-          return {
-            methodName: prop.key.name,
-            methodNode: prop.value
-          };
-        })
-      };
-    }
+  let m;
+  if ((m = matchPrototypeObjectAssignment(node))) {
+    return {
+      className: m.className,
+      methods: m.properties.map(prop => {
+        return {
+          methodName: prop.key.name,
+          methodNode: prop.value
+        };
+      })
+    };
   }
 }

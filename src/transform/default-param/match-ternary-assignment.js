@@ -1,27 +1,25 @@
-import _ from 'lodash';
+import {matchesAst, extract} from '../../utils/matches-ast';
 
-const isTernaryAssignment = _.matches({
+const matchTernaryAssignment = matchesAst({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
     left: {
       type: 'Identifier',
-      // name: <name>
+      name: extract('name')
     },
     operator: '=',
     right: {
       type: 'ConditionalExpression',
       test: {
         type: 'Identifier',
-        // name: <name>
+        name: extract('name2')
       },
       consequent: {
         type: 'Identifier',
-        // name: <name>
+        name: extract('name3')
       },
-      alternate: {
-        // <value>
-      }
+      alternate: extract('value')
     }
   }
 });
@@ -39,20 +37,9 @@ const isTernaryAssignment = _.matches({
  * @return {Object}
  */
 export default function (node) {
-  if (isTernaryAssignment(node)) {
-    const {
-      expression: {
-        left: {name: name},
-        right: {
-          test: {name: name2},
-          consequent: {name: name3},
-          alternate: value
-        }
-      }
-    } = node;
+  const {name, name2, name3, value} = matchTernaryAssignment(node) || {};
 
-    if (name === name2 && name === name3) {
-      return {name, value, node};
-    }
+  if (name && name === name2 && name === name3) {
+    return {name, value, node};
   }
 }

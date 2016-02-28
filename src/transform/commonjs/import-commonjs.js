@@ -1,6 +1,6 @@
 import estraverse from 'estraverse';
 import typeChecker from '../../utils/type-checker';
-import matchesAst from '../../utils/matches-ast';
+import {matchesAst, extract} from '../../utils/matches-ast';
 import multiReplaceStatement from '../../utils/multi-replace-statement';
 import ImportDeclaration from '../../syntax/import-declaration';
 import ImportSpecifier from '../../syntax/import-specifier';
@@ -24,16 +24,17 @@ export default function(ast) {
 // Converts VariableDeclarator to ImportDeclaration when we recognize it
 // as such, otherwise converts it to full VariableDeclaration (of original kind).
 function varToImport(dec, kind) {
-  if (isDefaultRequire(dec)) {
+  let m;
+  if ((m = matchDefaultRequire(dec))) {
     return new ImportDeclaration({
-      specifier: new ImportDefaultSpecifier(dec.id),
-      source: dec.init.arguments[0],
+      specifier: new ImportDefaultSpecifier(m.local),
+      source: m.sources[0],
     });
   }
-  else if (isNamedRequire(dec)) {
+  else if ((m = matchNamedRequire(dec))) {
     return new ImportDeclaration({
-      specifier: new ImportSpecifier({local: dec.id, imported: dec.init.property}),
-      source: dec.init.object.arguments[0],
+      specifier: new ImportSpecifier(m),
+      source: m.sources[0],
     });
   }
   else {
@@ -43,43 +44,42 @@ function varToImport(dec, kind) {
 
 function isVarWithRequireCalls(node) {
   return node.type === 'VariableDeclaration' &&
-    node.declarations.some(dec => isDefaultRequire(dec) || isNamedRequire(dec));
+    node.declarations.some(dec => matchDefaultRequire(dec) || matchNamedRequire(dec));
 }
 
-// matches: require(<string>)
-var isRequireCall = matchesAst({
+// matches: require(<source>)
+var matchRequireCall = matchesAst({
   type: 'CallExpression',
   callee: {
     type: 'Identifier',
     name: 'require'
   },
-  arguments: (args) => args.length === 1 && typeChecker.isString(args[0])
+  arguments: extract('sources', (args) => {
+    return args.length === 1 && typeChecker.isString(args[0]);
+  })
 });
 
-// Matches: <ident> = require(<string>);
-var isDefaultRequire = matchesAst({
+// Matches: <local> = require(<source>);
+var matchDefaultRequire = matchesAst({
   type: 'VariableDeclarator',
-  id: {
-    type: 'Identifier',
-    // name: <ident>
-  },
-  init: isRequireCall
+  id: extract('local', {
+    type: 'Identifier'
+  }),
+  init: matchRequireCall
 });
 
-// Matches: <ident> = require(<string>).<ident>;
-var isNamedRequire = matchesAst({
+// Matches: <local> = require(<source>).<imported>;
+var matchNamedRequire = matchesAst({
   type: 'VariableDeclarator',
-  id: {
-    type: 'Identifier',
-    // name: <ident>
-  },
+  id: extract('local', {
+    type: 'Identifier'
+  }),
   init: {
     type: 'MemberExpression',
     computed: false,
-    object: isRequireCall,
-    property: {
-      type: 'Identifier',
-      // name: <ident>
-    }
+    object: matchRequireCall,
+    property: extract('imported', {
+      type: 'Identifier'
+    })
   }
 });

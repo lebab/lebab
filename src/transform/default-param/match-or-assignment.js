@@ -1,24 +1,22 @@
-import _ from 'lodash';
+import {matchesAst, extract} from '../../utils/matches-ast';
 
-const isOrAssignment = _.matches({
+const matchOrAssignment = matchesAst({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
     left: {
       type: 'Identifier',
-      // name: <name>
+      name: extract('name')
     },
     operator: '=',
     right: {
       type: 'LogicalExpression',
       left: {
         type: 'Identifier',
-        // name: <name>
+        name: extract('name2')
       },
       operator: '||',
-      right: {
-        // <value>
-      }
+      right: extract('value')
     }
   }
 });
@@ -36,19 +34,9 @@ const isOrAssignment = _.matches({
  * @return {Object}
  */
 export default function (node) {
-  if (isOrAssignment(node)) {
-    const {
-      expression: {
-        left: {name: name},
-        right: {
-          left: {name: nameAgain},
-          right: value
-        }
-      }
-    } = node;
+  const {name, name2, value} = matchOrAssignment(node) || {};
 
-    if (name === nameAgain) {
-      return {name, value, node};
-    }
+  if (name && name === name2) {
+    return {name, value, node};
   }
 }
