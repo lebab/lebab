@@ -1,7 +1,7 @@
-import matchesAst from '../../utils/matches-ast';
+import {matchesAst, extract} from '../../utils/matches-ast';
 import isFunctionProperty from './is-function-property';
 
-const isPrototypeObjectAssignment = matchesAst({
+const matchPrototypeObjectAssignment = matchesAst({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
@@ -10,7 +10,7 @@ const isPrototypeObjectAssignment = matchesAst({
       computed: false,
       object: {
         type: 'Identifier',
-        // name: <className>
+        name: extract('className')
       },
       property: {
         type: 'Identifier',
@@ -20,7 +20,7 @@ const isPrototypeObjectAssignment = matchesAst({
     operator: '=',
     right: {
       type: 'ObjectExpression',
-      properties: (props) => props.every(isFunctionProperty)
+      properties: extract('properties', props => props.every(isFunctionProperty))
     }
   }
 });
@@ -42,21 +42,11 @@ const isPrototypeObjectAssignment = matchesAst({
  * @return {Object}
  */
 export default function (node) {
-  if (isPrototypeObjectAssignment(node)) {
-    const {
-      expression: {
-        left: {
-          object: {
-            name: className
-          }
-        },
-        right: {properties}
-      }
-    } = node;
-
+  let m;
+  if ((m = matchPrototypeObjectAssignment(node))) {
     return {
-      className,
-      methods: properties.map(prop => {
+      className: m.className,
+      methods: m.properties.map(prop => {
         return {
           methodName: prop.key.name,
           methodNode: prop.value
