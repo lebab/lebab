@@ -1,35 +1,4 @@
-import _ from 'lodash';
-
-const isPrototypeFunctionAssignment = _.matches({
-  type: 'ExpressionStatement',
-  expression: {
-    type: 'AssignmentExpression',
-    left: {
-      type: 'MemberExpression',
-      computed: false,
-      object: {
-        type: 'MemberExpression',
-        computed: false,
-        object: {
-          type: 'Identifier',
-          // name: <className>
-        },
-        property: {
-          type: 'Identifier',
-          name: 'prototype'
-        },
-      },
-      property: {
-        type: 'Identifier',
-        // name: <methodName>
-      }
-    },
-    operator: '=',
-    right: {
-      type: 'FunctionExpression'
-    }
-  }
-});
+import {matchesAst, extract} from '../../utils/matches-ast';
 
 /**
  * Matches: <className>.prototype.<methodName> = function () { ... }
@@ -43,20 +12,33 @@ const isPrototypeFunctionAssignment = _.matches({
  * @param  {Object} node
  * @return {Object}
  */
-export default function (node) {
-  if (isPrototypeFunctionAssignment(node)) {
-    const {
-      expression: {
-        left: {
-          object: {
-            object: {name: className}
-          },
-          property: {name: methodName}
+export default matchesAst({
+  type: 'ExpressionStatement',
+  expression: {
+    type: 'AssignmentExpression',
+    left: {
+      type: 'MemberExpression',
+      computed: false,
+      object: {
+        type: 'MemberExpression',
+        computed: false,
+        object: {
+          type: 'Identifier',
+          name: extract('className')
         },
-        right: methodNode
+        property: {
+          type: 'Identifier',
+          name: 'prototype'
+        },
+      },
+      property: {
+        type: 'Identifier',
+        name: extract('methodName')
       }
-    } = node;
-
-    return {className, methodName, methodNode};
+    },
+    operator: '=',
+    right: extract('methodNode', {
+      type: 'FunctionExpression'
+    })
   }
-}
+});
