@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import matchesAst from '../../utils/matches-ast';
 
 /**
  * Matches: <ident>: function() { ... }
@@ -6,7 +6,7 @@ import _ from 'lodash';
  * @param {Object} node
  * @return {Boolean}
  */
-export default _.matches({
+export default matchesAst({
   type: 'Property',
   key: {
     type: 'Identifier',
