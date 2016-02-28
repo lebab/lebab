@@ -1,7 +1,7 @@
-import _ from 'lodash';
+import {matchesAst, extract} from '../../utils/matches-ast';
 import isFunctionProperty from './is-function-property';
 
-const isObjectDefinePropertyCall = _.matches({
+const matchObjectDefinePropertyCall = matchesAst({
   type: 'ExpressionStatement',
   expression: {
     type: 'CallExpression',
@@ -23,7 +23,7 @@ const isObjectDefinePropertyCall = _.matches({
         computed: false,
         object: {
           type: 'Identifier',
-          // name: <SomeClass>
+          name: extract('className')
         },
         property: {
           type: 'Identifier',
@@ -32,10 +32,11 @@ const isObjectDefinePropertyCall = _.matches({
       },
       {
         type: 'Literal',
-        // value: <string>
+        value: extract('methodName')
       },
       {
         type: 'ObjectExpression',
+        properties: extract('properties')
       }
     ]
   }
@@ -64,21 +65,12 @@ function isAccessorDescriptor(node) {
  * @return {Object}
  */
 export default function (node) {
-  if (isObjectDefinePropertyCall(node)) {
-    const {
-      expression: {
-        arguments: [ // jshint ignore:line
-          {object: {name: className}},
-          {value: methodName},
-          {properties},
-        ]
-      }
-    } = node;
-
+  let m;
+  if ((m = matchObjectDefinePropertyCall(node))) {
     return {
-      className,
-      methodName,
-      descriptors: properties.filter(isAccessorDescriptor).map(prop => {
+      className: m.className,
+      methodName: m.methodName,
+      descriptors: m.properties.filter(isAccessorDescriptor).map(prop => {
         return {
           methodNode: prop.value,
           kind: prop.key.name,
