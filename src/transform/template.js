@@ -1,5 +1,4 @@
 import estraverse from 'estraverse';
-import esutils from 'esutils/lib/ast';
 import TemplateLiteral from './../syntax/template-literal';
 import typeChecker from './../utils/type-checker';
 import _ from 'lodash';
@@ -11,7 +10,7 @@ export default
     });
   }
 
-let operands, hasString, hasExpression, currentExpression;
+let operands, hasString, currentExpression;
 
 function traverser(node) {
   if (node.type === 'BinaryExpression' && node.operator === '+') {
@@ -62,10 +61,6 @@ function addOperand(node) {
   if (operands.indexOf(node) === -1) {
     if (typeChecker.isString(node)) {
       hasString = true;
-    }
-
-    if (esutils.isExpression(node) && !typeChecker.isLiteral(node)) {
-      hasExpression = true;
     }
 
     operands.push(node);

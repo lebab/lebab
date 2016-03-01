@@ -44,6 +44,22 @@ describe('Template string', () => {
     expect(test(script)).to.equal('var result = `Firstname: ${person.getFirstname()}Lastname: ${person.getLastname()}`;');
   });
 
+  it('should convert string and number literals', () => {
+    expect(test(
+      '"foo " + 25 + " bar";'
+    )).to.equal(
+      '`foo ${25} bar`;'
+    );
+  });
+
+  it('should convert string and member-expressions', () => {
+    expect(test(
+      '"foo " + foo.bar + " bar";'
+    )).to.equal(
+      '`foo ${foo.bar} bar`;'
+    );
+  });
+
   it('should escape ` characters', () => {
     const script = 'var result = "Firstname: `" + firstname + "`";';
 
