@@ -403,6 +403,29 @@ describe('Let/const', () => {
     });
   });
 
+  describe('in loop heads', () => {
+    it('should ignore var in for-loop head that is referenced outside the loop', () => {
+      expectNoChange(
+        'for (var i=0; i<10; i++) {}\n' +
+        'foo(i);'
+      );
+    });
+
+    it('should ignore var in for-in-loop head that is referenced outside the loop', () => {
+      expectNoChange(
+        'for (var key in obj) {}\n' +
+        'foo(key);'
+      );
+    });
+
+    it('should ignore var in for-of-loop head that is referenced outside the loop', () => {
+      expectNoChange(
+        'for (var item of array) {}\n' +
+        'foo(item);'
+      );
+    });
+  });
+
   // Variable hoisting
   describe('with variable assigned before declared', () => {
     it('should ignore', () => {

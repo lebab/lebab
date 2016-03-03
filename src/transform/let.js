@@ -27,7 +27,7 @@ export default
         else if (functionType.isFunctionExpression(node)) {
           enterFunctionExpression(node);
         }
-        else if (node.type === 'BlockStatement') {
+        else if (isBlockScopedStatement(node)) {
           scopeManager.enterBlock();
         }
         else if (node.type === 'VariableDeclarator') {
@@ -54,12 +54,21 @@ export default
         else if (functionType.isFunction(node)) {
           leaveFunction();
         }
-        else if (node.type === 'BlockStatement') {
+        else if (isBlockScopedStatement(node)) {
           scopeManager.leaveScope();
         }
       },
     });
   }
+
+// Block scope is usually delimited by { ... }
+// But for-loop heads also constitute a block scope.
+function isBlockScopedStatement(node) {
+  return node.type === 'BlockStatement' ||
+    node.type === 'ForStatement' ||
+    node.type === 'ForInStatement' ||
+    node.type === 'ForOfStatement';
+}
 
 // Program node works almost like a function:
 // it hoists all variables which can be tranformed to block-scoped let/const.
