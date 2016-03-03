@@ -44,6 +44,7 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
 - [x] **template** - string concatenation to template strings
     - [x] converts variables and arbitrary expressions to `${...}`
     - [ ] BUG [removes indentation of multi-line strings](#88)
+    - [ ] BUG [ignores difference between `.toString()` and `.valueOf()`](#107)
 - [x] **arrow** - callbacks to arrow functions
     - [x] not applied to functions that use `this` or `arguments`
     - [x] not applied to object properties (use `obj-method` transform)
