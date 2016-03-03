@@ -43,20 +43,20 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
     - [ ] no support for extending classes
 - [x] **template** - string concatenation to template strings
     - [x] converts variables and arbitrary expressions to `${...}`
-    - [ ] BUG #88: removes indentation of multi-line strings
+    - [ ] BUG [removes indentation of multi-line strings](#88)
 - [x] **arrow** - callbacks to arrow functions
     - [x] not applied to functions that use `this` or `arguments`
     - [x] not applied to object properties (use `obj-method` transform)
     - [x] converts immediate return `{ return x; }` to `=> x`
     - [ ] does not remove `that = this` assignments
     - [ ] does not recognize bound functions like `function(){}.bind(this)`
-    - [ ] BUG #105 : fails with immediately returning functions that are bound
+    - [ ] BUG [fails with immediately returning functions that are bound](#105)
 - [x] **let** - `var` to `let`/`const`
     - [x] never modified variables are converted to `const`
     - [x] properly recognizes block-scoping
     - [ ] vars that conflict with block-scoping are not converted
-    - [ ] BUG #90: treats existing `let`/`const` as `var`
-    - [ ] BUG #90: does not recognize destructuring
+    - [ ] BUG [treats existing `let`/`const` as `var`](#90)
+    - [ ] BUG [does not recognize destructuring](#90)
 - [x] **default-param** - default parameters instead of `a = a || 2`
     - [x] recognizes `a = a || 2`
     - [x] recognizes `a = a ? a : 2`
