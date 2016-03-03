@@ -404,6 +404,30 @@ describe('Let/const', () => {
   });
 
   describe('in loop heads', () => {
+    it('should convert var in for-loop head to let', () => {
+      expect(test(
+        'for (var i=0; i<10; i++) { foo(i); }'
+      )).to.equal(
+        'for (let i=0; i<10; i++) { foo(i); }'
+      );
+    });
+
+    it('should convert var in for-in head to const', () => {
+      expect(test(
+        'for (var key in obj) { foo(key); }'
+      )).to.equal(
+        'for (const key in obj) { foo(key); }'
+      );
+    });
+
+    it('should convert var in for-of head to const', () => {
+      expect(test(
+        'for (var item of array) { foo(item); }'
+      )).to.equal(
+        'for (const item of array) { foo(item); }'
+      );
+    });
+
     it('should ignore var in for-loop head that is referenced outside the loop', () => {
       expectNoChange(
         'for (var i=0; i<10; i++) {}\n' +

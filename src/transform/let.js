@@ -30,12 +30,16 @@ export default
         else if (isBlockScopedStatement(node)) {
           scopeManager.enterBlock();
         }
-        else if (node.type === 'VariableDeclarator') {
-          variableMarker.markDeclared(node.id.name);
-          // Uninitialized variables can never be const
-          if (node.init === null) {
-            variableMarker.markModified(node.id.name);
-          }
+        else if (node.type === 'VariableDeclaration') {
+          node.declarations.forEach(decl => {
+            variableMarker.markDeclared(decl.id.name);
+            // Uninitialized variables can never be const.
+            // But variables in for-in/of loop heads are actually initialized (although init === null).
+            const inForLoopHead = isAnyForStatement(parent) && parent.left === node;
+            if (decl.init === null && !inForLoopHead) {
+              variableMarker.markModified(decl.id.name);
+            }
+          });
         }
         else if (variableType.isAssignment(node)) {
           variableMarker.markModified(node.left.name);
@@ -64,10 +68,14 @@ export default
 // Block scope is usually delimited by { ... }
 // But for-loop heads also constitute a block scope.
 function isBlockScopedStatement(node) {
-  return node.type === 'BlockStatement' ||
-    node.type === 'ForStatement' ||
-    node.type === 'ForInStatement' ||
-    node.type === 'ForOfStatement';
+  return node.type === 'BlockStatement' || isAnyForStatement(node);
+}
+
+// True when dealing with any kind of for-loop
+function isAnyForStatement(node) {
+  return node.type === 'ForStatement' ||
+  node.type === 'ForInStatement' ||
+  node.type === 'ForOfStatement';
 }
 
 // Program node works almost like a function:
