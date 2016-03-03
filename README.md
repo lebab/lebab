@@ -47,8 +47,10 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
 - [x] **arrow** - callbacks to arrow functions
     - [x] not applied to functions that use `this` or `arguments`
     - [x] not applied to object properties (use `obj-method` transform)
+    - [x] converts immediate return `{ return x; }` to `=> x`
     - [ ] does not remove `that = this` assignments
     - [ ] does not recognize bound functions like `function(){}.bind(this)`
+    - [ ] BUG #105 : fails with immediately returning functions that are bound
 - [x] **let** - `var` to `let`/`const`
     - [x] never modified variables are converted to `const`
     - [x] properly recognizes block-scoping
