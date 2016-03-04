@@ -2,27 +2,24 @@ import estraverse from 'estraverse';
 import matchDefaultExport from './match-default-export';
 import matchNamedFunctionExport from './match-named-function-export';
 
-export default
-  function (ast) {
-    estraverse.replace(ast, {
-      enter: traverse
-    });
-  }
-
-function traverse(node, parent) {
-  let m;
-  if ((m = matchDefaultExport(node)) && parent.type === 'Program') {
-    return {
-      type: 'ExportDefaultDeclaration',
-      declaration: m.value
-    };
-  }
-  if ((m = matchNamedFunctionExport(node)) && parent.type === 'Program') {
-    return {
-      type: 'ExportNamedDeclaration',
-      declaration: functionExpressionToDeclaration(m)
-    };
-  }
+export default function (ast) {
+  estraverse.replace(ast, {
+    enter(node, parent) {
+      let m;
+      if ((m = matchDefaultExport(node)) && parent.type === 'Program') {
+        return {
+          type: 'ExportDefaultDeclaration',
+          declaration: m.value
+        };
+      }
+      if ((m = matchNamedFunctionExport(node)) && parent.type === 'Program') {
+        return {
+          type: 'ExportNamedDeclaration',
+          declaration: functionExpressionToDeclaration(m)
+        };
+      }
+    }
+  });
 }
 
 function functionExpressionToDeclaration({id, func}) {
