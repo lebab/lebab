@@ -46,4 +46,30 @@ describe('Export CommonJS', () => {
     });
   });
 
+  describe('named export', () => {
+    it('should convert module.exports.foo = function(){}', () => {
+      expect(test('module.exports.foo = function () {};')).to.equal('export function foo() {};');
+    });
+
+    it('should convert exports.foo = function(){}', () => {
+      expect(test('exports.foo = function () {};')).to.equal('export function foo() {};');
+    });
+
+    it('should convert exports.foo = function foo(){}', () => {
+      expect(test('exports.foo = function foo() {};')).to.equal('export function foo() {};');
+    });
+
+    it('should ignore exports.foo = function bar(){}', () => {
+      expectNoChange('exports.foo = function bar() {};');
+    });
+
+    it('should ignore exports.foo inside statements', () => {
+      expectNoChange(
+        'if (true) {\n' +
+        '  exports.foo = function() {};\n' +
+        '}'
+      );
+    });
+  });
+
 });
