@@ -1,5 +1,6 @@
 import estraverse from 'estraverse';
 import {matchesAst, extract} from '../../utils/matches-ast';
+import {isFunctionExpression} from '../../utils/function-type';
 import ExportDefaultDeclaration from '../../syntax/export-default-declaration';
 
 export default
@@ -73,9 +74,7 @@ var testNamedFunctionExport = matchesAst({
         type: 'Identifier'
       })
     },
-    right: extract('func', {
-      type: 'FunctionExpression'
-    })
+    right: extract('func', isFunctionExpression)
   }
 });
 
@@ -91,5 +90,19 @@ function matchNamedFunctionExport(node) {
 function functionExpressionToDeclaration({id, func}) {
   func.type = 'FunctionDeclaration';
   func.id = id;
+
+  // Transform <expression> to { return <expression>; }
+  if (func.body.type !== 'BlockStatement') {
+    func.body = {
+      type: 'BlockStatement',
+      body: [
+        {
+          type: 'ReturnStatement',
+          argument: func.body
+        }
+      ]
+    };
+  }
+
   return func;
 }

@@ -63,6 +63,28 @@ describe('Export CommonJS', () => {
       expectNoChange('exports.foo = function bar() {};');
     });
 
+    it('should convert exports.foo = arrow function', () => {
+      expect(test(
+        'exports.foo = () => {\n' +
+        '  return 1;\n' +
+        '};'
+      )).to.equal(
+        'export function foo() {\n' +
+        '  return 1;\n' +
+        '};'
+      );
+    });
+
+    it('should convert exports.foo = arrow function short form', () => {
+      expect(test(
+        'exports.foo = x => x;'
+      )).to.equal(
+        'export function foo(x) {\n' +
+        '  return x;\n' +
+        '};'
+      );
+    });
+
     it('should ignore exports.foo inside statements', () => {
       expectNoChange(
         'if (true) {\n' +
