@@ -73,12 +73,13 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
     - [x] does not touch stuff like `x = "use strict";`
 - [x] **commonjs** - CommonJS module definition to ES6 modules
     - [x] converts `var foo = require("foo")` to `import foo from "foo"`
+    - [x] converts `var bar = require("foo").bar` to `import {bar} from "foo"`
     - [x] converts `module.exports = function(){}` to `export default function(){}`
-    - [ ] only handles default imports and exports
+    - [x] converts `exports.foo = function(){}` to `export function foo(){}`
+    - [ ] only recognizes named exports of functions
     - [ ] only handles `require()` calls in `var` declarations
     - [ ] does not ensure that imported variable is treated as `const`
     - [ ] does not recognize imports/exports inside nested blocks/functions
-    - [ ] does not recognize `var bar = require("foo").bar`
     - [ ] does not recognize destructuring
 
 
