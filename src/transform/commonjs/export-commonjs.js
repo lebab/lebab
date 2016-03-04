@@ -1,7 +1,6 @@
 import estraverse from 'estraverse';
 import {matchesAst, extract} from '../../utils/matches-ast';
 import {isFunctionExpression} from '../../utils/function-type';
-import ExportDefaultDeclaration from '../../syntax/export-default-declaration';
 
 export default
   function (ast) {
@@ -12,8 +11,11 @@ export default
 
 function traverse(node, parent) {
   let m;
-  if (isModuleExportsAssignment(node) && parent.type === 'Program') {
-    return new ExportDefaultDeclaration(node.expression.right);
+  if ((m = matchDefaultExport(node)) && parent.type === 'Program') {
+    return {
+      type: 'ExportDefaultDeclaration',
+      declaration: m.value
+    };
   }
   if ((m = matchNamedFunctionExport(node)) && parent.type === 'Program') {
     return {
@@ -39,24 +41,14 @@ var isModuleExports = matchesAst({
 });
 
 // Matches: module.exports = ...
-var isModuleExportsAssignment = matchesAst({
+var matchDefaultExport = matchesAst({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
     operator: '=',
-    left: {
-      type: 'MemberExpression',
-      computed: false,
-      object: {
-        type: 'Identifier',
-        name: 'module'
-      },
-      property: {
-        type: 'Identifier',
-        name: 'exports'
-      }
-    }
-  }
+    left: isModuleExports,
+    right: extract('value')
+  },
 });
 
 // Matches: exports.<id> = <func>
