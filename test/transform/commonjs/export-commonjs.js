@@ -92,6 +92,15 @@ describe('Export CommonJS', () => {
         '}'
       );
     });
+
+    // Not yet supported features
+    it('should ignore exports.foo = <some-other-value>', () => {
+      expectNoChange(
+        'exports.foo = 123;\n' +
+        'exports.bar = {a: 1, b: 2};\n' +
+        'exports.baz = "Hello";'
+      );
+    });
   });
 
 });
