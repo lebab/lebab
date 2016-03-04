@@ -1,6 +1,6 @@
 import estraverse from 'estraverse';
-import {matchesAst, extract} from '../../utils/matches-ast';
-import {isFunctionExpression} from '../../utils/function-type';
+import matchDefaultExport from './match-default-export';
+import matchNamedFunctionExport from './match-named-function-export';
 
 export default
   function (ast) {
@@ -22,60 +22,6 @@ function traverse(node, parent) {
       type: 'ExportNamedDeclaration',
       declaration: functionExpressionToDeclaration(m)
     };
-  }
-}
-
-var isExports = matchesAst({
-  type: 'Identifier',
-  name: 'exports'
-});
-
-var isModuleExports = matchesAst({
-  type: 'MemberExpression',
-  computed: false,
-  object: {
-    type: 'Identifier',
-    name: 'module'
-  },
-  property: isExports
-});
-
-// Matches: module.exports = ...
-var matchDefaultExport = matchesAst({
-  type: 'ExpressionStatement',
-  expression: {
-    type: 'AssignmentExpression',
-    operator: '=',
-    left: isModuleExports,
-    right: extract('value')
-  },
-});
-
-// Matches: exports.<id> = <func>
-// Matches: module.exports.<id> = <func>
-var testNamedFunctionExport = matchesAst({
-  type: 'ExpressionStatement',
-  expression: {
-    type: 'AssignmentExpression',
-    operator: '=',
-    left: {
-      type: 'MemberExpression',
-      computed: false,
-      object: (ast) => isExports(ast) || isModuleExports(ast),
-      property: extract('id', {
-        type: 'Identifier'
-      })
-    },
-    right: extract('func', isFunctionExpression)
-  }
-});
-
-function matchNamedFunctionExport(node) {
-  const {id, func} = testNamedFunctionExport(node);
-
-  // Exclude functions with different name than the assigned property name
-  if (id && (!func.id || func.id.name === id.name)) {
-    return {id, func};
   }
 }
 
