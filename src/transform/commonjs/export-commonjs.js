@@ -21,6 +21,18 @@ export default function (ast) {
             declaration: functionExpressionToDeclaration(m.value, m.id)
           };
         }
+        else if (m.value.type === 'Identifier') {
+          return {
+            type: 'ExportNamedDeclaration',
+            specifiers: [
+              {
+                type: 'ExportSpecifier',
+                exported: m.id,
+                local: m.value
+              }
+            ]
+          };
+        }
       }
     }
   });

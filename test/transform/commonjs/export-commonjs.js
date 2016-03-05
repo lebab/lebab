@@ -85,6 +85,14 @@ describe('Export CommonJS', () => {
       );
     });
 
+    it('should convert exports.foo = foo;', () => {
+      expect(test('exports.foo = foo;')).to.equal('export {foo};');
+    });
+
+    it('should convert exports.foo = bar;', () => {
+      expect(test('exports.foo = bar;')).to.equal('export {bar as foo};');
+    });
+
     it('should ignore exports.foo inside statements', () => {
       expectNoChange(
         'if (true) {\n' +
