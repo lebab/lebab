@@ -14,12 +14,14 @@ export default function (ast) {
         };
       }
       if ((m = matchNamedExport(node)) && parent.type === 'Program') {
-        // Exclude functions with different name than the assigned property name
-        if (isFunctionExpression(m.value) && compatibleIdentifiers(m.id, m.value.id)) {
-          return {
-            type: 'ExportNamedDeclaration',
-            declaration: functionExpressionToDeclaration(m.value, m.id)
-          };
+        if (isFunctionExpression(m.value)) {
+          // Exclude functions with different name than the assigned property name
+          if (compatibleIdentifiers(m.id, m.value.id)) {
+            return {
+              type: 'ExportNamedDeclaration',
+              declaration: functionExpressionToDeclaration(m.value, m.id)
+            };
+          }
         }
         else if (m.value.type === 'Identifier') {
           return {
@@ -31,6 +33,22 @@ export default function (ast) {
                 local: m.value
               }
             ]
+          };
+        }
+        else {
+          return {
+            type: 'ExportNamedDeclaration',
+            declaration: {
+              type: 'VariableDeclaration',
+              kind: 'var',
+              declarations: [
+                {
+                  type: 'VariableDeclarator',
+                  id: m.id,
+                  init: m.value
+                }
+              ]
+            }
           };
         }
       }
