@@ -74,13 +74,16 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
 - [x] **commonjs** - CommonJS module definition to ES6 modules
     - [x] converts `var foo = require("foo")` to `import foo from "foo"`
     - [x] converts `var bar = require("foo").bar` to `import {bar} from "foo"`
-    - [x] converts `module.exports = function(){}` to `export default function(){}`
-    - [x] converts `exports.foo = function(){}` to `export function foo(){}`
-    - [ ] only recognizes named exports of functions
+    - [x] converts `var {bar} = require("foo")` to `import {bar} from "foo"`
     - [ ] only handles `require()` calls in `var` declarations
     - [ ] does not ensure that imported variable is treated as `const`
+    - [x] converts `module.exports = <anything>` to `export default <anything>`
+    - [x] converts `exports.foo = function(){}` to `export function foo(){}`
+    - [x] converts `exports.Foo = class {}` to `export class Foo {}`
+    - [x] converts `exports.foo = 123` to `export var foo = 123`
+    - [x] converts `exports.foo = bar` to `export {bar as foo}`
+    - [ ] does not check if named export conflicts with existing variable names
     - [ ] does not recognize imports/exports inside nested blocks/functions
-    - [ ] does not recognize destructuring
 
 
 ## Roadmap
