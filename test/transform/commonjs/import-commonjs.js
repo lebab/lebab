@@ -100,6 +100,48 @@ describe('Import CommonJS', () => {
         'import {foo as bar} from "foolib";'
       );
     });
+
+    it('should convert simple object destructuring to named import', () => {
+      expect(test(
+        'var {foo} = require("foolib");'
+      )).to.equal(
+        'import {foo} from "foolib";'
+      );
+    });
+
+    it('should convert aliased object destructuring to named import', () => {
+      expect(test(
+        'var {foo: bar} = require("foolib");'
+      )).to.equal(
+        'import {foo as bar} from "foolib";'
+      );
+    });
+
+    it('should convert multi-field object destructurings to named imports', () => {
+      expect(test(
+        'var {foo, bar: myBar, baz} = require("foolib");'
+      )).to.equal(
+        'import {foo, bar as myBar, baz} from "foolib";'
+      );
+    });
+
+    it('should ignore array destructuring', () => {
+      expectNoChange(
+        'var [a, b, c] = require("foolib");'
+      );
+    });
+
+    it('should ignore nested object destructuring', () => {
+      expectNoChange(
+        'var {foo: {bar}} = require("foolib");'
+      );
+    });
+
+    it('should ignore destructuring of require().foo', () => {
+      expectNoChange(
+        'var {foo} = require("foolib").foo;'
+      );
+    });
   });
 
   // Not yet supported things...
@@ -110,10 +152,6 @@ describe('Import CommonJS', () => {
 
   it('should not convert unassigned require() call', () => {
     expectNoChange('require("foo");');
-  });
-
-  it('should not convert require() with object destruction', () => {
-    expectNoChange('var {foo} = require("foolib");');
   });
 
 });

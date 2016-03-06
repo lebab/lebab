@@ -25,27 +25,70 @@ export default function(ast) {
 // as such, otherwise converts it to full VariableDeclaration (of original kind).
 function varToImport(dec, kind) {
   let m;
-  if ((m = matchDefaultRequire(dec))) {
-    return new ImportDeclaration({
-      specifier: new ImportDefaultSpecifier(m.local),
-      source: m.sources[0],
-    });
+  if ((m = matchRequire(dec))) {
+    if (m.id.type === 'ObjectPattern') {
+      return patternToNamedImport(m);
+    }
+    else if (m.id.type === 'Identifier') {
+      return identifierToDefaultImport(m);
+    }
   }
-  else if ((m = matchNamedRequire(dec))) {
-    return new ImportDeclaration({
-      specifier: new ImportSpecifier(m),
-      source: m.sources[0],
-    });
+  else if ((m = matchRequireWithProperty(dec))) {
+    return propertyToNamedImport(m);
   }
   else {
     return new VariableDeclaration(kind, [dec]);
   }
 }
 
+function patternToNamedImport({id, sources}) {
+  return new ImportDeclaration({
+    specifiers: id.properties.map(({key, value}) => {
+      return new ImportSpecifier({
+        local: value,
+        imported: key
+      });
+    }),
+    source: sources[0]
+  });
+}
+
+function identifierToDefaultImport({id, sources}) {
+  return new ImportDeclaration({
+    specifiers: [new ImportDefaultSpecifier(id)],
+    source: sources[0],
+  });
+}
+
+function propertyToNamedImport({id, property, sources}) {
+  return new ImportDeclaration({
+    specifiers: [new ImportSpecifier({local: id, imported: property})],
+    source: sources[0],
+  });
+}
+
 function isVarWithRequireCalls(node) {
   return node.type === 'VariableDeclaration' &&
-    node.declarations.some(dec => matchDefaultRequire(dec) || matchNamedRequire(dec));
+    node.declarations.some(dec => matchRequire(dec) || matchRequireWithProperty(dec));
 }
+
+var isIdentifier = matchesAst({
+  type: 'Identifier'
+});
+
+// matches Property with Identifier key and value (possibly shorthand)
+var isSimpleProperty = matchesAst({
+  type: 'Property',
+  key: isIdentifier,
+  computed: false,
+  value: isIdentifier
+});
+
+// matches: {a, b: myB, c, ...}
+var isObjectPattern = matchesAst({
+  type: 'ObjectPattern',
+  properties: (props) => props.every(isSimpleProperty)
+});
 
 // matches: require(<source>)
 var matchRequireCall = matchesAst({
@@ -59,26 +102,22 @@ var matchRequireCall = matchesAst({
   })
 });
 
-// Matches: <local> = require(<source>);
-var matchDefaultRequire = matchesAst({
+// Matches: <id> = require(<source>);
+var matchRequire = matchesAst({
   type: 'VariableDeclarator',
-  id: extract('local', {
-    type: 'Identifier'
-  }),
+  id: extract('id', id => isIdentifier(id) || isObjectPattern(id)),
   init: matchRequireCall
 });
 
-// Matches: <local> = require(<source>).<imported>;
-var matchNamedRequire = matchesAst({
+// Matches: <id> = require(<source>).<property>;
+var matchRequireWithProperty = matchesAst({
   type: 'VariableDeclarator',
-  id: extract('local', {
-    type: 'Identifier'
-  }),
+  id: extract('id', isIdentifier),
   init: {
     type: 'MemberExpression',
     computed: false,
     object: matchRequireCall,
-    property: extract('imported', {
+    property: extract('property', {
       type: 'Identifier'
     })
   }

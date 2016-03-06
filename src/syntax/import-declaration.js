@@ -7,12 +7,12 @@ export default
 class ImportDeclaration extends BaseSyntax {
   /**
    * @param {Object} cfg
-   * @param {ImportSpecifier|ImportDefaultSpecifier} cfg.specifier
+   * @param {ImportSpecifier[]|ImportDefaultSpecifier[]} cfg.specifiers
    * @param {Literal} cfg.source String literal containing library path
    */
-  constructor({specifier, source}) {
+  constructor({specifiers, source}) {
     super('ImportDeclaration');
-    this.specifiers = [specifier];
+    this.specifiers = specifiers;
     this.source = source;
   }
 }
