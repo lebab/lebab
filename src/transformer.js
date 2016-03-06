@@ -61,7 +61,7 @@ class Transformer {
   // invokes callback with normal js,
   // then re-adds the hashBang comment back
   ignoringHashBangComment(code, callback) {
-    const [all, hashBang, js] = code.match(/^(\s*#!.*?\r?\n|)([\s\S]*)$/); // jshint ignore:line
+    const [/* all */, hashBang, js] = code.match(/^(\s*#!.*?\r?\n|)([\s\S]*)$/);
     return hashBang + callback(js);
   }
 }
