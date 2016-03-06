@@ -46,12 +46,13 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
     - [ ] BUG [removes indentation of multi-line strings](#88)
     - [ ] BUG [ignores difference between `.toString()` and `.valueOf()`](#107)
 - [x] **arrow** - callbacks to arrow functions
-    - [x] not applied to functions that use `this` or `arguments`
+    - [x] Converts bound functions like `function(){}.bind(this)`
+    - [x] not applied to unbound functions that use `this`
+    - [x] not applied to functions that use `arguments`
     - [x] not applied to object properties (use `obj-method` transform)
     - [x] converts immediate return `{ return x; }` to `=> x`
     - [ ] does not remove `that = this` assignments
-    - [ ] does not recognize bound functions like `function(){}.bind(this)`
-    - [ ] BUG [fails with immediately returning functions that are bound](#105)
+    - [ ] BUG [fails with immediately returning functions that have methods invoked](#105)
 - [x] **let** - `var` to `let`/`const`
     - [x] never modified variables are converted to `const`
     - [x] properly recognizes block-scoping
