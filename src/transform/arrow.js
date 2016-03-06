@@ -1,17 +1,18 @@
 import _ from 'lodash';
 import estraverse from 'estraverse';
-import ArrowFunctionExpression from './../syntax/arrow-function-expression';
+import ArrowFunctionExpression from '../syntax/arrow-function-expression';
+import {matchesAst, extract} from '../utils/matches-ast';
 
 export default function (ast) {
   estraverse.replace(ast, {
     enter(node, parent) {
+      let m;
+
       if (isFunctionConvertableToArrow(node, parent)) {
-        return new ArrowFunctionExpression({
-          body: extractArrowBody(node.body),
-          params: node.params,
-          defaults: node.defaults,
-          rest: node.rest,
-        });
+        return functionToArrow(node);
+      }
+      else if ((m = matchBoundFunction(node))) {
+        return functionToArrow(m.func);
       }
     }
   });
@@ -26,6 +27,30 @@ function isFunctionConvertableToArrow(node, parent) {
     !hasThis(node.body) &&
     !hasArguments(node.body);
 }
+
+// Matches: function(){}.bind(this)
+var matchBoundFunction = matchesAst({
+  type: 'CallExpression',
+  callee: {
+    type: 'MemberExpression',
+    computed: false,
+    object: extract('func', {
+      type: 'FunctionExpression',
+      id: null,
+      body: body => !hasArguments(body),
+      generator: false
+    }),
+    property: {
+      type: 'Identifier',
+      name: 'bind'
+    }
+  },
+  arguments: [
+    {
+      type: 'ThisExpression'
+    }
+  ]
+});
 
 function hasThis(ast) {
   return hasInFunctionBody(ast, {type: 'ThisExpression'});
@@ -54,6 +79,15 @@ function hasInFunctionBody(ast, pattern) {
   });
 
   return found;
+}
+
+function functionToArrow(func) {
+  return new ArrowFunctionExpression({
+    body: extractArrowBody(func.body),
+    params: func.params,
+    defaults: func.defaults,
+    rest: func.rest,
+  });
 }
 
 function extractArrowBody(block) {

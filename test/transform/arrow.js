@@ -117,4 +117,42 @@ describe('Arrow functions', () => {
     );
   });
 
+  describe('bound functions', () => {
+    it('should convert this-using functions', () => {
+      expect(test(
+        'a(function (a, b=2, ...c) { this.x = 3; }.bind(this));'
+      )).to.equal(
+        'a((a, b=2, ...c) => { this.x = 3; });'
+      );
+    });
+
+    it('should convert immediately returning functions', () => {
+      expect(test(
+        'a(function () { return 123; }.bind(this));'
+      )).to.equal(
+        'a(() => 123);'
+      );
+    });
+
+    it('should convert object members', () => {
+      expect(test(
+        '({foo: function() { this.x = 3; }.bind(this)});'
+      )).to.equal(
+        '({foo: () => { this.x = 3; }});'
+      );
+    });
+
+    it('should not convert functions using `arguments`', () => {
+      expectNoChange('a(function () { arguments; }.bind(this));');
+    });
+
+    it('should not convert generator functions', () => {
+      expectNoChange('a(function* () { }.bind(this));');
+    });
+
+    it('should not convert named function expressions', () => {
+      expectNoChange('a(function foo() { });');
+    });
+  });
+
 });
