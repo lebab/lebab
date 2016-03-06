@@ -59,7 +59,7 @@ describe('Export CommonJS', () => {
       expect(test('exports.foo = function foo() {};')).to.equal('export function foo() {};');
     });
 
-    it('should ignore exports.foo = function bar(){}', () => {
+    it('should ignore function export when function name does not match with exported name', () => {
       expectNoChange('exports.foo = function bar() {};');
     });
 
@@ -85,20 +85,46 @@ describe('Export CommonJS', () => {
       );
     });
 
+    it('should convert exports.Foo = class {};', () => {
+      expect(test('exports.Foo = class {};')).to.equal('export class Foo {};');
+    });
+
+    it('should convert exports.Foo = class Foo {};', () => {
+      expect(test('exports.Foo = class Foo {};')).to.equal('export class Foo {};');
+    });
+
+    it('should ignore class export when class name does not match with exported name', () => {
+      expectNoChange('exports.Foo = class Bar {};');
+    });
+
+    it('should convert exports.foo = foo;', () => {
+      expect(test('exports.foo = foo;')).to.equal('export {foo};');
+    });
+
+    it('should convert exports.foo = bar;', () => {
+      expect(test('exports.foo = bar;')).to.equal('export {bar as foo};');
+    });
+
+    it('should export undefined & NaN like any other identifier', () => {
+      expect(test('exports.foo = undefined;')).to.equal('export {undefined as foo};');
+      expect(test('exports.foo = NaN;')).to.equal('export {NaN as foo};');
+    });
+
+    it('should convert exports.foo = <literal> to export var', () => {
+      expect(test('exports.foo = 123;')).to.equal('export var foo = 123;');
+      expect(test('exports.foo = {a: 1, b: 2};')).to.equal('export var foo = {a: 1, b: 2};');
+      expect(test('exports.foo = [1, 2, 3];')).to.equal('export var foo = [1, 2, 3];');
+      expect(test('exports.foo = "Hello";')).to.equal('export var foo = "Hello";');
+      expect(test('exports.foo = null;')).to.equal('export var foo = null;');
+      expect(test('exports.foo = true;')).to.equal('export var foo = true;');
+      expect(test('exports.foo = false;')).to.equal('export var foo = false;');
+    });
+
     it('should ignore exports.foo inside statements', () => {
       expectNoChange(
         'if (true) {\n' +
         '  exports.foo = function() {};\n' +
         '}'
-      );
-    });
-
-    // Not yet supported features
-    it('should ignore exports.foo = <some-other-value>', () => {
-      expectNoChange(
-        'exports.foo = 123;\n' +
-        'exports.bar = {a: 1, b: 2};\n' +
-        'exports.baz = "Hello";'
       );
     });
   });
