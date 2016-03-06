@@ -10,53 +10,61 @@ export default function (ast) {
     enter(node, parent) {
       let m;
       if ((m = matchDefaultExport(node)) && parent.type === 'Program') {
-        return {
-          type: 'ExportDefaultDeclaration',
-          declaration: m.value
-        };
+        return exportDefault(m);
       }
-      if ((m = matchNamedExport(node)) && parent.type === 'Program') {
-        if (isFunctionExpression(m.value)) {
-          // Exclude functions with different name than the assigned property name
-          if (compatibleIdentifiers(m.id, m.value.id)) {
-            return new ExportNamedDeclaration({
-              declaration: functionExpressionToDeclaration(m.value, m.id)
-            });
-          }
-        }
-        else if (m.value.type === 'ClassExpression') {
-          // Exclude classes with different name than the assigned property name
-          if (compatibleIdentifiers(m.id, m.value.id)) {
-            return new ExportNamedDeclaration({
-              declaration: classExpressionToDeclaration(m.value, m.id)
-            });
-          }
-        }
-        else if (m.value.type === 'Identifier') {
-          return new ExportNamedDeclaration({
-            specifiers: [
-              {
-                type: 'ExportSpecifier',
-                exported: m.id,
-                local: m.value
-              }
-            ]
-          });
-        }
-        else {
-          return new ExportNamedDeclaration({
-            declaration: new VariableDeclaration('var', [
-              {
-                type: 'VariableDeclarator',
-                id: m.id,
-                init: m.value
-              }
-            ])
-          });
-        }
+      else if ((m = matchNamedExport(node)) && parent.type === 'Program') {
+        return exportNamed(m);
       }
     }
   });
+}
+
+function exportDefault({value}) {
+  return {
+    type: 'ExportDefaultDeclaration',
+    declaration: value
+  };
+}
+
+function exportNamed({id, value}) {
+  if (isFunctionExpression(value)) {
+    // Exclude functions with different name than the assigned property name
+    if (compatibleIdentifiers(id, value.id)) {
+      return new ExportNamedDeclaration({
+        declaration: functionExpressionToDeclaration(value, id)
+      });
+    }
+  }
+  else if (value.type === 'ClassExpression') {
+    // Exclude classes with different name than the assigned property name
+    if (compatibleIdentifiers(id, value.id)) {
+      return new ExportNamedDeclaration({
+        declaration: classExpressionToDeclaration(value, id)
+      });
+    }
+  }
+  else if (value.type === 'Identifier') {
+    return new ExportNamedDeclaration({
+      specifiers: [
+        {
+          type: 'ExportSpecifier',
+          exported: id,
+          local: value
+        }
+      ]
+    });
+  }
+  else {
+    return new ExportNamedDeclaration({
+      declaration: new VariableDeclaration('var', [
+        {
+          type: 'VariableDeclarator',
+          id: id,
+          init: value
+        }
+      ])
+    });
+  }
 }
 
 // True when one of the identifiers is null or their names are equal.
