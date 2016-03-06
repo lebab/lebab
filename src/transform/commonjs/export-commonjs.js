@@ -2,6 +2,8 @@ import estraverse from 'estraverse';
 import matchDefaultExport from './match-default-export';
 import matchNamedExport from './match-named-export';
 import {isFunctionExpression} from '../../utils/function-type';
+import ExportNamedDeclaration from '../../syntax/export-named-declaration';
+import VariableDeclaration from '../../syntax/variable-declaration';
 
 export default function (ast) {
   estraverse.replace(ast, {
@@ -17,24 +19,21 @@ export default function (ast) {
         if (isFunctionExpression(m.value)) {
           // Exclude functions with different name than the assigned property name
           if (compatibleIdentifiers(m.id, m.value.id)) {
-            return {
-              type: 'ExportNamedDeclaration',
+            return new ExportNamedDeclaration({
               declaration: functionExpressionToDeclaration(m.value, m.id)
-            };
+            });
           }
         }
         else if (m.value.type === 'ClassExpression') {
           // Exclude classes with different name than the assigned property name
           if (compatibleIdentifiers(m.id, m.value.id)) {
-            return {
-              type: 'ExportNamedDeclaration',
+            return new ExportNamedDeclaration({
               declaration: classExpressionToDeclaration(m.value, m.id)
-            };
+            });
           }
         }
         else if (m.value.type === 'Identifier') {
-          return {
-            type: 'ExportNamedDeclaration',
+          return new ExportNamedDeclaration({
             specifiers: [
               {
                 type: 'ExportSpecifier',
@@ -42,23 +41,18 @@ export default function (ast) {
                 local: m.value
               }
             ]
-          };
+          });
         }
         else {
-          return {
-            type: 'ExportNamedDeclaration',
-            declaration: {
-              type: 'VariableDeclaration',
-              kind: 'var',
-              declarations: [
-                {
-                  type: 'VariableDeclarator',
-                  id: m.id,
-                  init: m.value
-                }
-              ]
-            }
-          };
+          return new ExportNamedDeclaration({
+            declaration: new VariableDeclaration('var', [
+              {
+                type: 'VariableDeclarator',
+                id: m.id,
+                init: m.value
+              }
+            ])
+          });
         }
       }
     }
