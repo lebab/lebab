@@ -23,6 +23,15 @@ export default function (ast) {
             };
           }
         }
+        else if (m.value.type === 'ClassExpression') {
+          // Exclude classes with different name than the assigned property name
+          if (compatibleIdentifiers(m.id, m.value.id)) {
+            return {
+              type: 'ExportNamedDeclaration',
+              declaration: classExpressionToDeclaration(m.value, m.id)
+            };
+          }
+        }
         else if (m.value.type === 'Identifier') {
           return {
             type: 'ExportNamedDeclaration',
@@ -56,7 +65,7 @@ export default function (ast) {
   });
 }
 
-// Trye when one of the identifiers is null or their names are equal.
+// True when one of the identifiers is null or their names are equal.
 function compatibleIdentifiers(id1, id2) {
   return !id1 || !id2 || id1.name === id2.name;
 }
@@ -79,4 +88,10 @@ function functionExpressionToDeclaration(func, id) {
   }
 
   return func;
+}
+
+function classExpressionToDeclaration(cls, id) {
+  cls.type = 'ClassDeclaration';
+  cls.id = id;
+  return cls;
 }

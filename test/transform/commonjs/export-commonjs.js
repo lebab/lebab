@@ -59,7 +59,7 @@ describe('Export CommonJS', () => {
       expect(test('exports.foo = function foo() {};')).to.equal('export function foo() {};');
     });
 
-    it('should ignore exports.foo = function bar(){}', () => {
+    it('should ignore function export when function name does not match with exported name', () => {
       expectNoChange('exports.foo = function bar() {};');
     });
 
@@ -83,6 +83,18 @@ describe('Export CommonJS', () => {
         '  return x;\n' +
         '};'
       );
+    });
+
+    it('should convert exports.Foo = class {};', () => {
+      expect(test('exports.Foo = class {};')).to.equal('export class Foo {};');
+    });
+
+    it('should convert exports.Foo = class Foo {};', () => {
+      expect(test('exports.Foo = class Foo {};')).to.equal('export class Foo {};');
+    });
+
+    it('should ignore class export when class name does not match with exported name', () => {
+      expectNoChange('exports.Foo = class Bar {};');
     });
 
     it('should convert exports.foo = foo;', () => {
