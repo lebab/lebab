@@ -10,14 +10,13 @@ export default
     });
   }
 
-let operands, hasString, currentExpression;
+let operands, hasString;
 
 function traverser(node) {
   if (node.type === 'BinaryExpression' && node.operator === '+') {
 
     operands = [];
     hasString = false;
-    currentExpression = node;
 
     estraverse.traverse(node, {
       enter: detector
