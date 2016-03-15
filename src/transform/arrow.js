@@ -6,13 +6,13 @@ import {matchesAst, extract} from '../utils/matches-ast';
 export default function (ast) {
   estraverse.replace(ast, {
     enter(node, parent) {
-      let m;
-
       if (isFunctionConvertableToArrow(node, parent)) {
         return functionToArrow(node);
       }
-      else if ((m = matchBoundFunction(node))) {
-        return functionToArrow(m.func);
+
+      const {func} = matchBoundFunction(node);
+      if (func) {
+        return functionToArrow(func);
       }
     }
   });

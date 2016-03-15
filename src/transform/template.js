@@ -26,7 +26,7 @@ function traverser(node) {
     if (hasString) {
       operands = _(operands).reverse().value();
 
-      let templateString = new TemplateLiteral();
+      const templateString = new TemplateLiteral();
       templateString.createFromArray(operands);
       this.skip();
       return templateString;
@@ -38,8 +38,8 @@ function detector(node) {
 
   if (typeChecker.isBinaryExpression(node)) {
     if (node.operator === '+') {
-      let left = node.left;
-      let right = node.right;
+      const left = node.left;
+      const right = node.right;
 
       addOperand(right);
 

@@ -65,12 +65,13 @@ function isAccessorDescriptor(node) {
  * @return {Object}
  */
 export default function (node) {
-  let m;
-  if ((m = matchObjectDefinePropertyCall(node))) {
+  const {className, methodName, properties} = matchObjectDefinePropertyCall(node);
+
+  if (className) {
     return {
-      className: m.className,
-      methodName: m.methodName,
-      descriptors: m.properties.filter(isAccessorDescriptor).map(prop => {
+      className: className,
+      methodName: methodName,
+      descriptors: properties.filter(isAccessorDescriptor).map(prop => {
         return {
           methodNode: prop.value,
           kind: prop.key.name,

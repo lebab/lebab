@@ -9,12 +9,11 @@ import FunctionHoister from '../scope/function-hoister';
 import VariableDeclaration from '../syntax/variable-declaration';
 
 let scopeManager;
-let variableMarker;
 
 export default
   function (ast) {
     scopeManager = new ScopeManager();
-    variableMarker = new VariableMarker(scopeManager);
+    const variableMarker = new VariableMarker(scopeManager);
 
     estraverse.traverse(ast, {
       enter(node, parent) {
