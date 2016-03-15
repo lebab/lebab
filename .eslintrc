@@ -252,7 +252,7 @@
     // require spaces around operators
     "space-infix-ops": 2,
     // spaces before/after unary operators (required for words, disallowed for nonwords)
-    // TODO: "space-unary-ops": 2,
+    "space-unary-ops": 2,
     // require a space immediately following the // or /* in a comment
     "spaced-comment": 2,
 

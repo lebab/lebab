@@ -43,7 +43,7 @@ class TemplateLiteral extends BaseSyntax {
           this.quasis.push(element);
         }
 
-        if (! typeChecker.isString(parts[i + 1])) {
+        if (!typeChecker.isString(parts[i + 1])) {
           let element = new TemplateElement();
           this.quasis.push(element);
 
