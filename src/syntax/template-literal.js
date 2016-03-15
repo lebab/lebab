@@ -47,7 +47,7 @@ class TemplateLiteral extends BaseSyntax {
           let element = new TemplateElement();
           this.quasis.push(element);
 
-          if(typeof parts[i + 1] === 'undefined') {
+          if (typeof parts[i + 1] === 'undefined') {
             element.tail = true;
           }
         }

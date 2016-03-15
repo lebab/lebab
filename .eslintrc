@@ -196,7 +196,7 @@
     // require space after colon: no space before
     "key-spacing": 2,
     // enforce space before and after keywords
-    // TODO: "keyword-spacing": 2,
+    "keyword-spacing": 2,
     // require LF line breaks
     "linebreak-style": [2, "unix"],
     // require a capital letter for constructors
