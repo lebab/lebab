@@ -10,7 +10,8 @@ export default
     });
   }
 
-let operands, hasString;
+let operands;
+let hasString;
 
 function traverser(node) {
   if (node.type === 'BinaryExpression' && node.operator === '+') {
