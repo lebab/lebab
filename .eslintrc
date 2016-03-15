@@ -275,7 +275,7 @@
     // disallow unnecessary constructor
     "no-useless-constructor": 2,
     // require method shorthand syntax for object literals
-    // TODO: "object-shorthand": [2, "methods"],
+    "object-shorthand": [2, "methods"],
     // suggest using arrow functions as callbacks
     "prefer-arrow-callback": 2,
     // suggest using const declaration for variables that are never reassigned after declared

@@ -67,7 +67,7 @@ function hasInFunctionBody(ast, pattern) {
   let found = false;
 
   estraverse.traverse(ast, {
-    enter: function (node) {
+    enter(node) {
       if (predicate(node)) {
         found = true;
         this.break();
