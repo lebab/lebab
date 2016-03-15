@@ -250,7 +250,7 @@
     // disallow spaces inside parentheses
     "space-in-parens": 2,
     // require spaces around operators
-    // TODO: "space-infix-ops": 2,
+    "space-infix-ops": 2,
     // spaces before/after unary operators (required for words, disallowed for nonwords)
     // TODO: "space-unary-ops": 2,
     // require a space immediately following the // or /* in a comment

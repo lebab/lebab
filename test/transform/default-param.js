@@ -28,7 +28,7 @@ describe('Default parameters', () => {
         'function x(a, b, c) {\n' +
         '  a = a || "salam";\n' +
         '  b = b || {};\n' +
-        '  c = c || [];\n'+
+        '  c = c || [];\n' +
         '}'
       )).to.equal(
         'function x(a="salam", b={}, c=[]) {}'
@@ -60,7 +60,7 @@ describe('Default parameters', () => {
         'function x(a, b, c) {\n' +
         '  a = a ? a : "salam";\n' +
         '  b = b ? b : {};\n' +
-        '  c = c ? c : [];\n'+
+        '  c = c ? c : [];\n' +
         '}'
       )).to.equal(
         'function x(a="salam", b={}, c=[]) {}'
