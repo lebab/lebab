@@ -180,7 +180,7 @@
     // enforce spaces inside of single line blocks
     "block-spacing": 2,
     // Enforce one true brace style
-    // TODO: "brace-style": [2, "stroustrup"],
+    "brace-style": [2, "stroustrup"],
     // require camel case names
     "camelcase": 2,
     // require space after comma, no space before

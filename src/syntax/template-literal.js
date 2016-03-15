@@ -36,7 +36,8 @@ class TemplateLiteral extends BaseSyntax {
         element.setCooked(currVal);
         element.setRaw(currRaw);
         this.quasis.push(element);
-      } else {
+      }
+      else {
         if (i === 0) {
           let element = new TemplateElement();
           this.quasis.push(element);

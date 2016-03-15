@@ -93,7 +93,8 @@ function functionToArrow(func) {
 function extractArrowBody(block) {
   if (block.body[0] && block.body[0].type === 'ReturnStatement') {
     return block.body[0].argument;
-  } else {
+  }
+  else {
     return block;
   }
 }

@@ -47,7 +47,8 @@ function detector(node) {
 
         this.skip();
       }
-    } else {
+    }
+    else {
       addOperand(node);
       this.skip();
     }
