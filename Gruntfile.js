@@ -7,7 +7,7 @@ grunt.initConfig({
       modules: 'common'
     },
     dist: {
-      files:  [{
+      files: [{
         'expand': true,
         'cwd': 'src/',
         'src': ['**/*.js'],
