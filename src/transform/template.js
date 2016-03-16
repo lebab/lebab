@@ -3,58 +3,55 @@ import TemplateLiteral from './../syntax/template-literal';
 import typeChecker from './../utils/type-checker';
 import _ from 'lodash';
 
-export default
-  function (ast) {
-    estraverse.replace(ast, {
-      enter: traverser
-    });
-  }
-
 let operands;
 let hasString;
 
-function traverser(node) {
-  if (node.type === 'BinaryExpression' && node.operator === '+') {
+export default function(ast) {
+  estraverse.replace(ast, {
+    enter(node) {
+      if (node.type === 'BinaryExpression' && node.operator === '+') {
 
-    operands = [];
-    hasString = false;
+        operands = [];
+        hasString = false;
 
-    estraverse.traverse(node, {
-      enter: detector
-    });
+        detect(node);
 
-    if (hasString) {
-      operands = _(operands).reverse().value();
+        if (hasString) {
+          operands = _(operands).reverse().value();
 
-      const templateString = new TemplateLiteral();
-      templateString.createFromArray(operands);
-      this.skip();
-      return templateString;
-    }
-  }
-}
-
-function detector(node) {
-
-  if (typeChecker.isBinaryExpression(node)) {
-    if (node.operator === '+') {
-      const left = node.left;
-      const right = node.right;
-
-      addOperand(right);
-
-      if (!typeChecker.isBinaryExpression(left)) {
-        addOperand(left);
-
-        this.skip();
+          const templateString = new TemplateLiteral();
+          templateString.createFromArray(operands);
+          this.skip();
+          return templateString;
+        }
       }
     }
-    else {
-      addOperand(node);
-      this.skip();
-    }
-  }
+  });
+}
 
+function detect(ast) {
+  estraverse.traverse(ast, {
+    enter(node) {
+      if (typeChecker.isBinaryExpression(node)) {
+        if (node.operator === '+') {
+          const left = node.left;
+          const right = node.right;
+
+          addOperand(right);
+
+          if (!typeChecker.isBinaryExpression(left)) {
+            addOperand(left);
+
+            this.skip();
+          }
+        }
+        else {
+          addOperand(node);
+          this.skip();
+        }
+      }
+    }
+  });
 }
 
 function addOperand(node) {
