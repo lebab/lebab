@@ -7,7 +7,6 @@ function test(script) {
 }
 
 describe('Template string', () => {
-
   it('shouldn\'t convert non-concatenated strings', () => {
     const script = 'var result = "test";';
 

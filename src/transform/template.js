@@ -10,7 +10,6 @@ export default function(ast) {
   estraverse.replace(ast, {
     enter(node) {
       if (node.type === 'BinaryExpression' && node.operator === '+') {
-
         operands = [];
         hasString = false;
 
@@ -55,7 +54,6 @@ function detect(ast) {
 }
 
 function addOperand(node) {
-
   if (operands.indexOf(node) === -1) {
     if (typeChecker.isString(node)) {
       hasString = true;
@@ -63,5 +61,4 @@ function addOperand(node) {
 
     operands.push(node);
   }
-
 }

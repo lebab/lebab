@@ -236,7 +236,7 @@
     // enforce operators to be placed before line breaks
     "operator-linebreak": 2,
     // disallow empty lines at the beginning and end of blocks
-    // TODO: "padded-blocks": [2, "never"],
+    "padded-blocks": [2, "never"],
     // require use of 'single-quotes'
     "quotes": [2, "single"],
     // require semicolons

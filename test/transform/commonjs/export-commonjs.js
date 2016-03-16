@@ -11,7 +11,6 @@ function expectNoChange(script) {
 }
 
 describe('Export CommonJS', () => {
-
   describe('default export', () => {
     it('should convert module.exports assignment to default export', () => {
       expect(test('module.exports = 123;')).to.equal('export default 123;');
@@ -128,5 +127,4 @@ describe('Export CommonJS', () => {
       );
     });
   });
-
 });

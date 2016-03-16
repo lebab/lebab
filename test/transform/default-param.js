@@ -11,7 +11,6 @@ function expectNoChange(script) {
 }
 
 describe('Default parameters', () => {
-
   describe('detected from or-assignment', () => {
     it('should work for simple case', () => {
       expect(test(
@@ -306,5 +305,4 @@ describe('Default parameters', () => {
       'function foo(variable1, variable2, variable3, variable4, variable5, variable6, variable7, variable8) {}'
     );
   });
-
 });

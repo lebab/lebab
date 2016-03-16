@@ -17,7 +17,6 @@ function test(script) {
 }
 
 describe('Comments', () => {
-
   it('should not convert comment line', () => {
     expect(test(
       '// comment line\n' +
@@ -77,5 +76,4 @@ describe('Comments', () => {
       '}'
     );
   });
-
 });

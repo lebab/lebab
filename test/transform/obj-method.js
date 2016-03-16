@@ -11,7 +11,6 @@ function expectNoChange(script) {
 }
 
 describe('Object methods', () => {
-
   it('should convert a function inside an object to method', () => {
     expect(test(
       '({\n' +
@@ -86,5 +85,4 @@ describe('Object methods', () => {
       '});'
     );
   });
-
 });

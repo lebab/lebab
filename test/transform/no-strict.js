@@ -7,7 +7,6 @@ function test(script) {
 }
 
 describe('Removal of "use strict"', () => {
-
   it('should remove statement with "use strict" string', () => {
     expect(test('"use strict";')).to.equal('');
     expect(test('\'use strict\';')).to.equal('');
@@ -22,5 +21,4 @@ describe('Removal of "use strict"', () => {
     expect(test('x = "use strict";')).to.equal('x = "use strict";');
     expect(test('foo("use strict");')).to.equal('foo("use strict");');
   });
-
 });
