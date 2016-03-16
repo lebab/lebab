@@ -3,7 +3,7 @@ import estraverse from 'estraverse';
 import ArrowFunctionExpression from '../syntax/arrow-function-expression';
 import {matchesAst, extract} from '../utils/matches-ast';
 
-export default function (ast) {
+export default function(ast) {
   estraverse.replace(ast, {
     enter(node, parent) {
       if (isFunctionConvertableToArrow(node, parent)) {

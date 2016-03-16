@@ -27,8 +27,7 @@ const transformsMap = {
 /**
  * Runs transforms on code.
  */
-export default
-class Transformer {
+export default class Transformer {
   /**
    * @param {Object} transforms List of transforms to enable
    */

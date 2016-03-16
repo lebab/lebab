@@ -36,7 +36,7 @@ const matchTernaryAssignment = matchesAst({
  * @param {Object} node
  * @return {Object}
  */
-export default function (node) {
+export default function(node) {
   const {name, name2, name3, value} = matchTernaryAssignment(node) || {};
 
   if (name && name === name2 && name === name3) {

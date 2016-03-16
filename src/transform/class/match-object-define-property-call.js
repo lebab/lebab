@@ -64,7 +64,7 @@ function isAccessorDescriptor(node) {
  * @param  {Object} node
  * @return {Object}
  */
-export default function (node) {
+export default function(node) {
   const {className, methodName, properties} = matchObjectDefinePropertyCall(node);
 
   if (className) {

@@ -246,7 +246,7 @@
     // require a space before blocks
     "space-before-blocks": 2,
     // disallow a space before function opening parenthesis
-    // TODO: "space-before-function-paren": [2, "never"],
+    "space-before-function-paren": [2, "never"],
     // disallow spaces inside parentheses
     "space-in-parens": 2,
     // require spaces around operators

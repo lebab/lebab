@@ -41,7 +41,7 @@ const matchPrototypeObjectAssignment = matchesAst({
  * @param  {Object} node
  * @return {Object}
  */
-export default function (node) {
+export default function(node) {
   const {className, properties} = matchPrototypeObjectAssignment(node);
 
   if (className) {
