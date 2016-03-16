@@ -11,8 +11,7 @@
  * @param  {Object} node
  * @param  {Object[]} replacementNodes
  */
-export default
-function multiReplaceStatement(parentNode, node, replacementNodes) {
+export default function multiReplaceStatement(parentNode, node, replacementNodes) {
   const index = parentNode.body.indexOf(node);
   if (index !== -1) {
     parentNode.body.splice(index, 1, ...replacementNodes);

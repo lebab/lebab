@@ -20,7 +20,7 @@ const isFunctionVariableDeclaration = matchesAst({
  * @param  {Object} node
  * @return {Object}
  */
-export default function (node) {
+export default function(node) {
   if (isFunctionVariableDeclaration(node)) {
     const {
       declarations: [

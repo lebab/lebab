@@ -11,7 +11,6 @@ function expectNoChange(script) {
 }
 
 describe('Arrow functions', () => {
-
   it('should convert simple callbacks', () => {
     const script = 'setTimeout(function() { return 2; });';
 
@@ -154,5 +153,4 @@ describe('Arrow functions', () => {
       expectNoChange('a(function foo() { });');
     });
   });
-
 });

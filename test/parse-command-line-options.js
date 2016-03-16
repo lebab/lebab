@@ -109,5 +109,4 @@ describe('Command Line Interface', () => {
       parse(['--enable', 'let', '--disable', 'let']);
     }).to.throw('Options --enable and --disable can not be used together.');
   });
-
 });

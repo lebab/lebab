@@ -1,11 +1,10 @@
 import estraverse from 'estraverse';
 
-export default
-  function (ast) {
-    estraverse.replace(ast, {
-      enter: propertyToShorthand
-    });
-  }
+export default function(ast) {
+  estraverse.replace(ast, {
+    enter: propertyToShorthand
+  });
+}
 
 function propertyToShorthand(node) {
   if (node.type === 'Property' && equalIdentifiers(node.key, node.value)) {

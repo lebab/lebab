@@ -42,8 +42,8 @@
     "grunt-babel": "^5.0.3",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-clean": "^0.7.0",
-    "grunt-contrib-jshint": "^0.11.1",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-eslint": "^18.0.0",
     "grunt-mocha-test": "^0.12.7",
     "load-grunt-tasks": "^3.1.0",
     "mocha": "^2.3.4"

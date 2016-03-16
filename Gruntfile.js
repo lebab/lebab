@@ -7,7 +7,7 @@ grunt.initConfig({
       modules: 'common'
     },
     dist: {
-      files:  [{
+      files: [{
         'expand': true,
         'cwd': 'src/',
         'src': ['**/*.js'],
@@ -31,11 +31,11 @@ grunt.initConfig({
       tasks: ['default']
     }
   },
-  jshint: {
+  eslint: {
     options: {
-      jshintrc: '.jshintrc'
+      configFile: '.eslintrc'
     },
-    allFiles: [
+    target: [
       'src/**/*.js',
       'test/**/*.js',
       'bin/*.js',
@@ -59,4 +59,4 @@ grunt.initConfig({
 });
 
 grunt.registerTask('default', ['clean', 'babel']);
-grunt.registerTask('test', ['jshint', 'default', 'mochaTest']);
+grunt.registerTask('test', ['eslint', 'default', 'mochaTest']);

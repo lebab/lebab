@@ -4,7 +4,7 @@ import matchOrAssignment from './match-or-assignment';
 import matchTernaryAssignment from './match-ternary-assignment';
 import matchIfUndefinedAssignment from './match-if-undefined-assignment';
 
-export default function (ast) {
+export default function(ast) {
   estraverse.replace(ast, {
     enter(node) {
       if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {

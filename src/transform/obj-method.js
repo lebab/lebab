@@ -12,7 +12,7 @@ const isTransformableProperty = matchesAst({
   shorthand: false
 });
 
-export default function (ast) {
+export default function(ast) {
   estraverse.replace(ast, {
     enter(node) {
       if (isTransformableProperty(node)) {

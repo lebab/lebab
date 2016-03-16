@@ -19,10 +19,10 @@ class TemplateLiteral extends BaseSyntax {
 
   createFromArray(parts) {
     for (let i = 0; i < parts.length; i++) {
-      let curr = parts[i];
+      const curr = parts[i];
 
       if (typeChecker.isString(curr)) {
-        let element = new TemplateElement();
+        const element = new TemplateElement();
         let currVal = curr.value;
         let currRaw = this.escapeForTemplate(curr.raw);
 
@@ -36,17 +36,18 @@ class TemplateLiteral extends BaseSyntax {
         element.setCooked(currVal);
         element.setRaw(currRaw);
         this.quasis.push(element);
-      } else {
+      }
+      else {
         if (i === 0) {
-          let element = new TemplateElement();
+          const element = new TemplateElement();
           this.quasis.push(element);
         }
 
-        if (! typeChecker.isString(parts[i + 1])) {
-          let element = new TemplateElement();
+        if (!typeChecker.isString(parts[i + 1])) {
+          const element = new TemplateElement();
           this.quasis.push(element);
 
-          if(typeof parts[i + 1] === 'undefined') {
+          if (typeof parts[i + 1] === 'undefined') {
             element.tail = true;
           }
         }

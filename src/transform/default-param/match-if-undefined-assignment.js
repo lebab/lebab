@@ -74,7 +74,7 @@ function isIdent(node, name) {
  * @param {Object} node
  * @return {Object}
  */
-export default function (node) {
+export default function(node) {
   const {name, name2, operator, consequent, alternate} = matchIfUndefinedAssignment(node) || {};
 
   if (name && name === name2) {

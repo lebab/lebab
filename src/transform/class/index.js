@@ -8,8 +8,7 @@ import matchPrototypeFunctionAssignment from './match-prototype-function-assignm
 import matchPrototypeObjectAssignment from './match-prototype-object-assignment';
 import matchObjectDefinePropertyCall from './match-object-define-property-call';
 
-export default
-function (ast) {
+export default function(ast) {
   const potentialClasses = {};
 
   estraverse.traverse(ast, {

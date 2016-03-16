@@ -9,61 +9,59 @@ import FunctionHoister from '../scope/function-hoister';
 import VariableDeclaration from '../syntax/variable-declaration';
 
 let scopeManager;
-let variableMarker;
 
-export default
-  function (ast) {
-    scopeManager = new ScopeManager();
-    variableMarker = new VariableMarker(scopeManager);
+export default function(ast) {
+  scopeManager = new ScopeManager();
+  const variableMarker = new VariableMarker(scopeManager);
 
-    estraverse.traverse(ast, {
-      enter(node, parent) {
-        if (node.type === 'Program') {
-          enterProgram(node);
-        }
-        else if (functionType.isFunctionDeclaration(node)) {
-          enterFunctionDeclaration(node);
-        }
-        else if (functionType.isFunctionExpression(node)) {
-          enterFunctionExpression(node);
-        }
-        else if (isBlockScopedStatement(node)) {
-          scopeManager.enterBlock();
-        }
-        else if (node.type === 'VariableDeclaration') {
-          node.declarations.forEach(decl => {
-            variableMarker.markDeclared(decl.id.name);
-            // Uninitialized variables can never be const.
-            // But variables in for-in/of loop heads are actually initialized (although init === null).
-            const inForLoopHead = isAnyForStatement(parent) && parent.left === node;
-            if (decl.init === null && !inForLoopHead) {
-              variableMarker.markModified(decl.id.name);
-            }
-          });
-        }
-        else if (variableType.isAssignment(node)) {
-          variableMarker.markModified(node.left.name);
-        }
-        else if (variableType.isUpdate(node)) {
-          variableMarker.markModified(node.argument.name);
-        }
-        else if (variableType.isReference(node, parent)) {
-          variableMarker.markReferenced(node.name);
-        }
-      },
-      leave(node) {
-        if (node.type === 'Program') {
-          leaveProgram();
-        }
-        else if (functionType.isFunction(node)) {
-          leaveFunction();
-        }
-        else if (isBlockScopedStatement(node)) {
-          scopeManager.leaveScope();
-        }
-      },
-    });
-  }
+  estraverse.traverse(ast, {
+    enter(node, parent) {
+      if (node.type === 'Program') {
+        enterProgram(node);
+      }
+      else if (functionType.isFunctionDeclaration(node)) {
+        enterFunctionDeclaration(node);
+      }
+      else if (functionType.isFunctionExpression(node)) {
+        enterFunctionExpression(node);
+      }
+      else if (isBlockScopedStatement(node)) {
+        scopeManager.enterBlock();
+      }
+      else if (node.type === 'VariableDeclaration') {
+        node.declarations.forEach(decl => {
+          variableMarker.markDeclared(decl.id.name);
+          // Uninitialized variables can never be const.
+          // But variables in for-in/of loop heads are actually initialized (although init === null).
+          const inForLoopHead = isAnyForStatement(parent) && parent.left === node;
+          if (decl.init === null && !inForLoopHead) {
+            variableMarker.markModified(decl.id.name);
+          }
+        });
+      }
+      else if (variableType.isAssignment(node)) {
+        variableMarker.markModified(node.left.name);
+      }
+      else if (variableType.isUpdate(node)) {
+        variableMarker.markModified(node.argument.name);
+      }
+      else if (variableType.isReference(node, parent)) {
+        variableMarker.markReferenced(node.name);
+      }
+    },
+    leave(node) {
+      if (node.type === 'Program') {
+        leaveProgram();
+      }
+      else if (functionType.isFunction(node)) {
+        leaveFunction();
+      }
+      else if (isBlockScopedStatement(node)) {
+        scopeManager.leaveScope();
+      }
+    },
+  });
+}
 
 // Block scope is usually delimited by { ... }
 // But for-loop heads also constitute a block scope.

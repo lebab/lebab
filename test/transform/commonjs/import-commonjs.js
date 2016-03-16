@@ -11,7 +11,6 @@ function expectNoChange(script) {
 }
 
 describe('Import CommonJS', () => {
-
   describe('default import', () => {
     it('should convert basic var/let/const with require()', () => {
       expect(test('var   foo = require("foo");')).to.equal('import foo from "foo";');
@@ -153,5 +152,4 @@ describe('Import CommonJS', () => {
   it('should not convert unassigned require() call', () => {
     expectNoChange('require("foo");');
   });
-
 });

@@ -5,7 +5,7 @@ import {isFunctionExpression} from '../../utils/function-type';
 import ExportNamedDeclaration from '../../syntax/export-named-declaration';
 import VariableDeclaration from '../../syntax/variable-declaration';
 
-export default function (ast) {
+export default function(ast) {
   estraverse.replace(ast, {
     enter(node, parent) {
       let m;

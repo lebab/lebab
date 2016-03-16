@@ -11,7 +11,6 @@ function expectNoChange(script) {
 }
 
 describe('Classes', () => {
-
   it('should not convert functions without prototype assignment to class', () => {
     expectNoChange(
       'function MyClass() {\n' +
@@ -215,5 +214,4 @@ describe('Classes', () => {
       '});'
     );
   });
-
 });

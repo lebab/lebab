@@ -11,7 +11,6 @@ function expectNoChange(script) {
 }
 
 describe('Default parameters', () => {
-
   describe('detected from or-assignment', () => {
     it('should work for simple case', () => {
       expect(test(
@@ -28,7 +27,7 @@ describe('Default parameters', () => {
         'function x(a, b, c) {\n' +
         '  a = a || "salam";\n' +
         '  b = b || {};\n' +
-        '  c = c || [];\n'+
+        '  c = c || [];\n' +
         '}'
       )).to.equal(
         'function x(a="salam", b={}, c=[]) {}'
@@ -60,7 +59,7 @@ describe('Default parameters', () => {
         'function x(a, b, c) {\n' +
         '  a = a ? a : "salam";\n' +
         '  b = b ? b : {};\n' +
-        '  c = c ? c : [];\n'+
+        '  c = c ? c : [];\n' +
         '}'
       )).to.equal(
         'function x(a="salam", b={}, c=[]) {}'
@@ -306,5 +305,4 @@ describe('Default parameters', () => {
       'function foo(variable1, variable2, variable3, variable4, variable5, variable6, variable7, variable8) {}'
     );
   });
-
 });

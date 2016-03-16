@@ -33,7 +33,7 @@ const matchOrAssignment = matchesAst({
  * @param {Object} node
  * @return {Object}
  */
-export default function (node) {
+export default function(node) {
   const {name, name2, value} = matchOrAssignment(node) || {};
 
   if (name && name === name2) {

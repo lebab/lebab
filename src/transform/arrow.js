@@ -3,16 +3,16 @@ import estraverse from 'estraverse';
 import ArrowFunctionExpression from '../syntax/arrow-function-expression';
 import {matchesAst, extract} from '../utils/matches-ast';
 
-export default function (ast) {
+export default function(ast) {
   estraverse.replace(ast, {
     enter(node, parent) {
-      let m;
-
       if (isFunctionConvertableToArrow(node, parent)) {
         return functionToArrow(node);
       }
-      else if ((m = matchBoundFunction(node))) {
-        return functionToArrow(m.func);
+
+      const {func} = matchBoundFunction(node);
+      if (func) {
+        return functionToArrow(func);
       }
     }
   });
@@ -67,7 +67,7 @@ function hasInFunctionBody(ast, pattern) {
   let found = false;
 
   estraverse.traverse(ast, {
-    enter: function (node) {
+    enter(node) {
       if (predicate(node)) {
         found = true;
         this.break();
@@ -93,7 +93,8 @@ function functionToArrow(func) {
 function extractArrowBody(block) {
   if (block.body[0] && block.body[0].type === 'ReturnStatement') {
     return block.body[0].argument;
-  } else {
+  }
+  else {
     return block;
   }
 }

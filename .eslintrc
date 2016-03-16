@@ -1,0 +1,294 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "env": {
+    "node": true,
+    "mocha": true
+  },
+  "rules": {
+    // # Possible errors
+    //
+    // disallow assignment in conditional expressions
+    "no-cond-assign": 2,
+    // disallow use of console.log()
+    "no-console": 2,
+    // disallow use of constant expressions in conditions
+    "no-constant-condition": 2,
+    // disallow control characters in regular expressions
+    "no-control-regex": 2,
+    // disallow use of debugger
+    "no-debugger": 2,
+    // disallow duplicate arguments in functions
+    "no-dupe-args": 2,
+    // disallow duplicate keys when creating object literals
+    "no-dupe-keys": 2,
+    // disallow a duplicate switch case label
+    "no-duplicate-case": 2,
+    // disallow empty block statements
+    "no-empty": 2,
+    // disallow the use of empty character classes in regular expressions
+    "no-empty-character-class": 2,
+    // disallow assigning to the exception in a catch block
+    "no-ex-assign": 2,
+    // disallow double-negation boolean casts in a boolean context
+    "no-extra-boolean-cast": 2,
+    // disallow unnecessary semicolons
+    "no-extra-semi": 2,
+    // disallow overwriting functions written as function declarations
+    "no-func-assign": 2,
+    // disallow function or variable declarations in nested blocks
+    "no-inner-declarations": 2,
+    // disallow invalid regular expression strings in the RegExp constructor
+    "no-invalid-regexp": 2,
+    // disallow irregular whitespace outside of strings and comments
+    "no-irregular-whitespace": 2,
+    // disallow negation of the left operand of an in expression
+    "no-negated-in-lhs": 2,
+    // disallow the use of object properties of the global object (Math and JSON) as functions
+    "no-obj-calls": 2,
+    // disallow multiple spaces in a regular expression literal
+    "no-regex-spaces": 2,
+    // disallow sparse arrays
+    "no-sparse-arrays": 2,
+    // Avoid code that looks like two expressions but is actually one
+    "no-unexpected-multiline": 2,
+    // disallow unreachable statements after a return, throw, continue, or break statement
+    "no-unreachable": 2,
+    // disallow comparisons with the value NaN
+    "use-isnan": 2,
+    // ensure that the results of typeof are compared against a valid string
+    "valid-typeof": 2,
+
+    // # Best practices
+    //
+    // enforces return statements in callbacks of array’s methods
+    "array-callback-return": 2,
+    // require curly braces for all control statements
+    "curly": 2,
+    // require default case in switch statements
+    "default-case": 2,
+    // enforces consistent newlines before or after dots
+    "dot-location": [2, "property"],
+    // require foo.bar instead of foo['bar']
+    "dot-notation": 2,
+    // require the use of === and !==
+    "eqeqeq": 2,
+    // make sure for-in loops have an if statement
+    "guard-for-in": 2,
+    // disallow the use of alert, confirm, and prompt
+    "no-alert": 2,
+    // disallow use of arguments.caller or arguments.callee
+    "no-caller": 2,
+    // disallow lexical declarations in case clauses
+    "no-case-declarations": 2,
+    // disallow use of empty functions
+    "no-empty-function": 2,
+    // disallow use of empty destructuring patterns
+    "no-empty-pattern": 2,
+    // disallow use of eval()
+    "no-eval": 2,
+    // disallow unnecessary function binding
+    "no-extra-bind": 2,
+    // disallow fallthrough of case statements
+    "no-fallthrough": 2,
+    // disallow the use of leading or trailing decimal points in numeric literals
+    "no-floating-decimal": 2,
+    // disallow var and named functions in global scope
+    "no-implicit-globals": 2,
+    // disallow use of eval()-like methods
+    "no-implied-eval": 2,
+    // disallow this keywords outside of classes or class-like objects
+    "no-invalid-this": 2,
+    // disallow usage of __iterator__ property
+    "no-iterator": 2,
+    // disallow use of labeled statements
+    "no-labels": 2,
+    // disallow unnecessary nested blocks
+    "no-lone-blocks": 2,
+    // disallow creation of functions within loops
+    "no-loop-func": 2,
+    // disallow the use of magic numbers
+    "no-magic-numbers": [2, {"ignore": [-1, 0, 1, 2]}],
+    // disallow use of multiple spaces
+    "no-multi-spaces": 2,
+    // disallow use of multiline strings
+    "no-multi-str": 2,
+    // disallow use of the new operator when not part of an assignment or comparison
+    "no-new": 2,
+    // disallow use of new operator for Function object
+    "no-new-func": 2,
+    // disallows creating new instances of String,Number, and Boolean
+    "no-new-wrappers": 2,
+    // disallow use of octal literals
+    "no-octal": 2,
+    // disallow use of octal escape sequences in string literals, such as var foo = "Copyright \251";
+    "no-octal-escape": 2,
+    // disallow usage of __proto__ property
+    "no-proto": 2,
+    // disallow declaring the same variable more than once
+    "no-redeclare": 2,
+    // disallow use of assignment in return statement
+    "no-return-assign": 2,
+    // disallow use of javascript: urls
+    "no-script-url": 2,
+    // disallow assignments where both sides are exactly the same
+    "no-self-assign": 2,
+    // disallow comparisons where both sides are exactly the same
+    "no-self-compare": 2,
+    // disallow use of the comma operator
+    "no-sequences": 2,
+    // disallow unmodified conditions of loops
+    "no-unmodified-loop-condition": 2,
+    // disallow usage of expressions in statement position
+    "no-unused-expressions": 2,
+    // disallow unnecessary .call() and .apply()
+    "no-useless-call": 2,
+    // disallow unnecessary concatenation of literals or template literals
+    "no-useless-concat": 2,
+    // disallow use of the void operator
+    "no-void": 2,
+    // disallow use of the with statement
+    "no-with": 2,
+    // require use of the second argument for parseInt()
+    "radix": 2,
+    // require immediate function invocation to be wrapped in parentheses
+    "wrap-iife": 2,
+
+    // # Variables
+    //
+    // disallow the catch clause parameter name being the same as a variable in the outer scope
+    "no-catch-shadow": 2,
+    // disallow deletion of variables
+    "no-delete-var": 2,
+    // disallow declaration of variables already declared in the outer scope
+    "no-shadow": 2,
+    // disallow shadowing of names such as arguments
+    "no-shadow-restricted-names": 2,
+    // disallow use of undeclared variables
+    "no-undef": 2,
+    // disallow use of undefined when initializing variables
+    "no-undef-init": 2,
+    // disallow declaration of variables that are not used in the code
+    "no-unused-vars": 2,
+
+    // # Stylistic issues
+    //
+    // enforce no spacing inside array brackets
+    "array-bracket-spacing": 2,
+    // enforce spaces inside of single line blocks
+    "block-spacing": 2,
+    // Enforce one true brace style
+    "brace-style": [2, "stroustrup"],
+    // require camel case names
+    "camelcase": 2,
+    // require space after comma, no space before
+    "comma-spacing": 2,
+    // require commas at end of line (no comma-first style)
+    "comma-style": 2,
+    // disallow spaces inside computed properties
+    "computed-property-spacing": 2,
+    // require file to end with a newline
+    "eol-last": 2,
+    // require indentation of 2 spaces
+    "indent": [2, 2],
+    // require space after colon: no space before
+    "key-spacing": 2,
+    // enforce space before and after keywords
+    "keyword-spacing": 2,
+    // require LF line breaks
+    "linebreak-style": [2, "unix"],
+    // require a capital letter for constructors
+    "new-cap": 2,
+    // disallow the omission of parentheses when invoking a constructor with no arguments
+    "new-parens": 2,
+    // disallow use of the Array constructor
+    "no-array-constructor": 2,
+    // disallow use of bitwise operators
+    "no-bitwise": 2,
+    // disallow use of the continue statement
+    "no-continue": 2,
+    // disallow if as the only statement in an else block
+    "no-lonely-if": 2,
+    // disallow negated if-else conditions
+    "no-negated-condition": 2,
+    // disallow nested ternary expressions
+    "no-nested-ternary": 2,
+    // disallow the use of the Object constructor
+    "no-new-object": 2,
+    // disallow space between function identifier and application
+    "no-spaced-func": 2,
+    // disallow trailing whitespace at the end of lines
+    "no-trailing-spaces": 2,
+    // disallow _dangling_ underscores in identifiers
+    "no-underscore-dangle": 2,
+    // disallow the use of ternary operators when a simpler alternative exists
+    "no-unneeded-ternary": [2, {"defaultAssignment": true}],
+    // disallow whitespace before properties
+    "no-whitespace-before-property": 2,
+    // require or disallow padding inside curly braces
+    "object-curly-spacing": 2,
+    // disallow one declaration declaring multiple variables
+    "one-var": [2, "never"],
+    // require assignment operator shorthand where possible
+    "operator-assignment": 2,
+    // enforce operators to be placed before line breaks
+    "operator-linebreak": 2,
+    // disallow empty lines at the beginning and end of blocks
+    "padded-blocks": [2, "never"],
+    // require use of 'single-quotes'
+    "quotes": [2, "single"],
+    // require semicolons
+    "semi": 2,
+    // enforce no space before; and space after semicolons
+    "semi-spacing": 2,
+    // require a space before blocks
+    "space-before-blocks": 2,
+    // disallow a space before function opening parenthesis
+    "space-before-function-paren": [2, "never"],
+    // disallow spaces inside parentheses
+    "space-in-parens": 2,
+    // require spaces around operators
+    "space-infix-ops": 2,
+    // spaces before/after unary operators (required for words, disallowed for nonwords)
+    "space-unary-ops": 2,
+    // require a space immediately following the // or /* in a comment
+    "spaced-comment": 2,
+
+    // # ECMAScript 6
+    //
+    // require space before/after arrow function's arrow
+    "arrow-spacing": 2,
+    // verify calls of super() in constructors
+    "constructor-super": 2,
+    // disallow modifying variables of class declarations
+    "no-class-assign": 2,
+    // disallow modifying variables that are declared using const
+    "no-const-assign": 2,
+    // disallow duplicate name in class members
+    "no-dupe-class-members": 2,
+    // disallow use of the new operator with the Symbol object
+    "no-new-symbol": 2,
+    // disallow use of this/super before calling super() in constructors
+    "no-this-before-super": 2,
+    // disallow unnecessary constructor
+    "no-useless-constructor": 2,
+    // require method shorthand syntax for object literals
+    "object-shorthand": [2, "methods"],
+    // suggest using arrow functions as callbacks
+    "prefer-arrow-callback": 2,
+    // suggest using const declaration for variables that are never reassigned after declared
+    "prefer-const": 2,
+    // suggest using the rest parameters instead of arguments
+    "prefer-rest-params": 2,
+    // suggest using the spread operator instead of .apply()
+    "prefer-spread": 2,
+    // suggest using template literals instead of strings concatenation
+    "prefer-template": 2,
+    // disallow generator functions that do not have yield
+    "require-yield": 2,
+    // disallow spaces inside template ${curly block}
+    "template-curly-spacing": 2,
+  }
+}

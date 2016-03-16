@@ -41,12 +41,13 @@ const matchPrototypeObjectAssignment = matchesAst({
  * @param  {Object} node
  * @return {Object}
  */
-export default function (node) {
-  let m;
-  if ((m = matchPrototypeObjectAssignment(node))) {
+export default function(node) {
+  const {className, properties} = matchPrototypeObjectAssignment(node);
+
+  if (className) {
     return {
-      className: m.className,
-      methods: m.properties.map(prop => {
+      className: className,
+      methods: properties.map(prop => {
         return {
           methodName: prop.key.name,
           methodNode: prop.value

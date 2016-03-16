@@ -7,7 +7,6 @@ function test(script) {
 }
 
 describe('Object shorthands', () => {
-
   it('should convert matching key-value entries to shorthand notation', () => {
     expect(test('({foo: foo})')).to.equal('({foo})');
   });
@@ -28,5 +27,4 @@ describe('Object shorthands', () => {
   it('should not convert string properties to shorthands', () => {
     expect(test('({"foo": foo})')).to.equal('({"foo": foo})');
   });
-
 });

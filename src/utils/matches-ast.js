@@ -47,14 +47,14 @@ export function matchesAst(pattern) {
  */
 export function extract(fieldName, matcher) {
   return (ast) => {
-    let extractedFields = {[fieldName]: ast};
+    const extractedFields = {[fieldName]: ast};
 
     if (typeof matcher === 'object') {
       matcher = matchesAst(matcher);
     }
 
     if (typeof matcher === 'function') {
-      let result = matcher(ast);
+      const result = matcher(ast);
       if (typeof result === 'object') {
         return _.assign(extractedFields, result);
       }
