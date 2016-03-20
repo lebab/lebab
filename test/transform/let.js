@@ -131,6 +131,23 @@ describe('Let/const', () => {
         'y = 20;'
       );
     });
+
+    it('should split to let & const inside switch case', () => {
+      expect(test(
+        'switch (nr) {\n' +
+        'case 15:\n' +
+        '  var x = 1, y = 2;\n' +
+        '  x++;\n' +
+        '}'
+      )).to.equal(
+        'switch (nr) {\n' +
+        'case 15:\n' +
+        '  let x = 1;\n' +
+        '  const y = 2;\n' +
+        '  x++;\n' +
+        '}'
+      );
+    });
   });
 
   describe('with nested function', () => {
