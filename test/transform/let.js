@@ -150,6 +150,62 @@ describe('Let/const', () => {
     });
   });
 
+  describe('with multi-variable declaration in restrictive parent', () => {
+    it('should use const when all consts in if-statement', () => {
+      expect(test(
+        'if (true) var x = 1, y = 2'
+      )).to.equal(
+        'if (true) const x = 1, y = 2;'
+      );
+    });
+
+    it('should use let when both let & const in if-statement', () => {
+      expect(test(
+        'if (true) var x = 1, y = ++x;'
+      )).to.equal(
+        'if (true) let x = 1, y = ++x;'
+      );
+    });
+
+    it('should use var when both var & const in if-statement', () => {
+      expect(test(
+        'if (false) {\n' +
+        '  if (true) var x = 1, y = ++x;\n' +
+        '}\n' +
+        'foo(x);'
+      )).to.equal(
+        'if (false) {\n' +
+        '  if (true) var x = 1, y = ++x;\n' +
+        '}\n' +
+        'foo(x);'
+      );
+    });
+
+    it('should use let when both let & const in else-side of if-statement', () => {
+      expect(test(
+        'if (true); else var x = 1, y = ++x;'
+      )).to.equal(
+        'if (true); else let x = 1, y = ++x;'
+      );
+    });
+
+    it('should use let when both let & const in for-loop head', () => {
+      expect(test(
+        'for (var i=0, len=arr.length; i<len; i++) {}'
+      )).to.equal(
+        'for (let i=0, len=arr.length; i<len; i++) {}'
+      );
+    });
+
+    it('should use let when both let & const in for-in-loop body', () => {
+      expect(test(
+        'for (item in array) var x = 1, y = ++x'
+      )).to.equal(
+        'for (item in array) let x = 1, y = ++x'
+      );
+    });
+  });
+
   describe('with nested function', () => {
     it('should use let when variable re-declared inside it', () => {
       expect(test(

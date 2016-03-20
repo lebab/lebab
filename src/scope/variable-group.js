@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 /**
  * Encapsulates a VariableDeclaration node
  * and a list of Variable objects declared by it.
@@ -47,6 +49,32 @@ class VariableGroup {
     else {
       return undefined;
     }
+  }
+
+  /**
+   * Returns the most restrictive possible common `kind` value
+   * for variables defined in this group.
+   *
+   * - When all vars are const, return "const".
+   * - When some vars are "let" and some "const", returns "let".
+   * - When some vars are "var", return "var".
+   *
+   * @return {String} Either "var", "let" or "const".
+   */
+  getMostRestrictiveKind() {
+    const kindToVal = {
+      'var': 1,
+      'let': 2,
+      'const': 3,
+    };
+    const valToKind = {
+      1: 'var',
+      2: 'let',
+      3: 'const',
+    };
+
+    const minVal = _.min(this.variables.map(v => kindToVal[v.getKind()]));
+    return valToKind[minVal];
   }
 
   /**

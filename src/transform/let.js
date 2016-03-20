@@ -137,7 +137,7 @@ function transformVarsToLetOrConst() {
       // VariableDeclaration node.
       group.getNode().kind = commonKind;
     }
-    else {
+    else if (hasMultiStatementBody(group.getParentNode())) {
       // When some variables are of a different kind,
       // create separate VariableDeclaration nodes for each
       // VariableDeclarator and set their `kind` value appropriately.
@@ -147,7 +147,19 @@ function transformVarsToLetOrConst() {
 
       multiReplaceStatement(group.getParentNode(), group.getNode(), varNodes);
     }
+    else {
+      // When parent node restricts breaking VariableDeclaration to multiple ones
+      // just change the kind of the declaration to the most restrictive possible
+      group.getNode().kind = group.getMostRestrictiveKind();
+    }
   });
+}
+
+// Does a node have body that can contain an array of statements
+function hasMultiStatementBody(node) {
+  return node.type === 'BlockStatement' ||
+    node.type === 'Program' ||
+    node.type === 'SwitchCase';
 }
 
 // Returns all VariableGroups of variables in current function scope,
