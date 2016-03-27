@@ -6,6 +6,7 @@ const transformer = new Transformer({
   'arrow': true,
   'let': true,
   'default-param': true,
+  'arg-spread': true,
   'obj-method': true,
   'obj-shorthand': true,
   'no-strict': true,

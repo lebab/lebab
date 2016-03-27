@@ -13,6 +13,7 @@ program.description(`${pkg.description}
     + arrow .......... callback to arrow function
     + let ............ var to let/const
     + default-param .. use of || to default parameters
+    + arg-spread ..... use of apply() to spread operator
     + obj-method ..... function values in objects to methods
     + obj-shorthand .. {foo: foo} to {foo}
     + no-strict ...... remove "use strict" directives
@@ -62,6 +63,7 @@ function getTransforms() {
     'arrow': true,
     'let': true,
     'default-param': true,
+    'arg-spread': true,
     'obj-method': true,
     'obj-shorthand': true,
     'no-strict': true,
