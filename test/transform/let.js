@@ -609,6 +609,62 @@ describe('Let/const', () => {
     });
   });
 
+  describe('with destructuring assignment', () => {
+    it('should use let when array destructuring used', () => {
+      expect(test(
+        'var foo = 1;\n' +
+        '[foo] = [1, 2, 3];'
+      )).to.equal(
+        'let foo = 1;\n' +
+        '[foo] = [1, 2, 3];'
+      );
+    });
+
+    it('should use let when object destructuring used', () => {
+      expect(test(
+        'var foo = 1;\n' +
+        '({foo}) = {foo: 2};'
+      )).to.equal(
+        'let foo = 1;\n' +
+        '({foo}) = {foo: 2};'
+      );
+    });
+
+    it('should use let when nested destructuring used', () => {
+      expect(test(
+        'var foo = 1;\n' +
+        '[{foo}] = [{foo: 2}];'
+      )).to.equal(
+        'let foo = 1;\n' +
+        '[{foo}] = [{foo: 2}];'
+      );
+    });
+
+    it('should use let for all variables modified through destructuring', () => {
+      expect(test(
+        'var a = 1;\n' +
+        'var b = 1;\n' +
+        'var c = 1;\n' +
+        '[a, {foo: c}] = [3, {foo: 2}];'
+      )).to.equal(
+        'let a = 1;\n' +
+        'const b = 1;\n' +
+        'let c = 1;\n' +
+        '[a, {foo: c}] = [3, {foo: 2}];'
+      );
+    });
+
+    it('should use const when name is used as property key in object destructor', () => {
+      expect(test(
+        'var foo = 1;\n' +
+        '({foo: a}) = {foo: 2};'
+      )).to.equal(
+        'const foo = 1;\n' +
+        '({foo: a}) = {foo: 2};'
+      );
+    });
+  });
+
   // Possible errors (Issues #31 and #53)
   describe('regression tests', () => {
     it('should not throw error for assignment to undeclared variable', () => {

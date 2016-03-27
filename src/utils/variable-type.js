@@ -1,16 +1,6 @@
 import {isFunction} from './function-type';
 
 /**
- * True when node is variable assignment expression (like x += 1).
- *
- * @param {Object} node
- * @return {Boolean}
- */
-export function isAssignment(node) {
-  return node.type === 'AssignmentExpression' && node.left.type === 'Identifier';
-}
-
-/**
  * True when node is variable update expression (like x++).
  *
  * @param {Object} node

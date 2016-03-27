@@ -2,6 +2,7 @@ import _ from 'lodash';
 import estraverse from 'estraverse';
 import * as functionType from '../utils/function-type';
 import * as variableType from '../utils/variable-type';
+import * as destructuring from '../utils/destructuring.js';
 import multiReplaceStatement from '../utils/multi-replace-statement';
 import ScopeManager from '../scope/scope-manager';
 import VariableMarker from '../scope/variable-marker';
@@ -39,8 +40,10 @@ export default function(ast) {
           }
         });
       }
-      else if (variableType.isAssignment(node)) {
-        variableMarker.markModified(node.left.name);
+      else if (node.type === 'AssignmentExpression') {
+        destructuring.extractVariableNames(node.left).forEach(name => {
+          variableMarker.markModified(name);
+        });
       }
       else if (variableType.isUpdate(node)) {
         variableMarker.markModified(node.argument.name);
