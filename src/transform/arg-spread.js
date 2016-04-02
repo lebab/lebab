@@ -26,11 +26,11 @@ export default function(ast) {
 // removing the location information that we don't care about when comparing
 // AST nodes.
 function omitLoc(obj) {
-  if (_.isPlainObject(obj)) {
-    return _(obj).omit('loc').mapValues(omitLoc).value();
-  }
-  else if (_.isArray(obj)) {
+  if (_.isArray(obj)) {
     return obj.map(omitLoc);
+  }
+  else if (_.isObjectLike(obj)) {
+    return _(obj).omit('loc').mapValues(omitLoc).value();
   }
   else {
     return obj;
