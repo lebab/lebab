@@ -64,7 +64,7 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
     - [x] recognizes `a = a ? a : 2`
     - [x] recognizes `a = a === undefined ? 2 : a`
     - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
-- [x] **arg-spread** - use of apply() to spread operator (in next release)
+- [x] **arg-spread** - use of apply() to spread operator **(in next release)**
     - [x] recognizes `obj.method.apply(obj, args)`
     - [ ] does not convert plain `func.apply()`
 - [x] **obj-method** - function values in object to methods
