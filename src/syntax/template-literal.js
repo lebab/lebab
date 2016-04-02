@@ -28,12 +28,11 @@ class TemplateLiteral extends BaseSyntax {
         let currVal = curr.value;
         let currRaw = this.escapeForTemplate(curr.raw);
 
-        while (typeChecker.isString(parts[++i])) {
+        while (typeChecker.isString(parts[i + 1])) {
+          i++;
           currVal += parts[i].value;
           currRaw += this.escapeForTemplate(parts[i].raw);
         }
-
-        i--;
 
         this.quasis.push(new TemplateElement({
           raw: currRaw,
