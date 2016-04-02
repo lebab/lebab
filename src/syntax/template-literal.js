@@ -9,12 +9,15 @@ export default
 class TemplateLiteral extends BaseSyntax {
   /**
    * Create a template literal
+   * @param {Object[]} parts
    */
-  constructor() {
+  constructor(parts) {
     super('TemplateLiteral');
 
     this.expressions = [];
     this.quasis = [];
+
+    this.createFromArray(parts);
   }
 
   createFromArray(parts) {

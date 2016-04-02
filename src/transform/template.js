@@ -10,10 +10,8 @@ export default function(ast) {
         const operands = detectOperands(node);
 
         if (operands.some(op => typeChecker.isString(op))) {
-          const templateString = new TemplateLiteral();
-          templateString.createFromArray(_.reverse(operands));
           this.skip();
-          return templateString;
+          return new TemplateLiteral(_.reverse(operands));
         }
       }
     }
