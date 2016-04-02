@@ -4,18 +4,16 @@ import typeChecker from './../utils/type-checker';
 import _ from 'lodash';
 
 let operands;
-let hasString;
 
 export default function(ast) {
   estraverse.replace(ast, {
     enter(node) {
       if (node.type === 'BinaryExpression' && node.operator === '+') {
         operands = [];
-        hasString = false;
 
         detect(node);
 
-        if (hasString) {
+        if (operands.some(op => typeChecker.isString(op))) {
           operands = _(operands).reverse().value();
 
           const templateString = new TemplateLiteral();
@@ -55,10 +53,6 @@ function detect(ast) {
 
 function addOperand(node) {
   if (operands.indexOf(node) === -1) {
-    if (typeChecker.isString(node)) {
-      hasString = true;
-    }
-
     operands.push(node);
   }
 }
