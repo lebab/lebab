@@ -25,7 +25,6 @@ class TemplateLiteral extends BaseSyntax {
       const curr = parts[i];
 
       if (typeChecker.isString(curr)) {
-        const element = new TemplateElement();
         let currVal = curr.value;
         let currRaw = this.escapeForTemplate(curr.raw);
 
@@ -36,23 +35,20 @@ class TemplateLiteral extends BaseSyntax {
 
         i--;
 
-        element.setCooked(currVal);
-        element.setRaw(currRaw);
-        this.quasis.push(element);
+        this.quasis.push(new TemplateElement({
+          raw: currRaw,
+          cooked: currVal
+        }));
       }
       else {
         if (i === 0) {
-          const element = new TemplateElement();
-          this.quasis.push(element);
+          this.quasis.push(new TemplateElement({}));
         }
 
         if (!typeChecker.isString(parts[i + 1])) {
-          const element = new TemplateElement();
-          this.quasis.push(element);
-
-          if (typeof parts[i + 1] === 'undefined') {
-            element.tail = true;
-          }
+          this.quasis.push(new TemplateElement({
+            tail: typeof parts[i + 1] === 'undefined'
+          }));
         }
 
         this.expressions.push(curr);

@@ -7,21 +7,16 @@ export default
 class TemplateElement extends BaseSyntax {
   /**
    * Create a template literal
+   *
+   * @param {Object} cfg
+   * @param {String} cfg.raw As it looks in source, with escapes added
+   * @param {String} cfg.cooked The actual value
+   * @param {Boolean} cfg.tail True to signify the last element in TemplateLiteral
    */
-  constructor() {
+  constructor({raw = '', cooked = '', tail = false}) {
     super('TemplateElement');
 
-    this.value = {raw: '', cooked: ''};
-    this.tail = false;
-  }
-
-  // The raw version is as it looks in source, with escapes added
-  setRaw(raw) {
-    this.value.raw = raw;
-  }
-
-  // The cooked varsion is the actual value
-  setCooked(cooked) {
-    this.value.cooked = cooked;
+    this.value = {raw, cooked};
+    this.tail = tail;
   }
 }
