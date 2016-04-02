@@ -41,6 +41,7 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
     - [ ] does not recognize classes without methods
     - [ ] does not recognize static methods
     - [ ] no support for extending classes
+    - [ ] BUG [does not support namespaced classes](#113)
 - [x] **template** - string concatenation to template strings
     - [x] converts variables and arbitrary expressions to `${...}`
     - [ ] BUG [removes indentation of multi-line strings](#88)
