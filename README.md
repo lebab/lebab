@@ -91,9 +91,8 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
     - [ ] does not recognize imports/exports inside nested blocks/functions
 
 
-## Roadmap
+## What's next?
 
-- [ ] `for-in` loops to `for-of` loops
-- [ ] `arguments` to rest parameters
-- [ ] `that = this` detection for arrow functions
-- [ ] object/array parameters to destructuring
+Which feature should Lebab implement next?
+Let us know by [creating an issue](https://github.com/mohebifar/lebab/issues)
+or voicing your opinion in existing one.
