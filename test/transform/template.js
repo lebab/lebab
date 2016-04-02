@@ -6,41 +6,49 @@ function test(script) {
   return transformer.run(script);
 }
 
+function expectNoChange(script) {
+  expect(test(script)).to.equal(script);
+}
+
 describe('Template string', () => {
-  it('shouldn\'t convert non-concatenated strings', () => {
-    const script = 'var result = "test";';
-
-    expect(test(script)).to.equal(script);
+  it('should not convert non-concatenated strings', () => {
+    expectNoChange('var result = "test";');
   });
 
-  it('shouldn\'t convert non-string binary expressions with + operator', () => {
-    const script = 'var result = 1 + 2;';
-
-    expect(test(script)).to.equal(script);
+  it('should not convert non-string binary expressions with + operator', () => {
+    expectNoChange('var result = 1 + 2;');
   });
 
-  it('shouldn\'t convert only string concatenation', () => {
-    const script = 'var result = "Hello " + " World!";';
-
-    expect(test(script)).to.equal('var result = `Hello  World!`;');
+  it('should converts only string concatenation', () => {
+    expect(test(
+      'var result = "Hello " + " World!";'
+    )).to.equal(
+      'var result = `Hello  World!`;'
+    );
   });
 
   it('should convert string and one variable concatenation', () => {
-    const script = 'var result = "Firstname: " + firstname;';
-
-    expect(test(script)).to.equal('var result = `Firstname: ${firstname}`;');
+    expect(test(
+      'var result = "Firstname: " + firstname;'
+    )).to.equal(
+      'var result = `Firstname: ${firstname}`;'
+    );
   });
 
   it('should convert string and multiple variables concatenation', () => {
-    const script = 'var result = "Fullname: " + firstname + lastname;';
-
-    expect(test(script)).to.equal('var result = `Fullname: ${firstname}${lastname}`;');
+    expect(test(
+      'var result = "Fullname: " + firstname + lastname;'
+    )).to.equal(
+      'var result = `Fullname: ${firstname}${lastname}`;'
+    );
   });
 
   it('should convert string and call expressions', () => {
-    const script = 'var result = "Firstname: " + person.getFirstname() + "Lastname: " + person.getLastname();';
-
-    expect(test(script)).to.equal('var result = `Firstname: ${person.getFirstname()}Lastname: ${person.getLastname()}`;');
+    expect(test(
+      'var result = "Firstname: " + person.getFirstname() + "Lastname: " + person.getLastname();'
+    )).to.equal(
+      'var result = `Firstname: ${person.getFirstname()}Lastname: ${person.getLastname()}`;'
+    );
   });
 
   it('should convert string and number literals', () => {
@@ -60,9 +68,11 @@ describe('Template string', () => {
   });
 
   it('should escape ` characters', () => {
-    const script = 'var result = "Firstname: `" + firstname + "`";';
-
-    expect(test(script)).to.equal('var result = `Firstname: \\`${firstname}\\``;');
+    expect(test(
+      'var result = "Firstname: `" + firstname + "`";'
+    )).to.equal(
+      'var result = `Firstname: \\`${firstname}\\``;'
+    );
   });
 
   it('should leave \\t, \\r, \\n, \\v, \\f, \\b, \\0, \\\\ escaped as is', () => {
