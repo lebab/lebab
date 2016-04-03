@@ -8,10 +8,11 @@ export default function(ast) {
   estraverse.replace(ast, {
     enter(node) {
       if (isPlusExpression(node)) {
+        this.skip();
+
         const [operands, isStringConcatenation] = flattenPlusExpression(node);
 
         if (isStringConcatenation) {
-          this.skip();
           return new TemplateLiteral(splitQuasisAndExpressions(operands));
         }
       }
