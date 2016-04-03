@@ -1,5 +1,5 @@
 import estraverse from 'estraverse';
-import typeChecker from '../utils/type-checker';
+import isString from '../utils/is-string';
 
 export default function(ast) {
   estraverse.replace(ast, {
@@ -12,5 +12,5 @@ export default function(ast) {
 }
 
 function isUseStrictString(node) {
-  return typeChecker.isString(node) && node.value === 'use strict';
+  return isString(node) && node.value === 'use strict';
 }

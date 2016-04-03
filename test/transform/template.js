@@ -17,14 +17,11 @@ describe('Template string', () => {
 
   it('should not convert non-string binary expressions with + operator', () => {
     expectNoChange('var result = 1 + 2;');
+    expectNoChange('var result = a + b;');
   });
 
-  it('should converts only string concatenation', () => {
-    expect(test(
-      'var result = "Hello " + " World!";'
-    )).to.equal(
-      'var result = `Hello  World!`;'
-    );
+  it('should not convert only string concatenation', () => {
+    expectNoChange('var result = "Hello " + " World!";');
   });
 
   it('should convert string and one variable concatenation', () => {
@@ -40,6 +37,38 @@ describe('Template string', () => {
       'var result = "Fullname: " + firstname + lastname;'
     )).to.equal(
       'var result = `Fullname: ${firstname}${lastname}`;'
+    );
+  });
+
+  it('should convert parenthized string concatenations', () => {
+    expect(test(
+      '"str1 " + (x + " str2");'
+    )).to.equal(
+      '`str1 ${x} str2`;'
+    );
+  });
+
+  it('should convert parenthized string concatenations and other concatenations', () => {
+    expect(test(
+      'x + " str1 " + (y + " str2");'
+    )).to.equal(
+      '`${x} str1 ${y} str2`;'
+    );
+  });
+
+  it('should convert parenthized non-string concatenations', () => {
+    expect(test(
+      '(x + y) + " string " + (a + b);'
+    )).to.equal(
+      '`${x + y} string ${a + b}`;'
+    );
+  });
+
+  it('should convert non-parenthized non-string concatenations', () => {
+    expect(test(
+      'x + y + " string " + a + b;'
+    )).to.equal(
+      '`${x + y} string ${a}${b}`;'
     );
   });
 
