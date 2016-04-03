@@ -17,6 +17,7 @@ describe('Template string', () => {
 
   it('should not convert non-string binary expressions with + operator', () => {
     expectNoChange('var result = 1 + 2;');
+    expectNoChange('var result = a + b;');
   });
 
   it('should not convert only string concatenation', () => {
