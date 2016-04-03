@@ -59,6 +59,22 @@ describe('Template string', () => {
     );
   });
 
+  it('should convert parenthized non-string concatenations', () => {
+    expect(test(
+      '(x + y) + " string " + (a + b);'
+    )).to.equal(
+      '`${x + y} string ${a + b}`;'
+    );
+  });
+
+  it('should convert non-parenthized non-string concatenations', () => {
+    expect(test(
+      'x + y + " string " + a + b;'
+    )).to.equal(
+      '`${x + y} string ${a}${b}`;'
+    );
+  });
+
   it('should convert string and call expressions', () => {
     expect(test(
       'var result = "Firstname: " + person.getFirstname() + "Lastname: " + person.getLastname();'

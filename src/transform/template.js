@@ -8,9 +8,9 @@ export default function(ast) {
   estraverse.replace(ast, {
     enter(node) {
       if (isPlusExpression(node)) {
-        const operands = detectOperands(node);
+        const [operands, isStringConcatenation] = flattenPlusExpression(node);
 
-        if (operands.some(isString)) {
+        if (isStringConcatenation) {
           this.skip();
           return new TemplateLiteral(splitQuasisAndExpressions(operands));
         }
@@ -19,15 +19,23 @@ export default function(ast) {
   });
 }
 
-function detectOperands(node) {
+// Returns two items:
+// - flat array of all the plus operation sub-expressions
+// - true when the result of the plus operation is a string
+function flattenPlusExpression(node) {
   if (isPlusExpression(node)) {
-    return _.flatten([
-      detectOperands(node.left),
-      detectOperands(node.right)
-    ]);
+    const [left, leftIsString] = flattenPlusExpression(node.left);
+    const [right, rightIsString] = flattenPlusExpression(node.right);
+
+    if (leftIsString || rightIsString) {
+      return [_.flatten([left, right]), true];
+    }
+    else {
+      return [node, false];
+    }
   }
   else {
-    return [node];
+    return [node, isString(node)];
   }
 }
 
@@ -64,7 +72,7 @@ function splitQuasisAndExpressions(operands) {
 
       if (!isString(operands[i + 1] || {})) {
         quasis.push(new TemplateElement({
-          tail: typeof operands[i + 1] === 'undefined'
+          tail: operands[i + 1] === undefined
         }));
       }
 
