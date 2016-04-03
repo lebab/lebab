@@ -1,6 +1,6 @@
 import BaseSyntax from './base';
 import TemplateElement from './template-element';
-import typeChecker from './../utils/type-checker';
+import isString from './../utils/is-string';
 
 /**
  * The class to define the TemplateLiteral syntax
@@ -24,11 +24,11 @@ class TemplateLiteral extends BaseSyntax {
     for (let i = 0; i < parts.length; i++) {
       const curr = parts[i];
 
-      if (typeChecker.isString(curr)) {
+      if (isString(curr)) {
         let currVal = curr.value;
         let currRaw = this.escapeForTemplate(curr.raw);
 
-        while (typeChecker.isString(parts[i + 1])) {
+        while (isString(parts[i + 1] || {})) {
           i++;
           currVal += parts[i].value;
           currRaw += this.escapeForTemplate(parts[i].raw);
@@ -44,7 +44,7 @@ class TemplateLiteral extends BaseSyntax {
           this.quasis.push(new TemplateElement({}));
         }
 
-        if (!typeChecker.isString(parts[i + 1])) {
+        if (!isString(parts[i + 1] || {})) {
           this.quasis.push(new TemplateElement({
             tail: typeof parts[i + 1] === 'undefined'
           }));

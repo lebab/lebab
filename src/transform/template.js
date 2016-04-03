@@ -1,6 +1,6 @@
 import estraverse from 'estraverse';
 import TemplateLiteral from './../syntax/template-literal';
-import typeChecker from './../utils/type-checker';
+import isString from './../utils/is-string';
 import _ from 'lodash';
 
 export default function(ast) {
@@ -9,7 +9,7 @@ export default function(ast) {
       if (isPlusExpression(node)) {
         const operands = detectOperands(node);
 
-        if (operands.some(op => typeChecker.isString(op))) {
+        if (operands.some(isString)) {
           this.skip();
           return new TemplateLiteral(operands);
         }

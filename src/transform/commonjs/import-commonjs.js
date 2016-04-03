@@ -1,5 +1,5 @@
 import estraverse from 'estraverse';
-import typeChecker from '../../utils/type-checker';
+import isString from '../../utils/is-string';
 import {matchesAst, extract} from '../../utils/matches-ast';
 import multiReplaceStatement from '../../utils/multi-replace-statement';
 import ImportDeclaration from '../../syntax/import-declaration';
@@ -98,7 +98,7 @@ var matchRequireCall = matchesAst({
     name: 'require'
   },
   arguments: extract('sources', (args) => {
-    return args.length === 1 && typeChecker.isString(args[0]);
+    return args.length === 1 && isString(args[0]);
   })
 });
 
