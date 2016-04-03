@@ -11,38 +11,21 @@ export default function(ast) {
 
         if (operands.some(op => typeChecker.isString(op))) {
           this.skip();
-          return new TemplateLiteral(_.reverse(operands));
+          return new TemplateLiteral(operands);
         }
       }
     }
   });
 }
 
-function detectOperands(ast) {
-  const operands = [];
-
-  estraverse.traverse(ast, {
-    enter(node) {
-      if (typeChecker.isBinaryExpression(node)) {
-        if (node.operator === '+') {
-          const left = node.left;
-          const right = node.right;
-
-          operands.push(right);
-
-          if (!typeChecker.isBinaryExpression(left)) {
-            operands.push(left);
-
-            this.skip();
-          }
-        }
-        else {
-          operands.push(node);
-          this.skip();
-        }
-      }
-    }
-  });
-
-  return operands;
+function detectOperands(node) {
+  if (node.type === 'BinaryExpression' && node.operator === '+') {
+    return _.flatten([
+      detectOperands(node.left),
+      detectOperands(node.right)
+    ]);
+  }
+  else {
+    return [node];
+  }
 }

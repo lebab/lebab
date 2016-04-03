@@ -43,6 +43,22 @@ describe('Template string', () => {
     );
   });
 
+  it('should convert parenthized string concatenations', () => {
+    expect(test(
+      '"str1 " + (x + " str2");'
+    )).to.equal(
+      '`str1 ${x} str2`;'
+    );
+  });
+
+  it('should convert parenthized string concatenations and other concatenations', () => {
+    expect(test(
+      'x + " str1 " + (y + " str2");'
+    )).to.equal(
+      '`${x} str1 ${y} str2`;'
+    );
+  });
+
   it('should convert string and call expressions', () => {
     expect(test(
       'var result = "Firstname: " + person.getFirstname() + "Lastname: " + person.getLastname();'
