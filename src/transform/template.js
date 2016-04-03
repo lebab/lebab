@@ -6,7 +6,7 @@ import _ from 'lodash';
 export default function(ast) {
   estraverse.replace(ast, {
     enter(node) {
-      if (node.type === 'BinaryExpression' && node.operator === '+') {
+      if (isPlusExpression(node)) {
         const operands = detectOperands(node);
 
         if (operands.some(op => typeChecker.isString(op))) {
@@ -19,7 +19,7 @@ export default function(ast) {
 }
 
 function detectOperands(node) {
-  if (node.type === 'BinaryExpression' && node.operator === '+') {
+  if (isPlusExpression(node)) {
     return _.flatten([
       detectOperands(node.left),
       detectOperands(node.right)
@@ -28,4 +28,8 @@ function detectOperands(node) {
   else {
     return [node];
   }
+}
+
+function isPlusExpression(node) {
+  return node.type === 'BinaryExpression' && node.operator === '+';
 }
