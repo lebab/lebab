@@ -19,12 +19,8 @@ describe('Template string', () => {
     expectNoChange('var result = 1 + 2;');
   });
 
-  it('should converts only string concatenation', () => {
-    expect(test(
-      'var result = "Hello " + " World!";'
-    )).to.equal(
-      'var result = `Hello  World!`;'
-    );
+  it('should not convert only string concatenation', () => {
+    expectNoChange('var result = "Hello " + " World!";');
   });
 
   it('should convert string and one variable concatenation', () => {

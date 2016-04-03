@@ -12,7 +12,7 @@ export default function(ast) {
 
         const [operands, isStringConcatenation] = flattenPlusExpression(node);
 
-        if (isStringConcatenation) {
+        if (isStringConcatenation && !operands.every(isString)) {
           return new TemplateLiteral(splitQuasisAndExpressions(operands));
         }
       }
