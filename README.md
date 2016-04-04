@@ -96,3 +96,8 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
 Which feature should Lebab implement next?
 Let us know by [creating an issue](https://github.com/mohebifar/lebab/issues)
 or voicing your opinion in existing one.
+
+Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][pattern-matching]
+
+[pattern-matching]: http://nene.github.io/2016/04/02/matches-ast
+
