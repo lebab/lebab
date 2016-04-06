@@ -5,21 +5,30 @@ import {matchesAst, extract} from '../utils/matches-ast';
 export default function(ast) {
   estraverse.replace(ast, {
     enter(node) {
-      const {memberExpr, thisParam, arrayParam} = matchApplyCall(node);
+      const {func, array} = matchFunctionApplyCall(node);
+      if (func) {
+        return createCallWithSpread(func, array);
+      }
+
+      const {memberExpr, thisParam, arrayParam} = matchObjectApplyCall(node);
       if (memberExpr && _.isEqual(omitLoc(memberExpr.object), omitLoc(thisParam))) {
-        return {
-          type: 'CallExpression',
-          callee: memberExpr,
-          arguments: [
-            {
-              type: 'SpreadElement',
-              argument: arrayParam,
-            }
-          ]
-        };
+        return createCallWithSpread(memberExpr, arrayParam);
       }
     }
   });
+}
+
+function createCallWithSpread(func, array) {
+  return {
+    type: 'CallExpression',
+    callee: func,
+    arguments: [
+      {
+        type: 'SpreadElement',
+        argument: array,
+      }
+    ]
+  };
 }
 
 // Recursively strips `loc` fields from given object and its nested objects,
@@ -37,7 +46,37 @@ function omitLoc(obj) {
   }
 }
 
-var matchApplyCall = matchesAst({
+var isUndefined = matchesAst({
+  type: 'Identifier',
+  name: 'undefined'
+});
+
+var isNull = matchesAst({
+  type: 'Literal',
+  value: null,
+  raw: 'null'
+});
+
+var matchFunctionApplyCall = matchesAst({
+  type: 'CallExpression',
+  callee: {
+    type: 'MemberExpression',
+    computed: false,
+    object: extract('func', {
+      type: 'Identifier'
+    }),
+    property: {
+      type: 'Identifier',
+      name: 'apply'
+    }
+  },
+  arguments: [
+    node => isUndefined(node) || isNull(node),
+    extract('array')
+  ]
+});
+
+var matchObjectApplyCall = matchesAst({
   type: 'CallExpression',
   callee: {
     type: 'MemberExpression',

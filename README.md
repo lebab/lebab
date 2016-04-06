@@ -67,7 +67,7 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
     - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
 - [x] **arg-spread** - use of apply() to spread operator **(in next release)**
     - [x] recognizes `obj.method.apply(obj, args)`
-    - [ ] does not convert plain `func.apply()`
+    - [x] recognizes `func.apply(undefined, args)`
 - [x] **obj-method** - function values in object to methods
     - [ ] does not convert named function expressions
     - [ ] does not convert arrow-functions
@@ -100,4 +100,3 @@ or voicing your opinion in existing one.
 Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][pattern-matching]
 
 [pattern-matching]: http://nene.github.io/2016/04/02/matches-ast
-

@@ -35,10 +35,15 @@ describe('Arguments apply() to spread', () => {
     expectNoChange('obj.fn.apply({}, someArray);');
   });
 
-  it('should not convert plain fn.apply()', () => {
+  it('should convert plain fn.apply()', () => {
+    expect(test('fn.apply(undefined, someArray);')).to.equal('fn(...someArray);');
+    expect(test('fn.apply(null, someArray);')).to.equal('fn(...someArray);');
+  });
+
+  it('should not convert plain fn.apply() when actual object used as this parameter', () => {
     expectNoChange('fn.apply(obj, someArray);');
     expectNoChange('fn.apply(this, someArray);');
-    expectNoChange('fn.apply(null, someArray);');
+    expectNoChange('fn.apply({}, someArray);');
   });
 
   it('should convert obj.fn.apply() with array expression', () => {
