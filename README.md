@@ -41,11 +41,11 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
     - [ ] does not recognize classes without methods
     - [ ] does not recognize static methods
     - [ ] no support for extending classes
-    - [ ] BUG [does not support namespaced classes](#113)
+    - [ ] BUG [does not support namespaced classes][113]
 - [x] **template** - string concatenation to template strings
     - [x] converts variables and arbitrary expressions to `${...}`
-    - [ ] BUG [removes indentation of multi-line strings](#88)
-    - [ ] BUG [ignores difference between `.toString()` and `.valueOf()`](#107)
+    - [ ] BUG [removes indentation of multi-line strings][88]
+    - [ ] BUG [ignores difference between `.toString()` and `.valueOf()`][107]
 - [x] **arrow** - callbacks to arrow functions
     - [x] Converts bound functions like `function(){}.bind(this)`
     - [x] not applied to unbound functions that use `this`
@@ -53,13 +53,13 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
     - [x] not applied to object properties (use `obj-method` transform)
     - [x] converts immediate return `{ return x; }` to `=> x`
     - [ ] does not remove `that = this` assignments
-    - [ ] BUG [fails with immediately returning functions that have methods invoked](#105)
+    - [ ] BUG [fails with immediately returning functions that have methods invoked][105]
 - [x] **let** - `var` to `let`/`const`
     - [x] never modified variables are converted to `const`
     - [x] properly recognizes block-scoping
     - [ ] vars that conflict with block-scoping are not converted
-    - [ ] BUG [treats existing `let`/`const` as `var`](#90)
-    - [ ] BUG [does not recognize destructuring](#90)
+    - [ ] BUG [treats existing `let`/`const` as `var`][90]
+    - [ ] BUG [does not recognize destructuring][90]
 - [x] **default-param** - default parameters instead of `a = a || 2`
     - [x] recognizes `a = a || 2`
     - [x] recognizes `a = a ? a : 2`
@@ -100,3 +100,8 @@ or voicing your opinion in existing one.
 Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][pattern-matching]
 
 [pattern-matching]: http://nene.github.io/2016/04/02/matches-ast
+[88]: https://github.com/mohebifar/lebab/issues/88
+[90]: https://github.com/mohebifar/lebab/issues/90
+[105]: https://github.com/mohebifar/lebab/issues/105
+[107]: https://github.com/mohebifar/lebab/issues/107
+[113]: https://github.com/mohebifar/lebab/issues/113
