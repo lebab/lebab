@@ -42,6 +42,7 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
     - [ ] does not recognize static methods
     - [ ] no support for extending classes
     - [ ] BUG [does not support namespaced classes][113]
+    - [ ] BUG [class and method comments are not preserved][118]
 - [x] **template** - string concatenation to template strings
     - [x] converts variables and arbitrary expressions to `${...}`
     - [ ] BUG [removes indentation of multi-line strings][88]
@@ -105,3 +106,4 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [105]: https://github.com/mohebifar/lebab/issues/105
 [107]: https://github.com/mohebifar/lebab/issues/107
 [113]: https://github.com/mohebifar/lebab/issues/113
+[118]: https://github.com/mohebifar/lebab/issues/118
