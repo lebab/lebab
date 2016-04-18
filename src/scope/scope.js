@@ -16,7 +16,7 @@ class Scope {
    */
   constructor(parent) {
     this.parent = parent;
-    this.vars = {};
+    this.vars = Object.create(null);
   }
 
   /**
