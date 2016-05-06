@@ -69,6 +69,20 @@ describe('Let/const', () => {
         'x++;'
       );
     });
+
+    it('should handle variables names identical to Object prototype methods', () => {
+      expect(test(
+        'var constructor = 1;\n' +
+        'var toString = 1;\n' +
+        'var valueOf = 1;\n' +
+        'var hasOwnProperty = 1;'
+      )).to.equal(
+        'const constructor = 1;\n' +
+        'const toString = 1;\n' +
+        'const valueOf = 1;\n' +
+        'const hasOwnProperty = 1;'
+      );
+    });
   });
 
   describe('with multi-variable declaration', () => {
