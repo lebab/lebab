@@ -34,6 +34,14 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
 
 ## Features and known limitations
 
+Lebab is not magic.
+It uses heuristics to figure out likely ES6 equivalent,
+but it doesn't guarantee that the resulting code is 100% equivalent.
+
+Therefore the recommended way of using Lebab is to apply one transform at a time,
+read what exactly the transform does and what are its limitations,
+apply it for your code and inspect the diff carefully.
+
 - [x] **class** - function/prototypes to classes
     - [x] recognizes `Foo.prototype.method = function(){ ... };`
     - [x] recognizes `Foo.prototype = { ...methods... };`
@@ -46,7 +54,7 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
 - [x] **template** - string concatenation to template strings
     - [x] converts variables and arbitrary expressions to `${...}`
     - [ ] BUG [removes indentation of multi-line strings][88]
-    - [ ] BUG [ignores difference between `.toString()` and `.valueOf()`][107]
+    - [ ] LIMITATION [ignores difference between `.toString()` and `.valueOf()`][107]
 - [x] **arrow** - callbacks to arrow functions
     - [x] Converts bound functions like `function(){}.bind(this)`
     - [x] not applied to unbound functions that use `this`
@@ -66,6 +74,7 @@ $ lebab es5.js -o es6.js --enable let,arrow,commonjs
     - [x] recognizes `a = a ? a : 2`
     - [x] recognizes `a = a === undefined ? 2 : a`
     - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
+    - [ ] LIMITATION [transforming `a = a || 2` does produce strictly equivalent code][125]
 - [x] **arg-spread** - use of apply() to spread operator
     - [x] recognizes `obj.method.apply(obj, args)`
     - [x] recognizes `func.apply(undefined, args)`
@@ -107,3 +116,4 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [107]: https://github.com/mohebifar/lebab/issues/107
 [113]: https://github.com/mohebifar/lebab/issues/113
 [118]: https://github.com/mohebifar/lebab/issues/118
+[125]: https://github.com/mohebifar/lebab/issues/125
