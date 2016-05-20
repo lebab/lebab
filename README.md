@@ -33,7 +33,8 @@ The recommended way of using Lebab is to apply one transform at a time,
 read what exactly the transform does and what are its limitations,
 apply it for your code and inspect the diff carefully.
 
-**Safe transforms.**
+### Safe transforms
+
 These transforms can be applied with relatively high confidence.
 They use pretty straight-forward and strict rules for chainging the code.
 The resulting ES2015 code should be almost 100% equivalent of the original code.
@@ -77,7 +78,8 @@ The resulting ES2015 code should be almost 100% equivalent of the original code.
     - [ ] does not check if named export conflicts with existing variable names
     - [ ] does not recognize imports/exports inside nested blocks/functions
 
-**Unsafe transforms.**
+### Unsafe transforms
+
 These transforms should be applied with caution.
 They use heuristics to detect common patterns that can be expressed with ES2015 syntax.
 There are no guarantees that the resulting code is equivalent of the original code.
