@@ -19,42 +19,25 @@ Install it using npm:
 $ npm install -g lebab
 ```
 
-Transpile your old-fashioned code using the `lebab` cli tool.
+Convert your old-fashioned code using the `lebab` cli tool,
+enabling a specific transformation:
 
 ```bash
-$ lebab es5.js -o es6.js
-```
-
-Or convert just the features of your choice:
-
-```bash
-$ lebab es5.js -o es6.js --enable let,arrow,commonjs
+$ lebab es5.js -o es6.js --enable let
 ```
 
 
 ## Features and known limitations
 
-Lebab is not magic.
-It uses heuristics to figure out likely ES6 equivalent,
-but it doesn't guarantee that the resulting code is 100% equivalent.
-
-Therefore the recommended way of using Lebab is to apply one transform at a time,
+The recommended way of using Lebab is to apply one transform at a time,
 read what exactly the transform does and what are its limitations,
 apply it for your code and inspect the diff carefully.
 
-- [x] **class** - function/prototypes to classes
-    - [x] recognizes `Foo.prototype.method = function(){ ... };`
-    - [x] recognizes `Foo.prototype = { ...methods... };`
-    - [x] recognizes getters/setters defined with `Object.defineProperty()`
-    - [ ] does not recognize classes without methods
-    - [ ] does not recognize static methods
-    - [ ] no support for extending classes
-    - [ ] BUG [does not support namespaced classes][113]
-    - [ ] BUG [class and method comments are not preserved][118]
-- [x] **template** - string concatenation to template strings
-    - [x] converts variables and arbitrary expressions to `${...}`
-    - [ ] BUG [removes indentation of multi-line strings][88]
-    - [ ] LIMITATION [ignores difference between `.toString()` and `.valueOf()`][107]
+**Safe transforms.**
+These transforms can be applied with relatively high confidence.
+They use pretty straight-forward and strict rules for chainging the code.
+The resulting ES2015 code should be almost 100% equivalent of the original code.
+
 - [x] **arrow** - callbacks to arrow functions
     - [x] Converts bound functions like `function(){}.bind(this)`
     - [x] not applied to unbound functions that use `this`
@@ -69,12 +52,6 @@ apply it for your code and inspect the diff carefully.
     - [ ] vars that conflict with block-scoping are not converted
     - [ ] BUG [treats existing `let`/`const` as `var`][90]
     - [ ] BUG [does not recognize destructuring][90]
-- [x] **default-param** - default parameters instead of `a = a || 2`
-    - [x] recognizes `a = a || 2`
-    - [x] recognizes `a = a ? a : 2`
-    - [x] recognizes `a = a === undefined ? 2 : a`
-    - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
-    - [ ] LIMITATION [transforming `a = a || 2` does produce strictly equivalent code][125]
 - [x] **arg-spread** - use of apply() to spread operator
     - [x] recognizes `obj.method.apply(obj, args)`
     - [x] recognizes `func.apply(undefined, args)`
@@ -99,6 +76,31 @@ apply it for your code and inspect the diff carefully.
     - [x] converts `exports.foo = bar` to `export {bar as foo}`
     - [ ] does not check if named export conflicts with existing variable names
     - [ ] does not recognize imports/exports inside nested blocks/functions
+
+**Unsafe transforms.**
+These transforms should be applied with caution.
+They use heuristics to detect common patterns that can be expressed with ES2015 syntax.
+There are no guarantees that the resulting code is equivalent of the original code.
+
+- [x] **class** - function/prototypes to classes
+    - [x] recognizes `Foo.prototype.method = function(){ ... };`
+    - [x] recognizes `Foo.prototype = { ...methods... };`
+    - [x] recognizes getters/setters defined with `Object.defineProperty()`
+    - [ ] does not recognize classes without methods
+    - [ ] does not recognize static methods
+    - [ ] no support for extending classes
+    - [ ] BUG [class and method comments are not preserved][118]
+    - [ ] LIMITATION [does not support namespaced classes][113]
+- [x] **template** - string concatenation to template strings
+    - [x] converts variables and arbitrary expressions to `${...}`
+    - [ ] BUG [removes indentation of multi-line strings][88]
+    - [ ] LIMITATION [ignores difference between `.toString()` and `.valueOf()`][107]
+- [x] **default-param** - default parameters instead of `a = a || 2`
+    - [x] recognizes `a = a || 2`
+    - [x] recognizes `a = a ? a : 2`
+    - [x] recognizes `a = a === undefined ? 2 : a`
+    - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
+    - [ ] LIMITATION [transforming `a = a || 2` does produce strictly equivalent code][125]
 
 
 ## What's next?
