@@ -1,28 +1,28 @@
 import _ from 'lodash';
 
 /**
- * Extracts all variable names from from destructuring
+ * Extracts all variables from from destructuring
  * operation in assignment or variable declaration.
  *
  * Also works for a single identifier (so it generalizes
  * for all assignments / variable declarations).
  *
  * @param  {Object} node
- * @return {String[]} Variable names
+ * @return {Object[]} Identifiers
  */
-export function extractVariableNames(node) {
+export function extractVariables(node) {
   if (node.type === 'Identifier') {
-    return [node.name];
+    return [node];
   }
 
   if (node.type === 'ArrayPattern') {
-    return _(node.elements).map(extractVariableNames).flatten().value();
+    return _(node.elements).map(extractVariables).flatten().value();
   }
   if (node.type === 'ObjectPattern') {
-    return _(node.properties).map(extractVariableNames).flatten().value();
+    return _(node.properties).map(extractVariables).flatten().value();
   }
   if (node.type === 'Property') {
-    return extractVariableNames(node.value);
+    return extractVariables(node.value);
   }
 
   // Ignore stuff like MemberExpressions,

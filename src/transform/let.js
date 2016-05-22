@@ -41,8 +41,8 @@ export default function(ast) {
         });
       }
       else if (node.type === 'AssignmentExpression') {
-        destructuring.extractVariableNames(node.left).forEach(name => {
-          variableMarker.markModified(name);
+        destructuring.extractVariables(node.left).forEach(ident => {
+          variableMarker.markModified(ident.name);
         });
       }
       else if (variableType.isUpdate(node)) {
