@@ -57,7 +57,7 @@ The resulting ES2015 code should be almost 100% equivalent of the original code.
     - [x] recognizes `obj.method.apply(obj, args)`
     - [x] recognizes `func.apply(undefined, args)`
 - [x] **obj-method** - function values in object to methods
-    - [ ] does not convert named function expressions
+    - [ ] LIMITATION [does not convert named function expressions][127]
     - [ ] does not convert arrow-functions
 - [x] **obj-shorthand** - `{foo: foo}` to `{foo}`
     - [x] ignores numeric and `NaN` properties
@@ -121,3 +121,4 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [113]: https://github.com/mohebifar/lebab/issues/113
 [118]: https://github.com/mohebifar/lebab/issues/118
 [125]: https://github.com/mohebifar/lebab/issues/125
+[127]: https://github.com/mohebifar/lebab/issues/127
