@@ -6,18 +6,21 @@ import _ from 'lodash';
 program.usage('[options] <file>');
 program.description(`${pkg.description}
 
-  Available transforms:
+  Safe transforms:
 
-    + class .......... prototype assignments to class declaration
-    + template ....... string concatenation to template string
     + arrow .......... callback to arrow function
     + let ............ var to let/const
-    + default-param .. use of || to default parameters
     + arg-spread ..... use of apply() to spread operator
     + obj-method ..... function values in objects to methods
     + obj-shorthand .. {foo: foo} to {foo}
     + no-strict ...... remove "use strict" directives
-    + commonjs ....... CommonJS module loading to import/export`);
+    + commonjs ....... CommonJS module loading to import/export
+
+  Unsafe transforms:
+
+    + class .......... prototype assignments to class declaration
+    + template ....... string concatenation to template string
+    + default-param .. use of || to default parameters`);
 program.version(pkg.version);
 program.option('-o, --out-file <out>', 'compile into a single file');
 program.option('--enable <a,b,c>', 'enable only specified transforms', v => v.split(','));
