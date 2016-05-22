@@ -308,6 +308,18 @@ describe('Let/const', () => {
     });
   });
 
+  describe('with nested function that uses destructured parmaters', () => {
+    it('should use const when variable redeclared as parameter', () => {
+      expect(test(
+        'var a = 0;\n' +
+        'function foo({a}) { a = 1; };'
+      )).to.equal(
+        'const a = 0;\n' +
+        'function foo({a}) { a = 1; };'
+      );
+    });
+  });
+
   describe('with nested block', () => {
     it('should use let when variable assigned in it', () => {
       expect(test(
@@ -461,6 +473,20 @@ describe('Let/const', () => {
       );
     });
 
+    it('should use const when variable name used as destructured function parameter name outside the block', () => {
+      expect(test(
+        'if (true) {\n' +
+        '  var a = 1;\n' +
+        '}\n' +
+        'function fn({a}) {}'
+      )).to.equal(
+        'if (true) {\n' +
+        '  const a = 1;\n' +
+        '}\n' +
+        'function fn({a}) {}'
+      );
+    });
+
     it('should ignore variable referenced in function body outside the block', () => {
       expectNoChange(
         'if (true) {\n' +
@@ -594,6 +620,14 @@ describe('Let/const', () => {
     it('should ignore when re-declaring of function parameter', () => {
       expectNoChange(
         'function foo(a) {\n' +
+        '  var a = 1;\n' +
+        '}'
+      );
+    });
+
+    it('should ignore when re-declaring of destuctured function parameter', () => {
+      expectNoChange(
+        'function foo({a}) {\n' +
         '  var a = 1;\n' +
         '}'
       );

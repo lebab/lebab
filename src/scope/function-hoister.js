@@ -1,5 +1,7 @@
+import _ from 'lodash';
 import estraverse from 'estraverse';
 import * as functionType from '../utils/function-type';
+import * as destructuring from '../utils/destructuring.js';
 import Variable from '../scope/variable';
 import VariableGroup from '../scope/variable-group';
 
@@ -41,7 +43,7 @@ class FunctionHoister {
   }
 
   hoistFunctionParams(params) {
-    params.forEach(p => {
+    _(params).map(destructuring.extractVariables).flatten().forEach(p => {
       this.functionScope.register(p.name, new Variable(p));
     });
   }
