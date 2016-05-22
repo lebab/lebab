@@ -220,6 +220,50 @@ describe('Let/const', () => {
     });
   });
 
+  describe('with destructured variable declaration', () => {
+    it('should use const when not referenced afterwards', () => {
+      expect(test(
+        'var [x, y] = [1, 2];\n' +
+        'var {foo, bar} = {foo: 1, bar: 2};'
+      )).to.equal(
+        'const [x, y] = [1, 2];\n' +
+        'const {foo, bar} = {foo: 1, bar: 2};'
+      );
+    });
+
+    it('should use let when assigned to afterwards', () => {
+      expect(test(
+        'var [x, y] = [1, 2];\n' +
+        'x = 3;\n' +
+        'y = 4;'
+      )).to.equal(
+        'let [x, y] = [1, 2];\n' +
+        'x = 3;\n' +
+        'y = 4;'
+      );
+    });
+
+    it('should use let when only some vars assigned to afterwards', () => {
+      expect(test(
+        'var [x, y] = [1, 2];\n' +
+        'y = 4;'
+      )).to.equal(
+        'let [x, y] = [1, 2];\n' +
+        'y = 4;'
+      );
+    });
+
+    it('should use var when only some vars are block-scoped', () => {
+      expectNoChange(
+        'if (true) {\n' +
+        '  var [x, y] = [1, 2];\n' +
+        '  x = 10;\n' +
+        '}\n' +
+        'y = 20;'
+      );
+    });
+  });
+
   describe('with nested function', () => {
     it('should use let when variable re-declared inside it', () => {
       expect(test(

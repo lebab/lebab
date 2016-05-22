@@ -31,7 +31,10 @@ export default function(ast) {
       }
       else if (node.type === 'VariableDeclaration') {
         node.declarations.forEach(decl => {
-          variableMarker.markDeclared(decl.id.name);
+          variableMarker.markDeclared(
+            destructuring.extractVariables(decl.id).map(v => v.name)
+          );
+
           // Uninitialized variables can never be const.
           // But variables in for-in/of loop heads are actually initialized (although init === null).
           const inForLoopHead = isAnyForStatement(parent) && parent.left === node;

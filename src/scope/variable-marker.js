@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 /**
  * Labels variables in relation to their use in block scope.
  *
@@ -14,24 +16,42 @@ class VariableMarker {
   }
 
   /**
-   * Marks variable declared in current block scope.
+   * Marks set of variables declared in current block scope.
+   *
+   * Takes an array of variable names to support the case of declaring
+   * multiple variables at once with a destructuring operation.
    *
    * - Not valid block var when already declared before.
    *
-   * @param  {String} varName
+   * @param  {String[]} varNames
    */
-  markDeclared(varName) {
-    const blockVar = this.getScope().findFunctionScoped(varName);
+  markDeclared(varNames) {
+    const alreadySeen = [];
 
-    // Ignore repeated var declarations
-    if (blockVar.isDeclared()) {
-      blockVar.markHoisted();
-      return;
-    }
+    varNames.forEach(varName => {
+      const blockVar = this.getScope().findFunctionScoped(varName);
 
-    // Remember that it's declared and register in current block scope
-    blockVar.markDeclared();
-    this.getScope().register(varName, blockVar);
+      // all variable names declared with a destructuring operation
+      // reference the same Variable object, so when we mark the
+      // first variable in destructuring as declared, they all
+      // will be marked as declared, but this kind of re-declaring
+      // (which isn't actually real re-declaring) should not cause
+      // variable to be marked as declared multiple times and
+      // therefore marked as hoisted.
+      if (!_.includes(alreadySeen, blockVar)) {
+        alreadySeen.push(blockVar);
+
+        // Ignore repeated var declarations
+        if (blockVar.isDeclared()) {
+          blockVar.markHoisted();
+          return;
+        }
+      }
+
+      // Remember that it's declared and register in current block scope
+      blockVar.markDeclared();
+      this.getScope().register(varName, blockVar);
+    });
   }
 
   /**

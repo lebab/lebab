@@ -73,7 +73,13 @@ class FunctionHoister {
     node.declarations.forEach(declaratorNode => {
       const variable = new Variable(declaratorNode, group);
       group.add(variable);
-      this.functionScope.register(declaratorNode.id.name, variable);
+      // All destructured variable names point to the same Variable instance,
+      // as we want to treat the destructured variables as one un-breakable
+      // unit - if one of them is modified and other one not, we cannot break
+      // them apart into const and let, but instead need to use let for both.
+      destructuring.extractVariables(declaratorNode.id).forEach(v => {
+        this.functionScope.register(v.name, variable);
+      });
     });
   }
 }
