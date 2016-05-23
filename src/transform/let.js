@@ -32,7 +32,7 @@ export default function(ast) {
       else if (node.type === 'VariableDeclaration') {
         node.declarations.forEach(decl => {
           variableMarker.markDeclared(
-            destructuring.extractVariables(decl.id).map(v => v.name)
+            destructuring.extractVariableNames(decl.id)
           );
 
           // Uninitialized variables can never be const.
@@ -44,8 +44,8 @@ export default function(ast) {
         });
       }
       else if (node.type === 'AssignmentExpression') {
-        destructuring.extractVariables(node.left).forEach(ident => {
-          variableMarker.markModified(ident.name);
+        destructuring.extractVariableNames(node.left).forEach(name => {
+          variableMarker.markModified(name);
         });
       }
       else if (variableType.isUpdate(node)) {

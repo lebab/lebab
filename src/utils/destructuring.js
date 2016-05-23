@@ -29,3 +29,14 @@ export function extractVariables(node) {
   // we only care about variables.
   return [];
 }
+
+/**
+ * Like extractVariables(), but returns the names of variables
+ * instead of Identifier objects.
+ *
+ * @param  {Object} node
+ * @return {String[]} variable names
+ */
+export function extractVariableNames(node) {
+  return extractVariables(node).map(v => v.name);
+}

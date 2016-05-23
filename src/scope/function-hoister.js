@@ -77,8 +77,8 @@ class FunctionHoister {
       // as we want to treat the destructured variables as one un-breakable
       // unit - if one of them is modified and other one not, we cannot break
       // them apart into const and let, but instead need to use let for both.
-      destructuring.extractVariables(declaratorNode.id).forEach(v => {
-        this.functionScope.register(v.name, variable);
+      destructuring.extractVariableNames(declaratorNode.id).forEach(name => {
+        this.functionScope.register(name, variable);
       });
     });
   }
