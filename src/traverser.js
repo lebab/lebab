@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import estraverse from 'estraverse';
 
 // JSX AST types, as documented in:
@@ -25,10 +26,10 @@ const jsxExtensions = {
  */
 export default {
   traverse(tree, cfg) {
-    return estraverse.traverse(tree, Object.assign(cfg, jsxExtensions));
+    return estraverse.traverse(tree, _.assign(cfg, jsxExtensions));
   },
   replace(tree, cfg) {
-    return estraverse.replace(tree, Object.assign(cfg, jsxExtensions));
+    return estraverse.replace(tree, _.assign(cfg, jsxExtensions));
   },
   VisitorOption: estraverse.VisitorOption,
 };

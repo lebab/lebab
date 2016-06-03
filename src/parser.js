@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import espree from 'espree';
 
 /**
@@ -5,6 +6,6 @@ import espree from 'espree';
  */
 export default {
   parse(js, opts) {
-    return espree.parse(js, Object.assign({ecmaFeatures: {jsx: true}}, opts));
+    return espree.parse(js, _.assign({ecmaFeatures: {jsx: true}}, opts));
   }
 };
