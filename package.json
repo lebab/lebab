@@ -8,7 +8,7 @@
     "test": "grunt test"
   },
   "engines": {
-    "node": ">=5.7.1"
+    "node": ">=0.10"
   },
   "repository": {
     "type": "git",
