@@ -115,8 +115,7 @@ describe('Template string', () => {
     expect(test('x = "\\\\" + y;')).to.equal('x = `\\\\${y}`;');
   });
 
-  it('should leave octal-, hex-, unicode-escapes as is', () => {
-    expect(test('x = "\\251" + y;')).to.equal('x = `\\251${y}`;');
+  it('should leave hex- and unicode-escapes as is', () => {
     expect(test('x = "\\xA9" + y;')).to.equal('x = `\\xA9${y}`;');
     expect(test('x = "\\u00A9" + y;')).to.equal('x = `\\u00A9${y}`;');
   });
