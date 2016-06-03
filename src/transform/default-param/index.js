@@ -25,7 +25,8 @@ function transformDefaultParams(fn) {
 
     const detected = detectedDefaults[param.name];
     // Transform when default value detected and no existing default value
-    if (detected && !fn.defaults[i]) {
+    if (detected && (!fn.defaults || !fn.defaults[i])) {
+      fn.defaults = fn.defaults || [];
       fn.defaults[i] = detected.value;
       multiReplaceStatement(fn.body, detected.node, []);
     }
