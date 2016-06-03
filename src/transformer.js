@@ -1,3 +1,4 @@
+import 'babel/polyfill';
 import _ from 'lodash';
 import recast from 'recast';
 import parser from './parser';
