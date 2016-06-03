@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import estraverse from 'estraverse';
+import traverser from '../traverser';
 import * as functionType from '../utils/function-type';
 import * as variableType from '../utils/variable-type';
 import * as destructuring from '../utils/destructuring.js';
@@ -15,7 +15,7 @@ export default function(ast) {
   scopeManager = new ScopeManager();
   const variableMarker = new VariableMarker(scopeManager);
 
-  estraverse.traverse(ast, {
+  traverser.traverse(ast, {
     enter(node, parent) {
       if (node.type === 'Program') {
         enterProgram(node);

@@ -1,11 +1,11 @@
-import estraverse from 'estraverse';
+import traverser from '../traverser';
 import TemplateLiteral from './../syntax/template-literal';
 import TemplateElement from './../syntax/template-element';
 import isString from './../utils/is-string';
 import _ from 'lodash';
 
 export default function(ast) {
-  estraverse.replace(ast, {
+  traverser.replace(ast, {
     enter(node) {
       if (isPlusExpression(node)) {
         this.skip();

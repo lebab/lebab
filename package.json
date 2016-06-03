@@ -32,6 +32,8 @@
   "dependencies": {
     "babel": "^5.8.34",
     "commander": "^2.9.0",
+    "espree": "^3.1.5",
+    "esprima": "^2.7.2",
     "estraverse": "^4.1.1",
     "lodash": "^4.5.1",
     "recast": "^0.11.0"

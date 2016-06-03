@@ -1,4 +1,4 @@
-import estraverse from 'estraverse';
+import traverser from '../../traverser';
 import isString from '../../utils/is-string';
 import {matchesAst, extract} from '../../utils/matches-ast';
 import multiReplaceStatement from '../../utils/multi-replace-statement';
@@ -8,7 +8,7 @@ import ImportDefaultSpecifier from '../../syntax/import-default-specifier';
 import VariableDeclaration from '../../syntax/variable-declaration';
 
 export default function(ast) {
-  estraverse.replace(ast, {
+  traverser.replace(ast, {
     enter(node, parent) {
       if (isVarWithRequireCalls(node) && parent.type === 'Program') {
         multiReplaceStatement(

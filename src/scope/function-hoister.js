@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import estraverse from 'estraverse';
+import traverser from '../traverser';
 import * as functionType from '../utils/function-type';
 import * as destructuring from '../utils/destructuring.js';
 import Variable from '../scope/variable';
@@ -49,7 +49,7 @@ class FunctionHoister {
   }
 
   hoistVariables(ast) {
-    estraverse.traverse(ast, {
+    traverser.traverse(ast, {
       // Use arrow-function here, so we can access outer `this`.
       enter: (node, parent) => {
         if (node.type === 'VariableDeclaration') {
@@ -58,11 +58,11 @@ class FunctionHoister {
         else if (functionType.isFunctionDeclaration(node)) {
           this.functionScope.register(node.id.name, new Variable(node));
           // Skip anything inside the nested function
-          return estraverse.VisitorOption.Skip;
+          return traverser.VisitorOption.Skip;
         }
         else if (functionType.isFunctionExpression(node)) {
           // Skip anything inside the nested function
-          return estraverse.VisitorOption.Skip;
+          return traverser.VisitorOption.Skip;
         }
       }
     });
