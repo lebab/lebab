@@ -1,4 +1,4 @@
-import estraverse from 'estraverse';
+import traverser from '../../traverser';
 import matchDefaultExport from './match-default-export';
 import matchNamedExport from './match-named-export';
 import {isFunctionExpression} from '../../utils/function-type';
@@ -6,7 +6,7 @@ import ExportNamedDeclaration from '../../syntax/export-named-declaration';
 import VariableDeclaration from '../../syntax/variable-declaration';
 
 export default function(ast) {
-  estraverse.replace(ast, {
+  traverser.replace(ast, {
     enter(node, parent) {
       let m;
       if ((m = matchDefaultExport(node)) && parent.type === 'Program') {

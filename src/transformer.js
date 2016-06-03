@@ -1,5 +1,7 @@
+import 'babel/polyfill';
 import _ from 'lodash';
 import recast from 'recast';
+import parser from './parser';
 
 // Transforms
 import classTransform from './transform/class';
@@ -48,7 +50,7 @@ export default class Transformer {
    */
   run(code) {
     return this.ignoringHashBangComment(code, (js) => {
-      const ast = recast.parse(js);
+      const ast = recast.parse(js, {parser});
 
       this.transforms.forEach(transformer => {
         transformer(ast.program);

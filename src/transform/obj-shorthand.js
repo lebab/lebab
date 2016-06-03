@@ -1,7 +1,7 @@
-import estraverse from 'estraverse';
+import traverser from '../traverser';
 
 export default function(ast) {
-  estraverse.replace(ast, {
+  traverser.replace(ast, {
     enter: propertyToShorthand
   });
 }
