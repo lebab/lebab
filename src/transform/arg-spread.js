@@ -31,7 +31,7 @@ function createCallWithSpread(func, array) {
   };
 }
 
-// Recursively strips `loc` fields from given object and its nested objects,
+// Recursively strips `loc`, `start` and `end` fields from given object and its nested objects,
 // removing the location information that we don't care about when comparing
 // AST nodes.
 function omitLoc(obj) {
@@ -39,7 +39,7 @@ function omitLoc(obj) {
     return obj.map(omitLoc);
   }
   else if (_.isObjectLike(obj)) {
-    return _(obj).omit('loc').mapValues(omitLoc).value();
+    return _(obj).omit('loc', 'start', 'end').mapValues(omitLoc).value();
   }
   else {
     return obj;
