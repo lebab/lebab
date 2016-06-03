@@ -1,4 +1,4 @@
-import espree from 'espree';
+import espree from 'esprima';
 
 /**
  * An Esprima-compatible parser with JSX parsing enabled.
