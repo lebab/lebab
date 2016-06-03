@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import estraverse from 'estraverse';
+import traverser from '../traverser';
 import ArrowFunctionExpression from '../syntax/arrow-function-expression';
 import {matchesAst, extract} from '../utils/matches-ast';
 
 export default function(ast) {
-  estraverse.replace(ast, {
+  traverser.replace(ast, {
     enter(node, parent) {
       if (isFunctionConvertableToArrow(node, parent)) {
         return functionToArrow(node);
@@ -66,7 +66,7 @@ function hasInFunctionBody(ast, pattern) {
   const predicate = _.matches(pattern);
   let found = false;
 
-  estraverse.traverse(ast, {
+  traverser.traverse(ast, {
     enter(node) {
       if (predicate(node)) {
         found = true;

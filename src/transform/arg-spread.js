@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import estraverse from 'estraverse';
+import traverser from '../traverser';
 import {matchesAst, extract} from '../utils/matches-ast';
 
 export default function(ast) {
-  estraverse.replace(ast, {
+  traverser.replace(ast, {
     enter(node) {
       const {func, array} = matchFunctionApplyCall(node);
       if (func) {

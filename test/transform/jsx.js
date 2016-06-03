@@ -18,7 +18,7 @@ function expectNoChange(script) {
 }
 
 describe('JSX support', () => {
-  it('ignores JSX syntax', () => {
+  it.only('ignores JSX syntax', () => {
     expectNoChange(
       'var foo = ( <div/> );'
     );

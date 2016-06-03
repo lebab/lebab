@@ -1,11 +1,11 @@
-import estraverse from 'estraverse';
+import traverser from '../../traverser';
 import multiReplaceStatement from '../../utils/multi-replace-statement';
 import matchOrAssignment from './match-or-assignment';
 import matchTernaryAssignment from './match-ternary-assignment';
 import matchIfUndefinedAssignment from './match-if-undefined-assignment';
 
 export default function(ast) {
-  estraverse.replace(ast, {
+  traverser.replace(ast, {
     enter(node) {
       if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
         transformDefaultParams(node);

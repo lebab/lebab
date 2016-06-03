@@ -1,5 +1,5 @@
 import matchesAst from '../utils/matches-ast';
-import estraverse from 'estraverse';
+import traverser from '../traverser';
 
 const isTransformableProperty = matchesAst({
   type: 'Property',
@@ -13,7 +13,7 @@ const isTransformableProperty = matchesAst({
 });
 
 export default function(ast) {
-  estraverse.replace(ast, {
+  traverser.replace(ast, {
     enter(node) {
       if (isTransformableProperty(node)) {
         node.method = true;

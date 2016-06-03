@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import estraverse from 'estraverse';
+import traverser from '../../traverser';
 import PotentialClass from './potential-class';
 import PotentialMethod from './potential-method';
 import matchFunctionDeclaration from './match-function-declaration';
@@ -11,7 +11,7 @@ import matchObjectDefinePropertyCall from './match-object-define-property-call';
 export default function(ast) {
   const potentialClasses = {};
 
-  estraverse.traverse(ast, {
+  traverser.traverse(ast, {
     enter(node, parent) {
       let m;
 
