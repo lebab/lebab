@@ -50,9 +50,12 @@ The resulting ES2015 code should be almost 100% equivalent of the original code.
 - [x] **let** - `var` to `let`/`const`
     - [x] never modified variables are converted to `const`
     - [x] properly recognizes block-scoping
-    - [ ] vars that conflict with block-scoping are not converted
-    - [ ] BUG [treats existing `let`/`const` as `var`][90]
-    - [ ] BUG [does not recognize destructuring][90]
+    - [x] splits single var declaration to multiple `let`/`const` declarations if needed
+    - [x] recognizes vars defined/assigned using destructuring
+    - [x] vars that conflict with block-scoping are not converted
+    - [x] repeated declarations of the same var are not converted
+    - [x] existing `let`/`const` are not converted
+    - [ ] BUG [fails with repeated variable definitions that use destructuring][131]
 - [x] **arg-spread** - use of apply() to spread operator
     - [x] recognizes `obj.method.apply(obj, args)`
     - [x] recognizes `func.apply(undefined, args)`
@@ -115,10 +118,10 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 
 [pattern-matching]: http://nene.github.io/2016/04/02/matches-ast
 [88]: https://github.com/mohebifar/lebab/issues/88
-[90]: https://github.com/mohebifar/lebab/issues/90
 [105]: https://github.com/mohebifar/lebab/issues/105
 [107]: https://github.com/mohebifar/lebab/issues/107
 [113]: https://github.com/mohebifar/lebab/issues/113
 [118]: https://github.com/mohebifar/lebab/issues/118
 [125]: https://github.com/mohebifar/lebab/issues/125
 [127]: https://github.com/mohebifar/lebab/issues/127
+[131]: https://github.com/mohebifar/lebab/issues/131
