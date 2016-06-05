@@ -51,6 +51,7 @@ class PotentialMethod {
       },
       kind: this.kind,
       static: false,
+      comments: this.fullNode && this.fullNode.comments,
     };
   }
 

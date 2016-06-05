@@ -57,7 +57,8 @@ class PotentialClass {
       body: {
         type: 'ClassBody',
         body: this.createMethods()
-      }
+      },
+      comments: this.fullNode.comments,
     };
   }
 

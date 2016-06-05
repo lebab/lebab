@@ -214,4 +214,87 @@ describe('Classes', () => {
       '});'
     );
   });
+
+  describe('comments', () => {
+    it('should preserve class comments', () => {
+      expect(test(
+        '/** My nice class. */\n' +
+        'function MyClass() {\n' +
+        '}\n' +
+        'MyClass.prototype.method = function(a, b) {\n' +
+        '};'
+      )).to.equal(
+        '/** My nice class. */\n' +
+        'class MyClass {\n' +
+        '  method(a, b) {\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('should preserve method comments', () => {
+      expect(test(
+        'function MyClass() {\n' +
+        '}\n' +
+        '/** My nice method. */\n' +
+        'MyClass.prototype.method = function(a, b) {\n' +
+        '};'
+      )).to.equal(
+        'class MyClass {\n' +
+        '  /** My nice method. */\n' +
+        '  method(a, b) {\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('should preserve class with constructor comments', () => {
+      expect(test(
+        '/** My nice class. */\n' +
+        'function MyClass() {\n' +
+        '  this.foo = 1;\n' +
+        '}\n' +
+        'MyClass.prototype.method = function(a, b) {\n' +
+        '};'
+      )).to.equal(
+        '/** My nice class. */\n' +
+        'class MyClass {\n' +
+        '  constructor() {\n' +
+        '    this.foo = 1;\n' +
+        '  }\n' +
+        '\n' +
+        '  method(a, b) {\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('should preserve multiple comments in various places', () => {
+      expect(test(
+        '// My class\n' +
+        '// it is nice\n' +
+        'function MyClass() {\n' +
+        '}\n' +
+        '// comment after constructor-function\n' +
+        '\n' +
+        '// Look me, a method!\n' +
+        '// it is nice too\n' +
+        'MyClass.prototype.method = function(a, b) {\n' +
+        '};\n' +
+        '// and even some comments in here'
+      )).to.equal(
+        '// My class\n' +
+        '// it is nice\n' +
+        'class MyClass {\n' +
+        '  // comment after constructor-function\n' +
+        '\n' +
+        '  // Look me, a method!\n' +
+        '  // it is nice too\n' +
+        '  method(a, b) {\n' +
+        '  }\n' +
+        '  // and even some comments in here\n' +
+        '}'
+      );
+    });
+  });
 });
