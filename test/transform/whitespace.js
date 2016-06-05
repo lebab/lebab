@@ -17,7 +17,7 @@ function test(script) {
   return transformer.run(script);
 }
 
-describe('Comments', () => {
+describe('Whitespace', () => {
   it('should not eliminate leading newlines', () => {
     expect(test(
       '\n\nvar x = 42;'
