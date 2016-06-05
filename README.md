@@ -94,7 +94,6 @@ There are no guarantees that the resulting code is equivalent of the original co
     - [ ] does not recognize classes without methods
     - [ ] does not recognize static methods
     - [ ] no support for extending classes
-    - [ ] BUG [class and method comments are not preserved][118]
     - [ ] LIMITATION [does not support namespaced classes][113]
 - [x] **template** - string concatenation to template strings
     - [x] converts variables and arbitrary expressions to `${...}`
@@ -121,7 +120,6 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [105]: https://github.com/mohebifar/lebab/issues/105
 [107]: https://github.com/mohebifar/lebab/issues/107
 [113]: https://github.com/mohebifar/lebab/issues/113
-[118]: https://github.com/mohebifar/lebab/issues/118
 [125]: https://github.com/mohebifar/lebab/issues/125
 [127]: https://github.com/mohebifar/lebab/issues/127
 [131]: https://github.com/mohebifar/lebab/issues/131
