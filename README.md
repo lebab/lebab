@@ -36,7 +36,7 @@ apply it for your code and inspect the diff carefully.
 ### Safe transforms
 
 These transforms can be applied with relatively high confidence.
-They use pretty straight-forward and strict rules for chainging the code.
+They use pretty straight-forward and strict rules for changing the code.
 The resulting ES2015 code should be almost 100% equivalent of the original code.
 
 - [x] **arrow** - callbacks to arrow functions
