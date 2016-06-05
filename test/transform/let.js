@@ -819,4 +819,24 @@ describe('Let/const', () => {
       );
     });
   });
+
+  describe('comments', () => {
+    it('should preserve comment line', () => {
+      expect(test(
+        '// comment line\n' +
+        'var x = 42;'
+      )).to.equal(
+        '// comment line\n' +
+        'const x = 42;'
+      );
+    });
+
+    it('should preserve trailing comment', () => {
+      expect(test(
+        'var x = 42; // trailing comment'
+      )).to.equal(
+        'const x = 42; // trailing comment'
+      );
+    });
+  });
 });
