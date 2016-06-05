@@ -757,6 +757,38 @@ describe('Let/const', () => {
     });
   });
 
+  // Completely disallow conversion of existing let & const.
+  // (While we could convert several cases of let to const,
+  // we cannot right now guarantee correct conversion of all
+  // the edge cases.)
+  describe('existing let/const', () => {
+    it('should not convert existing let to const', () => {
+      expectNoChange(
+        'let x = 1;'
+      );
+    });
+
+    it('should not convert existing const to var', () => {
+      expectNoChange(
+        'if (true) {\n' +
+        '  const x = 1;\n' +
+        '} else {\n' +
+        '  const x = 2;\n' +
+        '}'
+      );
+    });
+
+    it('should not convert existing let to var', () => {
+      expectNoChange(
+        'if (true) {\n' +
+        '  let x = 1;\n' +
+        '} else {\n' +
+        '  let x = 2;\n' +
+        '}'
+      );
+    });
+  });
+
   // Possible errors (Issues #31 and #53)
   describe('regression tests', () => {
     it('should not throw error for assignment to undeclared variable', () => {

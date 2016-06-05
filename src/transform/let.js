@@ -136,6 +136,11 @@ function leaveFunction() {
 // This is where the actual transform happens
 function transformVarsToLetOrConst() {
   getFunctionVariableGroups().forEach(group => {
+    // Do not modify existing let & const
+    if (group.getNode().kind !== 'var') {
+      return;
+    }
+
     const commonKind = group.getCommonKind();
     if (commonKind) {
       // When all variables in group are of the same kind,
