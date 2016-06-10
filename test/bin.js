@@ -20,7 +20,7 @@ describe('Smoke test for the executable script', () => {
 
   describe('when valid input and output file given', () => {
     it('transforms input file to output file', done => {
-      exec('node ./bin/index.js test/test-data.js -o test/output.js', (error, stdout, stderr) => {
+      exec('node ./bin/index.js -t let,arrow test/test-data.js -o test/output.js', (error, stdout, stderr) => {
         expect(error).to.equal(null);
         expect(stderr).to.equal('');
         expect(stdout).to.equal('');
@@ -36,7 +36,7 @@ describe('Smoke test for the executable script', () => {
 
   describe('when no input/output files given', () => {
     it('reads STDIN and writes STDOUT', done => {
-      exec('node ./bin/index.js < test/test-data.js > test/output.js', (error, stdout, stderr) => {
+      exec('node ./bin/index.js -t let,arrow < test/test-data.js > test/output.js', (error, stdout, stderr) => {
         expect(error).to.equal(null);
         expect(stderr).to.equal('');
         expect(stdout).to.equal('');
@@ -52,7 +52,7 @@ describe('Smoke test for the executable script', () => {
 
   describe('when invalid transform name given', () => {
     it('exits with error message', done => {
-      exec('node ./bin/index.js --enable blah test/test-data.js', (error, stdout, stderr) => {
+      exec('node ./bin/index.js --transform blah test/test-data.js', (error, stdout, stderr) => {
         expect(error).not.to.equal(null);
         expect(stderr).to.equal('Unknown transform "blah".\n');
         expect(stdout).to.equal('');

@@ -1,11 +1,8 @@
 import program from 'commander';
 import pkg from '../package.json';
 import fs from 'fs';
-import _ from 'lodash';
 
-program.usage('[options] <file>');
-program.description(`${pkg.description}
-
+const transformsDocs = `
   Safe transforms:
 
     + arrow .......... callback to arrow function
@@ -20,11 +17,13 @@ program.description(`${pkg.description}
 
     + class .......... prototype assignments to class declaration
     + template ....... string concatenation to template string
-    + default-param .. use of || to default parameters`);
+    + default-param .. use of || to default parameters`;
+
+program.usage('-t <transform> <file>');
+program.description(`${pkg.description}\n${transformsDocs}`);
 program.version(pkg.version);
 program.option('-o, --out-file <out>', 'compile into a single file');
-program.option('--enable <a,b,c>', 'enable only specified transforms', v => v.split(','));
-program.option('--disable <a,b,c>', 'disable specified transforms', v => v.split(','));
+program.option('-t, --transform <a,b,c>', 'one or more transformations to perform', v => v.split(','));
 
 /**
  * Parses and validates command line options from argv.
@@ -55,44 +54,38 @@ function getInputFile() {
 }
 
 function getTransforms() {
-  if (program.enable && program.disable) {
-    throw 'Options --enable and --disable can not be used together.';
+  if (!program.transform || program.transform.length === 0) {
+    throw `No transforms specifed :(
+
+Use --transform option to pick one of the following:
+${transformsDocs}`;
   }
 
-  // All enabled by default
-  let transforms = {
-    'class': true,
-    'template': true,
-    'arrow': true,
-    'let': true,
-    'default-param': true,
-    'arg-spread': true,
-    'obj-method': true,
-    'obj-shorthand': true,
-    'no-strict': true,
-    'commonjs': true,
+  // All disabled by default
+  const transforms = {
+    'class': false,
+    'template': false,
+    'arrow': false,
+    'let': false,
+    'default-param': false,
+    'arg-spread': false,
+    'obj-method': false,
+    'obj-shorthand': false,
+    'no-strict': false,
+    'commonjs': false,
   };
 
-  // When --enable used turn off everything besides the specified tranformers
-  if (program.enable) {
-    transforms = _.mapValues(transforms, _.constant(false));
-
-    setTransformsEnabled(transforms, program.enable, true);
-  }
-
-  // When --disable used, disable the specific transforms
-  if (program.disable) {
-    setTransformsEnabled(transforms, program.disable, false);
-  }
+  // When --transform used, enable the specific transforms
+  setTransformsEnabled(transforms, program.transform);
 
   return transforms;
 }
 
-function setTransformsEnabled(transforms, names, enabled) {
+function setTransformsEnabled(transforms, names) {
   names.forEach(name => {
     if (!transforms.hasOwnProperty(name)) {
       throw `Unknown transform "${name}".`;
     }
-    transforms[name] = enabled;
+    transforms[name] = true;
   });
 }
