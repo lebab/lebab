@@ -15,7 +15,7 @@ export default function(transformsCfg) {
     //   expectTransform("code").toReturn("transformed code");
     //
     expectTransform(script) {
-      const code = transformer.run(script);
+      const code = transformer.run(script).code;
 
       return {
         toReturn(expectedValue) {
@@ -26,7 +26,7 @@ export default function(transformsCfg) {
 
     // Asserts that transfroming the string has no effect
     expectNoChange(script) {
-      expect(transformer.run(script)).to.equal(script);
+      expect(transformer.run(script).code).to.equal(script);
     }
   };
 }

@@ -13,4 +13,4 @@ catch (error) {
 }
 
 var transformer = new Transformer(options.transforms);
-io.write(options.outFile, transformer.run(io.read(options.inFile)));
+io.write(options.outFile, transformer.run(io.read(options.inFile)).code);
