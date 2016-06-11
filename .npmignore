@@ -6,5 +6,5 @@ Gruntfile.js
 /test
 /test-lib
 .editorconfig
-.jshintrc
+.eslintrc
 .travis.yml
