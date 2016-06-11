@@ -22,7 +22,7 @@ const transformsDocs = `
 program.usage('-t <transform> <file>');
 program.description(`${pkg.description}\n${transformsDocs}`);
 program.version(pkg.version);
-program.option('-o, --out-file <out>', 'compile into a single file');
+program.option('-o, --out-file <file>', 'write output to a file');
 program.option('-t, --transform <a,b,c>', 'one or more transformations to perform', v => v.split(','));
 
 /**
