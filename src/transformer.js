@@ -14,6 +14,7 @@ import objMethodTransform from './transform/obj-method';
 import objShorthandTransform from './transform/obj-shorthand';
 import noStrictTransform from './transform/no-strict';
 import commonjsTransform from './transform/commonjs';
+import exponentTransform from './transform/exponent';
 
 const transformsMap = {
   'class': classTransform,
@@ -26,6 +27,7 @@ const transformsMap = {
   'obj-shorthand': objShorthandTransform,
   'no-strict': noStrictTransform,
   'commonjs': commonjsTransform,
+  'exponent': exponentTransform,
 };
 
 /**

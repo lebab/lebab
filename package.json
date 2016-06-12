@@ -35,7 +35,7 @@
     "espree": "^3.1.5",
     "estraverse": "^4.1.1",
     "lodash": "^4.5.1",
-    "recast": "^0.11.0"
+    "recast": "^0.11.7"
   },
   "devDependencies": {
     "chai": "^3.4.1",
