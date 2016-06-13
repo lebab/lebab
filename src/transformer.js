@@ -13,6 +13,7 @@ import argSpreadTransform from './transform/arg-spread';
 import objMethodTransform from './transform/obj-method';
 import objShorthandTransform from './transform/obj-shorthand';
 import noStrictTransform from './transform/no-strict';
+import noNamespaceTransform from './transform/no-namespace';
 import commonjsTransform from './transform/commonjs';
 
 const transformsMap = {
@@ -25,6 +26,7 @@ const transformsMap = {
   'obj-method': objMethodTransform,
   'obj-shorthand': objShorthandTransform,
   'no-strict': noStrictTransform,
+  'no-namespace': noNamespaceTransform,
   'commonjs': commonjsTransform,
 };
 
