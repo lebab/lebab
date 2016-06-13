@@ -4,6 +4,7 @@ import PotentialClass from './potential-class';
 import PotentialMethod from './potential-method';
 import matchFunctionDeclaration from './match-function-declaration';
 import matchFunctionVar from './match-function-var';
+import matchFunctionAssignment from './match-function-assignment';
 import matchPrototypeFunctionAssignment from './match-prototype-function-assignment';
 import matchPrototypeObjectAssignment from './match-prototype-object-assignment';
 import matchObjectDefinePropertyCall from './match-object-define-property-call';
@@ -37,6 +38,17 @@ export default function(ast) {
           parent,
         });
       }
+      else if ((m = matchFunctionAssignment(node))) {
+        if (potentialClasses[m.className]) {
+          potentialClasses[m.className].addMethod(new PotentialMethod({
+            name: m.methodName,
+            methodNode: m.methodNode,
+            fullNode: node,
+            parent,
+            static: true
+          }));
+        }
+      }
       else if ((m = matchPrototypeFunctionAssignment(node))) {
         if (potentialClasses[m.className]) {
           potentialClasses[m.className].addMethod(new PotentialMethod({
@@ -44,6 +56,7 @@ export default function(ast) {
             methodNode: m.methodNode,
             fullNode: node,
             parent,
+            static: false
           }));
         }
       }
@@ -55,6 +68,7 @@ export default function(ast) {
               methodNode: method.methodNode,
               fullNode: node,
               parent,
+              static: false
             }));
           });
         }
@@ -68,6 +82,7 @@ export default function(ast) {
               fullNode: node,
               parent,
               kind: desc.kind,
+              static: false
             }));
           });
         }

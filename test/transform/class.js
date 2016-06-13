@@ -32,6 +32,20 @@ describe('Classes', () => {
     );
   });
 
+  it('should convert static function declarations with assignment to static class methods', () => {
+    expect(test(
+      'function MyClass() {\n' +
+      '}\n' +
+      'MyClass.method = function(a, b) {\n' +
+      '};'
+    )).to.equal(
+      'class MyClass {\n' +
+      '  static method(a, b) {\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
   it('should convert function variables with prototype assignment to class', () => {
     expect(test(
       'var MyClass = function() {\n' +
