@@ -17,7 +17,11 @@ const transformsDocs = `
 
     + class .......... prototype assignments to class declaration
     + template ....... string concatenation to template string
-    + default-param .. use of || to default parameters`;
+    + default-param .. use of || to default parameters
+
+  ES7 transforms:
+
+    + exponent ....... Math.pow() to ** operator`;
 
 program.usage('-t <transform> <file>');
 program.description(`${pkg.description}\n${transformsDocs}`);
@@ -73,6 +77,7 @@ ${transformsDocs}`;
     'obj-shorthand': false,
     'no-strict': false,
     'commonjs': false,
+    'exponent': false,
   };
 
   // When --transform used, enable the specific transforms
