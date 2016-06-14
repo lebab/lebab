@@ -90,9 +90,9 @@ There are no guarantees that the resulting code is equivalent of the original co
 - [x] **class** - function/prototypes to classes
     - [x] recognizes `Foo.prototype.method = function(){ ... };`
     - [x] recognizes `Foo.prototype = { ...methods... };`
+    - [x] recognizes static methods like `Foo.method = function(){ ... };`
     - [x] recognizes getters/setters defined with `Object.defineProperty()`
     - [ ] does not recognize classes without methods
-    - [ ] does not recognize static methods
     - [ ] no support for extending classes
     - [ ] LIMITATION [does not support namespaced classes][113]
 - [x] **template** - string concatenation to template strings
