@@ -45,7 +45,7 @@ export default function(ast) {
             methodNode: m.methodNode,
             fullNode: node,
             parent,
-            static: true
+            static: true,
           }));
         }
       }
@@ -56,7 +56,6 @@ export default function(ast) {
             methodNode: m.methodNode,
             fullNode: node,
             parent,
-            static: false
           }));
         }
       }
@@ -68,7 +67,6 @@ export default function(ast) {
               methodNode: method.methodNode,
               fullNode: node,
               parent,
-              static: false
             }));
           });
         }
@@ -82,7 +80,6 @@ export default function(ast) {
               fullNode: node,
               parent,
               kind: desc.kind,
-              static: false
             }));
           });
         }

@@ -12,7 +12,7 @@ class PotentialMethod {
    *   @param {Object} cfg.fullNode
    *   @param {Object} cfg.parent
    *   @param {String} cfg.kind Either 'get' or 'set' (optional)
-   *   @param {boolean} cfg.static
+   *   @param {Boolean} cfg.static True to make static method (optional)
    */
   constructor(cfg) {
     this.name = cfg.name;
@@ -20,7 +20,7 @@ class PotentialMethod {
     this.fullNode = cfg.fullNode;
     this.parent = cfg.parent;
     this.kind = cfg.kind || 'method';
-    this.static = cfg.static;
+    this.static = cfg.static || false;
   }
 
   /**
