@@ -34,6 +34,7 @@ describe('Command Line Interface', () => {
       'obj-shorthand': false,
       'no-strict': false,
       'commonjs': false,
+      'exponent': false,
     });
   });
 
@@ -50,6 +51,7 @@ describe('Command Line Interface', () => {
       'obj-shorthand': false,
       'no-strict': true,
       'commonjs': true,
+      'exponent': false,
     });
   });
 

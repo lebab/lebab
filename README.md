@@ -106,6 +106,12 @@ There are no guarantees that the resulting code is equivalent of the original co
     - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
     - [ ] LIMITATION [transforming `a = a || 2` does produce strictly equivalent code][125]
 
+### ES7 transforms
+
+A single transform for the single ES7 syntax feature.
+
+- [x] **exponent** - `Math.pow()` to `**` operator
+
 
 ## What's next?
 

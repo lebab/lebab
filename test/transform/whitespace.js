@@ -11,6 +11,7 @@ const transformer = new Transformer({
   'obj-shorthand': true,
   'no-strict': true,
   'commonjs': true,
+  'exponent': true,
 });
 
 function test(script) {
