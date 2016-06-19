@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import extractComments from './extractComments';
 import multiReplaceStatement from './../../utils/multi-replace-statement';
 
 /**
@@ -56,12 +56,8 @@ class PotentialMethod {
       },
       kind: this.kind,
       static: this.static,
-      comments: this.getComments(),
+      comments: extractComments(this.commentNodes),
     };
-  }
-
-  getComments() {
-    return _(this.commentNodes).map(n => n.comments || []).flatten().value();
   }
 
   /**
