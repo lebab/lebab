@@ -173,7 +173,10 @@ function transformVarsToLetOrConst() {
 
 function logWarningForVarKind(node) {
   if (node.kind === 'var') {
-    logger.warn('Unable to transform var');
+    logger.warn({
+      line: node.loc.start.line,
+      msg: 'Unable to transform var',
+    });
   }
 }
 

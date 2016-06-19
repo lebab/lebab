@@ -252,7 +252,7 @@ describe('Let/const', () => {
         '}\n' +
         'y = 20;'
       ).withWarnings([
-        'Unable to transform var'
+        {line: 2, msg: 'Unable to transform var'}
       ]);
     });
   });
@@ -531,7 +531,7 @@ describe('Let/const', () => {
         '}\n' +
         'fn = function() { return a; }'
       ).withWarnings([
-        'Unable to transform var'
+        {line: 2, msg: 'Unable to transform var'}
       ]);
     });
 
@@ -542,7 +542,7 @@ describe('Let/const', () => {
         '}\n' +
         'fn = () => a;'
       ).withWarnings([
-        'Unable to transform var'
+        {line: 2, msg: 'Unable to transform var'}
       ]);
     });
 
@@ -553,7 +553,7 @@ describe('Let/const', () => {
         '}\n' +
         'const foo = a;'
       ).withWarnings([
-        'Unable to transform var'
+        {line: 2, msg: 'Unable to transform var'}
       ]);
     });
   });
@@ -588,7 +588,7 @@ describe('Let/const', () => {
         'for (var i=0; i<10; i++) {}\n' +
         'foo(i);'
       ).withWarnings([
-        'Unable to transform var'
+        {line: 1, msg: 'Unable to transform var'}
       ]);
     });
 
@@ -597,7 +597,7 @@ describe('Let/const', () => {
         'for (var key in obj) {}\n' +
         'foo(key);'
       ).withWarnings([
-        'Unable to transform var'
+        {line: 1, msg: 'Unable to transform var'}
       ]);
     });
 
@@ -606,7 +606,7 @@ describe('Let/const', () => {
         'for (var item of array) {}\n' +
         'foo(item);'
       ).withWarnings([
-        'Unable to transform var'
+        {line: 1, msg: 'Unable to transform var'}
       ]);
     });
   });
@@ -618,7 +618,7 @@ describe('Let/const', () => {
         'a = 1;\n' +
         'var a = 2;'
       ).withWarnings([
-        'Unable to transform var'
+        {line: 2, msg: 'Unable to transform var'}
       ]);
     });
 
@@ -636,7 +636,7 @@ describe('Let/const', () => {
         '  var a = 2;\n' +
         '}'
       ).withWarnings([
-        'Unable to transform var'
+        {line: 4, msg: 'Unable to transform var'}
       ]);
     });
   });
@@ -647,7 +647,7 @@ describe('Let/const', () => {
         'foo(a);\n' +
         'var a = 2;'
       ).withWarnings([
-        'Unable to transform var'
+        {line: 2, msg: 'Unable to transform var'}
       ]);
     });
   });
@@ -658,7 +658,7 @@ describe('Let/const', () => {
         'var a = 1;\n' +
         'var a = 2;'
       ).withWarnings([
-        'Unable to transform var'
+        {line: 1, msg: 'Unable to transform var'}
       ]);
     });
 
@@ -672,7 +672,7 @@ describe('Let/const', () => {
         '  foo(a);\n' +
         '}'
       ).withWarnings([
-        'Unable to transform var'
+        {line: 2, msg: 'Unable to transform var'}
       ]);
     });
 
