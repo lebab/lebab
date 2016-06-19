@@ -70,7 +70,9 @@ describe('Import CommonJS', () => {
         'if (true) {\n' +
         '  var foo = require("foo");\n' +
         '}'
-      );
+      ).withWarnings([
+        {line: 2, msg: 'import can only be at root level', type: 'commonjs'}
+      ]);
     });
   });
 

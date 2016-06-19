@@ -7,10 +7,14 @@ import ImportSpecifier from '../../syntax/import-specifier';
 import ImportDefaultSpecifier from '../../syntax/import-default-specifier';
 import VariableDeclaration from '../../syntax/variable-declaration';
 
-export default function(ast) {
+export default function(ast, logger) {
   traverser.replace(ast, {
     enter(node, parent) {
-      if (isVarWithRequireCalls(node) && parent.type === 'Program') {
+      if (isVarWithRequireCalls(node)) {
+        if (parent.type !== 'Program') {
+          return logRootLevelWarning(logger, node);
+        }
+
         multiReplaceStatement(
           parent,
           node,
@@ -18,6 +22,14 @@ export default function(ast) {
         );
       }
     }
+  });
+}
+
+function logRootLevelWarning(logger, node) {
+  logger.warn({
+    line: node.loc.start.line,
+    msg: 'import can only be at root level',
+    type: 'commonjs',
   });
 }
 
