@@ -20,11 +20,7 @@ export default function(ast, logger) {
         // Do not transform functions with name,
         // as the name might be recursively referenced from inside.
         if (match.functionName) {
-          logger.warn({
-            line: node.loc.start.line,
-            msg: 'Unable to transform named function',
-            type: 'obj-method'
-          });
+          logger.warn(node, 'Unable to transform named function', 'obj-method');
           return;
         }
 

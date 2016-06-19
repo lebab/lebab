@@ -11,25 +11,19 @@ export default function(ast, logger) {
       let m;
       if ((m = matchDefaultExport(node))) {
         if (parent.type !== 'Program') {
-          return logRootLevelWarning(logger, node);
+          logger.warn(node, 'export can only be at root level', 'commonjs');
+          return;
         }
         return exportDefault(m);
       }
       else if ((m = matchNamedExport(node))) {
         if (parent.type !== 'Program') {
-          return logRootLevelWarning(logger, node);
+          logger.warn(node, 'export can only be at root level', 'commonjs');
+          return;
         }
         return exportNamed(m);
       }
     }
-  });
-}
-
-function logRootLevelWarning(logger, node) {
-  logger.warn({
-    line: node.loc.start.line,
-    msg: 'export can only be at root level',
-    type: 'commonjs',
   });
 }
 

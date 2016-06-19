@@ -12,7 +12,8 @@ export default function(ast, logger) {
     enter(node, parent) {
       if (isVarWithRequireCalls(node)) {
         if (parent.type !== 'Program') {
-          return logRootLevelWarning(logger, node);
+          logger.warn(node, 'import can only be at root level', 'commonjs');
+          return;
         }
 
         multiReplaceStatement(
@@ -22,14 +23,6 @@ export default function(ast, logger) {
         );
       }
     }
-  });
-}
-
-function logRootLevelWarning(logger, node) {
-  logger.warn({
-    line: node.loc.start.line,
-    msg: 'import can only be at root level',
-    type: 'commonjs',
   });
 }
 
