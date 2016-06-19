@@ -1,21 +1,21 @@
 import createTestHelpers from '../createTestHelpers';
-const {expect, test, expectNoChange} = createTestHelpers({'let': true});
+const {expectTransform, expectNoChange} = createTestHelpers({'let': true});
 
 describe('Let/const', () => {
   describe('with uninitialized variable', () => {
     it('should use let when never used afterwards', () => {
-      expect(test(
+      expectTransform(
         'var x;'
-      )).to.equal(
+      ).toReturn(
         'let x;'
       );
     });
 
     it('should use let when assigned aftwerwards', () => {
-      expect(test(
+      expectTransform(
         'var x;\n' +
         'x = 6;'
-      )).to.equal(
+      ).toReturn(
         'let x;\n' +
         'x = 6;'
       );
@@ -24,50 +24,50 @@ describe('Let/const', () => {
 
   describe('with initialized variable', () => {
     it('should use const when never used afterwards', () => {
-      expect(test(
+      expectTransform(
         'var x = 2;'
-      )).to.equal(
+      ).toReturn(
         'const x = 2;'
       );
     });
 
     it('should use const when only referenced afterwards', () => {
-      expect(test(
+      expectTransform(
         'var x = 2;\n' +
         'foo(x);'
-      )).to.equal(
+      ).toReturn(
         'const x = 2;\n' +
         'foo(x);'
       );
     });
 
     it('should use let when re-assigned afterwards', () => {
-      expect(test(
+      expectTransform(
         'var x = 5;\n' +
         'x = 6;'
-      )).to.equal(
+      ).toReturn(
         'let x = 5;\n' +
         'x = 6;'
       );
     });
 
     it('should use let when updated aftwerwards', () => {
-      expect(test(
+      expectTransform(
         'var x = 5;\n' +
         'x++;'
-      )).to.equal(
+      ).toReturn(
         'let x = 5;\n' +
         'x++;'
       );
     });
 
     it('should handle variables names identical to Object prototype methods', () => {
-      expect(test(
+      expectTransform(
         'var constructor = 1;\n' +
         'var toString = 1;\n' +
         'var valueOf = 1;\n' +
         'var hasOwnProperty = 1;'
-      )).to.equal(
+      ).toReturn(
         'const constructor = 1;\n' +
         'const toString = 1;\n' +
         'const valueOf = 1;\n' +
@@ -78,19 +78,19 @@ describe('Let/const', () => {
 
   describe('with multi-variable declaration', () => {
     it('should use const when not referenced afterwards', () => {
-      expect(test(
+      expectTransform(
         'var x = 1, y = 2;'
-      )).to.equal(
+      ).toReturn(
         'const x = 1, y = 2;'
       );
     });
 
     it('should use let when assigned to afterwards', () => {
-      expect(test(
+      expectTransform(
         'var x = 1, y = 2;\n' +
         'x = 3;\n' +
         'y = 4;'
-      )).to.equal(
+      ).toReturn(
         'let x = 1, y = 2;\n' +
         'x = 3;\n' +
         'y = 4;'
@@ -98,11 +98,11 @@ describe('Let/const', () => {
     });
 
     it('should use let when initially unassigned but assigned afterwards', () => {
-      expect(test(
+      expectTransform(
         'var x, y;\n' +
         'x = 3;\n' +
         'y = 4;'
-      )).to.equal(
+      ).toReturn(
         'let x, y;\n' +
         'x = 3;\n' +
         'y = 4;'
@@ -110,10 +110,10 @@ describe('Let/const', () => {
     });
 
     it('should split to let & const when only some vars assigned to afterwards', () => {
-      expect(test(
+      expectTransform(
         'var x = 1, y = 2;\n' +
         'y = 4;'
-      )).to.equal(
+      ).toReturn(
         'const x = 1;\n' +
         'let y = 2;\n' +
         'y = 4;'
@@ -121,13 +121,13 @@ describe('Let/const', () => {
     });
 
     it('should split to let & var when only some vars are block-scoped', () => {
-      expect(test(
+      expectTransform(
         'if (true) {\n' +
         '  var x = 1, y = 2;\n' +
         '  x = 10;\n' +
         '}\n' +
         'y = 20;'
-      )).to.equal(
+      ).toReturn(
         'if (true) {\n' +
         '  let x = 1;\n' +
         '  var y = 2;\n' +
@@ -138,13 +138,13 @@ describe('Let/const', () => {
     });
 
     it('should split to let & const inside switch case', () => {
-      expect(test(
+      expectTransform(
         'switch (nr) {\n' +
         'case 15:\n' +
         '  var x = 1, y = 2;\n' +
         '  x++;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'switch (nr) {\n' +
         'case 15:\n' +
         '  let x = 1;\n' +
@@ -157,28 +157,28 @@ describe('Let/const', () => {
 
   describe('with multi-variable declaration in restrictive parent', () => {
     it('should use const when all consts in if-statement', () => {
-      expect(test(
+      expectTransform(
         'if (true) var x = 1, y = 2'
-      )).to.equal(
+      ).toReturn(
         'if (true) const x = 1, y = 2;'
       );
     });
 
     it('should use let when both let & const in if-statement', () => {
-      expect(test(
+      expectTransform(
         'if (true) var x = 1, y = ++x;'
-      )).to.equal(
+      ).toReturn(
         'if (true) let x = 1, y = ++x;'
       );
     });
 
     it('should use var when both var & const in if-statement', () => {
-      expect(test(
+      expectTransform(
         'if (false) {\n' +
         '  if (true) var x = 1, y = ++x;\n' +
         '}\n' +
         'foo(x);'
-      )).to.equal(
+      ).toReturn(
         'if (false) {\n' +
         '  if (true) var x = 1, y = ++x;\n' +
         '}\n' +
@@ -187,25 +187,25 @@ describe('Let/const', () => {
     });
 
     it('should use let when both let & const in else-side of if-statement', () => {
-      expect(test(
+      expectTransform(
         'if (true); else var x = 1, y = ++x;'
-      )).to.equal(
+      ).toReturn(
         'if (true); else let x = 1, y = ++x;'
       );
     });
 
     it('should use let when both let & const in for-loop head', () => {
-      expect(test(
+      expectTransform(
         'for (var i=0, len=arr.length; i<len; i++) {}'
-      )).to.equal(
+      ).toReturn(
         'for (let i=0, len=arr.length; i<len; i++) {}'
       );
     });
 
     it('should use let when both let & const in for-in-loop body', () => {
-      expect(test(
+      expectTransform(
         'for (item in array) var x = 1, y = ++x'
-      )).to.equal(
+      ).toReturn(
         'for (item in array) let x = 1, y = ++x'
       );
     });
@@ -213,21 +213,21 @@ describe('Let/const', () => {
 
   describe('with destructured variable declaration', () => {
     it('should use const when not referenced afterwards', () => {
-      expect(test(
+      expectTransform(
         'var [x, y] = [1, 2];\n' +
         'var {foo, bar} = {foo: 1, bar: 2};'
-      )).to.equal(
+      ).toReturn(
         'const [x, y] = [1, 2];\n' +
         'const {foo, bar} = {foo: 1, bar: 2};'
       );
     });
 
     it('should use let when assigned to afterwards', () => {
-      expect(test(
+      expectTransform(
         'var [x, y] = [1, 2];\n' +
         'x = 3;\n' +
         'y = 4;'
-      )).to.equal(
+      ).toReturn(
         'let [x, y] = [1, 2];\n' +
         'x = 3;\n' +
         'y = 4;'
@@ -235,10 +235,10 @@ describe('Let/const', () => {
     });
 
     it('should use let when only some vars assigned to afterwards', () => {
-      expect(test(
+      expectTransform(
         'var [x, y] = [1, 2];\n' +
         'y = 4;'
-      )).to.equal(
+      ).toReturn(
         'let [x, y] = [1, 2];\n' +
         'y = 4;'
       );
@@ -257,11 +257,11 @@ describe('Let/const', () => {
 
   describe('with nested function', () => {
     it('should use let when variable re-declared inside it', () => {
-      expect(test(
+      expectTransform(
         'var a = 0;\n' +
         'function foo() { var a = 1; }\n' +
         'a = 2;'
-      )).to.equal(
+      ).toReturn(
         'let a = 0;\n' +
         'function foo() { const a = 1; }\n' +
         'a = 2;'
@@ -269,30 +269,30 @@ describe('Let/const', () => {
     });
 
     it('should use let when variable assigned inside it', () => {
-      expect(test(
+      expectTransform(
         'var a = 0;\n' +
         'function foo() { a = 1; }'
-      )).to.equal(
+      ).toReturn(
         'let a = 0;\n' +
         'function foo() { a = 1; }'
       );
     });
 
     it('should use const when variable referenced inside it', () => {
-      expect(test(
+      expectTransform(
         'var a = 0;\n' +
         'function foo() { bar(a); }'
-      )).to.equal(
+      ).toReturn(
         'const a = 0;\n' +
         'function foo() { bar(a); }'
       );
     });
 
     it('should use const when variable redeclared as parameter', () => {
-      expect(test(
+      expectTransform(
         'var a = 0;\n' +
         'function foo(a) { a = 1; }'
-      )).to.equal(
+      ).toReturn(
         'const a = 0;\n' +
         'function foo(a) { a = 1; }'
       );
@@ -301,11 +301,11 @@ describe('Let/const', () => {
 
   describe('with nested arrow-function', () => {
     it('should use let when variable re-declared inside it', () => {
-      expect(test(
+      expectTransform(
         'var a = 0;\n' +
         '() => { var a = 1; };\n' +
         'a = 2;'
-      )).to.equal(
+      ).toReturn(
         'let a = 0;\n' +
         '() => { const a = 1; };\n' +
         'a = 2;'
@@ -313,30 +313,30 @@ describe('Let/const', () => {
     });
 
     it('should use let when variable assigned inside it', () => {
-      expect(test(
+      expectTransform(
         'var a = 0;\n' +
         '() => { a = 1; };'
-      )).to.equal(
+      ).toReturn(
         'let a = 0;\n' +
         '() => { a = 1; };'
       );
     });
 
     it('should use const when variable referenced inside it', () => {
-      expect(test(
+      expectTransform(
         'var a = 0;\n' +
         '() => { bar(a); };'
-      )).to.equal(
+      ).toReturn(
         'const a = 0;\n' +
         '() => { bar(a); };'
       );
     });
 
     it('should use const when variable redeclared as parameter', () => {
-      expect(test(
+      expectTransform(
         'var a = 0;\n' +
         '(a) => a = 1;'
-      )).to.equal(
+      ).toReturn(
         'const a = 0;\n' +
         '(a) => a = 1;'
       );
@@ -345,10 +345,10 @@ describe('Let/const', () => {
 
   describe('with nested function that uses destructured parmaters', () => {
     it('should use const when variable redeclared as parameter', () => {
-      expect(test(
+      expectTransform(
         'var a = 0;\n' +
         'function foo({a}) { a = 1; };'
-      )).to.equal(
+      ).toReturn(
         'const a = 0;\n' +
         'function foo({a}) { a = 1; };'
       );
@@ -357,32 +357,32 @@ describe('Let/const', () => {
 
   describe('with nested block', () => {
     it('should use let when variable assigned in it', () => {
-      expect(test(
+      expectTransform(
         'var a = 0;\n' +
         'if (true) { a = 1; }'
-      )).to.equal(
+      ).toReturn(
         'let a = 0;\n' +
         'if (true) { a = 1; }'
       );
     });
 
     it('should use const when variable referenced in it', () => {
-      expect(test(
+      expectTransform(
         'var a = 0;\n' +
         'if (true) { foo(a); }'
-      )).to.equal(
+      ).toReturn(
         'const a = 0;\n' +
         'if (true) { foo(a); }'
       );
     });
 
     it('should use let when variable only assigned inside a single block', () => {
-      expect(test(
+      expectTransform(
         'if (true) {\n' +
         '  var a = 1;\n' +
         '  a = 2;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'if (true) {\n' +
         '  let a = 1;\n' +
         '  a = 2;\n' +
@@ -391,12 +391,12 @@ describe('Let/const', () => {
     });
 
     it('should use const when variable only referenced inside a single block', () => {
-      expect(test(
+      expectTransform(
         'if (true) {\n' +
         '  var a = 1;\n' +
         '  foo(a);\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'if (true) {\n' +
         '  const a = 1;\n' +
         '  foo(a);\n' +
@@ -405,12 +405,12 @@ describe('Let/const', () => {
     });
 
     it('should use let when variable assigned inside further nested block', () => {
-      expect(test(
+      expectTransform(
         'if (true) {\n' +
         '  var a = 1;\n' +
         '  if (false) { a = 2; }\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'if (true) {\n' +
         '  let a = 1;\n' +
         '  if (false) { a = 2; }\n' +
@@ -419,12 +419,12 @@ describe('Let/const', () => {
     });
 
     it('should use const when variable referenced inside further nested block', () => {
-      expect(test(
+      expectTransform(
         'if (true) {\n' +
         '  var a = 1;\n' +
         '  if (false) { foo(a); }\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'if (true) {\n' +
         '  const a = 1;\n' +
         '  if (false) { foo(a); }\n' +
@@ -451,13 +451,13 @@ describe('Let/const', () => {
     });
 
     it('should use const when variable name used in object property outside the block', () => {
-      expect(test(
+      expectTransform(
         'if (true) {\n' +
         '  var a = 1;\n' +
         '}\n' +
         'obj.a = 2;\n' +
         'x = {a: 2};'
-      )).to.equal(
+      ).toReturn(
         'if (true) {\n' +
         '  const a = 1;\n' +
         '}\n' +
@@ -467,12 +467,12 @@ describe('Let/const', () => {
     });
 
     it('should use const when variable name used as function expression name outside the block', () => {
-      expect(test(
+      expectTransform(
         'if (true) {\n' +
         '  var a = 1;\n' +
         '}\n' +
         'fn = function a() {}'
-      )).to.equal(
+      ).toReturn(
         'if (true) {\n' +
         '  const a = 1;\n' +
         '}\n' +
@@ -481,12 +481,12 @@ describe('Let/const', () => {
     });
 
     it('should use const when variable name used as function parameter name outside the block', () => {
-      expect(test(
+      expectTransform(
         'if (true) {\n' +
         '  var a = 1;\n' +
         '}\n' +
         'function fn(a) {}'
-      )).to.equal(
+      ).toReturn(
         'if (true) {\n' +
         '  const a = 1;\n' +
         '}\n' +
@@ -495,12 +495,12 @@ describe('Let/const', () => {
     });
 
     it('should use const when variable name used as arrow-function parameter name outside the block', () => {
-      expect(test(
+      expectTransform(
         'if (true) {\n' +
         '  var a = 1;\n' +
         '}\n' +
         'fn = (a) => {};'
-      )).to.equal(
+      ).toReturn(
         'if (true) {\n' +
         '  const a = 1;\n' +
         '}\n' +
@@ -509,12 +509,12 @@ describe('Let/const', () => {
     });
 
     it('should use const when variable name used as destructured function parameter name outside the block', () => {
-      expect(test(
+      expectTransform(
         'if (true) {\n' +
         '  var a = 1;\n' +
         '}\n' +
         'function fn({a}) {}'
-      )).to.equal(
+      ).toReturn(
         'if (true) {\n' +
         '  const a = 1;\n' +
         '}\n' +
@@ -552,25 +552,25 @@ describe('Let/const', () => {
 
   describe('in loop heads', () => {
     it('should convert var in for-loop head to let', () => {
-      expect(test(
+      expectTransform(
         'for (var i=0; i<10; i++) { foo(i); }'
-      )).to.equal(
+      ).toReturn(
         'for (let i=0; i<10; i++) { foo(i); }'
       );
     });
 
     it('should convert var in for-in head to const', () => {
-      expect(test(
+      expectTransform(
         'for (var key in obj) { foo(key); }'
-      )).to.equal(
+      ).toReturn(
         'for (const key in obj) { foo(key); }'
       );
     });
 
     it('should convert var in for-of head to const', () => {
-      expect(test(
+      expectTransform(
         'for (var item of array) { foo(item); }'
-      )).to.equal(
+      ).toReturn(
         'for (const item of array) { foo(item); }'
       );
     });
@@ -607,13 +607,13 @@ describe('Let/const', () => {
     });
 
     it('should ignore when similar variable in outer scope', () => {
-      expect(test(
+      expectTransform(
         'var a = 0;\n' +
         'function foo() {\n' +
         '  a = 1;\n' +
         '  var a = 2;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'const a = 0;\n' +
         'function foo() {\n' +
         '  a = 1;\n' +
@@ -678,12 +678,12 @@ describe('Let/const', () => {
     });
 
     it('should allow re-declaring of function declaration name', () => {
-      expect(test(
+      expectTransform(
         'function foo(a) {\n' +
         '  var foo;\n' +
         '  return foo;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function foo(a) {\n' +
         '  let foo;\n' +
         '  return foo;\n' +
@@ -694,42 +694,42 @@ describe('Let/const', () => {
 
   describe('with destructuring assignment', () => {
     it('should use let when array destructuring used', () => {
-      expect(test(
+      expectTransform(
         'var foo = 1;\n' +
         '[foo] = [1, 2, 3];'
-      )).to.equal(
+      ).toReturn(
         'let foo = 1;\n' +
         '[foo] = [1, 2, 3];'
       );
     });
 
     it('should use let when object destructuring used', () => {
-      expect(test(
+      expectTransform(
         'var foo = 1;\n' +
         '({foo}) = {foo: 2};'
-      )).to.equal(
+      ).toReturn(
         'let foo = 1;\n' +
         '({foo}) = {foo: 2};'
       );
     });
 
     it('should use let when nested destructuring used', () => {
-      expect(test(
+      expectTransform(
         'var foo = 1;\n' +
         '[{foo}] = [{foo: 2}];'
-      )).to.equal(
+      ).toReturn(
         'let foo = 1;\n' +
         '[{foo}] = [{foo: 2}];'
       );
     });
 
     it('should use let for all variables modified through destructuring', () => {
-      expect(test(
+      expectTransform(
         'var a = 1;\n' +
         'var b = 1;\n' +
         'var c = 1;\n' +
         '[a, {foo: c}] = [3, {foo: 2}];'
-      )).to.equal(
+      ).toReturn(
         'let a = 1;\n' +
         'const b = 1;\n' +
         'let c = 1;\n' +
@@ -738,10 +738,10 @@ describe('Let/const', () => {
     });
 
     it('should use const when name is used as property key in object destructor', () => {
-      expect(test(
+      expectTransform(
         'var foo = 1;\n' +
         '({foo: a}) = {foo: 2};'
-      )).to.equal(
+      ).toReturn(
         'const foo = 1;\n' +
         '({foo: a}) = {foo: 2};'
       );
@@ -791,20 +791,20 @@ describe('Let/const', () => {
     });
 
     it('should use const when similarly-named property is assigned to', () => {
-      expect(test(
+      expectTransform(
         'var x = 2;\n' +
         'b.x += 1;'
-      )).to.equal(
+      ).toReturn(
         'const x = 2;\n' +
         'b.x += 1;'
       );
     });
 
     it('should use const when similarly-named property is updated', () => {
-      expect(test(
+      expectTransform(
         'var x = 2;\n' +
         'b.x++;'
-      )).to.equal(
+      ).toReturn(
         'const x = 2;\n' +
         'b.x++;'
       );
@@ -813,19 +813,19 @@ describe('Let/const', () => {
 
   describe('comments', () => {
     it('should preserve comment line', () => {
-      expect(test(
+      expectTransform(
         '// comment line\n' +
         'var x = 42;'
-      )).to.equal(
+      ).toReturn(
         '// comment line\n' +
         'const x = 42;'
       );
     });
 
     it('should preserve trailing comment', () => {
-      expect(test(
+      expectTransform(
         'var x = 42; // trailing comment'
-      )).to.equal(
+      ).toReturn(
         'const x = 42; // trailing comment'
       );
     });

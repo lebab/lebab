@@ -1,9 +1,9 @@
 import createTestHelpers from '../createTestHelpers';
-const {expect, test, expectNoChange} = createTestHelpers({'obj-shorthand': true});
+const {expectTransform, expectNoChange} = createTestHelpers({'obj-shorthand': true});
 
 describe('Object shorthands', () => {
   it('should convert matching key-value entries to shorthand notation', () => {
-    expect(test('({foo: foo})')).to.equal('({foo})');
+    expectTransform('({foo: foo})').toReturn('({foo})');
   });
 
   it('should not convert non-matching key-value entries to shorthand notation', () => {

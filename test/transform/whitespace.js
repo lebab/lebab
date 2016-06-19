@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expect, test} = createTestHelpers({
+const {expectTransform} = createTestHelpers({
   'class': true,
   'template': true,
   'arrow': true,
@@ -15,39 +15,39 @@ const {expect, test} = createTestHelpers({
 
 describe('Whitespace', () => {
   it('should not eliminate leading newlines', () => {
-    expect(test(
+    expectTransform(
       '\n\nvar x = 42;'
-    )).to.equal(
+    ).toReturn(
       '\n\nconst x = 42;'
     );
   });
 
   it('should not eliminate trailing newlines', () => {
-    expect(test(
+    expectTransform(
       'var x = 42;\n\n'
-    )).to.equal(
+    ).toReturn(
       'const x = 42;\n\n'
     );
   });
 
   it('ignores #! comment at the beginning of file', () => {
-    expect(test(
+    expectTransform(
       '#!/usr/bin/env node\n' +
       'var x = 42;'
-    )).to.equal(
+    ).toReturn(
       '#!/usr/bin/env node\n' +
       'const x = 42;'
     );
   });
 
   it('ignores #! comment almost at the beginning of file', () => {
-    expect(test(
+    expectTransform(
       '\n' +
       '#!/usr/local/bin/node\n' +
       'if (true) {\n' +
       '  var foo = 42;\n' +
       '}'
-    )).to.equal(
+    ).toReturn(
       '\n' +
       '#!/usr/local/bin/node\n' +
       'if (true) {\n' +

@@ -1,15 +1,15 @@
 import createTestHelpers from '../createTestHelpers';
-const {expect, test, expectNoChange} = createTestHelpers({'no-strict': true});
+const {expectTransform, expectNoChange} = createTestHelpers({'no-strict': true});
 
 describe('Removal of "use strict"', () => {
   it('should remove statement with "use strict" string', () => {
-    expect(test('"use strict";')).to.equal('');
-    expect(test('\'use strict\';')).to.equal('');
+    expectTransform('"use strict";').toReturn('');
+    expectTransform('\'use strict\';').toReturn('');
   });
 
   it('should remove the whole line where "use strict" used to be', () => {
-    expect(test('"use strict";\nfoo();')).to.equal('foo();');
-    expect(test('foo();\n"use strict";\nbar();')).to.equal('foo();\nbar();');
+    expectTransform('"use strict";\nfoo();').toReturn('foo();');
+    expectTransform('foo();\n"use strict";\nbar();').toReturn('foo();\nbar();');
   });
 
   it('should keep "use strict" used inside other code', () => {

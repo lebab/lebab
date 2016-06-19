@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expect, test} = createTestHelpers({
+const {expectTransform} = createTestHelpers({
   'class': true,
   'template': true,
   'arrow': true,
@@ -15,36 +15,36 @@ const {expect, test} = createTestHelpers({
 
 describe('JSX support', () => {
   it('should support self-closing element', () => {
-    expect(test(
+    expectTransform(
       'var foo = <div/>;'
-    )).to.equal(
+    ).toReturn(
       'const foo = <div/>;'
     );
   });
 
   it('should support attributes', () => {
-    expect(test(
+    expectTransform(
       'var foo = <div foo="hello" bar={2}/>;'
-    )).to.equal(
+    ).toReturn(
       'const foo = <div foo="hello" bar={2}/>;'
     );
   });
 
   it('should support spread attributes', () => {
-    expect(test(
+    expectTransform(
       'var foo = <div {...attrs}/>;'
-    )).to.equal(
+    ).toReturn(
       'const foo = <div {...attrs}/>;'
     );
   });
 
   it('should support nested elements', () => {
-    expect(test(
+    expectTransform(
       'var foo = <div>\n' +
       '    <Foo/>\n' +
       '    <Bar/>\n' +
       '</div>;'
-    )).to.equal(
+    ).toReturn(
       'const foo = <div>\n' +
       '    <Foo/>\n' +
       '    <Bar/>\n' +
@@ -53,33 +53,33 @@ describe('JSX support', () => {
   });
 
   it('should support member-expressions as element name', () => {
-    expect(test(
+    expectTransform(
       'var foo = <Foo.bar/>;'
-    )).to.equal(
+    ).toReturn(
       'const foo = <Foo.bar/>;'
     );
   });
 
   it('should support XML namespaces', () => {
-    expect(test(
+    expectTransform(
       'var foo = <xml:foo/>;'
-    )).to.equal(
+    ).toReturn(
       'const foo = <xml:foo/>;'
     );
   });
 
   it('should support content', () => {
-    expect(test(
+    expectTransform(
       'var foo = <div>Hello {a + b}</div>;'
-    )).to.equal(
+    ).toReturn(
       'const foo = <div>Hello {a + b}</div>;'
     );
   });
 
   it('should support empty content expressions', () => {
-    expect(test(
+    expectTransform(
       'var foo = <div> {/* some comments */} </div>;'
-    )).to.equal(
+    ).toReturn(
       'const foo = <div> {/* some comments */} </div>;'
     );
   });

@@ -1,15 +1,15 @@
 import createTestHelpers from '../createTestHelpers';
-const {expect, test, expectNoChange} = createTestHelpers({'obj-method': true});
+const {expectTransform, expectNoChange} = createTestHelpers({'obj-method': true});
 
 describe('Object methods', () => {
   it('should convert a function inside an object to method', () => {
-    expect(test(
+    expectTransform(
       '({\n' +
       '  someMethod: function(a, b, c) {\n' +
       '    return a + b + c;\n' +
       '  }\n' +
       '});'
-    )).to.equal(
+    ).toReturn(
       '({\n' +
       '  someMethod(a, b, c) {\n' +
       '    return a + b + c;\n' +
@@ -19,7 +19,7 @@ describe('Object methods', () => {
   });
 
   it('should ignore non-function properties of object', () => {
-    expect(test(
+    expectTransform(
       '({\n' +
       '  foo: 123,\n' +
       '  method1: function() {\n' +
@@ -28,7 +28,7 @@ describe('Object methods', () => {
       '  method2: function() {\n' +
       '  },\n' +
       '});'
-    )).to.equal(
+    ).toReturn(
       '({\n' +
       '  foo: 123,\n' +
       '  method1() {\n' +
@@ -41,14 +41,14 @@ describe('Object methods', () => {
   });
 
   it('should convert function properties in nested object literal', () => {
-    expect(test(
+    expectTransform(
       '({\n' +
       '  nested: {\n' +
       '    method: function() {\n' +
       '    }\n' +
       '  }\n' +
       '});'
-    )).to.equal(
+    ).toReturn(
       '({\n' +
       '  nested: {\n' +
       '    method() {\n' +

@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expect, test, expectNoChange} = createTestHelpers({'class': true});
+const {expectTransform, expectNoChange} = createTestHelpers({'class': true});
 
 describe('Classes', () => {
   it('should not convert functions without prototype assignment to class', () => {
@@ -10,12 +10,12 @@ describe('Classes', () => {
   });
 
   it('should convert function declarations with prototype assignment to class', () => {
-    expect(test(
+    expectTransform(
       'function MyClass() {\n' +
       '}\n' +
       'MyClass.prototype.method = function(a, b) {\n' +
       '};'
-    )).to.equal(
+    ).toReturn(
       'class MyClass {\n' +
       '  method(a, b) {\n' +
       '  }\n' +
@@ -24,12 +24,12 @@ describe('Classes', () => {
   });
 
   it('should convert static function declarations with assignment to static class methods', () => {
-    expect(test(
+    expectTransform(
       'function MyClass() {\n' +
       '}\n' +
       'MyClass.method = function(a, b) {\n' +
       '};'
-    )).to.equal(
+    ).toReturn(
       'class MyClass {\n' +
       '  static method(a, b) {\n' +
       '  }\n' +
@@ -38,12 +38,12 @@ describe('Classes', () => {
   });
 
   it('should convert function variables with prototype assignment to class', () => {
-    expect(test(
+    expectTransform(
       'var MyClass = function() {\n' +
       '};\n' +
       'MyClass.prototype.method = function() {\n' +
       '};'
-    )).to.equal(
+    ).toReturn(
       'class MyClass {\n' +
       '  method() {\n' +
       '  }\n' +
@@ -73,13 +73,13 @@ describe('Classes', () => {
   });
 
   it('should convert non-empty function to constructor method', () => {
-    expect(test(
+    expectTransform(
       'function MyClass(a, b) {\n' +
       '  this.params = [a, b];\n' +
       '}\n' +
       'MyClass.prototype.method = function(ma, mb) {\n' +
       '};'
-    )).to.equal(
+    ).toReturn(
       'class MyClass {\n' +
       '  constructor(a, b) {\n' +
       '    this.params = [a, b];\n' +
@@ -102,14 +102,14 @@ describe('Classes', () => {
   });
 
   it('should ignore non-function assignments to prototype', () => {
-    expect(test(
+    expectTransform(
       'function MyClass() {\n' +
       '}\n' +
       'MyClass.prototype.count = 10;\n' +
       'MyClass.prototype.method = function() {\n' +
       '};\n' +
       'MyClass.prototype.hash = {foo: "bar"};'
-    )).to.equal(
+    ).toReturn(
       'class MyClass {\n' +
       '  method() {\n' +
       '  }\n' +
@@ -121,7 +121,7 @@ describe('Classes', () => {
   });
 
   it('should detect methods from object assigned directly to prototype', () => {
-    expect(test(
+    expectTransform(
       'function MyClass() {\n' +
       '}\n' +
       'MyClass.prototype = {\n' +
@@ -130,7 +130,7 @@ describe('Classes', () => {
       '  methodB: function(b) {\n' +
       '  }\n' +
       '};'
-    )).to.equal(
+    ).toReturn(
       'class MyClass {\n' +
       '  methodA(a) {\n' +
       '  }\n' +
@@ -154,7 +154,7 @@ describe('Classes', () => {
   });
 
   it('should convert Object.defineProperty to setters and getters', () => {
-    expect(test(
+    expectTransform(
       'function MyClass() {\n' +
       '}\n' +
       'Object.defineProperty(MyClass.prototype, "someAccessor", {\n' +
@@ -165,7 +165,7 @@ describe('Classes', () => {
       '    this._some = value;\n' +
       '  }\n' +
       '});'
-    )).to.equal(
+    ).toReturn(
       'class MyClass {\n' +
       '  get someAccessor() {\n' +
       '    return this._some;\n' +
@@ -179,7 +179,7 @@ describe('Classes', () => {
   });
 
   it('should ignore other options of Object.defineProperty when converting get/set', () => {
-    expect(test(
+    expectTransform(
       'function MyClass() {\n' +
       '}\n' +
       'Object.defineProperty(MyClass.prototype, "someAccessor", {\n' +
@@ -189,7 +189,7 @@ describe('Classes', () => {
       '    this._some = value;\n' +
       '  }\n' +
       '});'
-    )).to.equal(
+    ).toReturn(
       'class MyClass {\n' +
       '  set someAccessor(value) {\n' +
       '    this._some = value;\n' +
@@ -222,13 +222,13 @@ describe('Classes', () => {
 
   describe('comments', () => {
     it('should preserve class comments', () => {
-      expect(test(
+      expectTransform(
         '/** My nice class. */\n' +
         'function MyClass() {\n' +
         '}\n' +
         'MyClass.prototype.method = function(a, b) {\n' +
         '};'
-      )).to.equal(
+      ).toReturn(
         '/** My nice class. */\n' +
         'class MyClass {\n' +
         '  method(a, b) {\n' +
@@ -238,13 +238,13 @@ describe('Classes', () => {
     });
 
     it('should preserve method comments', () => {
-      expect(test(
+      expectTransform(
         'function MyClass() {\n' +
         '}\n' +
         '/** My nice method. */\n' +
         'MyClass.prototype.method = function(a, b) {\n' +
         '};'
-      )).to.equal(
+      ).toReturn(
         'class MyClass {\n' +
         '  /** My nice method. */\n' +
         '  method(a, b) {\n' +
@@ -254,14 +254,14 @@ describe('Classes', () => {
     });
 
     it('should preserve class with constructor comments', () => {
-      expect(test(
+      expectTransform(
         '/** My nice class. */\n' +
         'function MyClass() {\n' +
         '  this.foo = 1;\n' +
         '}\n' +
         'MyClass.prototype.method = function(a, b) {\n' +
         '};'
-      )).to.equal(
+      ).toReturn(
         '/** My nice class. */\n' +
         'class MyClass {\n' +
         '  constructor() {\n' +
@@ -275,7 +275,7 @@ describe('Classes', () => {
     });
 
     it('should preserve multiple comments in various places', () => {
-      expect(test(
+      expectTransform(
         '// My class\n' +
         '// it is nice\n' +
         'function MyClass() {\n' +
@@ -287,7 +287,7 @@ describe('Classes', () => {
         'MyClass.prototype.method = function(a, b) {\n' +
         '};\n' +
         '// and even some comments in here'
-      )).to.equal(
+      ).toReturn(
         '// My class\n' +
         '// it is nice\n' +
         'class MyClass {\n' +
@@ -303,7 +303,7 @@ describe('Classes', () => {
     });
 
     it('should preserve prototype = {} comments', () => {
-      expect(test(
+      expectTransform(
         'function MyClass() {\n' +
         '}\n' +
         '// comment before\n' +
@@ -313,7 +313,7 @@ describe('Classes', () => {
         '  // comment B\n' +
         '  methodB: function() {}\n' +
         '};\n'
-      )).to.equal(
+      ).toReturn(
         'class MyClass {\n' +
         '  // comment before\n' +
         '  // comment A\n' +
@@ -326,7 +326,7 @@ describe('Classes', () => {
     });
 
     it('should preserve Object.defineProperty comments', () => {
-      expect(test(
+      expectTransform(
         'function MyClass() {\n' +
         '}\n' +
         '// Comment before\n' +
@@ -336,7 +336,7 @@ describe('Classes', () => {
         '  // Setter comment\n' +
         '  set: function() {}\n' +
         '});'
-      )).to.equal(
+      ).toReturn(
         'class MyClass {\n' +
         '  // Comment before\n' +
         '  // Getter comment\n' +

@@ -10,12 +10,18 @@ export default function(transformsCfg) {
   const transformer = new Transformer(transformsCfg);
 
   return {
-    // Pass-through assertion from Chai
-    expect,
+    // Generic transformation asserter, to be called like:
+    //
+    //   expectTransform("code").toReturn("transformed code");
+    //
+    expectTransform(script) {
+      const code = transformer.run(script);
 
-    // Transforms the given string
-    test(script) {
-      return transformer.run(script);
+      return {
+        toReturn(expectedValue) {
+          expect(code).to.equal(expectedValue);
+        }
+      };
     },
 
     // Asserts that transfroming the string has no effect

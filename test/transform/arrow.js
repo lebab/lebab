@@ -1,65 +1,65 @@
 import createTestHelpers from '../createTestHelpers';
-const {expect, test, expectNoChange} = createTestHelpers({'arrow': true});
+const {expectTransform, expectNoChange} = createTestHelpers({'arrow': true});
 
 describe('Arrow functions', () => {
   it('should convert simple callbacks', () => {
     const script = 'setTimeout(function() { return 2; });';
 
-    expect(test(script)).to.equal('setTimeout(() => 2);');
+    expectTransform(script).toReturn('setTimeout(() => 2);');
   });
 
   it('should convert callbacks with a single argument', () => {
     const script = 'a(function(b) { return b; });';
 
-    expect(test(script)).to.equal('a(b => b);');
+    expectTransform(script).toReturn('a(b => b);');
   });
 
   it('should convert callbacks with multiple arguments', () => {
     const script = 'a(function(b, c) { return b; });';
 
-    expect(test(script)).to.equal('a((b, c) => b);');
+    expectTransform(script).toReturn('a((b, c) => b);');
   });
 
   it('should convert function assignment', () => {
     const script = 'x = function () { foo(); };';
 
-    expect(test(script)).to.equal('x = () => { foo(); };');
+    expectTransform(script).toReturn('x = () => { foo(); };');
   });
 
   it('should convert immediate function invocation', () => {
     const script = '(function () { foo(); }());';
 
-    expect(test(script)).to.equal('((() => { foo(); })());');
+    expectTransform(script).toReturn('((() => { foo(); })());');
   });
 
   it('should convert returning of a function', () => {
     const script = 'function foo () { return function() { foo(); }; }';
 
-    expect(test(script)).to.equal('function foo () { return () => { foo(); }; }');
+    expectTransform(script).toReturn('function foo () { return () => { foo(); }; }');
   });
 
   it('should convert functions using `this` keyword inside a nested function', () => {
     const script = 'a(function () { return function() { this; }; });';
 
-    expect(test(script)).to.equal('a(() => function() { this; });');
+    expectTransform(script).toReturn('a(() => function() { this; });');
   });
 
   it('should convert functions using `arguments` inside a nested function', () => {
     const script = 'a(function () { return function() { arguments; }; });';
 
-    expect(test(script)).to.equal('a(() => function() { arguments; });');
+    expectTransform(script).toReturn('a(() => function() { arguments; });');
   });
 
   it('should preserve default parameters', () => {
     const script = 'foo(function (a=1, b=2, c) { });';
 
-    expect(test(script)).to.equal('foo((a=1, b=2, c) => { });');
+    expectTransform(script).toReturn('foo((a=1, b=2, c) => { });');
   });
 
   it('should preserve rest parameters', () => {
     const script = 'foo(function (x, ...xs) { });';
 
-    expect(test(script)).to.equal('foo((x, ...xs) => { });');
+    expectTransform(script).toReturn('foo((x, ...xs) => { });');
   });
 
 
@@ -109,25 +109,25 @@ describe('Arrow functions', () => {
 
   describe('bound functions', () => {
     it('should convert this-using functions', () => {
-      expect(test(
+      expectTransform(
         'a(function (a, b=2, ...c) { this.x = 3; }.bind(this));'
-      )).to.equal(
+      ).toReturn(
         'a((a, b=2, ...c) => { this.x = 3; });'
       );
     });
 
     it('should convert immediately returning functions', () => {
-      expect(test(
+      expectTransform(
         'a(function () { return 123; }.bind(this));'
-      )).to.equal(
+      ).toReturn(
         'a(() => 123);'
       );
     });
 
     it('should convert object members', () => {
-      expect(test(
+      expectTransform(
         '({foo: function() { this.x = 3; }.bind(this)});'
-      )).to.equal(
+      ).toReturn(
         '({foo: () => { this.x = 3; }});'
       );
     });

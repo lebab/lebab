@@ -1,19 +1,19 @@
 import createTestHelpers from '../createTestHelpers';
-const {expect, test, expectNoChange} = createTestHelpers({'exponent': true});
+const {expectTransform, expectNoChange} = createTestHelpers({'exponent': true});
 
 describe('Exponentiation operator', () => {
   it('should convert Math.pow()', () => {
-    expect(test(
+    expectTransform(
       'result = Math.pow(a, b);'
-    )).to.equal(
+    ).toReturn(
       'result = a ** b;'
     );
   });
 
   it('should parenthesize arguments when needed', () => {
-    expect(test(
+    expectTransform(
       'result = Math.pow(a + 1, b + 2);'
-    )).to.equal(
+    ).toReturn(
       'result = (a + 1) ** (b + 2);'
     );
   });
