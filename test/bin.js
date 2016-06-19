@@ -62,4 +62,26 @@ describe('Smoke test for the executable script', () => {
       });
     });
   });
+
+  describe('when transform generates warnings', () => {
+    beforeEach(() => {
+      fs.writeFileSync(
+        'test/test-data-warnings.js',
+        'if (true) { var x = 10; }\n x = 12;\n'
+      );
+    });
+
+    afterEach(() => {
+      fs.unlinkSync('test/test-data-warnings.js');
+    });
+
+    it('logs warnings to STDERR', done => {
+      exec('node ./bin/index.js --transform let test/test-data-warnings.js', (error, stdout, stderr) => {
+        expect(error).to.equal(null);
+        expect(stderr).to.equal('1:  warning  Unable to transform var\n');
+        expect(stdout).to.equal('if (true) { var x = 10; }\n x = 12;\n');
+        done();
+      });
+    });
+  });
 });

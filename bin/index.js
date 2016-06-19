@@ -13,4 +13,11 @@ catch (error) {
 }
 
 var transformer = new Transformer(options.transforms);
-io.write(options.outFile, transformer.run(io.read(options.inFile)).code);
+var result = transformer.run(io.read(options.inFile));
+
+// Log warnings if there are any
+result.warnings.forEach(function(warning) { // eslint-disable-line
+  console.error(warning.line + ":  warning  " + warning.msg); // eslint-disable-line
+});
+
+io.write(options.outFile, result.code);
