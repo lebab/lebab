@@ -65,7 +65,9 @@ describe('Object methods', () => {
       '    return foo();\n' +
       '  }\n' +
       '});'
-    );
+    ).withWarnings([
+      {line: 2, msg: 'Unable to transform named function', type: 'obj-method'}
+    ]);
   });
 
   it('should not convert computed properties', () => {
