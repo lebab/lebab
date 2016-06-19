@@ -1,10 +1,5 @@
-import {expect} from 'chai';
-import Transformer from './../../lib/transformer';
-const transformer = new Transformer({'no-strict': true});
-
-function test(script) {
-  return transformer.run(script);
-}
+import createTestHelpers from '../createTestHelpers';
+const {expect, test, expectNoChange} = createTestHelpers({'no-strict': true});
 
 describe('Removal of "use strict"', () => {
   it('should remove statement with "use strict" string', () => {
@@ -18,7 +13,7 @@ describe('Removal of "use strict"', () => {
   });
 
   it('should keep "use strict" used inside other code', () => {
-    expect(test('x = "use strict";')).to.equal('x = "use strict";');
-    expect(test('foo("use strict");')).to.equal('foo("use strict");');
+    expectNoChange('x = "use strict";');
+    expectNoChange('foo("use strict");');
   });
 });

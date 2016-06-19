@@ -1,6 +1,5 @@
-import {expect} from 'chai';
-import Transformer from './../../lib/transformer';
-const transformer = new Transformer({
+import createTestHelpers from '../createTestHelpers';
+const {expect, test} = createTestHelpers({
   'class': true,
   'template': true,
   'arrow': true,
@@ -13,10 +12,6 @@ const transformer = new Transformer({
   'commonjs': true,
   'exponent': true,
 });
-
-function test(script) {
-  return transformer.run(script);
-}
 
 describe('JSX support', () => {
   it('should support self-closing element', () => {

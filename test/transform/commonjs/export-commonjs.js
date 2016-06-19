@@ -1,14 +1,5 @@
-import {expect} from 'chai';
-import Transformer from './../../../lib/transformer';
-const transformer = new Transformer({commonjs: true});
-
-function test(script) {
-  return transformer.run(script);
-}
-
-function expectNoChange(script) {
-  expect(test(script)).to.equal(script);
-}
+import createTestHelpers from '../../createTestHelpers';
+const {expect, test, expectNoChange} = createTestHelpers({'commonjs': true});
 
 describe('Export CommonJS', () => {
   describe('default export', () => {

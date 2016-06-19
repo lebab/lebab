@@ -1,14 +1,5 @@
-import {expect} from 'chai';
-import Transformer from './../../lib/transformer';
-const transformer = new Transformer({'template': true});
-
-function test(script) {
-  return transformer.run(script);
-}
-
-function expectNoChange(script) {
-  expect(test(script)).to.equal(script);
-}
+import createTestHelpers from '../createTestHelpers';
+const {expect, test, expectNoChange} = createTestHelpers({'template': true});
 
 describe('Template string', () => {
   it('should not convert non-concatenated strings', () => {
