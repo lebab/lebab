@@ -176,6 +176,7 @@ function logWarningForVarKind(node) {
     logger.warn({
       line: node.loc.start.line,
       msg: 'Unable to transform var',
+      type: 'let',
     });
   }
 }
