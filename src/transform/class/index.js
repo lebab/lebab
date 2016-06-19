@@ -80,12 +80,14 @@ export default function(ast) {
       }
       else if ((m = matchObjectDefinePropertyCall(node))) {
         if (potentialClasses[m.className]) {
-          m.descriptors.forEach(desc => {
+          m.descriptors.forEach((desc, i) => {
+            const parentComments = (i === 0) ? [node] : [];
+
             potentialClasses[m.className].addMethod(new PotentialMethod({
               name: m.methodName,
               methodNode: desc.methodNode,
               fullNode: node,
-              commentNodes: [node],
+              commentNodes: parentComments.concat([desc.propertyNode]),
               parent,
               kind: desc.kind,
             }));

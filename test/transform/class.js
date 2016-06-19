@@ -333,5 +333,28 @@ describe('Classes', () => {
         '}\n'
       );
     });
+
+    it('should preserve Object.defineProperty comments', () => {
+      expect(test(
+        'function MyClass() {\n' +
+        '}\n' +
+        '// Comment before\n' +
+        'Object.defineProperty(MyClass.prototype, "someAccessor", {\n' +
+        '  // Getter comment\n' +
+        '  get: function() {},\n' +
+        '  // Setter comment\n' +
+        '  set: function() {}\n' +
+        '});'
+      )).to.equal(
+        'class MyClass {\n' +
+        '  // Comment before\n' +
+        '  // Getter comment\n' +
+        '  get someAccessor() {}\n' +
+        '\n' +
+        '  // Setter comment\n' +
+        '  set someAccessor() {}\n' +
+        '}'
+      );
+    });
   });
 });
