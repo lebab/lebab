@@ -26,7 +26,10 @@ export default function(transformsCfg) {
       withWarnings(expectedWarnings) {
         expect(warnings).to.deep.equal(expectedWarnings);
         return this;
-      }
+      },
+      withoutWarnings() {
+        return this.withWarnings([]);
+      },
     };
   }
 
