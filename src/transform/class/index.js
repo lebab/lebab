@@ -44,6 +44,7 @@ export default function(ast) {
             name: m.methodName,
             methodNode: m.methodNode,
             fullNode: node,
+            commentNodes: [node],
             parent,
             static: true,
           }));
@@ -55,17 +56,21 @@ export default function(ast) {
             name: m.methodName,
             methodNode: m.methodNode,
             fullNode: node,
+            commentNodes: [node],
             parent,
           }));
         }
       }
       else if ((m = matchPrototypeObjectAssignment(node))) {
         if (potentialClasses[m.className]) {
-          m.methods.forEach(method => {
+          m.methods.forEach((method, i) => {
+            const assignmentComments = (i === 0) ? [node] : [];
+
             potentialClasses[m.className].addMethod(new PotentialMethod({
               name: method.methodName,
               methodNode: method.methodNode,
               fullNode: node,
+              commentNodes: assignmentComments.concat([method.propertyNode]),
               parent,
             }));
           });
@@ -78,6 +83,7 @@ export default function(ast) {
               name: m.methodName,
               methodNode: desc.methodNode,
               fullNode: node,
+              commentNodes: [node],
               parent,
               kind: desc.kind,
             }));

@@ -310,5 +310,28 @@ describe('Classes', () => {
         '}'
       );
     });
+
+    it('should preserve prototype = {} comments', () => {
+      expect(test(
+        'function MyClass() {\n' +
+        '}\n' +
+        '// comment before\n' +
+        'MyClass.prototype = {\n' +
+        '  // comment A\n' +
+        '  methodA: function() {},\n' +
+        '  // comment B\n' +
+        '  methodB: function() {}\n' +
+        '};\n'
+      )).to.equal(
+        'class MyClass {\n' +
+        '  // comment before\n' +
+        '  // comment A\n' +
+        '  methodA() {}\n' +
+        '\n' +
+        '  // comment B\n' +
+        '  methodB() {}\n' +
+        '}\n'
+      );
+    });
   });
 });
