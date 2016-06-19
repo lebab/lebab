@@ -10,13 +10,15 @@ class PotentialClass {
    * @param {Object} cfg
    *   @param {String} cfg.name Class name
    *   @param {PotentialMethod} cfg.constructor
-   *   @param {Object} cfg.fullNode
+   *   @param {Object} cfg.fullNode Node to remove after converting to class
+   *   @param {Object[]} cfg.commentNodes Nodes to extract comments from
    *   @param {Object} cfg.parent
    */
-  constructor({name, constructor, fullNode, parent}) {
+  constructor({name, constructor, fullNode, commentNodes, parent}) {
     this.name = name;
     this.constructor = constructor;
     this.fullNode = fullNode;
+    this.commentNodes = commentNodes;
     this.parent = parent;
     this.methods = [];
   }
@@ -58,8 +60,12 @@ class PotentialClass {
         type: 'ClassBody',
         body: this.createMethods()
       },
-      comments: this.fullNode.comments,
+      comments: this.getComments(),
     };
+  }
+
+  getComments() {
+    return _(this.commentNodes).map(n => n.comments || []).flatten().value();
   }
 
   createMethods() {

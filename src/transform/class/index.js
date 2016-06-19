@@ -24,6 +24,7 @@ export default function(ast) {
             methodNode: m.constructorNode,
           }),
           fullNode: node,
+          commentNodes: [node],
           parent,
         });
       }
@@ -35,6 +36,7 @@ export default function(ast) {
             methodNode: m.constructorNode,
           }),
           fullNode: node,
+          commentNodes: [node],
           parent,
         });
       }
