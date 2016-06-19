@@ -9,9 +9,11 @@ import VariableMarker from '../scope/variable-marker';
 import FunctionHoister from '../scope/function-hoister';
 import VariableDeclaration from '../syntax/variable-declaration';
 
+let logger;
 let scopeManager;
 
-export default function(ast) {
+export default function(ast, loggerInstance) {
+  logger = loggerInstance;
   scopeManager = new ScopeManager();
   const variableMarker = new VariableMarker(scopeManager);
 
@@ -147,6 +149,7 @@ function transformVarsToLetOrConst() {
       // just set appropriate `kind` value for the existing
       // VariableDeclaration node.
       group.getNode().kind = commonKind;
+      logWarningForVarKind(group.getNode());
     }
     else if (hasMultiStatementBody(group.getParentNode())) {
       // When some variables are of a different kind,
@@ -157,13 +160,21 @@ function transformVarsToLetOrConst() {
       });
 
       multiReplaceStatement(group.getParentNode(), group.getNode(), varNodes);
+      logWarningForVarKind(group.getNode());
     }
     else {
       // When parent node restricts breaking VariableDeclaration to multiple ones
       // just change the kind of the declaration to the most restrictive possible
       group.getNode().kind = group.getMostRestrictiveKind();
+      logWarningForVarKind(group.getNode());
     }
   });
+}
+
+function logWarningForVarKind(node) {
+  if (node.kind === 'var') {
+    logger.warn('Unable to transform var');
+  }
 }
 
 // Does a node have body that can contain an array of statements
