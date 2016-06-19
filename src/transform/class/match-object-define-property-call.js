@@ -58,6 +58,7 @@ function isAccessorDescriptor(node) {
  * - className
  * - methodName
  * - descriptors:
+ *     - propertyNode
  *     - methodNode
  *     - kind
  *
@@ -73,6 +74,7 @@ export default function(node) {
       methodName: methodName,
       descriptors: properties.filter(isAccessorDescriptor).map(prop => {
         return {
+          propertyNode: prop,
           methodNode: prop.value,
           kind: prop.key.name,
         };

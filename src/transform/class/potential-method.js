@@ -1,3 +1,4 @@
+import extractComments from './extractComments';
 import multiReplaceStatement from './../../utils/multi-replace-statement';
 
 /**
@@ -9,7 +10,8 @@ class PotentialMethod {
    * @param {Object} cfg
    *   @param {String} cfg.name Method name
    *   @param {Object} cfg.methodNode
-   *   @param {Object} cfg.fullNode
+   *   @param {Object} cfg.fullNode Node to remove after converting to class
+   *   @param {Object[]} cfg.commentNodes Nodes to extract comments from
    *   @param {Object} cfg.parent
    *   @param {String} cfg.kind Either 'get' or 'set' (optional)
    *   @param {Boolean} cfg.static True to make static method (optional)
@@ -18,6 +20,7 @@ class PotentialMethod {
     this.name = cfg.name;
     this.methodNode = cfg.methodNode;
     this.fullNode = cfg.fullNode;
+    this.commentNodes = cfg.commentNodes || [];
     this.parent = cfg.parent;
     this.kind = cfg.kind || 'method';
     this.static = cfg.static || false;
@@ -53,7 +56,7 @@ class PotentialMethod {
       },
       kind: this.kind,
       static: this.static,
-      comments: this.fullNode && this.fullNode.comments,
+      comments: extractComments(this.commentNodes),
     };
   }
 

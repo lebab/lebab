@@ -24,6 +24,7 @@ export default function(ast) {
             methodNode: m.constructorNode,
           }),
           fullNode: node,
+          commentNodes: [node],
           parent,
         });
       }
@@ -35,6 +36,7 @@ export default function(ast) {
             methodNode: m.constructorNode,
           }),
           fullNode: node,
+          commentNodes: [node],
           parent,
         });
       }
@@ -44,6 +46,7 @@ export default function(ast) {
             name: m.methodName,
             methodNode: m.methodNode,
             fullNode: node,
+            commentNodes: [node],
             parent,
             static: true,
           }));
@@ -55,17 +58,21 @@ export default function(ast) {
             name: m.methodName,
             methodNode: m.methodNode,
             fullNode: node,
+            commentNodes: [node],
             parent,
           }));
         }
       }
       else if ((m = matchPrototypeObjectAssignment(node))) {
         if (potentialClasses[m.className]) {
-          m.methods.forEach(method => {
+          m.methods.forEach((method, i) => {
+            const assignmentComments = (i === 0) ? [node] : [];
+
             potentialClasses[m.className].addMethod(new PotentialMethod({
               name: method.methodName,
               methodNode: method.methodNode,
               fullNode: node,
+              commentNodes: assignmentComments.concat([method.propertyNode]),
               parent,
             }));
           });
@@ -73,11 +80,14 @@ export default function(ast) {
       }
       else if ((m = matchObjectDefinePropertyCall(node))) {
         if (potentialClasses[m.className]) {
-          m.descriptors.forEach(desc => {
+          m.descriptors.forEach((desc, i) => {
+            const parentComments = (i === 0) ? [node] : [];
+
             potentialClasses[m.className].addMethod(new PotentialMethod({
               name: m.methodName,
               methodNode: desc.methodNode,
               fullNode: node,
+              commentNodes: parentComments.concat([desc.propertyNode]),
               parent,
               kind: desc.kind,
             }));
