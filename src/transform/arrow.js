@@ -3,10 +3,14 @@ import traverser from '../traverser';
 import ArrowFunctionExpression from '../syntax/arrow-function-expression';
 import {matchesAst, extract} from '../utils/matches-ast';
 
-export default function(ast) {
+export default function(ast, logger) {
   traverser.replace(ast, {
     enter(node, parent) {
       if (isFunctionConvertableToArrow(node, parent)) {
+        if (hasArguments(node.body)) {
+          logger.warn(node, 'Can not use arguments in arrow function', 'arrow');
+          return;
+        }
         return functionToArrow(node);
       }
 
@@ -24,8 +28,7 @@ function isFunctionConvertableToArrow(node, parent) {
     parent.type !== 'MethodDefinition' &&
     !node.id &&
     !node.generator &&
-    !hasThis(node.body) &&
-    !hasArguments(node.body);
+    !hasThis(node.body);
 }
 
 // Matches: function(){}.bind(this)
