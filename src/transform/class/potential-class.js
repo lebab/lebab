@@ -25,6 +25,22 @@ class PotentialClass {
   }
 
   /**
+   * Returns the name of the class.
+   * @return {String}
+   */
+  getName() {
+    return this.name;
+  }
+
+  /**
+   * Returns the AST node for the original function
+   * @return {Object}
+   */
+  getFullNode() {
+    return this.fullNode;
+  }
+
+  /**
    * Adds method to class.
    * @param {PotentialMethod} method
    */

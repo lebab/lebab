@@ -9,7 +9,7 @@ import matchPrototypeFunctionAssignment from './match-prototype-function-assignm
 import matchPrototypeObjectAssignment from './match-prototype-object-assignment';
 import matchObjectDefinePropertyCall from './match-object-define-property-call';
 
-export default function(ast) {
+export default function(ast, logger) {
   const potentialClasses = {};
 
   traverser.traverse(ast, {
@@ -98,9 +98,19 @@ export default function(ast) {
     leave(node) {
       if (node.type === 'Program') {
         _(potentialClasses)
-          .filter(cls => cls.isTransformable())
+          .filter(cls => cls.isTransformable() ? true : logWarning(cls))
           .forEach(cls => cls.transform());
       }
     }
   });
+
+  function logWarning(cls) {
+    if (/^[A-Z]/.test(cls.getName())) {
+      logger.warn(
+        cls.getFullNode(),
+        `Function ${cls.getName()} looks like class, but has no prototype`,
+        'class'
+      );
+    }
+  }
 }
