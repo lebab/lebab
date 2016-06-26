@@ -251,7 +251,9 @@ describe('Let/const', () => {
         '  x = 10;\n' +
         '}\n' +
         'y = 20;'
-      );
+      ).withWarnings([
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
   });
 
@@ -528,7 +530,9 @@ describe('Let/const', () => {
         '  var a = 1;\n' +
         '}\n' +
         'fn = function() { return a; }'
-      );
+      ).withWarnings([
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
 
     it('should ignore variable referenced in shorthand arrow-function body outside the block', () => {
@@ -537,7 +541,9 @@ describe('Let/const', () => {
         '  var a = 1;\n' +
         '}\n' +
         'fn = () => a;'
-      );
+      ).withWarnings([
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
 
     it('should ignore variable referenced in variable declaration outside the block', () => {
@@ -546,7 +552,9 @@ describe('Let/const', () => {
         '  var a = 1;\n' +
         '}\n' +
         'const foo = a;'
-      );
+      ).withWarnings([
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
   });
 
@@ -579,21 +587,27 @@ describe('Let/const', () => {
       expectNoChange(
         'for (var i=0; i<10; i++) {}\n' +
         'foo(i);'
-      );
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
 
     it('should ignore var in for-in-loop head that is referenced outside the loop', () => {
       expectNoChange(
         'for (var key in obj) {}\n' +
         'foo(key);'
-      );
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
 
     it('should ignore var in for-of-loop head that is referenced outside the loop', () => {
       expectNoChange(
         'for (var item of array) {}\n' +
         'foo(item);'
-      );
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
   });
 
@@ -603,7 +617,9 @@ describe('Let/const', () => {
       expectNoChange(
         'a = 1;\n' +
         'var a = 2;'
-      );
+      ).withWarnings([
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
 
     it('should ignore when similar variable in outer scope', () => {
@@ -619,7 +635,9 @@ describe('Let/const', () => {
         '  a = 1;\n' +
         '  var a = 2;\n' +
         '}'
-      );
+      ).withWarnings([
+        {line: 4, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
   });
 
@@ -628,7 +646,9 @@ describe('Let/const', () => {
       expectNoChange(
         'foo(a);\n' +
         'var a = 2;'
-      );
+      ).withWarnings([
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
   });
 
@@ -637,7 +657,9 @@ describe('Let/const', () => {
       expectNoChange(
         'var a = 1;\n' +
         'var a = 2;'
-      );
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
 
     it('should ignore when declarations in different blocks', () => {
@@ -649,7 +671,9 @@ describe('Let/const', () => {
         '  var a;\n' +
         '  foo(a);\n' +
         '}'
-      );
+      ).withWarnings([
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
 
     it('should ignore when re-declaring of function parameter', () => {

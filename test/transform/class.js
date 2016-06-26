@@ -4,9 +4,18 @@ const {expectTransform, expectNoChange} = createTestHelpers({'class': true});
 describe('Classes', () => {
   it('should not convert functions without prototype assignment to class', () => {
     expectNoChange(
+      'function myFunc() {\n' +
+      '}'
+    ).withoutWarnings();
+  });
+
+  it('should warn about functions that are named like classes', () => {
+    expectNoChange(
       'function MyClass() {\n' +
       '}'
-    );
+    ).withWarnings([
+      {line: 1, msg: 'Function MyClass looks like class, but has no prototype', type: 'class'}
+    ]);
   });
 
   it('should convert function declarations with prototype assignment to class', () => {

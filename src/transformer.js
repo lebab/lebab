@@ -2,6 +2,7 @@ import 'babel/polyfill';
 import _ from 'lodash';
 import recast from 'recast';
 import parser from './parser';
+import Logger from './logger';
 
 // Transforms
 import classTransform from './transform/class';
@@ -51,11 +52,20 @@ export default class Transformer {
    * @return {String} Output ES6 code
    */
   run(code) {
+    const logger = new Logger();
+
+    return {
+      code: this.applyAllTransforms(code, logger),
+      warnings: logger.getWarnings(),
+    };
+  }
+
+  applyAllTransforms(code, logger) {
     return this.ignoringHashBangComment(code, (js) => {
       const ast = recast.parse(js, {parser});
 
       this.transforms.forEach(transformer => {
-        transformer(ast.program);
+        transformer(ast.program, logger);
       });
 
       return recast.print(ast).code;

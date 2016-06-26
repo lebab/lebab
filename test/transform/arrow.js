@@ -87,11 +87,21 @@ describe('Arrow functions', () => {
   });
 
   it('should not convert functions using `arguments`', () => {
-    expectNoChange('a(function () { arguments; });');
-    expectNoChange('a(function () { foo(arguments); });');
-    expectNoChange('a(function () { return arguments[0] + 1; });');
-    expectNoChange('a(function () { return Array.slice.apply(arguments); });');
-    expectNoChange('a(function () { if (x) foo(arguments); });');
+    expectNoChange('a(function () { arguments; });').withWarnings([
+      {line: 1, msg: 'Can not use arguments in arrow function', type: 'arrow'}
+    ]);
+    expectNoChange('a(function () { foo(arguments); });').withWarnings([
+      {line: 1, msg: 'Can not use arguments in arrow function', type: 'arrow'}
+    ]);
+    expectNoChange('a(function () { return arguments[0] + 1; });').withWarnings([
+      {line: 1, msg: 'Can not use arguments in arrow function', type: 'arrow'}
+    ]);
+    expectNoChange('a(function () { return Array.slice.apply(arguments); });').withWarnings([
+      {line: 1, msg: 'Can not use arguments in arrow function', type: 'arrow'}
+    ]);
+    expectNoChange('a(function () { if (x) foo(arguments); });').withWarnings([
+      {line: 1, msg: 'Can not use arguments in arrow function', type: 'arrow'}
+    ]);
   });
 
   it('should not convert object methods', () => {
@@ -133,7 +143,9 @@ describe('Arrow functions', () => {
     });
 
     it('should not convert functions using `arguments`', () => {
-      expectNoChange('a(function () { arguments; }.bind(this));');
+      expectNoChange('a(function () { arguments; }.bind(this));').withWarnings([
+        {line: 1, msg: 'Can not use arguments in arrow function', type: 'arrow'}
+      ]);
     });
 
     it('should not convert generator functions', () => {

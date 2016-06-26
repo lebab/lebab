@@ -1,21 +1,29 @@
-import matchesAst from '../utils/matches-ast';
+import {matchesAst, extract} from '../utils/matches-ast';
 import traverser from '../traverser';
 
-const isTransformableProperty = matchesAst({
+const matchTransformableProperty = matchesAst({
   type: 'Property',
   value: {
     type: 'FunctionExpression',
-    id: null,
+    id: extract('functionName'),
   },
   method: false,
   computed: false,
   shorthand: false
 });
 
-export default function(ast) {
+export default function(ast, logger) {
   traverser.replace(ast, {
     enter(node) {
-      if (isTransformableProperty(node)) {
+      const match = matchTransformableProperty(node);
+      if (match) {
+        // Do not transform functions with name,
+        // as the name might be recursively referenced from inside.
+        if (match.functionName) {
+          logger.warn(node, 'Unable to transform named function', 'obj-method');
+          return;
+        }
+
         node.method = true;
       }
     }

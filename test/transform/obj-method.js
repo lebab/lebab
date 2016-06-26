@@ -15,7 +15,7 @@ describe('Object methods', () => {
       '    return a + b + c;\n' +
       '  }\n' +
       '});'
-    );
+    ).withoutWarnings();
   });
 
   it('should ignore non-function properties of object', () => {
@@ -37,7 +37,7 @@ describe('Object methods', () => {
       '  method2() {\n' +
       '  },\n' +
       '});'
-    );
+    ).withoutWarnings();
   });
 
   it('should convert function properties in nested object literal', () => {
@@ -55,7 +55,7 @@ describe('Object methods', () => {
       '    }\n' +
       '  }\n' +
       '});'
-    );
+    ).withoutWarnings();
   });
 
   it('should not convert named function expressions', () => {
@@ -65,7 +65,9 @@ describe('Object methods', () => {
       '    return foo();\n' +
       '  }\n' +
       '});'
-    );
+    ).withWarnings([
+      {line: 2, msg: 'Unable to transform named function', type: 'obj-method'}
+    ]);
   });
 
   it('should not convert computed properties', () => {
@@ -74,6 +76,6 @@ describe('Object methods', () => {
       '  ["foo" + count]: function() {\n' +
       '  }\n' +
       '});'
-    );
+    ).withoutWarnings();
   });
 });
