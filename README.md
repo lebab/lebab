@@ -46,7 +46,6 @@ The resulting ES2015 code should be almost 100% equivalent of the original code.
     - [x] not applied to object properties (use `obj-method` transform)
     - [x] converts immediate return `{ return x; }` to `=> x`
     - [ ] does not remove `that = this` assignments
-    - [ ] BUG [fails with immediately returning functions that have methods invoked][105]
 - [x] **let** - `var` to `let`/`const`
     - [x] never modified variables are converted to `const`
     - [x] properly recognizes block-scoping
