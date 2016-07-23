@@ -27,6 +27,7 @@ program.usage('-t <transform> <file>');
 program.description(`${pkg.description}\n${transformsDocs}`);
 program.version(pkg.version);
 program.option('-o, --out-file <file>', 'write output to a file');
+program.option('--dir <dir>', 'in-place transform all *.js files of a directory');
 program.option('-t, --transform <a,b,c>', 'one or more transformations to perform', v => v.split(','));
 
 /**
@@ -43,6 +44,7 @@ export default function parseCommandLineOptions(argv) {
   return {
     inFile: getInputFile(),
     outFile: program.outFile,
+    dir: getDir(),
     transforms: getTransforms(),
   };
 }
@@ -55,6 +57,22 @@ function getInputFile() {
     throw `File ${program.args[0]} does not exist.`;
   }
   return program.args[0];
+}
+
+function getDir() {
+  if (!program.dir) {
+    return undefined;
+  }
+  if (program.outFile) {
+    throw 'The --dir and --out-file options cannot be used together.';
+  }
+  if (program.args[0]) {
+    throw 'The --dir and plain input file options cannot be used together.';
+  }
+  if (!fs.existsSync(program.dir)) {
+    throw `Directory ${program.dir} does not exist.`;
+  }
+  return program.dir;
 }
 
 function getTransforms() {
