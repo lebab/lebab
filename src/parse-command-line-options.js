@@ -1,6 +1,7 @@
 import program from 'commander';
 import pkg from '../package.json';
 import fs from 'fs';
+import path from 'path';
 
 const transformsDocs = `
   Safe transforms:
@@ -27,7 +28,8 @@ program.usage('-t <transform> <file>');
 program.description(`${pkg.description}\n${transformsDocs}`);
 program.version(pkg.version);
 program.option('-o, --out-file <file>', 'write output to a file');
-program.option('--dir <dir>', 'in-place transform all *.js files of a directory');
+program.option('--replace <dir>', `in-place transform all *.js files in a directory
+                         <dir> can also be a single file or a glob pattern`);
 program.option('-t, --transform <a,b,c>', 'one or more transformations to perform', v => v.split(','));
 
 /**
@@ -44,7 +46,7 @@ export default function parseCommandLineOptions(argv) {
   return {
     inFile: getInputFile(),
     outFile: program.outFile,
-    dir: getDir(),
+    replace: getReplace(),
     transforms: getTransforms(),
   };
 }
@@ -59,20 +61,21 @@ function getInputFile() {
   return program.args[0];
 }
 
-function getDir() {
-  if (!program.dir) {
+function getReplace() {
+  if (!program.replace) {
     return undefined;
   }
   if (program.outFile) {
-    throw 'The --dir and --out-file options cannot be used together.';
+    throw 'The --replace and --out-file options cannot be used together.';
   }
   if (program.args[0]) {
-    throw 'The --dir and plain input file options cannot be used together.';
+    throw 'The --replace and plain input file options cannot be used together.\n' +
+      'Did you forget to quote the --replace parameter?';
   }
-  if (!fs.existsSync(program.dir)) {
-    throw `Directory ${program.dir} does not exist.`;
+  if (fs.existsSync(program.replace) && fs.statSync(program.replace).isDirectory()) {
+    return path.join(program.replace, '/**/*.js');
   }
-  return program.dir;
+  return program.replace;
 }
 
 function getTransforms() {

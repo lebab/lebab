@@ -65,14 +65,14 @@ describe('Command Line Interface', () => {
     const options = parse(['-t', 'class']);
     expect(options.inFile).to.equal(undefined);
     expect(options.outFile).to.equal(undefined);
-    expect(options.dir).to.equal(undefined);
+    expect(options.replace).to.equal(undefined);
   });
 
   it('when existing <filename> given reads <filename> and writes to STDOUT', () => {
     const options = parse(['-t', 'class', 'lib/io.js']);
     expect(options.inFile).to.equal('lib/io.js');
     expect(options.outFile).to.equal(undefined);
-    expect(options.dir).to.equal(undefined);
+    expect(options.replace).to.equal(undefined);
   });
 
   it('when not-existing <filename> given raises error', () => {
@@ -91,31 +91,32 @@ describe('Command Line Interface', () => {
     const options = parse(['-t', 'class', '--out-file', 'some/file.js']);
     expect(options.inFile).to.equal(undefined);
     expect(options.outFile).to.equal('some/file.js');
-    expect(options.dir).to.equal(undefined);
+    expect(options.replace).to.equal(undefined);
   });
 
-  it('when --dir <dirname> given transforms all files in a directory', () => {
-    const options = parse(['-t', 'class', '--dir', 'lib/']);
+  it('when --replace <dirname> given transforms all files in glob pattern', () => {
+    const options = parse(['-t', 'class', '--replace', '*.js']);
     expect(options.inFile).to.equal(undefined);
     expect(options.outFile).to.equal(undefined);
-    expect(options.dir).to.equal('lib/');
+    expect(options.replace).to.equal('*.js');
   });
 
-  it('when --dir used together with input file, raises error', () => {
+  it('when --replace used together with input file, raises error', () => {
     expect(() => {
-      parse(['-t', 'class', '--dir', 'lib/', 'lib/io.js']);
-    }).to.throw('The --dir and plain input file options cannot be used together.');
+      parse(['-t', 'class', '--replace', 'lib/', 'lib/io.js']);
+    }).to.throw('The --replace and plain input file options cannot be used together.');
   });
 
-  it('when --dir used together with outout file, raises error', () => {
+  it('when --replace used together with outout file, raises error', () => {
     expect(() => {
-      parse(['-t', 'class', '--dir', 'lib/', '-o', 'some/file.js']);
-    }).to.throw('The --dir and --out-file options cannot be used together.');
+      parse(['-t', 'class', '--replace', 'lib/', '-o', 'some/file.js']);
+    }).to.throw('The --replace and --out-file options cannot be used together.');
   });
 
-  it('when --dir used with non-existing dir name, raises error', () => {
-    expect(() => {
-      parse(['-t', 'class', '--dir', 'missing/']);
-    }).to.throw('Directory missing/ does not exist.');
+  it('when --replace used with existing dir name, turns it into glob pattern', () => {
+    const options = parse(['-t', 'class', '--replace', 'lib/']);
+    expect(options.inFile).to.equal(undefined);
+    expect(options.outFile).to.equal(undefined);
+    expect(options.replace).to.equal('lib/**/*.js');
   });
 });

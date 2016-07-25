@@ -26,9 +26,9 @@ export default class Cli {
    * Runs the app
    */
   run() {
-    if (this.options.dir) {
+    if (this.options.replace) {
       // Transform all files in a directory
-      glob.sync(`${this.options.dir}/**/*.js`).forEach((file) => {
+      glob.sync(this.options.replace).forEach((file) => {
         this.transformFile(file, file);
       });
     }
