@@ -78,7 +78,7 @@ describe('Smoke test for the executable script', () => {
     it('logs warnings to STDERR', done => {
       exec('node ./bin/index.js --transform let test/test-data-warnings.js', (error, stdout, stderr) => {
         expect(error).to.equal(null);
-        expect(stderr).to.equal('1:  warning  Unable to transform var  (let)\n');
+        expect(stderr).to.equal('test/test-data-warnings.js:\n1:  warning  Unable to transform var  (let)\n');
         expect(stdout).to.equal('if (true) { var x = 10; }\n x = 12;\n');
         done();
       });

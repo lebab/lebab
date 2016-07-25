@@ -39,6 +39,7 @@
     "commander": "^2.9.0",
     "espree": "^3.1.5",
     "estraverse": "^4.1.1",
+    "glob": "^7.0.5",
     "lodash": "^4.5.1",
     "recast": "^0.11.7"
   },
