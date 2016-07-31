@@ -91,8 +91,14 @@ function functionToArrow(func) {
 }
 
 function extractArrowBody(block) {
-  if (block.body[0] && block.body[0].type === 'ReturnStatement') {
-    return block.body[0].argument;
+  const returnStat = block.body[0];
+  if (returnStat && returnStat.type === 'ReturnStatement') {
+    const returnVal = returnStat.argument;
+    // preserve return statement comments
+    if (returnStat.comments && returnStat.comments.length > 0) {
+      returnVal.comments = (returnVal.comments || []).concat(returnStat.comments);
+    }
+    return returnVal;
   }
   else {
     return block;
