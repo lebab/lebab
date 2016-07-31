@@ -11,12 +11,12 @@ export default function(ast) {
   traverser.replace(ast, {
     enter(node, parent) {
       if (isVarWithRequireCalls(node) && parent.type === 'Program') {
-        multiReplaceStatement(
+        multiReplaceStatement({
           parent,
           node,
-          node.declarations.map(dec => varToImport(dec, node.kind)),
-          {preserveComments: true}
-        );
+          replacements: node.declarations.map(dec => varToImport(dec, node.kind)),
+          preserveComments: true,
+        });
       }
     }
   });

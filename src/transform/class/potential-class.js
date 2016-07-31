@@ -45,7 +45,11 @@ class PotentialClass {
    * with ClassDeclaration.
    */
   transform() {
-    multiReplaceStatement(this.parent, this.fullNode, [this.toClassDeclaration()]);
+    multiReplaceStatement({
+      parent: this.parent,
+      node: this.fullNode,
+      replacements: [this.toClassDeclaration()],
+    });
 
     this.methods.forEach(method => method.remove());
   }

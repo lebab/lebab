@@ -64,6 +64,10 @@ class PotentialMethod {
    * Removes original prototype assignment node from AST.
    */
   remove() {
-    multiReplaceStatement(this.parent, this.fullNode, []);
+    multiReplaceStatement({
+      parent: this.parent,
+      node: this.fullNode,
+      replacements: [],
+    });
   }
 }
