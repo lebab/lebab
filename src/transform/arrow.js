@@ -2,6 +2,7 @@ import _ from 'lodash';
 import traverser from '../traverser';
 import ArrowFunctionExpression from '../syntax/arrow-function-expression';
 import {matchesAst, extract} from '../utils/matches-ast';
+import copyComments from '../utils/copy-comments';
 
 export default function(ast) {
   traverser.replace(ast, {
@@ -95,9 +96,7 @@ function extractArrowBody(block) {
   if (returnStat && returnStat.type === 'ReturnStatement') {
     const returnVal = returnStat.argument;
     // preserve return statement comments
-    if (returnStat.comments && returnStat.comments.length > 0) {
-      returnVal.comments = (returnVal.comments || []).concat(returnStat.comments);
-    }
+    copyComments({from: returnStat, to: returnVal});
     return returnVal;
   }
   else {

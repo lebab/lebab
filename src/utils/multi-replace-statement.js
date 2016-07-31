@@ -1,3 +1,5 @@
+import copyComments from './copy-comments';
+
 /**
  * Replaces `node` inside `parent` with any number of `replacements`.
  *
@@ -17,8 +19,8 @@
 export default function multiReplaceStatement({parent, node, replacements, preserveComments}) {
   const body = getBody(parent);
   const index = body.indexOf(node);
-  if (preserveComments) {
-    copyComments(node, replacements[0]);
+  if (preserveComments && replacements[0]) {
+    copyComments({from: node, to: replacements[0]});
   }
   if (index !== -1) {
     body.splice(index, 1, ...replacements);
@@ -34,12 +36,5 @@ function getBody(node) {
     return node.consequent;
   default:
     throw `Unsupported node type '${node.type}' in multiReplaceStatement()`;
-  }
-}
-
-function copyComments(node, replacementNode) {
-  if (node.comments && node.comments.length > 0 && replacementNode) {
-    const existingComments = replacementNode.comments || [];
-    replacementNode.comments = existingComments.concat(node.comments);
   }
 }
