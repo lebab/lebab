@@ -306,6 +306,14 @@ describe('Let/const', () => {
         'function foo(a) { a = 1; }'
       );
     });
+
+    it('should work with anonymous function declaration', () => {
+      expect(test(
+        'export default function () { var a = 1; }'
+      )).to.equal(
+        'export default function () { const a = 1; }'
+      );
+    });
   });
 
   describe('with nested arrow-function', () => {
