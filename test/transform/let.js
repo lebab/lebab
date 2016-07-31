@@ -846,5 +846,22 @@ describe('Let/const', () => {
         'const x = 42; // trailing comment'
       );
     });
+
+    it('should preserve comment before var broken up to let & const', () => {
+      // For some reason Recast creates an additional line-break after const.
+      // Unsure whether it's a bug in Recast or problem with how we preserve
+      // comments.
+      expect(test(
+        '// comment line\n' +
+        'var x = 1, y = 2;\n' +
+        'y = 3;'
+      )).to.equal(
+        '// comment line\n' +
+        'const x = 1;\n' +
+        '\n' +
+        'let y = 2;\n' +
+        'y = 3;'
+      );
+    });
   });
 });

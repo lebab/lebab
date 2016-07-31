@@ -14,7 +14,8 @@ export default function(ast) {
         multiReplaceStatement(
           parent,
           node,
-          node.declarations.map(dec => varToImport(dec, node.kind))
+          node.declarations.map(dec => varToImport(dec, node.kind)),
+          {preserveComments: true}
         );
       }
     }

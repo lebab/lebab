@@ -156,7 +156,9 @@ function transformVarsToLetOrConst() {
         return new VariableDeclaration(v.getKind(), [v.getNode()]);
       });
 
-      multiReplaceStatement(group.getParentNode(), group.getNode(), varNodes);
+      multiReplaceStatement(group.getParentNode(), group.getNode(), varNodes, {
+        preserveComments: true
+      });
     }
     else {
       // When parent node restricts breaking VariableDeclaration to multiple ones

@@ -10,10 +10,16 @@
  * @param  {Object} parentNode
  * @param  {Object} node
  * @param  {Object[]} replacementNodes
+ * @param  {Object} [flags]
+ *   @param  {Boolean} [flags.preserveComments] True to copy over comments from
+ *     node to first replacement node
  */
-export default function multiReplaceStatement(parentNode, node, replacementNodes) {
+export default function multiReplaceStatement(parentNode, node, replacementNodes, {preserveComments} = {}) {
   const body = getBody(parentNode);
   const index = body.indexOf(node);
+  if (preserveComments) {
+    copyComments(node, replacementNodes[0]);
+  }
   if (index !== -1) {
     body.splice(index, 1, ...replacementNodes);
   }
@@ -28,5 +34,12 @@ function getBody(node) {
     return node.consequent;
   default:
     throw `Unsupported node type '${node.type}' in multiReplaceStatement()`;
+  }
+}
+
+function copyComments(node, replacementNode) {
+  if (node.comments && node.comments.length > 0 && replacementNode) {
+    const existingComments = replacementNode.comments || [];
+    replacementNode.comments = existingComments.concat(node.comments);
   }
 }
