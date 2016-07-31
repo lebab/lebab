@@ -863,5 +863,23 @@ describe('Let/const', () => {
         'y = 3;'
       );
     });
+
+    it('should preserve comment between var broken up to let & const', () => {
+      // This is another weird behavior of Recast.
+      // The comment gets preserved, but placed in pretty strange spot.
+      expect(test(
+        '// comment line\n' +
+        'var x = 1, // comment\n' +
+        '    y = 2;\n' +
+        'y = 3;'
+      )).to.equal(
+        '// comment line\n' +
+        'const // comment\n' +
+        'x = 1;\n' +
+        '\n' +
+        'let y = 2;\n' +
+        'y = 3;'
+      );
+    });
   });
 });
