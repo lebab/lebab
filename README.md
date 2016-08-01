@@ -23,8 +23,17 @@ Convert your old-fashioned code using the `lebab` cli tool,
 enabling a specific transformation:
 
 ```bash
-$ lebab es5.js -o es6.js --enable let
+$ lebab es5.js -o es6.js --transform let
 ```
+
+Or transform an entire directory of files in-place:
+
+```bash
+$ lebab --replace src/js/ --transform arrow
+```
+
+For all the possible values for `--transform` option
+see the detailed docs below or use `--help` from command line.
 
 
 ## Features and known limitations
