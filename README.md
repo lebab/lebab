@@ -113,7 +113,7 @@ There are no guarantees that the resulting code is equivalent of the original co
     - [x] recognizes `a = a ? a : 2`
     - [x] recognizes `a = a === undefined ? 2 : a`
     - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
-    - [ ] LIMITATION [transforming `a = a || 2` does produce strictly equivalent code][125]
+    - [ ] LIMITATION [transforming `a = a || 2` does not produce strictly equivalent code][125]
 
 ### ES7 transforms
 
