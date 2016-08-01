@@ -156,4 +156,18 @@ describe('Arrow functions', () => {
       expectNoChange('a(function foo() { });');
     });
   });
+
+  describe('comments', () => {
+    it('should preserve comments when converting to shorthand notation', () => {
+      expectTransform(
+        'a(function(b) {\n' +
+        '  // comment\n' +
+        '  return b;\n' +
+        '});'
+      ).toReturn(
+        'a(b => // comment\n' +
+        'b);'
+      );
+    });
+  });
 });

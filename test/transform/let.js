@@ -299,6 +299,14 @@ describe('Let/const', () => {
         'function foo(a) { a = 1; }'
       );
     });
+
+    it('should work with anonymous function declaration', () => {
+      expectTransform(
+        'export default function () { var a = 1; }'
+      ).toReturn(
+        'export default function () { const a = 1; }'
+      );
+    });
   });
 
   describe('with nested arrow-function', () => {
@@ -851,6 +859,41 @@ describe('Let/const', () => {
         'var x = 42; // trailing comment'
       ).toReturn(
         'const x = 42; // trailing comment'
+      );
+    });
+
+    it('should preserve comment before var broken up to let & const', () => {
+      // For some reason Recast creates an additional line-break after const.
+      // Unsure whether it's a bug in Recast or problem with how we preserve
+      // comments.
+      expectTransform(
+        '// comment line\n' +
+        'var x = 1, y = 2;\n' +
+        'y = 3;'
+      ).toReturn(
+        '// comment line\n' +
+        'const x = 1;\n' +
+        '\n' +
+        'let y = 2;\n' +
+        'y = 3;'
+      );
+    });
+
+    it('should preserve comment between var broken up to let & const', () => {
+      // This is another weird behavior of Recast.
+      // The comment gets preserved, but placed in pretty strange spot.
+      expectTransform(
+        '// comment line\n' +
+        'var x = 1, // comment\n' +
+        '    y = 2;\n' +
+        'y = 3;'
+      ).toReturn(
+        '// comment line\n' +
+        'const // comment\n' +
+        'x = 1;\n' +
+        '\n' +
+        'let y = 2;\n' +
+        'y = 3;'
       );
     });
   });

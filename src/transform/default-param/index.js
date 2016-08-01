@@ -28,7 +28,11 @@ function transformDefaultParams(fn) {
     if (detected && (!fn.defaults || !fn.defaults[i])) {
       fn.defaults = fn.defaults || [];
       fn.defaults[i] = detected.value;
-      multiReplaceStatement(fn.body, detected.node, []);
+      multiReplaceStatement({
+        parent: fn.body,
+        node: detected.node,
+        replacements: []
+      });
     }
   });
 }

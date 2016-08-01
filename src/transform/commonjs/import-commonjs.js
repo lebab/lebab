@@ -16,11 +16,12 @@ export default function(ast, logger) {
           return;
         }
 
-        multiReplaceStatement(
+        multiReplaceStatement({
           parent,
           node,
-          node.declarations.map(dec => varToImport(dec, node.kind))
-        );
+          replacements: node.declarations.map(dec => varToImport(dec, node.kind)),
+          preserveComments: true,
+        });
       }
     }
   });

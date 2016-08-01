@@ -159,7 +159,13 @@ function transformVarsToLetOrConst() {
         return new VariableDeclaration(v.getKind(), [v.getNode()]);
       });
 
-      multiReplaceStatement(group.getParentNode(), group.getNode(), varNodes);
+      multiReplaceStatement({
+        parent: group.getParentNode(),
+        node: group.getNode(),
+        replacements: varNodes,
+        preserveComments: true,
+      });
+
       logWarningForVarKind(group.getNode());
     }
     else {

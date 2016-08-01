@@ -136,6 +136,18 @@ describe('Import CommonJS', () => {
     });
   });
 
+  describe('comments', () => {
+    it('should preserve comments before var declaration', () => {
+      expectTransform(
+        '// Comments\n' +
+        'var foo = require("foo");'
+      ).toReturn(
+        '// Comments\n' +
+        'import foo from "foo";'
+      );
+    });
+  });
+
   // Not yet supported things...
 
   it('should not convert assignment of require() call', () => {
