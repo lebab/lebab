@@ -1,28 +1,19 @@
-import {expect} from 'chai';
-import Transformer from './../../lib/transformer';
-const transformer = new Transformer({'arg-spread': true});
-
-function test(script) {
-  return transformer.run(script);
-}
-
-function expectNoChange(script) {
-  expect(test(script)).to.equal(script);
-}
+import createTestHelpers from '../createTestHelpers';
+const {expectTransform, expectNoChange} = createTestHelpers(['arg-spread']);
 
 describe('Arguments apply() to spread', () => {
   it('should convert basic obj.fn.apply()', () => {
-    expect(test(
+    expectTransform(
       'obj.fn.apply(obj, someArray);'
-    )).to.equal(
+    ).toReturn(
       'obj.fn(...someArray);'
     );
   });
 
   it('should convert this.method.apply()', () => {
-    expect(test(
+    expectTransform(
       'this.method.apply(this, someArray);'
-    )).to.equal(
+    ).toReturn(
       'this.method(...someArray);'
     );
   });
@@ -36,8 +27,8 @@ describe('Arguments apply() to spread', () => {
   });
 
   it('should convert plain fn.apply()', () => {
-    expect(test('fn.apply(undefined, someArray);')).to.equal('fn(...someArray);');
-    expect(test('fn.apply(null, someArray);')).to.equal('fn(...someArray);');
+    expectTransform('fn.apply(undefined, someArray);').toReturn('fn(...someArray);');
+    expectTransform('fn.apply(null, someArray);').toReturn('fn(...someArray);');
   });
 
   it('should not convert plain fn.apply() when actual object used as this parameter', () => {
@@ -47,33 +38,33 @@ describe('Arguments apply() to spread', () => {
   });
 
   it('should convert obj.fn.apply() with array expression', () => {
-    expect(test(
+    expectTransform(
       'obj.fn.apply(obj, [1, 2, 3]);'
-    )).to.equal(
+    ).toReturn(
       'obj.fn(...[1, 2, 3]);'
     );
   });
 
   it('should convert <long-expression>.fn.apply()', () => {
-    expect(test(
+    expectTransform(
       'foo[bar+1].baz.fn.apply(foo[bar+1].baz, someArray);'
-    )).to.equal(
+    ).toReturn(
       'foo[bar+1].baz.fn(...someArray);'
     );
   });
 
   it('should convert <literal>.fn.apply()', () => {
-    expect(test(
+    expectTransform(
       '[].fn.apply([], someArray);'
-    )).to.equal(
+    ).toReturn(
       '[].fn(...someArray);'
     );
   });
 
   it('should convert obj[fn].apply()', () => {
-    expect(test(
+    expectTransform(
       'obj[fn].apply(obj, someArray);'
-    )).to.equal(
+    ).toReturn(
       'obj[fn](...someArray);'
     );
   });

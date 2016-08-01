@@ -1,22 +1,13 @@
-import {expect} from 'chai';
-import Transformer from './../../../lib/transformer';
-const transformer = new Transformer({commonjs: true});
-
-function test(script) {
-  return transformer.run(script);
-}
-
-function expectNoChange(script) {
-  expect(test(script)).to.equal(script);
-}
+import createTestHelpers from '../../createTestHelpers';
+const {expectTransform, expectNoChange} = createTestHelpers(['commonjs']);
 
 describe('Export CommonJS', () => {
   describe('default export', () => {
     it('should convert module.exports assignment to default export', () => {
-      expect(test('module.exports = 123;')).to.equal('export default 123;');
-      expect(test('module.exports = function() {};')).to.equal('export default function() {};');
-      expect(test('module.exports = x => x;')).to.equal('export default x => x;');
-      expect(test('module.exports = class {};')).to.equal('export default class {};');
+      expectTransform('module.exports = 123;').toReturn('export default 123;');
+      expectTransform('module.exports = function() {};').toReturn('export default function() {};');
+      expectTransform('module.exports = x => x;').toReturn('export default x => x;');
+      expectTransform('module.exports = class {};').toReturn('export default class {};');
     });
 
     it('should not convert assignment to exports', () => {
@@ -41,21 +32,23 @@ describe('Export CommonJS', () => {
         'if (true) {\n' +
         '  module.exports = function() {};\n' +
         '}'
-      );
+      ).withWarnings([
+        {line: 2, msg: 'export can only be at root level', type: 'commonjs'}
+      ]);
     });
   });
 
   describe('named export', () => {
     it('should convert module.exports.foo = function(){}', () => {
-      expect(test('module.exports.foo = function () {};')).to.equal('export function foo() {};');
+      expectTransform('module.exports.foo = function () {};').toReturn('export function foo() {};');
     });
 
     it('should convert exports.foo = function(){}', () => {
-      expect(test('exports.foo = function () {};')).to.equal('export function foo() {};');
+      expectTransform('exports.foo = function () {};').toReturn('export function foo() {};');
     });
 
     it('should convert exports.foo = function foo(){}', () => {
-      expect(test('exports.foo = function foo() {};')).to.equal('export function foo() {};');
+      expectTransform('exports.foo = function foo() {};').toReturn('export function foo() {};');
     });
 
     it('should ignore function export when function name does not match with exported name', () => {
@@ -63,11 +56,11 @@ describe('Export CommonJS', () => {
     });
 
     it('should convert exports.foo = arrow function', () => {
-      expect(test(
+      expectTransform(
         'exports.foo = () => {\n' +
         '  return 1;\n' +
         '};'
-      )).to.equal(
+      ).toReturn(
         'export function foo() {\n' +
         '  return 1;\n' +
         '};'
@@ -75,9 +68,9 @@ describe('Export CommonJS', () => {
     });
 
     it('should convert exports.foo = arrow function short form', () => {
-      expect(test(
+      expectTransform(
         'exports.foo = x => x;'
-      )).to.equal(
+      ).toReturn(
         'export function foo(x) {\n' +
         '  return x;\n' +
         '};'
@@ -85,11 +78,11 @@ describe('Export CommonJS', () => {
     });
 
     it('should convert exports.Foo = class {};', () => {
-      expect(test('exports.Foo = class {};')).to.equal('export class Foo {};');
+      expectTransform('exports.Foo = class {};').toReturn('export class Foo {};');
     });
 
     it('should convert exports.Foo = class Foo {};', () => {
-      expect(test('exports.Foo = class Foo {};')).to.equal('export class Foo {};');
+      expectTransform('exports.Foo = class Foo {};').toReturn('export class Foo {};');
     });
 
     it('should ignore class export when class name does not match with exported name', () => {
@@ -97,26 +90,26 @@ describe('Export CommonJS', () => {
     });
 
     it('should convert exports.foo = foo;', () => {
-      expect(test('exports.foo = foo;')).to.equal('export {foo};');
+      expectTransform('exports.foo = foo;').toReturn('export {foo};');
     });
 
     it('should convert exports.foo = bar;', () => {
-      expect(test('exports.foo = bar;')).to.equal('export {bar as foo};');
+      expectTransform('exports.foo = bar;').toReturn('export {bar as foo};');
     });
 
     it('should export undefined & NaN like any other identifier', () => {
-      expect(test('exports.foo = undefined;')).to.equal('export {undefined as foo};');
-      expect(test('exports.foo = NaN;')).to.equal('export {NaN as foo};');
+      expectTransform('exports.foo = undefined;').toReturn('export {undefined as foo};');
+      expectTransform('exports.foo = NaN;').toReturn('export {NaN as foo};');
     });
 
     it('should convert exports.foo = <literal> to export var', () => {
-      expect(test('exports.foo = 123;')).to.equal('export var foo = 123;');
-      expect(test('exports.foo = {a: 1, b: 2};')).to.equal('export var foo = {a: 1, b: 2};');
-      expect(test('exports.foo = [1, 2, 3];')).to.equal('export var foo = [1, 2, 3];');
-      expect(test('exports.foo = "Hello";')).to.equal('export var foo = "Hello";');
-      expect(test('exports.foo = null;')).to.equal('export var foo = null;');
-      expect(test('exports.foo = true;')).to.equal('export var foo = true;');
-      expect(test('exports.foo = false;')).to.equal('export var foo = false;');
+      expectTransform('exports.foo = 123;').toReturn('export var foo = 123;');
+      expectTransform('exports.foo = {a: 1, b: 2};').toReturn('export var foo = {a: 1, b: 2};');
+      expectTransform('exports.foo = [1, 2, 3];').toReturn('export var foo = [1, 2, 3];');
+      expectTransform('exports.foo = "Hello";').toReturn('export var foo = "Hello";');
+      expectTransform('exports.foo = null;').toReturn('export var foo = null;');
+      expectTransform('exports.foo = true;').toReturn('export var foo = true;');
+      expectTransform('exports.foo = false;').toReturn('export var foo = false;');
     });
 
     it('should ignore exports.foo inside statements', () => {

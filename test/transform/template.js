@@ -1,14 +1,5 @@
-import {expect} from 'chai';
-import Transformer from './../../lib/transformer';
-const transformer = new Transformer({'template': true});
-
-function test(script) {
-  return transformer.run(script);
-}
-
-function expectNoChange(script) {
-  expect(test(script)).to.equal(script);
-}
+import createTestHelpers from '../createTestHelpers';
+const {expectTransform, expectNoChange} = createTestHelpers(['template']);
 
 describe('Template string', () => {
   it('should not convert non-concatenated strings', () => {
@@ -25,103 +16,103 @@ describe('Template string', () => {
   });
 
   it('should convert string and one variable concatenation', () => {
-    expect(test(
+    expectTransform(
       'var result = "Firstname: " + firstname;'
-    )).to.equal(
+    ).toReturn(
       'var result = `Firstname: ${firstname}`;'
     );
   });
 
   it('should convert string and multiple variables concatenation', () => {
-    expect(test(
+    expectTransform(
       'var result = "Fullname: " + firstname + lastname;'
-    )).to.equal(
+    ).toReturn(
       'var result = `Fullname: ${firstname}${lastname}`;'
     );
   });
 
   it('should convert parenthized string concatenations', () => {
-    expect(test(
+    expectTransform(
       '"str1 " + (x + " str2");'
-    )).to.equal(
+    ).toReturn(
       '`str1 ${x} str2`;'
     );
   });
 
   it('should convert parenthized string concatenations and other concatenations', () => {
-    expect(test(
+    expectTransform(
       'x + " str1 " + (y + " str2");'
-    )).to.equal(
+    ).toReturn(
       '`${x} str1 ${y} str2`;'
     );
   });
 
   it('should convert parenthized non-string concatenations', () => {
-    expect(test(
+    expectTransform(
       '(x + y) + " string " + (a + b);'
-    )).to.equal(
+    ).toReturn(
       '`${x + y} string ${a + b}`;'
     );
   });
 
   it('should convert non-parenthized non-string concatenations', () => {
-    expect(test(
+    expectTransform(
       'x + y + " string " + a + b;'
-    )).to.equal(
+    ).toReturn(
       '`${x + y} string ${a}${b}`;'
     );
   });
 
   it('should convert string and call expressions', () => {
-    expect(test(
+    expectTransform(
       'var result = "Firstname: " + person.getFirstname() + "Lastname: " + person.getLastname();'
-    )).to.equal(
+    ).toReturn(
       'var result = `Firstname: ${person.getFirstname()}Lastname: ${person.getLastname()}`;'
     );
   });
 
   it('should convert string and number literals', () => {
-    expect(test(
+    expectTransform(
       '"foo " + 25 + " bar";'
-    )).to.equal(
+    ).toReturn(
       '`foo ${25} bar`;'
     );
   });
 
   it('should convert string and member-expressions', () => {
-    expect(test(
+    expectTransform(
       '"foo " + foo.bar + " bar";'
-    )).to.equal(
+    ).toReturn(
       '`foo ${foo.bar} bar`;'
     );
   });
 
   it('should escape ` characters', () => {
-    expect(test(
+    expectTransform(
       'var result = "Firstname: `" + firstname + "`";'
-    )).to.equal(
+    ).toReturn(
       'var result = `Firstname: \\`${firstname}\\``;'
     );
   });
 
   it('should leave \\t, \\r, \\n, \\v, \\f, \\b, \\0, \\\\ escaped as is', () => {
-    expect(test('x = "\\t" + y;')).to.equal('x = `\\t${y}`;');
-    expect(test('x = "\\r" + y;')).to.equal('x = `\\r${y}`;');
-    expect(test('x = "\\n" + y;')).to.equal('x = `\\n${y}`;');
-    expect(test('x = "\\v" + y;')).to.equal('x = `\\v${y}`;');
-    expect(test('x = "\\f" + y;')).to.equal('x = `\\f${y}`;');
-    expect(test('x = "\\b" + y;')).to.equal('x = `\\b${y}`;');
-    expect(test('x = "\\0" + y;')).to.equal('x = `\\0${y}`;');
-    expect(test('x = "\\\\" + y;')).to.equal('x = `\\\\${y}`;');
+    expectTransform('x = "\\t" + y;').toReturn('x = `\\t${y}`;');
+    expectTransform('x = "\\r" + y;').toReturn('x = `\\r${y}`;');
+    expectTransform('x = "\\n" + y;').toReturn('x = `\\n${y}`;');
+    expectTransform('x = "\\v" + y;').toReturn('x = `\\v${y}`;');
+    expectTransform('x = "\\f" + y;').toReturn('x = `\\f${y}`;');
+    expectTransform('x = "\\b" + y;').toReturn('x = `\\b${y}`;');
+    expectTransform('x = "\\0" + y;').toReturn('x = `\\0${y}`;');
+    expectTransform('x = "\\\\" + y;').toReturn('x = `\\\\${y}`;');
   });
 
   it('should leave hex- and unicode-escapes as is', () => {
-    expect(test('x = "\\xA9" + y;')).to.equal('x = `\\xA9${y}`;');
-    expect(test('x = "\\u00A9" + y;')).to.equal('x = `\\u00A9${y}`;');
+    expectTransform('x = "\\xA9" + y;').toReturn('x = `\\xA9${y}`;');
+    expectTransform('x = "\\u00A9" + y;').toReturn('x = `\\u00A9${y}`;');
   });
 
   it('should eliminate escaping of quotes', () => {
-    expect(test('x = "\\\'" + y;')).to.equal('x = `\'${y}`;');
-    expect(test('x = "\\"" + y;')).to.equal('x = `"${y}`;');
+    expectTransform('x = "\\\'" + y;').toReturn('x = `\'${y}`;');
+    expectTransform('x = "\\"" + y;').toReturn('x = `"${y}`;');
   });
 });

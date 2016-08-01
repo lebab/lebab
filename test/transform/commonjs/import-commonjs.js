@@ -1,21 +1,12 @@
-import {expect} from 'chai';
-import Transformer from './../../../lib/transformer';
-const transformer = new Transformer({commonjs: true});
-
-function test(script) {
-  return transformer.run(script);
-}
-
-function expectNoChange(script) {
-  expect(test(script)).to.equal(script);
-}
+import createTestHelpers from '../../createTestHelpers';
+const {expectTransform, expectNoChange} = createTestHelpers(['commonjs']);
 
 describe('Import CommonJS', () => {
   describe('default import', () => {
     it('should convert basic var/let/const with require()', () => {
-      expect(test('var   foo = require("foo");')).to.equal('import foo from "foo";');
-      expect(test('const foo = require("foo");')).to.equal('import foo from "foo";');
-      expect(test('let   foo = require("foo");')).to.equal('import foo from "foo";');
+      expectTransform('var   foo = require("foo");').toReturn('import foo from "foo";');
+      expectTransform('const foo = require("foo");').toReturn('import foo from "foo";');
+      expectTransform('let   foo = require("foo");').toReturn('import foo from "foo";');
     });
 
     it('should do nothing with var that contains no require()', () => {
@@ -31,32 +22,32 @@ describe('Import CommonJS', () => {
     });
 
     it('should convert var with multiple require() calls', () => {
-      expect(test(
+      expectTransform(
         'var foo = require("foo"), bar = require("bar");'
-      )).to.equal(
+      ).toReturn(
         'import foo from "foo";\n' +
         'import bar from "bar";'
       );
     });
 
     it('should convert var/let/const with intermixed require() calls and normal initializations', () => {
-      expect(test(
+      expectTransform(
         'var foo = require("foo"), bar = 15;'
-      )).to.equal(
+      ).toReturn(
         'import foo from "foo";\n' +
         'var bar = 15;'
       );
 
-      expect(test(
+      expectTransform(
         'let abc, foo = require("foo")'
-      )).to.equal(
+      ).toReturn(
         'let abc;\n' +
         'import foo from "foo";'
       );
 
-      expect(test(
+      expectTransform(
         'const greeting = "hello", foo = require("foo");'
-      )).to.equal(
+      ).toReturn(
         'const greeting = "hello";\n' +
         'import foo from "foo";'
       );
@@ -65,9 +56,9 @@ describe('Import CommonJS', () => {
     // It would be nice to preserve the combined declarations,
     // but this kind of intermixed vars should really be a rare edge case.
     it('does not need to preserve combined variable declarations', () => {
-      expect(test(
+      expectTransform(
         'var foo = require("foo"), bar = 1, baz = 2;'
-      )).to.equal(
+      ).toReturn(
         'import foo from "foo";\n' +
         'var bar = 1;\n' +
         'var baz = 2;'
@@ -79,47 +70,49 @@ describe('Import CommonJS', () => {
         'if (true) {\n' +
         '  var foo = require("foo");\n' +
         '}'
-      );
+      ).withWarnings([
+        {line: 2, msg: 'import can only be at root level', type: 'commonjs'}
+      ]);
     });
   });
 
   describe('named import', () => {
     it('should convert foo = require().foo to named import', () => {
-      expect(test(
+      expectTransform(
         'var foo = require("foolib").foo;'
-      )).to.equal(
+      ).toReturn(
         'import {foo} from "foolib";'
       );
     });
 
     it('should convert bar = require().foo to aliased named import', () => {
-      expect(test(
+      expectTransform(
         'var bar = require("foolib").foo;'
-      )).to.equal(
+      ).toReturn(
         'import {foo as bar} from "foolib";'
       );
     });
 
     it('should convert simple object destructuring to named import', () => {
-      expect(test(
+      expectTransform(
         'var {foo} = require("foolib");'
-      )).to.equal(
+      ).toReturn(
         'import {foo} from "foolib";'
       );
     });
 
     it('should convert aliased object destructuring to named import', () => {
-      expect(test(
+      expectTransform(
         'var {foo: bar} = require("foolib");'
-      )).to.equal(
+      ).toReturn(
         'import {foo as bar} from "foolib";'
       );
     });
 
     it('should convert multi-field object destructurings to named imports', () => {
-      expect(test(
+      expectTransform(
         'var {foo, bar: myBar, baz} = require("foolib");'
-      )).to.equal(
+      ).toReturn(
         'import {foo, bar as myBar, baz} from "foolib";'
       );
     });
@@ -145,10 +138,10 @@ describe('Import CommonJS', () => {
 
   describe('comments', () => {
     it('should preserve comments before var declaration', () => {
-      expect(test(
+      expectTransform(
         '// Comments\n' +
         'var foo = require("foo");'
-      )).to.equal(
+      ).toReturn(
         '// Comments\n' +
         'import foo from "foo";'
       );

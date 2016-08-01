@@ -1,34 +1,25 @@
-import {expect} from 'chai';
-import Transformer from './../../lib/transformer';
-const transformer = new Transformer({'obj-method': true});
-
-function test(script) {
-  return transformer.run(script);
-}
-
-function expectNoChange(script) {
-  expect(test(script)).to.equal(script);
-}
+import createTestHelpers from '../createTestHelpers';
+const {expectTransform, expectNoChange} = createTestHelpers(['obj-method']);
 
 describe('Object methods', () => {
   it('should convert a function inside an object to method', () => {
-    expect(test(
+    expectTransform(
       '({\n' +
       '  someMethod: function(a, b, c) {\n' +
       '    return a + b + c;\n' +
       '  }\n' +
       '});'
-    )).to.equal(
+    ).toReturn(
       '({\n' +
       '  someMethod(a, b, c) {\n' +
       '    return a + b + c;\n' +
       '  }\n' +
       '});'
-    );
+    ).withoutWarnings();
   });
 
   it('should ignore non-function properties of object', () => {
-    expect(test(
+    expectTransform(
       '({\n' +
       '  foo: 123,\n' +
       '  method1: function() {\n' +
@@ -37,7 +28,7 @@ describe('Object methods', () => {
       '  method2: function() {\n' +
       '  },\n' +
       '});'
-    )).to.equal(
+    ).toReturn(
       '({\n' +
       '  foo: 123,\n' +
       '  method1() {\n' +
@@ -46,25 +37,25 @@ describe('Object methods', () => {
       '  method2() {\n' +
       '  },\n' +
       '});'
-    );
+    ).withoutWarnings();
   });
 
   it('should convert function properties in nested object literal', () => {
-    expect(test(
+    expectTransform(
       '({\n' +
       '  nested: {\n' +
       '    method: function() {\n' +
       '    }\n' +
       '  }\n' +
       '});'
-    )).to.equal(
+    ).toReturn(
       '({\n' +
       '  nested: {\n' +
       '    method() {\n' +
       '    }\n' +
       '  }\n' +
       '});'
-    );
+    ).withoutWarnings();
   });
 
   it('should not convert named function expressions', () => {
@@ -74,7 +65,9 @@ describe('Object methods', () => {
       '    return foo();\n' +
       '  }\n' +
       '});'
-    );
+    ).withWarnings([
+      {line: 2, msg: 'Unable to transform named function', type: 'obj-method'}
+    ]);
   });
 
   it('should not convert computed properties', () => {
@@ -83,6 +76,6 @@ describe('Object methods', () => {
       '  ["foo" + count]: function() {\n' +
       '  }\n' +
       '});'
-    );
+    ).withoutWarnings();
   });
 });

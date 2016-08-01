@@ -5,14 +5,22 @@ import {isFunctionExpression} from '../../utils/function-type';
 import ExportNamedDeclaration from '../../syntax/export-named-declaration';
 import VariableDeclaration from '../../syntax/variable-declaration';
 
-export default function(ast) {
+export default function(ast, logger) {
   traverser.replace(ast, {
     enter(node, parent) {
       let m;
-      if ((m = matchDefaultExport(node)) && parent.type === 'Program') {
+      if ((m = matchDefaultExport(node))) {
+        if (parent.type !== 'Program') {
+          logger.warn(node, 'export can only be at root level', 'commonjs');
+          return;
+        }
         return exportDefault(m);
       }
-      else if ((m = matchNamedExport(node)) && parent.type === 'Program') {
+      else if ((m = matchNamedExport(node))) {
+        if (parent.type !== 'Program') {
+          logger.warn(node, 'export can only be at root level', 'commonjs');
+          return;
+        }
         return exportNamed(m);
       }
     }

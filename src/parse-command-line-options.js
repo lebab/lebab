@@ -1,11 +1,9 @@
 import program from 'commander';
 import pkg from '../package.json';
 import fs from 'fs';
-import _ from 'lodash';
+import path from 'path';
 
-program.usage('[options] <file>');
-program.description(`${pkg.description}
-
+const transformsDocs = `
   Safe transforms:
 
     + arrow .......... callback to arrow function
@@ -20,11 +18,19 @@ program.description(`${pkg.description}
 
     + class .......... prototype assignments to class declaration
     + template ....... string concatenation to template string
-    + default-param .. use of || to default parameters`);
+    + default-param .. use of || to default parameters
+
+  ES7 transforms:
+
+    + exponent ....... Math.pow() to ** operator`;
+
+program.usage('-t <transform> <file>');
+program.description(`${pkg.description}\n${transformsDocs}`);
 program.version(pkg.version);
-program.option('-o, --out-file <out>', 'compile into a single file');
-program.option('--enable <a,b,c>', 'enable only specified transforms', v => v.split(','));
-program.option('--disable <a,b,c>', 'disable specified transforms', v => v.split(','));
+program.option('-o, --out-file <file>', 'write output to a file');
+program.option('--replace <dir>', `in-place transform all *.js files in a directory
+                         <dir> can also be a single file or a glob pattern`);
+program.option('-t, --transform <a,b,c>', 'one or more transformations to perform', v => v.split(','));
 
 /**
  * Parses and validates command line options from argv.
@@ -40,6 +46,7 @@ export default function parseCommandLineOptions(argv) {
   return {
     inFile: getInputFile(),
     outFile: program.outFile,
+    replace: getReplace(),
     transforms: getTransforms(),
   };
 }
@@ -54,13 +61,39 @@ function getInputFile() {
   return program.args[0];
 }
 
+function getReplace() {
+  if (!program.replace) {
+    return undefined;
+  }
+  if (program.outFile) {
+    throw 'The --replace and --out-file options cannot be used together.';
+  }
+  if (program.args[0]) {
+    throw 'The --replace and plain input file options cannot be used together.\n' +
+      'Did you forget to quote the --replace parameter?';
+  }
+  if (fs.existsSync(program.replace) && fs.statSync(program.replace).isDirectory()) {
+    return path.join(program.replace, '/**/*.js');
+  }
+  return program.replace;
+}
+
 function getTransforms() {
-  if (program.enable && program.disable) {
-    throw 'Options --enable and --disable can not be used together.';
+  if (!program.transform || program.transform.length === 0) {
+    throw `No transforms specifed :(
+
+Use --transform option to pick one of the following:
+${transformsDocs}`;
   }
 
-  // All enabled by default
-  let transforms = {
+  // Ensure only valid transform names are used
+  validateTransforms(program.transform);
+
+  return program.transform;
+}
+
+function validateTransforms(transformNames) {
+  const availableTransforms = {
     'class': true,
     'template': true,
     'arrow': true,
@@ -71,28 +104,12 @@ function getTransforms() {
     'obj-shorthand': true,
     'no-strict': true,
     'commonjs': true,
+    'exponent': true,
   };
 
-  // When --enable used turn off everything besides the specified tranformers
-  if (program.enable) {
-    transforms = _.mapValues(transforms, _.constant(false));
-
-    setTransformsEnabled(transforms, program.enable, true);
-  }
-
-  // When --disable used, disable the specific transforms
-  if (program.disable) {
-    setTransformsEnabled(transforms, program.disable, false);
-  }
-
-  return transforms;
-}
-
-function setTransformsEnabled(transforms, names, enabled) {
-  names.forEach(name => {
-    if (!transforms.hasOwnProperty(name)) {
+  transformNames.forEach(name => {
+    if (!availableTransforms[name]) {
       throw `Unknown transform "${name}".`;
     }
-    transforms[name] = enabled;
   });
 }

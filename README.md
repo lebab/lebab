@@ -23,8 +23,17 @@ Convert your old-fashioned code using the `lebab` cli tool,
 enabling a specific transformation:
 
 ```bash
-$ lebab es5.js -o es6.js --enable let
+$ lebab es5.js -o es6.js --transform let
 ```
+
+Or transform an entire directory of files in-place:
+
+```bash
+$ lebab --replace src/js/ --transform arrow
+```
+
+For all the possible values for `--transform` option
+see the detailed docs below or use `--help` from command line.
 
 
 ## Features and known limitations
@@ -104,7 +113,35 @@ There are no guarantees that the resulting code is equivalent of the original co
     - [x] recognizes `a = a ? a : 2`
     - [x] recognizes `a = a === undefined ? 2 : a`
     - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
-    - [ ] LIMITATION [transforming `a = a || 2` does produce strictly equivalent code][125]
+    - [ ] LIMITATION [transforming `a = a || 2` does not produce strictly equivalent code][125]
+
+### ES7 transforms
+
+A single transform for the single ES7 syntax feature.
+
+- [x] **exponent** - `Math.pow()` to `**` operator
+
+
+## Programming API
+
+Simply import and call `lebab.transform()`:
+
+```js
+import lebab from 'lebab';
+const {code, warnings} = lebab.transform('var f = function(){};', ['let', 'arrow']);
+console.log(code); // -> "const f = () => {};"
+```
+
+The warnings will be an array of objects like:
+
+```js
+[
+  {line: 12, msg: 'Unable to transform var', type: 'let'},
+  {line: 45, msg: 'Can not use arguments in arrow function', type: 'arrow'},
+]
+```
+
+Most of the time there won't be any warnings and the array will be empty.
 
 
 ## What's next?

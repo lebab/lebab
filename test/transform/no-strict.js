@@ -1,24 +1,19 @@
-import {expect} from 'chai';
-import Transformer from './../../lib/transformer';
-const transformer = new Transformer({'no-strict': true});
-
-function test(script) {
-  return transformer.run(script);
-}
+import createTestHelpers from '../createTestHelpers';
+const {expectTransform, expectNoChange} = createTestHelpers(['no-strict']);
 
 describe('Removal of "use strict"', () => {
   it('should remove statement with "use strict" string', () => {
-    expect(test('"use strict";')).to.equal('');
-    expect(test('\'use strict\';')).to.equal('');
+    expectTransform('"use strict";').toReturn('');
+    expectTransform('\'use strict\';').toReturn('');
   });
 
   it('should remove the whole line where "use strict" used to be', () => {
-    expect(test('"use strict";\nfoo();')).to.equal('foo();');
-    expect(test('foo();\n"use strict";\nbar();')).to.equal('foo();\nbar();');
+    expectTransform('"use strict";\nfoo();').toReturn('foo();');
+    expectTransform('foo();\n"use strict";\nbar();').toReturn('foo();\nbar();');
   });
 
   it('should keep "use strict" used inside other code', () => {
-    expect(test('x = "use strict";')).to.equal('x = "use strict";');
-    expect(test('foo("use strict");')).to.equal('foo("use strict");');
+    expectNoChange('x = "use strict";');
+    expectNoChange('foo("use strict");');
   });
 });

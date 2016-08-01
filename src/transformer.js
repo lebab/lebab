@@ -1,7 +1,7 @@
 import 'babel/polyfill';
-import _ from 'lodash';
 import recast from 'recast';
 import parser from './parser';
+import Logger from './logger';
 
 // Transforms
 import classTransform from './transform/class';
@@ -14,6 +14,7 @@ import objMethodTransform from './transform/obj-method';
 import objShorthandTransform from './transform/obj-shorthand';
 import noStrictTransform from './transform/no-strict';
 import commonjsTransform from './transform/commonjs';
+import exponentTransform from './transform/exponent';
 
 const transformsMap = {
   'class': classTransform,
@@ -26,6 +27,7 @@ const transformsMap = {
   'obj-shorthand': objShorthandTransform,
   'no-strict': noStrictTransform,
   'commonjs': commonjsTransform,
+  'exponent': exponentTransform,
 };
 
 /**
@@ -33,13 +35,10 @@ const transformsMap = {
  */
 export default class Transformer {
   /**
-   * @param {Object} transforms List of transforms to enable
+   * @param {String[]} transformNames List of transforms to enable
    */
-  constructor(transforms = {}) {
-    this.transforms = _(transforms)
-      .pickBy(enabled => enabled)
-      .map((enabled, key) => transformsMap[key])
-      .value();
+  constructor(transformNames = []) {
+    this.transforms = transformNames.map(name => transformsMap[name]);
   }
 
   /**
@@ -49,11 +48,20 @@ export default class Transformer {
    * @return {String} Output ES6 code
    */
   run(code) {
+    const logger = new Logger();
+
+    return {
+      code: this.applyAllTransforms(code, logger),
+      warnings: logger.getWarnings(),
+    };
+  }
+
+  applyAllTransforms(code, logger) {
     return this.ignoringHashBangComment(code, (js) => {
       const ast = recast.parse(js, {parser});
 
       this.transforms.forEach(transformer => {
-        transformer(ast.program);
+        transformer(ast.program, logger);
       });
 
       return recast.print(ast).code;

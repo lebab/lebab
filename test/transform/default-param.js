@@ -1,35 +1,26 @@
-import {expect} from 'chai';
-import Transformer from './../../lib/transformer';
-const transformer = new Transformer({'default-param': true});
-
-function test(script) {
-  return transformer.run(script);
-}
-
-function expectNoChange(script) {
-  expect(test(script)).to.equal(script);
-}
+import createTestHelpers from '../createTestHelpers';
+const {expectTransform, expectNoChange} = createTestHelpers(['default-param']);
 
 describe('Default parameters', () => {
   describe('detected from or-assignment', () => {
     it('should work for simple case', () => {
-      expect(test(
+      expectTransform(
         'function x(a) {\n' +
         '  a = a || 2;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function x(a=2) {}'
       );
     });
 
     it('should work for different types of parameters', () => {
-      expect(test(
+      expectTransform(
         'function x(a, b, c) {\n' +
         '  a = a || "salam";\n' +
         '  b = b || {};\n' +
         '  c = c || [];\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function x(a="salam", b={}, c=[]) {}'
       );
     });
@@ -45,23 +36,23 @@ describe('Default parameters', () => {
 
   describe('detected from ternary-assignment', () => {
     it('should work for simple case', () => {
-      expect(test(
+      expectTransform(
         'function x(a) {\n' +
         '  a = a ? a : 4;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function x(a=4) {}'
       );
     });
 
     it('should work for different types of parameters', () => {
-      expect(test(
+      expectTransform(
         'function x(a, b, c) {\n' +
         '  a = a ? a : "salam";\n' +
         '  b = b ? b : {};\n' +
         '  c = c ? c : [];\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function x(a="salam", b={}, c=[]) {}'
       );
     });
@@ -77,41 +68,41 @@ describe('Default parameters', () => {
 
   describe('detected from equals-undefined assignment', () => {
     it('should work for ===', () => {
-      expect(test(
+      expectTransform(
         'function x(a) {\n' +
         '  a = a === undefined ? 4 : a;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function x(a=4) {}'
       );
     });
 
     it('should work for !==', () => {
-      expect(test(
+      expectTransform(
         'function x(a) {\n' +
         '  a = a !== undefined ? a : 4;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function x(a=4) {}'
       );
     });
 
     it('should work for ==', () => {
-      expect(test(
+      expectTransform(
         'function x(a) {\n' +
         '  a = a == undefined ? 4 : a;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function x(a=4) {}'
       );
     });
 
     it('should work for !=', () => {
-      expect(test(
+      expectTransform(
         'function x(a) {\n' +
         '  a = a != undefined ? a : 4;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function x(a=4) {}'
       );
     });
@@ -143,41 +134,41 @@ describe('Default parameters', () => {
 
   describe('detected from typeof equals-undefined assignment', () => {
     it('should work for ===', () => {
-      expect(test(
+      expectTransform(
         'function x(a) {\n' +
         '  a = typeof a === "undefined" ? 4 : a;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function x(a=4) {}'
       );
     });
 
     it('should work for !==', () => {
-      expect(test(
+      expectTransform(
         'function x(a) {\n' +
         '  a = typeof a !== "undefined" ? a : 4;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function x(a=4) {}'
       );
     });
 
     it('should work for ==', () => {
-      expect(test(
+      expectTransform(
         'function x(a) {\n' +
         '  a = typeof a == "undefined" ? 4 : a;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function x(a=4) {}'
       );
     });
 
     it('should work for !=', () => {
-      expect(test(
+      expectTransform(
         'function x(a) {\n' +
         '  a = typeof a != "undefined" ? a : 4;\n' +
         '}'
-      )).to.equal(
+      ).toReturn(
         'function x(a=4) {}'
       );
     });
@@ -208,34 +199,34 @@ describe('Default parameters', () => {
   });
 
   it('should work when only some parameters have defaults', () => {
-    expect(test(
+    expectTransform(
       'function x(a, b, c) {\n' +
       '  b = b || 3;\n' +
       '}'
-    )).to.equal(
+    ).toReturn(
       'function x(a, b=3, c) {}'
     );
   });
 
   it('should work for multiple functions', () => {
-    expect(test(
+    expectTransform(
       'function x(a) { a = a || 2; }\n' +
       'function y(a) { a = a || 3; }'
-    )).to.equal(
+    ).toReturn(
       'function x(a=2) {}\n' +
       'function y(a=3) {}'
     );
   });
 
   it('should work for nested functions with similar parameter names', () => {
-    expect(test(
+    expectTransform(
       'function x(a) {\n' +
       '  function y(a) {\n' +
       '    a = a || 3;\n' +
       '  }\n' +
       '  a = a || 2;\n' +
       '}'
-    )).to.equal(
+    ).toReturn(
       'function x(a) {\n' +
       '  function y(a=3) {}\n' +
       '  a = a || 2;\n' +
@@ -265,11 +256,11 @@ describe('Default parameters', () => {
   });
 
   it('should work for function expressions', () => {
-    expect(test(
+    expectTransform(
       'foo(function(a) {\n' +
       '  a = a || 2;\n' +
       '});'
-    )).to.equal(
+    ).toReturn(
       'foo(function(a=2) {});'
     );
   });
