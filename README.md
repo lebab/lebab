@@ -113,6 +113,28 @@ A single transform for the single ES7 syntax feature.
 - [x] **exponent** - `Math.pow()` to `**` operator
 
 
+## Programming API
+
+Simply import and call `lebab.transform()`:
+
+```js
+import lebab from 'lebab';
+const {code, warnings} = lebab.transform('var f = function(){};', ['let', 'arrow']);
+console.log(code); // -> "const f = () => {};"
+```
+
+The warnings will be an array of objects like:
+
+```js
+[
+  {line: 12, msg: 'Unable to transform var', type: 'let'},
+  {line: 45, msg: 'Can not use arguments in arrow function', type: 'arrow'},
+]
+```
+
+Most of the time there won't be any warnings and the array will be empty.
+
+
 ## What's next?
 
 Which feature should Lebab implement next?
