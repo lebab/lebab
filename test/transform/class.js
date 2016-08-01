@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expectTransform, expectNoChange} = createTestHelpers({'class': true});
+const {expectTransform, expectNoChange} = createTestHelpers(['class']);
 
 describe('Classes', () => {
   it('should not convert functions without prototype assignment to class', () => {

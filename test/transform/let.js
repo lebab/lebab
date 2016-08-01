@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expectTransform, expectNoChange} = createTestHelpers({'let': true});
+const {expectTransform, expectNoChange} = createTestHelpers(['let']);
 
 describe('Let/const', () => {
   describe('with uninitialized variable', () => {

@@ -3,11 +3,11 @@ import Transformer from './../lib/transformer';
 
 /**
  * Generates functions that are used in all transform-tests.
- * @param  {Object} transformsCfg Config for Transformer class
+ * @param  {String[]} transformNames Config for Transformer class
  * @return {Object} functions expectTransform() and expectNoChange()
  */
-export default function(transformsCfg) {
-  const transformer = new Transformer(transformsCfg);
+export default function(transformNames) {
+  const transformer = new Transformer(transformNames);
 
   // Generic transformation asserter, to be called like:
   //

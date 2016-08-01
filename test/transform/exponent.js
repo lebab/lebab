@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expectTransform, expectNoChange} = createTestHelpers({'exponent': true});
+const {expectTransform, expectNoChange} = createTestHelpers(['exponent']);
 
 describe('Exponentiation operator', () => {
   it('should convert Math.pow()', () => {

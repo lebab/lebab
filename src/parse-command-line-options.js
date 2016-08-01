@@ -86,32 +86,30 @@ Use --transform option to pick one of the following:
 ${transformsDocs}`;
   }
 
-  // All disabled by default
-  const transforms = {
-    'class': false,
-    'template': false,
-    'arrow': false,
-    'let': false,
-    'default-param': false,
-    'arg-spread': false,
-    'obj-method': false,
-    'obj-shorthand': false,
-    'no-strict': false,
-    'commonjs': false,
-    'exponent': false,
-  };
+  // Ensure only valid transform names are used
+  validateTransforms(program.transform);
 
-  // When --transform used, enable the specific transforms
-  setTransformsEnabled(transforms, program.transform);
-
-  return transforms;
+  return program.transform;
 }
 
-function setTransformsEnabled(transforms, names) {
-  names.forEach(name => {
-    if (!transforms.hasOwnProperty(name)) {
+function validateTransforms(transformNames) {
+  const availableTransforms = {
+    'class': true,
+    'template': true,
+    'arrow': true,
+    'let': true,
+    'default-param': true,
+    'arg-spread': true,
+    'obj-method': true,
+    'obj-shorthand': true,
+    'no-strict': true,
+    'commonjs': true,
+    'exponent': true,
+  };
+
+  transformNames.forEach(name => {
+    if (!availableTransforms[name]) {
       throw `Unknown transform "${name}".`;
     }
-    transforms[name] = true;
   });
 }

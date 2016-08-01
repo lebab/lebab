@@ -1,5 +1,4 @@
 import 'babel/polyfill';
-import _ from 'lodash';
 import recast from 'recast';
 import parser from './parser';
 import Logger from './logger';
@@ -36,13 +35,10 @@ const transformsMap = {
  */
 export default class Transformer {
   /**
-   * @param {Object} transforms List of transforms to enable
+   * @param {String[]} transformNames List of transforms to enable
    */
-  constructor(transforms = {}) {
-    this.transforms = _(transforms)
-      .pickBy(enabled => enabled)
-      .map((enabled, key) => transformsMap[key])
-      .value();
+  constructor(transformNames = []) {
+    this.transforms = transformNames.map(name => transformsMap[name]);
   }
 
   /**

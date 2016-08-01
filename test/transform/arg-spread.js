@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expectTransform, expectNoChange} = createTestHelpers({'arg-spread': true});
+const {expectTransform, expectNoChange} = createTestHelpers(['arg-spread']);
 
 describe('Arguments apply() to spread', () => {
   it('should convert basic obj.fn.apply()', () => {

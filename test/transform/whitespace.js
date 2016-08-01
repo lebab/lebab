@@ -1,17 +1,17 @@
 import createTestHelpers from '../createTestHelpers';
-const {expectTransform} = createTestHelpers({
-  'class': true,
-  'template': true,
-  'arrow': true,
-  'let': true,
-  'default-param': true,
-  'arg-spread': true,
-  'obj-method': true,
-  'obj-shorthand': true,
-  'no-strict': true,
-  'commonjs': true,
-  'exponent': true,
-});
+const {expectTransform} = createTestHelpers([
+  'class',
+  'template',
+  'arrow',
+  'let',
+  'default-param',
+  'arg-spread',
+  'obj-method',
+  'obj-shorthand',
+  'no-strict',
+  'commonjs',
+  'exponent',
+]);
 
 describe('Whitespace', () => {
   it('should not eliminate leading newlines', () => {

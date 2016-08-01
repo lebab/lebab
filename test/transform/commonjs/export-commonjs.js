@@ -1,5 +1,5 @@
 import createTestHelpers from '../../createTestHelpers';
-const {expectTransform, expectNoChange} = createTestHelpers({'commonjs': true});
+const {expectTransform, expectNoChange} = createTestHelpers(['commonjs']);
 
 describe('Export CommonJS', () => {
   describe('default export', () => {

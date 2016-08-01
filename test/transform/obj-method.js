@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expectTransform, expectNoChange} = createTestHelpers({'obj-method': true});
+const {expectTransform, expectNoChange} = createTestHelpers(['obj-method']);
 
 describe('Object methods', () => {
   it('should convert a function inside an object to method', () => {

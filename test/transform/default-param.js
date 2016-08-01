@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expectTransform, expectNoChange} = createTestHelpers({'default-param': true});
+const {expectTransform, expectNoChange} = createTestHelpers(['default-param']);
 
 describe('Default parameters', () => {
   describe('detected from or-assignment', () => {

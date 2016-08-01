@@ -23,36 +23,18 @@ describe('Command Line Interface', () => {
 
   it('when single transforms given, enables it', () => {
     const options = parse(['-t', 'class']);
-    expect(options.transforms).to.deep.equal({
-      'class': true,
-      'template': false,
-      'arrow': false,
-      'let': false,
-      'default-param': false,
-      'arg-spread': false,
-      'obj-method': false,
-      'obj-shorthand': false,
-      'no-strict': false,
-      'commonjs': false,
-      'exponent': false,
-    });
+    expect(options.transforms).to.deep.equal([
+      'class',
+    ]);
   });
 
   it('when --transfrom=let,no-strict,commonjs given, enables only these transforms', () => {
     const options = parse(['--transform', 'let,no-strict,commonjs']);
-    expect(options.transforms).to.deep.equal({
-      'class': false,
-      'template': false,
-      'arrow': false,
-      'let': true,
-      'default-param': false,
-      'arg-spread': false,
-      'obj-method': false,
-      'obj-shorthand': false,
-      'no-strict': true,
-      'commonjs': true,
-      'exponent': false,
-    });
+    expect(options.transforms).to.deep.equal([
+      'let',
+      'no-strict',
+      'commonjs',
+    ]);
   });
 
   it('when --transform=unknown given, raises error', () => {

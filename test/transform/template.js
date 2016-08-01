@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expectTransform, expectNoChange} = createTestHelpers({'template': true});
+const {expectTransform, expectNoChange} = createTestHelpers(['template']);
 
 describe('Template string', () => {
   it('should not convert non-concatenated strings', () => {

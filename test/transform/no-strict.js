@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expectTransform, expectNoChange} = createTestHelpers({'no-strict': true});
+const {expectTransform, expectNoChange} = createTestHelpers(['no-strict']);
 
 describe('Removal of "use strict"', () => {
   it('should remove statement with "use strict" string', () => {

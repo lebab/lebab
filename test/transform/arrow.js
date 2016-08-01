@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expectTransform, expectNoChange} = createTestHelpers({'arrow': true});
+const {expectTransform, expectNoChange} = createTestHelpers(['arrow']);
 
 describe('Arrow functions', () => {
   it('should convert simple callbacks', () => {
