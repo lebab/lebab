@@ -65,6 +65,7 @@ The resulting ES2015 code should be almost 100% equivalent of the original code.
     - [x] repeated declarations of the same var are not converted
     - [x] existing `let`/`const` are not converted
     - [ ] BUG [fails with repeated variable definitions that use destructuring][131]
+    - [ ] BUG [fails with closure over a loop variable][145]
 - [x] **arg-spread** - use of apply() to spread operator
     - [x] recognizes `obj.method.apply(obj, args)`
     - [x] recognizes `func.apply(undefined, args)`
