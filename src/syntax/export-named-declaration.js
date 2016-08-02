@@ -10,10 +10,12 @@ class ExportNamedDeclaration extends BaseSyntax {
    * @param {Object} cfg
    * @param {Object} cfg.declaration Any *Declaration node (optional)
    * @param {Object[]} cfg.specifiers List of specifiers (optional)
+   * @param {Object[]} cfg.comments Comments data (optional)
    */
-  constructor({declaration, specifiers}) {
+  constructor({declaration, specifiers, comments}) {
     super('ExportNamedDeclaration');
     this.declaration = declaration;
     this.specifiers = specifiers;
+    this.comments = comments;
   }
 }

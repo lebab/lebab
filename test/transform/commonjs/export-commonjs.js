@@ -120,4 +120,56 @@ describe('Export CommonJS', () => {
       );
     });
   });
+
+  describe('comments', () => {
+    it('should preserve comments before default export', () => {
+      expectTransform(
+        '// Comments\n' +
+        'module.exports = function() {};'
+      ).toReturn(
+        '// Comments\n' +
+        'export default function() {};'
+      );
+    });
+
+    it('should preserve comments before named function export', () => {
+      expectTransform(
+        '// Comments\n' +
+        'exports.foo = function() {};'
+      ).toReturn(
+        '// Comments\n' +
+        'export function foo() {};'
+      );
+    });
+
+    it('should preserve comments before named class export', () => {
+      expectTransform(
+        '// Comments\n' +
+        'exports.Foo = class {};'
+      ).toReturn(
+        '// Comments\n' +
+        'export class Foo {};'
+      );
+    });
+
+    it('should preserve comments before identifier export', () => {
+      expectTransform(
+        '// Comments\n' +
+        'exports.foo = foo;'
+      ).toReturn(
+        '// Comments\n' +
+        'export {foo};'
+      );
+    });
+
+    it('should preserve comments before named literal value export', () => {
+      expectTransform(
+        '// Comments\n' +
+        'exports.FOO = 123;'
+      ).toReturn(
+        '// Comments\n' +
+        'export var FOO = 123;'
+      );
+    });
+  });
 });

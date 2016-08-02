@@ -14,32 +14,34 @@ export default function(ast, logger) {
           logger.warn(node, 'export can only be at root level', 'commonjs');
           return;
         }
-        return exportDefault(m);
+        return exportDefault(m, node.comments);
       }
       else if ((m = matchNamedExport(node))) {
         if (parent.type !== 'Program') {
           logger.warn(node, 'export can only be at root level', 'commonjs');
           return;
         }
-        return exportNamed(m);
+        return exportNamed(m, node.comments);
       }
     }
   });
 }
 
-function exportDefault({value}) {
+function exportDefault({value}, comments) {
   return {
     type: 'ExportDefaultDeclaration',
-    declaration: value
+    declaration: value,
+    comments,
   };
 }
 
-function exportNamed({id, value}) {
+function exportNamed({id, value}, comments) {
   if (isFunctionExpression(value)) {
     // Exclude functions with different name than the assigned property name
     if (compatibleIdentifiers(id, value.id)) {
       return new ExportNamedDeclaration({
-        declaration: functionExpressionToDeclaration(value, id)
+        declaration: functionExpressionToDeclaration(value, id),
+        comments,
       });
     }
   }
@@ -47,7 +49,8 @@ function exportNamed({id, value}) {
     // Exclude classes with different name than the assigned property name
     if (compatibleIdentifiers(id, value.id)) {
       return new ExportNamedDeclaration({
-        declaration: classExpressionToDeclaration(value, id)
+        declaration: classExpressionToDeclaration(value, id),
+        comments,
       });
     }
   }
@@ -59,7 +62,8 @@ function exportNamed({id, value}) {
           exported: id,
           local: value
         }
-      ]
+      ],
+      comments,
     });
   }
   else {
@@ -70,7 +74,8 @@ function exportNamed({id, value}) {
           id: id,
           init: value
         }
-      ])
+      ]),
+      comments,
     });
   }
 }
