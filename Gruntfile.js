@@ -3,9 +3,6 @@ require('load-grunt-tasks')(grunt);
 
 grunt.initConfig({
   babel: {
-    options: {
-      modules: 'common'
-    },
     dist: {
       files: [{
         'expand': true,

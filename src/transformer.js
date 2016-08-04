@@ -1,4 +1,4 @@
-import 'babel/polyfill';
+import 'babel-polyfill';
 import recast from 'recast';
 import parser from './parser';
 import Logger from './logger';
