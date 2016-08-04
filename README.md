@@ -145,6 +145,14 @@ The warnings will be an array of objects like:
 Most of the time there won't be any warnings and the array will be empty.
 
 
+## Editor plugins
+
+Alternatively one can use Lebab through plugins in the following editors:
+
+- [Atom](https://github.com/ga2mer/atom-lebab)
+- [Sublime](https://github.com/inkless/lebab-sublime) (does not work with Lebab 2.0)
+
+
 ## What's next?
 
 Which feature should Lebab implement next?
