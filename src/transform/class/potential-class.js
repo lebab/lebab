@@ -15,9 +15,10 @@ class PotentialClass {
    *   @param {Object[]} cfg.commentNodes Nodes to extract comments from
    *   @param {Object} cfg.parent
    */
-  constructor({name, constructor, fullNode, commentNodes, parent}) {
+  constructor({name, constructor, superClass, fullNode, commentNodes, parent}) {
     this.name = name;
     this.constructor = constructor;
+    this.superClass = superClass;
     this.fullNode = fullNode;
     this.commentNodes = commentNodes;
     this.parent = parent;
@@ -53,7 +54,7 @@ class PotentialClass {
    * @return {Boolean}
    */
   isTransformable() {
-    return this.methods.length > 0;
+    return this.methods.length > 0 || this.superClass !== undefined;
   }
 
   /**
@@ -73,6 +74,7 @@ class PotentialClass {
   toClassDeclaration() {
     return {
       type: 'ClassDeclaration',
+      superClass: this.superClass,
       id: {
         type: 'Identifier',
         name: this.name,

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import traverser from '../../traverser';
+import multiReplaceStatement from './../../utils/multi-replace-statement';
 import PotentialClass from './potential-class';
 import PotentialMethod from './potential-method';
 import matchFunctionDeclaration from './match-function-declaration';
@@ -8,6 +9,7 @@ import matchFunctionAssignment from './match-function-assignment';
 import matchPrototypeFunctionAssignment from './match-prototype-function-assignment';
 import matchPrototypeObjectAssignment from './match-prototype-object-assignment';
 import matchObjectDefinePropertyCall from './match-object-define-property-call';
+import matchInheritanceUtil from './match-inheritance-util';
 
 export default function(ast, logger) {
   const potentialClasses = {};
@@ -92,6 +94,12 @@ export default function(ast, logger) {
               kind: desc.kind,
             }));
           });
+        }
+      }
+      else if ((m = matchInheritanceUtil(node))) {
+        if (potentialClasses[m.className]) {
+          potentialClasses[m.className].superClass = m.superClass;
+          multiReplaceStatement({parent, node, replacements: []});
         }
       }
     },
