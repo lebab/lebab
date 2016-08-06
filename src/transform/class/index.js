@@ -9,10 +9,11 @@ import matchFunctionAssignment from './match-function-assignment';
 import matchPrototypeFunctionAssignment from './match-prototype-function-assignment';
 import matchPrototypeObjectAssignment from './match-prototype-object-assignment';
 import matchObjectDefinePropertyCall from './match-object-define-property-call';
-import matchInheritanceUtil from './match-inheritance-util';
+import UtilInheritsMatcher from './util-inherits-matcher';
 
 export default function(ast, logger) {
   const potentialClasses = {};
+  const utilInheritsMatcher = new UtilInheritsMatcher();
 
   traverser.traverse(ast, {
     enter(node, parent) {
@@ -96,7 +97,10 @@ export default function(ast, logger) {
           });
         }
       }
-      else if ((m = matchInheritanceUtil(node))) {
+      else if (utilInheritsMatcher.discoverIdentifiers(node, parent)) {
+        // Discovered util.inherits identifiers.
+      }
+      else if ((m = utilInheritsMatcher.match(node))) {
         if (potentialClasses[m.className]) {
           potentialClasses[m.className].superClass = m.superClass;
           multiReplaceStatement({parent, node, replacements: []});

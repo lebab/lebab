@@ -73,7 +73,7 @@ function propertyToNamedImport({id, property, sources}) {
   });
 }
 
-function isVarWithRequireCalls(node) {
+export function isVarWithRequireCalls(node) {
   return node.type === 'VariableDeclaration' &&
     node.declarations.some(dec => matchRequire(dec) || matchRequireWithProperty(dec));
 }
