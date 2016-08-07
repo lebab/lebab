@@ -39,16 +39,16 @@ describe('Export CommonJS', () => {
   });
 
   describe('named export', () => {
-    it('should convert module.exports.foo = function(){}', () => {
-      expectTransform('module.exports.foo = function () {};').toReturn('export function foo() {};');
+    it('should convert module.exports.foo = function () {}', () => {
+      expectTransform('module.exports.foo = function () {};').toReturn('export function foo() {}');
     });
 
-    it('should convert exports.foo = function(){}', () => {
-      expectTransform('exports.foo = function () {};').toReturn('export function foo() {};');
+    it('should convert exports.foo = function () {}', () => {
+      expectTransform('exports.foo = function () {};').toReturn('export function foo() {}');
     });
 
-    it('should convert exports.foo = function foo(){}', () => {
-      expectTransform('exports.foo = function foo() {};').toReturn('export function foo() {};');
+    it('should convert exports.foo = function foo() {}', () => {
+      expectTransform('exports.foo = function foo() {};').toReturn('export function foo() {}');
     });
 
     it('should ignore function export when function name does not match with exported name', () => {
@@ -63,7 +63,7 @@ describe('Export CommonJS', () => {
       ).toReturn(
         'export function foo() {\n' +
         '  return 1;\n' +
-        '};'
+        '}'
       );
     });
 
@@ -73,16 +73,16 @@ describe('Export CommonJS', () => {
       ).toReturn(
         'export function foo(x) {\n' +
         '  return x;\n' +
-        '};'
+        '}'
       );
     });
 
     it('should convert exports.Foo = class {};', () => {
-      expectTransform('exports.Foo = class {};').toReturn('export class Foo {};');
+      expectTransform('exports.Foo = class {};').toReturn('export class Foo {}');
     });
 
     it('should convert exports.Foo = class Foo {};', () => {
-      expectTransform('exports.Foo = class Foo {};').toReturn('export class Foo {};');
+      expectTransform('exports.Foo = class Foo {};').toReturn('export class Foo {}');
     });
 
     it('should ignore class export when class name does not match with exported name', () => {
@@ -138,7 +138,7 @@ describe('Export CommonJS', () => {
         'exports.foo = function() {};'
       ).toReturn(
         '// Comments\n' +
-        'export function foo() {};'
+        'export function foo() {}'
       );
     });
 
@@ -148,7 +148,7 @@ describe('Export CommonJS', () => {
         'exports.Foo = class {};'
       ).toReturn(
         '// Comments\n' +
-        'export class Foo {};'
+        'export class Foo {}'
       );
     });
 
