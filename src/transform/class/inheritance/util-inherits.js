@@ -1,11 +1,26 @@
-import {matchesAst, extract} from '../../utils/matches-ast';
-import {isVarWithRequireCalls} from '../commonjs/import-commonjs';
+import multiReplaceStatement from '../../../utils/multi-replace-statement';
+import {matchesAst, extract} from '../../../utils/matches-ast';
+import {isVarWithRequireCalls} from '../../commonjs/import-commonjs';
 
-export default class UtilInheritsMatcher {
+export default class UtilInherits {
 
-  constructor() {
+  constructor({potentialClasses}) {
+    this.potentialClasses = potentialClasses;
     this.utilNode = null;
     this.inheritsNode = null;
+  }
+
+  process(node, parent) {
+    var m;
+    if (this.discoverIdentifiers(node, parent)) {
+      // Discovered util.inherits identifiers.
+    }
+    else if ((m = this.match(node))) {
+      if (this.potentialClasses[m.className]) {
+        this.potentialClasses[m.className].superClass = m.superClass;
+        multiReplaceStatement({parent, node, replacements: []});
+      }
+    }
   }
 
   /**
@@ -47,14 +62,15 @@ export default class UtilInheritsMatcher {
           }})(dec)
       )[0];
 
-      if (matchesAst({init: {property: {name: 'inherits'}}})(declaration)) {
-        this.inheritsNode = declaration.id;
+      if (declaration) {
+        if (matchesAst({init: {property: {name: 'inherits'}}})(declaration)) {
+          this.inheritsNode = declaration.id;
+        }
+        else {
+          this.utilNode = declaration.id;
+        }
+        return true;
       }
-      else {
-        this.utilNode = declaration.id;
-      }
-
-      return true;
     }
     return false;
   }
