@@ -52,5 +52,41 @@ export default function inheritanceTests() {
         );
       });
     });
+
+    describe('prototype', () => {
+      it('should preserve inheritance when prototype is taken from another class', () => {
+        expectTransform(
+          'function MyClass(name) {\n' +
+          '  this.name = name;\n' +
+          '}\n' +
+          'MyClass.prototype = new OtherClass();\n' +
+          'MyClass.prototype.constructor = MyClass;'
+        ).toReturn(
+          'class MyClass extends OtherClass {\n' +
+          '  constructor(name) {\n' +
+          '    this.name = name;\n' +
+          '  }\n' +
+          '}'
+        );
+      });
+
+      it('should convert constructor calls to super()', () => {
+        expectTransform(
+          'function MyClass(name) {\n' +
+          '  OtherClass.call(null, this);\n' +
+          '  this.name = name;\n' +
+          '}\n' +
+          'MyClass.prototype = new OtherClass();\n' +
+          'MyClass.prototype.constructor = MyClass;'
+        ).toReturn(
+          'class MyClass extends OtherClass {\n' +
+          '  constructor(name) {\n' +
+          '    super();\n' +
+          '    this.name = name;\n' +
+          '  }\n' +
+          '}'
+        );
+      });
+    });
   });
 }
