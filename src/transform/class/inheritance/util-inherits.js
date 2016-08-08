@@ -19,7 +19,7 @@ export default class UtilInherits {
         return {
           className: m.className,
           superClass: m.superClass,
-          erasures: [{node, parent}]
+          replacements: [{node, parent, replacements: []}]
         };
       }
     }
@@ -123,4 +123,3 @@ export default class UtilInherits {
     })(node);
   }
 }
-

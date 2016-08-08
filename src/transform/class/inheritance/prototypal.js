@@ -9,7 +9,7 @@ export default class UtilInherits {
 
   process(node, parent) {
     var m;
-    if ((m = this.stepOne(node))) {
+    if ((m = this.matchPrototypeAssignment(node))) {
       if (this.potentialClasses[m.className]) {
         this.prototypeAssignments[m.className] = {
           node,
@@ -18,15 +18,19 @@ export default class UtilInherits {
         };
       }
     }
-    else if ((m = this.stepTwo(node))) {
+    else if ((m = this.matchConstructorAssignment(node))) {
       var prototypeAssignment = this.prototypeAssignments[m.className];
       if (this.potentialClasses[m.className] && prototypeAssignment) {
         return {
           className: m.className,
           superClass: prototypeAssignment.superClass,
-          erasures: [
-            {node, parent},
-            {node: prototypeAssignment.node, parent: prototypeAssignment.parent}
+          replacements: [
+            {node, parent, replacements: []},
+            {
+              node: prototypeAssignment.node,
+              parent: prototypeAssignment.parent,
+              replacements: []
+            }
           ]
         };
       }
@@ -35,18 +39,10 @@ export default class UtilInherits {
   }
 
   /**
-   * Discover variable declarator nodes for:
-   *  var <this.utilNode> = require("util");
-   *  var <this.inheritsNode> = require("util").inherits;
-   *
-   * Will store the discovered nodes in:
-   *  this.utilNode
-   *  this.inheritsNode
-   *
    * @param {Object} node
    * @return {Boolean}
    */
-  stepOne(node) {
+  matchPrototypeAssignment(node) {
     return matchesAst({
       type: 'ExpressionStatement',
       expression: {
@@ -73,7 +69,11 @@ export default class UtilInherits {
     })(node);
   }
 
-  stepTwo(node) {
+  /**
+   * @param {Object} node
+   * @return {Boolean}
+   */
+  matchConstructorAssignment(node) {
     return matchesAst({
       type: 'ExpressionStatement',
       expression: {
@@ -104,4 +104,3 @@ export default class UtilInherits {
     })(node);
   }
 }
-

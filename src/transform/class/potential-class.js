@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import extractComments from './extractComments';
+import {matchesAst} from './../../utils/matches-ast';
 import multiReplaceStatement from './../../utils/multi-replace-statement';
 
 /**
@@ -11,6 +12,7 @@ class PotentialClass {
    * @param {Object} cfg
    *   @param {String} cfg.name Class name
    *   @param {PotentialMethod} cfg.constructor
+   *   @param {String} cfg.superClass Super Class name
    *   @param {Object} cfg.fullNode Node to remove after converting to class
    *   @param {Object[]} cfg.commentNodes Nodes to extract comments from
    *   @param {Object} cfg.parent
@@ -23,6 +25,7 @@ class PotentialClass {
     this.commentNodes = commentNodes;
     this.parent = parent;
     this.methods = [];
+    this.replacements = [];
   }
 
   /**
@@ -67,6 +70,7 @@ class PotentialClass {
       node: this.fullNode,
       replacements: [this.toClassDeclaration()],
     });
+    this.replacements.forEach(multiReplaceStatement);
 
     this.methods.forEach(method => method.remove());
   }
@@ -95,6 +99,40 @@ class PotentialClass {
   }
 
   createConstructor() {
-    return this.constructor.isEmpty() ? undefined : this.constructor.toMethodDefinition();
+    if (this.constructor.isEmpty()) {
+      return undefined;
+    }
+    else {
+      this.modifySuperCalls();
+      return this.constructor.toMethodDefinition();
+    }
+  }
+
+  modifySuperCalls() {
+    this.constructor.methodNode.body.body.forEach(body => {
+      if (matchesAst({
+        type: 'ExpressionStatement',
+        expression: {
+          type: 'CallExpression',
+          callee: {
+            type: 'MemberExpression',
+            object: {
+              type: 'Identifier',
+              name: this.superClass
+            },
+            property: {
+              type: 'Identifier',
+              name: 'call'
+            }
+          },
+          arguments: (args) => args[0].type === 'ThisExpression'
+        }
+      })(body)) {
+        body.expression.callee = {
+          type: 'Super'
+        };
+        body.expression.arguments = body.expression.arguments.slice(1);
+      }
+    });
   }
 }

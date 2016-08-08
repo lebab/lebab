@@ -73,7 +73,7 @@ export default function inheritanceTests() {
       it('should convert constructor calls to super()', () => {
         expectTransform(
           'function MyClass(name) {\n' +
-          '  OtherClass.call(null, this);\n' +
+          '  OtherClass.call(this, name);\n' +
           '  this.name = name;\n' +
           '}\n' +
           'MyClass.prototype = new OtherClass();\n' +
@@ -81,7 +81,7 @@ export default function inheritanceTests() {
         ).toReturn(
           'class MyClass extends OtherClass {\n' +
           '  constructor(name) {\n' +
-          '    super();\n' +
+          '    super(name);\n' +
           '    this.name = name;\n' +
           '  }\n' +
           '}'
