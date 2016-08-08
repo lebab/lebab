@@ -8,6 +8,7 @@ import matchFunctionAssignment from './match-function-assignment';
 import matchPrototypeFunctionAssignment from './match-prototype-function-assignment';
 import matchPrototypeObjectAssignment from './match-prototype-object-assignment';
 import matchObjectDefinePropertyCall from './match-object-define-property-call';
+import multiReplaceStatement from '../../utils/multi-replace-statement';
 import Inheritance from './inheritance';
 
 export default function(ast, logger) {
@@ -96,8 +97,16 @@ export default function(ast, logger) {
           });
         }
       }
-      else {
-        inheritance.process(node, parent);
+      else if ((m = inheritance.process(node, parent))) {
+        if (potentialClasses[m.className]) {
+          potentialClasses[m.className].superClass = m.superClass;
+          m.erasures.forEach(erasure => {
+            multiReplaceStatement({
+              node: erasure.node,
+              parent: erasure.parent,
+              replacements: []});
+          });
+        }
       }
     },
     leave(node) {

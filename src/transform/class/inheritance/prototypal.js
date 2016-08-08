@@ -1,4 +1,3 @@
-import multiReplaceStatement from '../../../utils/multi-replace-statement';
 import {matchesAst, extract} from '../../../utils/matches-ast';
 
 export default class UtilInherits {
@@ -14,23 +13,25 @@ export default class UtilInherits {
       if (this.potentialClasses[m.className]) {
         this.prototypeAssignments[m.className] = {
           node,
+          parent,
           superClass: m.superClass
         };
-        return true;
       }
     }
     else if ((m = this.stepTwo(node))) {
       var prototypeAssignment = this.prototypeAssignments[m.className];
-      var potentialClass = this.potentialClasses[m.className];
-      if (potentialClass && prototypeAssignment) {
-        potentialClass.superClass = prototypeAssignment.superClass;
-        multiReplaceStatement({parent, node, replacements: []});
-        multiReplaceStatement({parent, node: prototypeAssignment.node,
-          replacements: []});
-        return true;
+      if (this.potentialClasses[m.className] && prototypeAssignment) {
+        return {
+          className: m.className,
+          superClass: prototypeAssignment.superClass,
+          erasures: [
+            {node, parent},
+            {node: prototypeAssignment.node, parent: prototypeAssignment.parent}
+          ]
+        };
       }
     }
-    return false;
+    return null;
   }
 
   /**

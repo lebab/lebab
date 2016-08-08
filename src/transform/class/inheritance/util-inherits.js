@@ -1,4 +1,3 @@
-import multiReplaceStatement from '../../../utils/multi-replace-statement';
 import {matchesAst, extract} from '../../../utils/matches-ast';
 import {isVarWithRequireCalls} from '../../commonjs/import-commonjs';
 
@@ -14,16 +13,17 @@ export default class UtilInherits {
     var m;
     if (this.discoverIdentifiers(node, parent)) {
       // Discovered util.inherits identifiers.
-      return true;
     }
     else if ((m = this.match(node))) {
       if (this.potentialClasses[m.className]) {
-        this.potentialClasses[m.className].superClass = m.superClass;
-        multiReplaceStatement({parent, node, replacements: []});
-        return true;
+        return {
+          className: m.className,
+          superClass: m.superClass,
+          erasures: [{node, parent}]
+        };
       }
     }
-    return false;
+    return null;
   }
 
   /**
