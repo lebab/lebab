@@ -16,6 +16,7 @@ export default class UtilInherits {
           node,
           superClass: m.superClass
         };
+        return true;
       }
     }
     else if ((m = this.stepTwo(node))) {
@@ -26,8 +27,10 @@ export default class UtilInherits {
         multiReplaceStatement({parent, node, replacements: []});
         multiReplaceStatement({parent, node: prototypeAssignment.node,
           replacements: []});
+        return true;
       }
     }
+    return false;
   }
 
   /**

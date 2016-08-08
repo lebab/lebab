@@ -14,13 +14,16 @@ export default class UtilInherits {
     var m;
     if (this.discoverIdentifiers(node, parent)) {
       // Discovered util.inherits identifiers.
+      return true;
     }
     else if ((m = this.match(node))) {
       if (this.potentialClasses[m.className]) {
         this.potentialClasses[m.className].superClass = m.superClass;
         multiReplaceStatement({parent, node, replacements: []});
+        return true;
       }
     }
+    return false;
   }
 
   /**
