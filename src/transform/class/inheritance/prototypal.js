@@ -66,6 +66,48 @@ export default class UtilInherits {
           }
         }
       }
+    })(node) ||
+    matchesAst({
+      type: 'ExpressionStatement',
+      expression: {
+        type: 'AssignmentExpression',
+        left: {
+          type: 'MemberExpression',
+          object: {
+            type: 'Identifier',
+            name: extract('className')
+          },
+          property: {
+            type: 'Identifier',
+            name: 'prototype'
+          }
+        },
+        right: {
+          type: 'CallExpression',
+          callee: {
+            type: 'MemberExpression',
+            object: {
+              type: 'Identifier',
+              name: 'Object'
+            },
+            property: {
+              type: 'Identifier',
+              name: 'create'
+            }
+          },
+          arguments: args => args.length === 1 && matchesAst({
+            type: 'MemberExpression',
+            object: {
+              type: 'Identifier',
+              name: extract('superClass')
+            },
+            property: {
+              type: 'Identifier',
+              name: 'prototype'
+            }
+          })(args[0])
+        }
+      }
     })(node);
   }
 
