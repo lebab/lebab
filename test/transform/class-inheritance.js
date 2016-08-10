@@ -54,6 +54,47 @@ export default function inheritanceTests() {
           'inherits(MyClass, OtherClass);'
         );
       });
+
+      it('should convert constructor .call(this, args...) to super()', () => {
+        expectTransform(
+          'var inherits = require(\'util\').inherits;\n' +
+          'function MyClass(name) {\n' +
+          '  OtherClass.call(this, name);\n' +
+          '  this.name = name;\n' +
+          '}\n' +
+          'inherits(MyClass, OtherClass);'
+        ).toReturn(
+          'var inherits = require(\'util\').inherits;\n' +
+          '\n' +
+          'class MyClass extends OtherClass {\n' +
+          '  constructor(name) {\n' +
+          '    super(name);\n' +
+          '    this.name = name;\n' +
+          '  }\n' +
+          '}'
+        );
+      });
+
+      it('should not convert constructor .call(args...) to super() ', () => {
+        // If we call the parent constructor with no `this` then we will not convert to a super call.
+        expectTransform(
+          'var inherits = require(\'util\').inherits;\n' +
+          'function MyClass(name) {\n' +
+          '  OtherClass.call(null, name);\n' +
+          '  this.name = name;\n' +
+          '}\n' +
+          'inherits(MyClass, OtherClass);'
+        ).toReturn(
+          'var inherits = require(\'util\').inherits;\n' +
+          '\n' +
+          'class MyClass extends OtherClass {\n' +
+          '  constructor(name) {\n' +
+          '    OtherClass.call(null, name);\n' +
+          '    this.name = name;\n' +
+          '  }\n' +
+          '}'
+        );
+      });
     });
 
     describe('prototype', () => {

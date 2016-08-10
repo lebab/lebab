@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import extractComments from './extractComments';
 import {matchesAst} from './../../utils/matches-ast';
+import stripLocationInfo from './../../utils/strip-location-info';
 import multiReplaceStatement from './../../utils/multi-replace-statement';
 
 /**
@@ -116,10 +117,7 @@ class PotentialClass {
           type: 'CallExpression',
           callee: {
             type: 'MemberExpression',
-            object: {
-              type: 'Identifier',
-              name: this.superClass
-            },
+            object: stripLocationInfo(this.superClass),
             property: {
               type: 'Identifier',
               name: 'call'
@@ -136,3 +134,4 @@ class PotentialClass {
     });
   }
 }
+

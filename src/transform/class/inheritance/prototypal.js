@@ -60,10 +60,7 @@ export default class UtilInherits {
         },
         right: {
           type: 'NewExpression',
-          callee: {
-            type: 'Identifier',
-            name: extract('superClass')
-          }
+          callee: extract('superClass')
         }
       }
     })(node) ||
@@ -97,10 +94,7 @@ export default class UtilInherits {
           },
           arguments: args => args.length === 1 && matchesAst({
             type: 'MemberExpression',
-            object: {
-              type: 'Identifier',
-              name: extract('superClass')
-            },
+            object: extract('superClass'),
             property: {
               type: 'Identifier',
               name: 'prototype'
