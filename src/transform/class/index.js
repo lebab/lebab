@@ -12,7 +12,7 @@ import Inheritance from './inheritance';
 
 export default function(ast, logger) {
   const potentialClasses = {};
-  const inheritance = new Inheritance(potentialClasses);
+  const inheritance = new Inheritance({potentialClasses});
 
   traverser.traverse(ast, {
     enter(node, parent) {
