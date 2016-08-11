@@ -122,6 +122,12 @@ A single transform for the single ES7 syntax feature.
 
 - [x] **exponent** - `Math.pow()` to `**` operator
 
+### Other transforms
+
+Other automated refactorings (not converting between ECMAScript versions).
+
+- [x] **multi-var** - single `var x,y;` declaration to `var x; var y;`
+
 
 ## Programming API
 

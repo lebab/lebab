@@ -15,6 +15,7 @@ import objShorthandTransform from './transform/obj-shorthand';
 import noStrictTransform from './transform/no-strict';
 import commonjsTransform from './transform/commonjs';
 import exponentTransform from './transform/exponent';
+import multiVarTransform from './transform/multi-var';
 
 const transformsMap = {
   'class': classTransform,
@@ -28,6 +29,7 @@ const transformsMap = {
   'no-strict': noStrictTransform,
   'commonjs': commonjsTransform,
   'exponent': exponentTransform,
+  'multi-var': multiVarTransform,
 };
 
 /**
@@ -45,7 +47,7 @@ export default class Transformer {
    * Tranforms code using all configured transforms.
    *
    * @param {String} code Input ES5 code
-   * @return {String} Output ES6 code
+   * @return {Object} Output ES6 code
    */
   run(code) {
     const logger = new Logger();
