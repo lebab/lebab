@@ -15,7 +15,7 @@ import objShorthandTransform from './transform/obj-shorthand';
 import noStrictTransform from './transform/no-strict';
 import commonjsTransform from './transform/commonjs';
 import exponentTransform from './transform/exponent';
-import splitDeclarationTransform from './transform/split-declaraion';
+import multiVarTransform from './transform/multi-var';
 
 const transformsMap = {
   'class': classTransform,
@@ -29,7 +29,7 @@ const transformsMap = {
   'no-strict': noStrictTransform,
   'commonjs': commonjsTransform,
   'exponent': exponentTransform,
-  'split-declaration': splitDeclarationTransform,
+  'multi-var': multiVarTransform,
 };
 
 /**

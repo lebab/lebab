@@ -105,7 +105,7 @@ function validateTransforms(transformNames) {
     'no-strict': true,
     'commonjs': true,
     'exponent': true,
-    'split-declaration': true,
+    'multi-var': true,
   };
 
   transformNames.forEach(name => {

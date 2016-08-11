@@ -3,25 +3,25 @@ import multiReplaceStatement from '../utils/multi-replace-statement';
 import VariableDeclaration from '../syntax/variable-declaration';
 
 export default function(ast) {
-  traverser.replace(ast, {
+  traverser.traverse(ast, {
     enter(node, parent) {
       if (node.type === 'VariableDeclaration' && node.declarations.length > 1) {
-        this.skip();
+        splitDeclaration(node, parent);
 
-        splitDeclarations(parent, node);
+        return traverser.VisitorOption.Skip;
       }
     }
   });
 }
 
-function splitDeclarations(parent, node) {
+function splitDeclaration(node, parent) {
   const declNodes = node.declarations.map(declarator => {
     return new VariableDeclaration(node.kind, [declarator]);
   });
 
   multiReplaceStatement({
-    parent: parent,
-    node: node,
+    parent,
+    node,
     replacements: declNodes,
     preserveComments: true,
   });
