@@ -22,7 +22,12 @@ const transformsDocs = `
 
   ES7 transforms:
 
-    + exponent ....... Math.pow() to ** operator`;
+    + exponent ....... Math.pow() to ** operator
+
+  Other transforms:
+
+    + multi-var ...... single var x,y; declaration to var x; var y;
+`;
 
 program.usage('-t <transform> <file>');
 program.description(`${pkg.description}\n${transformsDocs}`);
