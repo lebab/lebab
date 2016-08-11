@@ -17,7 +17,8 @@ describe('Multi-var', () => {
       expectTransform(
         'var x,y;'
       ).toReturn(
-        'var x;\nvar y;'
+        'var x;\n' +
+        'var y;'
       );
     });
   });
@@ -27,22 +28,13 @@ describe('Multi-var', () => {
       expectTransform(
         'var x,y=100;'
       ).toReturn(
-        'var x;\nvar y=100;'
+        'var x;\n' +
+        'var y=100;'
       );
     });
   });
 
   describe('with various type of declarations', () => {
-    it('should split into separate declarations', () => {
-      expectTransform(
-        'var x,y=100;let a,b=123;const c=12,d=234'
-      ).toReturn(
-        'var x;\nvar y=100;\nlet a;\nlet b=123;\nconst c=12;\nconst d=234;'
-      );
-    });
-  });
-
-  describe('with multi lines of declarations', () => {
     it('should split into separate declarations', () => {
       expectTransform(
         'var x,y=100;\n' +
@@ -64,7 +56,8 @@ describe('Multi-var', () => {
       expectTransform(
         'var x,y=100;// hello'
       ).toReturn(
-        'var x;// hello\nvar y=100;'
+        'var x;// hello\n' +
+        'var y=100;'
       );
     });
   });
@@ -74,7 +67,8 @@ describe('Multi-var', () => {
       expectTransform(
         '/* hello */var x,y=100;'
       ).toReturn(
-        '/* hello */var x;\nvar y=100;'
+        '/* hello */var x;\n' +
+        'var y=100;'
       );
     });
 
@@ -82,7 +76,8 @@ describe('Multi-var', () => {
       expectTransform(
         'var x,y=100;/* hello */'
       ).toReturn(
-        'var x;/* hello */\nvar y=100;'
+        'var x;/* hello */\n' +
+        'var y=100;'
       );
     });
 
@@ -90,7 +85,8 @@ describe('Multi-var', () => {
       expectTransform(
         'var x,/* hello */y=100;'
       ).toReturn(
-        'var x;\nvar /* hello */y=100;'
+        'var x;\n' +
+        'var /* hello */y=100;'
       );
     });
   });
