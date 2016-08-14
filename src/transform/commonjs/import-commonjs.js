@@ -40,6 +40,9 @@ function varToImport(dec, kind) {
     }
   }
   else if ((m = matchRequireWithProperty(dec))) {
+    if (m.property.name === 'default') {
+      return identifierToDefaultImport(m);
+    }
     return propertyToNamedImport(m);
   }
   else {
@@ -50,7 +53,7 @@ function varToImport(dec, kind) {
 function patternToNamedImport({id, sources}) {
   return new ImportDeclaration({
     specifiers: id.properties.map(({key, value}) => {
-      return new ImportSpecifier({
+      return createImportSpecifier({
         local: value,
         imported: key
       });
@@ -68,9 +71,16 @@ function identifierToDefaultImport({id, sources}) {
 
 function propertyToNamedImport({id, property, sources}) {
   return new ImportDeclaration({
-    specifiers: [new ImportSpecifier({local: id, imported: property})],
+    specifiers: [createImportSpecifier({local: id, imported: property})],
     source: sources[0],
   });
+}
+
+function createImportSpecifier({local, imported}) {
+  if (imported.name === 'default') {
+    return new ImportDefaultSpecifier(local);
+  }
+  return new ImportSpecifier({local, imported});
 }
 
 function isVarWithRequireCalls(node) {

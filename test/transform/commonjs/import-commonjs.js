@@ -74,6 +74,30 @@ describe('Import CommonJS', () => {
         {line: 2, msg: 'import can only be at root level', type: 'commonjs'}
       ]);
     });
+
+    it('should treat require().default as default import', () => {
+      expectTransform(
+        'var foo = require("foolib").default;'
+      ).toReturn(
+        'import foo from "foolib";'
+      );
+    });
+
+    it('should treat {default: foo} destructuring as default import', () => {
+      expectTransform(
+        'var {default: foo} = require("foolib");'
+      ).toReturn(
+        'import foo from "foolib";'
+      );
+    });
+
+    it('should recognize default import inside several destructurings', () => {
+      expectTransform(
+        'var {default: foo, bar: bar} = require("foolib");'
+      ).toReturn(
+        'import foo, {bar} from "foolib";'
+      );
+    });
   });
 
   describe('named import', () => {
