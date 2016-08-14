@@ -20,6 +20,10 @@ export default class Inheritance {
    * Process a node and return inheritance details if found.
    * @param {Object} node
    * @param {Object} parent
+   * @returns {Object}
+   *            {String}   className
+   *            {Node}     superClass
+   *            {Object[]} replacements
    */
   process(node, parent) {
     return (

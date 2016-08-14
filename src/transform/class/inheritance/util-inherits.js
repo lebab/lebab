@@ -1,14 +1,36 @@
 import {matchesAst, extract} from '../../../utils/matches-ast';
 import {isVarWithRequireCalls} from '../../commonjs/import-commonjs';
 
+/**
+ * Processes nodes to detect super classes and return information for later
+ * transformation.
+ *
+ * Detects:
+ *   var util = require('util');
+ *   function Class1() {}
+ *   function Class2() {}
+ *   util.inherits(Class1, Class2);
+ */
 export default class UtilInherits {
-
+  /**
+   * @param {Object} cfg
+   *   @param {PotentialClass[]} cfg.potentialClasses Class name
+   */
   constructor({potentialClasses}) {
     this.potentialClasses = potentialClasses;
     this.utilNode = null;
     this.inheritsNode = null;
   }
 
+  /**
+   * Process a node and return inheritance details if found.
+   * @param {Object} node
+   * @param {Object} parent
+   * @returns {Object}
+   *            {String}   className
+   *            {Node}     superClass
+   *            {Object[]} replacements
+   */
   process(node, parent) {
     var m;
     if (this.discoverIdentifiers(node, parent)) {

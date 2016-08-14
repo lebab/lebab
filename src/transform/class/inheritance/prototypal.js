@@ -1,12 +1,39 @@
 import {matchesAst, extract} from '../../../utils/matches-ast';
 
+/**
+ * Processes nodes to detect super classes and return information for later
+ * transformation.
+ *
+ * Detects:
+ *   function Class1() {}
+ *   function Class2() {}
+ *   Class1.prototype = Object.create(Class2.prototype);
+ *   Class1.prototype.constructor = Class1;
+ * and:
+ *   function Class1() {}
+ *   function Class2() {}
+ *   Class1.prototype = new Class2();
+ *   Class1.prototype.constructor = Class1;
+ */
 export default class UtilInherits {
-
+  /**
+   * @param {Object} cfg
+   *   @param {PotentialClass[]} cfg.potentialClasses Class name
+   */
   constructor({potentialClasses}) {
     this.potentialClasses = potentialClasses;
     this.prototypeAssignments = [];
   }
 
+  /**
+   * Process a node and return inheritance details if found.
+   * @param {Object} node
+   * @param {Object} parent
+   * @returns {Object}
+   *            {String}   className
+   *            {Node}     superClass
+   *            {Object[]} replacements
+   */
   process(node, parent) {
     var m;
     if ((m = this.matchPrototypeAssignment(node))) {
