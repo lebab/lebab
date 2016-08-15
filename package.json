@@ -11,7 +11,7 @@
     "travis": "npm run lint && npm run test"
   },
   "engines": {
-    "node": ">=0.10"
+    "node": ">=4"
   },
   "files": [
     "lib",
