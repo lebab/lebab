@@ -29,7 +29,10 @@ $ lebab es5.js -o es6.js --transform let
 Or transform an entire directory of files in-place:
 
 ```bash
+# .js files only
 $ lebab --replace src/js/ --transform arrow
+# For other file extensions, use explicit globbing
+$ lebab --replace 'src/js/**/*.jsx' --transform arrow
 ```
 
 For all the possible values for `--transform` option
