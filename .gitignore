@@ -2,4 +2,3 @@
 *.log
 node_modules
 lib
-test-lib

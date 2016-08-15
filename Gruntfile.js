@@ -10,12 +10,6 @@ grunt.initConfig({
         'src': ['**/*.js'],
         'dest': 'lib/',
         'ext': '.js'
-      }, {
-        'expand': true,
-        'cwd': 'test/',
-        'src': ['**/*.js'],
-        'dest': 'test-lib/',
-        'ext': '.js'
       }]
     }
   },
@@ -42,18 +36,8 @@ grunt.initConfig({
   clean: {
     js: [
       'lib/**/*.js',
-      'test-lib/**/*.js'
     ]
   },
-  mochaTest: {
-    test: {
-      options: {
-        reporter: 'spec'
-      },
-      src: ['test-lib/**/*.js']
-    }
-  }
 });
 
 grunt.registerTask('default', ['clean', 'babel']);
-grunt.registerTask('test', ['eslint', 'default', 'mochaTest']);
