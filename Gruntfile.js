@@ -11,9 +11,4 @@ grunt.initConfig({
       tasks: ['default']
     }
   },
-  clean: {
-    js: [
-      'lib/**/*.js',
-    ]
-  },
 });
