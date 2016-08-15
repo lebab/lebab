@@ -6,7 +6,7 @@
   "scripts": {
     "prepublish": "rm -rf lib/ && babel src/ --out-dir lib/",
     "lint": "eslint src/ test/ bin/ *.js",
-    "test": "mocha --compilers js:babel-register test/**/*.js"
+    "test": "npm run prepublish && mocha --compilers js:babel-register 'test/**/*.js'"
   },
   "engines": {
     "node": ">=0.10"

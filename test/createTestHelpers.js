@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import Transformer from './../lib/transformer';
+import Transformer from './../src/transformer';
 
 /**
  * Generates functions that are used in all transform-tests.
