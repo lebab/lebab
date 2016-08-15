@@ -22,17 +22,6 @@ grunt.initConfig({
       tasks: ['default']
     }
   },
-  eslint: {
-    options: {
-      configFile: '.eslintrc'
-    },
-    target: [
-      'src/**/*.js',
-      'test/**/*.js',
-      'bin/*.js',
-      '*.js'
-    ]
-  },
   clean: {
     js: [
       'lib/**/*.js',
