@@ -16,6 +16,7 @@ import noStrictTransform from './transform/no-strict';
 import commonjsTransform from './transform/commonjs';
 import exponentTransform from './transform/exponent';
 import multiVarTransform from './transform/multi-var';
+import forOfTransform from './transform/for-of';
 
 const transformsMap = {
   'class': classTransform,
@@ -30,6 +31,7 @@ const transformsMap = {
   'commonjs': commonjsTransform,
   'exponent': exponentTransform,
   'multi-var': multiVarTransform,
+  'for-of': forOfTransform,
 };
 
 /**

@@ -111,6 +111,7 @@ function validateTransforms(transformNames) {
     'commonjs': true,
     'exponent': true,
     'multi-var': true,
+    'for-of': true,
   };
 
   transformNames.forEach(name => {
