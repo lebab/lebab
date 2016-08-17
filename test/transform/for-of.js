@@ -121,5 +121,16 @@ describe('For loops to for-of', () => {
         {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
       ]);
     });
+
+    it('should not transform when loop initializes several variables', () => {
+      expectNoChange(
+        'for (var i=0, j=0; i < array.length; i++) {\n' +
+        '  var item = array[i];\n' +
+        '  console.log(item);\n' +
+        '}'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+      ]);
+    });
   });
 });

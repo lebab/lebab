@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import traverser from '../traverser';
-import {matchesAst, extract} from '../utils/matches-ast';
+import {matchesAst, extract, matchesLength} from '../utils/matches-ast';
 
 export default function(ast, logger) {
   traverser.replace(ast, {
@@ -54,7 +54,7 @@ var matchForLoop = matchesAst({
   type: 'ForStatement',
   init: {
     type: 'VariableDeclaration',
-    declarations: [
+    declarations: matchesLength([
       {
         type: 'VariableDeclarator',
         id: extract('index', {
@@ -65,7 +65,7 @@ var matchForLoop = matchesAst({
           value: 0,
         }
       }
-    ]
+    ])
   },
   test: {
     type: 'BinaryExpression',
