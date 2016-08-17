@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expectTransform} = createTestHelpers(['for-of']);
+const {expectTransform, expectNoChange} = createTestHelpers(['for-of']);
 
 describe('For loops to for-of', () => {
   describe('with existing array element alias', () => {
@@ -72,6 +72,28 @@ describe('For loops to for-of', () => {
         '  console.log(item);\n' +
         '}'
       );
+    });
+
+    it('should not transform when index variable used in loop body', () => {
+      expectNoChange(
+        'for (let i=0; i < array.length; i++) {\n' +
+        '  var item = array[i];\n' +
+        '  console.log(item, i);\n' +
+        '}'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+      ]);
+    });
+
+    it('should not transform when index variable used inside a function in loop body', () => {
+      expectNoChange(
+        'for (let i=0; i < array.length; i++) {\n' +
+        '  var item = array[i];\n' +
+        '  callback(function(){ return i; });\n' +
+        '}'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+      ]);
     });
   });
 });

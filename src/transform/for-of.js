@@ -2,16 +2,22 @@ import _ from 'lodash';
 import traverser from '../traverser';
 import {matchesAst, extract} from '../utils/matches-ast';
 
-export default function(ast) {
+export default function(ast, logger) {
   traverser.replace(ast, {
     enter(node) {
       const matches = matchForLoop(node);
+
       if (
         matches &&
         consistentIndexVar(matches) &&
-        consistentArrayVar(matches)
+        consistentArrayVar(matches) &&
+        !indexUsedInBody(matches)
       ) {
         return createForOf(matches);
+      }
+
+      if (node.type === 'ForStatement') {
+        logger.warn(node, 'Unable to transform for loop', 'for-of');
       }
     }
   });
@@ -29,6 +35,19 @@ function consistentArrayVar({array, arrayReference}) {
 
 function identEquals(a, b) {
   return a.name === b.name;
+}
+
+function indexUsedInBody({body, index}) {
+  let indexFound = false;
+  traverser.traverse(removeFirstBodyElement(body), {
+    enter(node) {
+      if (node.type === 'Identifier' && node.name === index.name) {
+        indexFound = true;
+        return traverser.VisitorOption.Break;
+      }
+    }
+  });
+  return indexFound;
 }
 
 var matchForLoop = matchesAst({
