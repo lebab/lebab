@@ -74,6 +74,32 @@ describe('For loops to for-of', () => {
       );
     });
 
+    it('should transform ++i loop-increment', () => {
+      expectTransform(
+        'for (var i=0; i < array.length; ++i) {\n' +
+        '  var item = array[i];\n' +
+        '  console.log(item);\n' +
+        '}'
+      ).toReturn(
+        'for (var item of array) {\n' +
+        '  console.log(item);\n' +
+        '}'
+      );
+    });
+
+    it('should transform i+=1 loop-increment', () => {
+      expectTransform(
+        'for (var i=0; i < array.length; i+=1) {\n' +
+        '  var item = array[i];\n' +
+        '  console.log(item);\n' +
+        '}'
+      ).toReturn(
+        'for (var item of array) {\n' +
+        '  console.log(item);\n' +
+        '}'
+      );
+    });
+
     it('should not transform when index variable used in loop body', () => {
       expectNoChange(
         'for (let i=0; i < array.length; i++) {\n' +

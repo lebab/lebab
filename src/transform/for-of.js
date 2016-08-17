@@ -85,14 +85,7 @@ var matchForLoop = matchesAst({
       }
     }
   },
-  'update': {
-    'type': 'UpdateExpression',
-    'operator': '++',
-    'argument': extract('indexIncrement', {
-      'type': 'Identifier',
-    }),
-    'prefix': false
-  },
+  'update': (node) => matchPlusPlus(node) || matchPlusOne(node),
   'body': extract('body', {
     'type': 'BlockStatement',
     'body': [
@@ -120,6 +113,28 @@ var matchForLoop = matchesAst({
       }
     ]
   })
+});
+
+// Matches <ident>++ or ++<ident>
+var matchPlusPlus = matchesAst({
+  'type': 'UpdateExpression',
+  'operator': '++',
+  'argument': extract('indexIncrement', {
+    'type': 'Identifier',
+  })
+});
+
+// Matches <ident>+=1
+var matchPlusOne = matchesAst({
+  'type': 'AssignmentExpression',
+  'operator': '+=',
+  'left': extract('indexIncrement', {
+    'type': 'Identifier',
+  }),
+  'right': {
+    'type': 'Literal',
+    'value': 1
+  }
 });
 
 function createForOf({kind, item, array, body}) {
