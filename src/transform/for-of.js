@@ -51,65 +51,65 @@ function indexUsedInBody({body, index}) {
 }
 
 var matchForLoop = matchesAst({
-  'type': 'ForStatement',
-  'init': {
-    'type': 'VariableDeclaration',
-    'declarations': [
+  type: 'ForStatement',
+  init: {
+    type: 'VariableDeclaration',
+    declarations: [
       {
-        'type': 'VariableDeclarator',
-        'id': extract('index', {
-          'type': 'Identifier',
+        type: 'VariableDeclarator',
+        id: extract('index', {
+          type: 'Identifier',
         }),
-        'init': {
-          'type': 'Literal',
-          'value': 0,
+        init: {
+          type: 'Literal',
+          value: 0,
         }
       }
     ]
   },
-  'test': {
-    'type': 'BinaryExpression',
-    'operator': '<',
-    'left': extract('indexComparison', {
-      'type': 'Identifier',
+  test: {
+    type: 'BinaryExpression',
+    operator: '<',
+    left: extract('indexComparison', {
+      type: 'Identifier',
     }),
-    'right': {
-      'type': 'MemberExpression',
-      'computed': false,
-      'object': extract('array', {
-        'type': 'Identifier',
+    right: {
+      type: 'MemberExpression',
+      computed: false,
+      object: extract('array', {
+        type: 'Identifier',
       }),
-      'property': {
-        'type': 'Identifier',
-        'name': 'length'
+      property: {
+        type: 'Identifier',
+        name: 'length'
       }
     }
   },
-  'update': (node) => matchPlusPlus(node) || matchPlusOne(node),
-  'body': extract('body', {
-    'type': 'BlockStatement',
-    'body': [
+  update: (node) => matchPlusPlus(node) || matchPlusOne(node),
+  body: extract('body', {
+    type: 'BlockStatement',
+    body: [
       {
-        'type': 'VariableDeclaration',
-        'declarations': [
+        type: 'VariableDeclaration',
+        declarations: [
           {
-            'type': 'VariableDeclarator',
-            'id': extract('item', {
-              'type': 'Identifier',
+            type: 'VariableDeclarator',
+            id: extract('item', {
+              type: 'Identifier',
             }),
-            'init': {
-              'type': 'MemberExpression',
-              'computed': true,
-              'object': extract('arrayReference', {
-                'type': 'Identifier',
+            init: {
+              type: 'MemberExpression',
+              computed: true,
+              object: extract('arrayReference', {
+                type: 'Identifier',
               }),
-              'property': extract('indexReference', {
-                'type': 'Identifier',
+              property: extract('indexReference', {
+                type: 'Identifier',
               })
             }
           }
         ],
-        'kind': extract('kind')
+        kind: extract('kind')
       }
     ]
   })
@@ -117,42 +117,42 @@ var matchForLoop = matchesAst({
 
 // Matches <ident>++ or ++<ident>
 var matchPlusPlus = matchesAst({
-  'type': 'UpdateExpression',
-  'operator': '++',
-  'argument': extract('indexIncrement', {
-    'type': 'Identifier',
+  type: 'UpdateExpression',
+  operator: '++',
+  argument: extract('indexIncrement', {
+    type: 'Identifier',
   })
 });
 
 // Matches <ident>+=1
 var matchPlusOne = matchesAst({
-  'type': 'AssignmentExpression',
-  'operator': '+=',
-  'left': extract('indexIncrement', {
-    'type': 'Identifier',
+  type: 'AssignmentExpression',
+  operator: '+=',
+  left: extract('indexIncrement', {
+    type: 'Identifier',
   }),
-  'right': {
-    'type': 'Literal',
-    'value': 1
+  right: {
+    type: 'Literal',
+    value: 1
   }
 });
 
 function createForOf({kind, item, array, body}) {
   return {
-    'type': 'ForOfStatement',
-    'left': {
-      'type': 'VariableDeclaration',
-      'declarations': [
+    type: 'ForOfStatement',
+    left: {
+      type: 'VariableDeclaration',
+      declarations: [
         {
-          'type': 'VariableDeclarator',
-          'id': item,
-          'init': null
+          type: 'VariableDeclarator',
+          id: item,
+          init: null
         }
       ],
-      'kind': kind
+      kind: kind
     },
-    'right': array,
-    'body': removeFirstBodyElement(body)
+    right: array,
+    body: removeFirstBodyElement(body)
   };
 }
 
