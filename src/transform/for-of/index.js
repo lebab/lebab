@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import traverser from '../traverser';
-import isEqualAst from '../utils/is-equal-ast';
-import {matchesAst, extract, matchesLength} from '../utils/matches-ast';
+import traverser from '../../traverser';
+import isEqualAst from '../../utils/is-equal-ast';
+import {matchesAst, extract, matchesLength} from '../../utils/matches-ast';
 
 export default function(ast, logger) {
   traverser.replace(ast, {
