@@ -19,6 +19,7 @@ const transformsDocs = `
     + class .......... prototype assignments to class declaration
     + template ....... string concatenation to template string
     + default-param .. use of || to default parameters
+    + for-of ......... for loop to for-of loop
 
   ES7 transforms:
 
@@ -111,6 +112,7 @@ function validateTransforms(transformNames) {
     'commonjs': true,
     'exponent': true,
     'multi-var': true,
+    'for-of': true,
   };
 
   transformNames.forEach(name => {

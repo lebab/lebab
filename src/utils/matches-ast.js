@@ -7,9 +7,12 @@ import _ from 'lodash';
  * can be provided to assert various conditions e.g. checking
  * that an array must be of a specific length.
  *
- * Additionally the utility extract() can be used to give names to
- * the parts of AST - these are then returned as a map of key-value
- * pairs.
+ * Additionally there are utility functions:
+ *
+ * - extract() can be used to give names to the parts of AST -
+ *   these are then returned as a map of key-value pairs.
+ *
+ * - matchesLength() ensures the exact array length is respected.
  *
  * @param  {Object}  pattern
  * @return {Function} Function that returns an object with
@@ -64,6 +67,25 @@ export function extract(fieldName, matcher) {
     }
 
     return extractedFields;
+  };
+}
+
+/**
+ * Utility for asserting that AST also matches the exact length
+ * of the specified array pattern (in addition to matching
+ * the first items in the array).
+ *
+ * @param {Array} pattern
+ * @return {Function}
+ */
+export function matchesLength(pattern) {
+  const matcher = matchesAst(pattern);
+
+  return (ast) => {
+    if (ast.length !== pattern.length) {
+      return false;
+    }
+    return matcher(ast);
   };
 }
 

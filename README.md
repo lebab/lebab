@@ -118,6 +118,10 @@ There are no guarantees that the resulting code is equivalent of the original co
     - [x] recognizes `a = a === undefined ? 2 : a`
     - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
     - [ ] LIMITATION [transforming `a = a || 2` does not produce strictly equivalent code][125]
+- [x] **for-of** - for loop to for-of loop
+    - [x] only works when loop body begins with `var item = array[i];`
+    - [ ] does not check for use of loop variables outside loop body
+    - [ ] WORK IN PROGRESS [see the issue for details][166]
 
 ### ES7 transforms
 
@@ -178,3 +182,4 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [125]: https://github.com/mohebifar/lebab/issues/125
 [127]: https://github.com/mohebifar/lebab/issues/127
 [131]: https://github.com/mohebifar/lebab/issues/131
+[166]: https://github.com/mohebifar/lebab/issues/166
