@@ -25,17 +25,13 @@ export default function(ast, logger) {
 }
 
 function consistentIndexVar({index, indexComparison, indexIncrement, indexReference}) {
-  return identEquals(index, indexComparison) &&
-    identEquals(index, indexIncrement) &&
-    identEquals(index, indexReference);
+  return isEqualAst(index, indexComparison) &&
+    isEqualAst(index, indexIncrement) &&
+    isEqualAst(index, indexReference);
 }
 
 function consistentArrayVar({array, arrayReference}) {
   return isEqualAst(array, arrayReference);
-}
-
-function identEquals(a, b) {
-  return a.name === b.name;
 }
 
 function indexUsedInBody({body, index}) {
