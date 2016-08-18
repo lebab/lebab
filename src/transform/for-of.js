@@ -35,9 +35,7 @@ function consistentArrayVar({array, arrayReference}) {
 }
 
 function indexUsedInBody({body, index}) {
-  return traverser.find(removeFirstBodyElement(body), (node) => {
-    return node.type === 'Identifier' && node.name === index.name;
-  });
+  return traverser.find(removeFirstBodyElement(body), (node) => isEqualAst(node, index));
 }
 
 var matchForLoop = matchesAst({
