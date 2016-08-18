@@ -117,7 +117,7 @@ describe('For loops to for-of', () => {
           '  console.log(item);\n' +
           '}'
         ).withWarnings([
-          {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+          {line: 1, msg: 'Only for-loops with let/const can be tranformed (use let transform first)', type: 'for-of'}
         ]);
       });
 
@@ -128,7 +128,7 @@ describe('For loops to for-of', () => {
           '  console.log(item);\n' +
           '}'
         ).withWarnings([
-          {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+          {line: 1, msg: 'Only for-loops with let/const can be tranformed (use let transform first)', type: 'for-of'}
         ]);
       });
 

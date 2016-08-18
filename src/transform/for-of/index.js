@@ -14,6 +14,11 @@ export default function(ast, logger) {
           return;
         }
 
+        if (matches.itemKind === 'var' || matches.indexKind === 'var') {
+          logger.warn(node, 'Only for-loops with let/const can be tranformed (use let transform first)', 'for-of');
+          return;
+        }
+
         return createForOf(matches);
       }
 
@@ -28,7 +33,7 @@ function indexUsedInBody({body, index}) {
   return traverser.find(removeFirstBodyElement(body), (node) => isEqualAst(node, index));
 }
 
-function createForOf({kind, item, array, body}) {
+function createForOf({item, itemKind, array, body}) {
   return {
     type: 'ForOfStatement',
     left: {
@@ -40,7 +45,7 @@ function createForOf({kind, item, array, body}) {
           init: null
         }
       ],
-      kind: kind
+      kind: itemKind
     },
     right: array,
     body: removeFirstBodyElement(body)

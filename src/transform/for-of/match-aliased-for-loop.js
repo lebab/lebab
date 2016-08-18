@@ -46,7 +46,7 @@ const matchLooseForLoop = matchesAst({
         }
       }
     ]),
-    kind: 'let'
+    kind: extract('indexKind')
   },
   test: {
     type: 'BinaryExpression',
@@ -86,7 +86,7 @@ const matchLooseForLoop = matchesAst({
             }
           }
         ],
-        kind: extract('kind', kind => kind === 'let' || kind === 'const')
+        kind: extract('itemKind')
       }
     ]
   })
@@ -114,9 +114,10 @@ function isConsistentArrayVar({array, arrayReference}) {
  * Extracts the following fields:
  *
  * - index - loop index identifier
+ * - indexKind - the kind of <index>
  * - array - array identifier or expression
  * - item - identifier used to alias current array element
- * - kind - the kind of <item>
+ * - itemKind - the kind of <item>
  * - body - the whole BlockStatement of for-loop body
  *
  * @param  {Object} node
