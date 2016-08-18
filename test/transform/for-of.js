@@ -5,52 +5,7 @@ describe('For loops to for-of', () => {
   describe('with existing array element alias', () => {
     it('should use the existing alias as loop variable', () => {
       expectTransform(
-        'for (var i=0; i < array.length; i++) {\n' +
-        '  var item = array[i];\n' +
-        '  console.log(item);\n' +
-        '}'
-      ).toReturn(
-        'for (var item of array) {\n' +
-        '  console.log(item);\n' +
-        '}'
-      );
-    });
-
-    it('should work with different variables and long for-loop body', () => {
-      expectTransform(
-        'for (var idx=0; idx < fruitList.length; idx++) {\n' +
-        '  var fruit = fruitList[idx];\n' +
-        '  var price = getCurrentPrice(fruit);\n' +
-        '  if (price > fruit.standardPrice) {\n' +
-        '    sell(fruit, price);\n' +
-        '  }\n' +
-        '}'
-      ).toReturn(
-        'for (var fruit of fruitList) {\n' +
-        '  var price = getCurrentPrice(fruit);\n' +
-        '  if (price > fruit.standardPrice) {\n' +
-        '    sell(fruit, price);\n' +
-        '  }\n' +
-        '}'
-      );
-    });
-
-    it('should support complex expressions for array', () => {
-      expectTransform(
-        'for (var i=0; i < store[current].fruits.length; i++) {\n' +
-        '  var item = store[current].fruits[i];\n' +
-        '  console.log(item);\n' +
-        '}'
-      ).toReturn(
-        'for (var item of store[current].fruits) {\n' +
-        '  console.log(item);\n' +
-        '}'
-      );
-    });
-
-    it('should preserve original let-kind of loop variable', () => {
-      expectTransform(
-        'for (var i=0; i < array.length; i++) {\n' +
+        'for (let i=0; i < array.length; i++) {\n' +
         '  let item = array[i];\n' +
         '  console.log(item);\n' +
         '}'
@@ -61,9 +16,41 @@ describe('For loops to for-of', () => {
       );
     });
 
+    it('should work with different variables and long for-loop body', () => {
+      expectTransform(
+        'for (let idx=0; idx < fruitList.length; idx++) {\n' +
+        '  let fruit = fruitList[idx];\n' +
+        '  let price = getCurrentPrice(fruit);\n' +
+        '  if (price > fruit.standardPrice) {\n' +
+        '    sell(fruit, price);\n' +
+        '  }\n' +
+        '}'
+      ).toReturn(
+        'for (let fruit of fruitList) {\n' +
+        '  let price = getCurrentPrice(fruit);\n' +
+        '  if (price > fruit.standardPrice) {\n' +
+        '    sell(fruit, price);\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('should support complex expressions for array', () => {
+      expectTransform(
+        'for (let i=0; i < store[current].fruits.length; i++) {\n' +
+        '  let item = store[current].fruits[i];\n' +
+        '  console.log(item);\n' +
+        '}'
+      ).toReturn(
+        'for (let item of store[current].fruits) {\n' +
+        '  console.log(item);\n' +
+        '}'
+      );
+    });
+
     it('should preserve original const-kind of loop variable', () => {
       expectTransform(
-        'for (var i=0; i < array.length; i++) {\n' +
+        'for (let i=0; i < array.length; i++) {\n' +
         '  const item = array[i];\n' +
         '  console.log(item);\n' +
         '}'
@@ -74,27 +61,14 @@ describe('For loops to for-of', () => {
       );
     });
 
-    it('should ignore the kind of original index variable', () => {
-      expectTransform(
-        'for (let i=0; i < array.length; i++) {\n' +
-        '  var item = array[i];\n' +
-        '  console.log(item);\n' +
-        '}'
-      ).toReturn(
-        'for (var item of array) {\n' +
-        '  console.log(item);\n' +
-        '}'
-      );
-    });
-
     it('should transform ++i loop-increment', () => {
       expectTransform(
-        'for (var i=0; i < array.length; ++i) {\n' +
-        '  var item = array[i];\n' +
+        'for (let i=0; i < array.length; ++i) {\n' +
+        '  let item = array[i];\n' +
         '  console.log(item);\n' +
         '}'
       ).toReturn(
-        'for (var item of array) {\n' +
+        'for (let item of array) {\n' +
         '  console.log(item);\n' +
         '}'
       );
@@ -102,12 +76,12 @@ describe('For loops to for-of', () => {
 
     it('should transform i+=1 loop-increment', () => {
       expectTransform(
-        'for (var i=0; i < array.length; i+=1) {\n' +
-        '  var item = array[i];\n' +
+        'for (let i=0; i < array.length; i+=1) {\n' +
+        '  let item = array[i];\n' +
         '  console.log(item);\n' +
         '}'
       ).toReturn(
-        'for (var item of array) {\n' +
+        'for (let item of array) {\n' +
         '  console.log(item);\n' +
         '}'
       );
@@ -117,7 +91,7 @@ describe('For loops to for-of', () => {
       it('when index variable used in loop body', () => {
         expectNoChange(
           'for (let i=0; i < array.length; i++) {\n' +
-          '  var item = array[i];\n' +
+          '  let item = array[i];\n' +
           '  console.log(item, i);\n' +
           '}'
         ).withWarnings([
@@ -128,7 +102,7 @@ describe('For loops to for-of', () => {
       it('when index variable used inside a function in loop body', () => {
         expectNoChange(
           'for (let i=0; i < array.length; i++) {\n' +
-          '  var item = array[i];\n' +
+          '  let item = array[i];\n' +
           '  callback(function(){ return i; });\n' +
           '}'
         ).withWarnings([
@@ -136,10 +110,32 @@ describe('For loops to for-of', () => {
         ]);
       });
 
+      it('when loop variable defined with var', () => {
+        expectNoChange(
+          'for (let i=0; i < array.length; i++) {\n' +
+          '  var item = array[i];\n' +
+          '  console.log(item);\n' +
+          '}'
+        ).withWarnings([
+          {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+        ]);
+      });
+
+      it('when loop index variable defined with var', () => {
+        expectNoChange(
+          'for (var i=0; i < array.length; i++) {\n' +
+          '  let item = array[i];\n' +
+          '  console.log(item);\n' +
+          '}'
+        ).withWarnings([
+          {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+        ]);
+      });
+
       it('when loop initializes several variables', () => {
         expectNoChange(
-          'for (var i=0, j=0; i < array.length; i++) {\n' +
-          '  var item = array[i];\n' +
+          'for (let i=0, j=0; i < array.length; i++) {\n' +
+          '  let item = array[i];\n' +
           '  console.log(item);\n' +
           '}'
         ).withWarnings([
@@ -149,8 +145,8 @@ describe('For loops to for-of', () => {
 
       it('when loop runs backwards', () => {
         expectNoChange(
-          'for (var i = array.length-1; i >= 0; i--) {\n' +
-          '  var item = array[i];\n' +
+          'for (let i = array.length-1; i >= 0; i--) {\n' +
+          '  let item = array[i];\n' +
           '  console.log(item);\n' +
           '}'
         ).withWarnings([
@@ -160,8 +156,8 @@ describe('For loops to for-of', () => {
 
       it('when elements taken from different array', () => {
         expectNoChange(
-          'for (var i=0; i < array.length; i++) {\n' +
-          '  var item = otherArray[i];\n' +
+          'for (let i=0; i < array.length; i++) {\n' +
+          '  let item = otherArray[i];\n' +
           '  console.log(item);\n' +
           '}'
         ).withWarnings([
@@ -171,8 +167,8 @@ describe('For loops to for-of', () => {
 
       it('when elements taken from different index', () => {
         expectNoChange(
-          'for (var i=0; i < array.length; i++) {\n' +
-          '  var item = array[otherIndex];\n' +
+          'for (let i=0; i < array.length; i++) {\n' +
+          '  let item = array[otherIndex];\n' +
           '  console.log(item);\n' +
           '}'
         ).withWarnings([
@@ -182,8 +178,8 @@ describe('For loops to for-of', () => {
 
       it('when incrementing a different index', () => {
         expectNoChange(
-          'for (var i=0; i < array.length; otherIndex++) {\n' +
-          '  var item = array[i];\n' +
+          'for (let i=0; i < array.length; otherIndex++) {\n' +
+          '  let item = array[i];\n' +
           '  console.log(item);\n' +
           '}'
         ).withWarnings([
@@ -193,8 +189,8 @@ describe('For loops to for-of', () => {
 
       it('when comparing a different index', () => {
         expectNoChange(
-          'for (var i=0; otherIndex < array.length; i++) {\n' +
-          '  var item = array[i];\n' +
+          'for (let i=0; otherIndex < array.length; i++) {\n' +
+          '  let item = array[i];\n' +
           '  console.log(item);\n' +
           '}'
         ).withWarnings([

@@ -26,8 +26,8 @@ const matchPlusOne = matchesAst({
 // Matches for-loop
 // without checking the consistency of index and array variables:
 //
-// for (var index = 0; indexComparison < array.length; indexIncrement++) {
-//     var item = arrayReference[indexReference];
+// for (let index = 0; indexComparison < array.length; indexIncrement++) {
+//     let item = arrayReference[indexReference];
 //     ...
 // }
 const matchLooseForLoop = matchesAst({
@@ -45,7 +45,8 @@ const matchLooseForLoop = matchesAst({
           value: 0,
         }
       }
-    ])
+    ]),
+    kind: 'let'
   },
   test: {
     type: 'BinaryExpression',
@@ -85,7 +86,7 @@ const matchLooseForLoop = matchesAst({
             }
           }
         ],
-        kind: extract('kind')
+        kind: extract('kind', kind => kind === 'let' || kind === 'const')
       }
     ]
   })
@@ -105,8 +106,8 @@ function isConsistentArrayVar({array, arrayReference}) {
  * Matches for-loop that aliases current array element
  * in the first line of the loop body:
  *
- *     for (var index = 0; index < array.length; index++) {
- *         var item = array[index];
+ *     for (let index = 0; index < array.length; index++) {
+ *         let item = array[index];
  *         ...
  *     }
  *
