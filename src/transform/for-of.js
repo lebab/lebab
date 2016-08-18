@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import traverser from '../traverser';
+import isEqualAst from '../utils/is-equal-ast';
 import {matchesAst, extract, matchesLength} from '../utils/matches-ast';
 
 export default function(ast, logger) {
@@ -30,22 +31,11 @@ function consistentIndexVar({index, indexComparison, indexIncrement, indexRefere
 }
 
 function consistentArrayVar({array, arrayReference}) {
-  return astEquals(array, arrayReference);
+  return isEqualAst(array, arrayReference);
 }
 
 function identEquals(a, b) {
   return a.name === b.name;
-}
-
-function astEquals(a, b) {
-  const metaDataFields = {
-    comments: true,
-    loc: true,
-    start: true,
-    end: true,
-  };
-
-  return _.isEqualWith(a, b, (aValue, bValue, key) => metaDataFields[key]);
 }
 
 function indexUsedInBody({body, index}) {
