@@ -8,7 +8,12 @@ export default function(ast, logger) {
     enter(node) {
       const matches = matchAliasedForLoop(node);
 
-      if (matches && !indexUsedInBody(matches)) {
+      if (matches) {
+        if (indexUsedInBody(matches)) {
+          logger.warn(node, 'Index variable used in for-loop body', 'for-of');
+          return;
+        }
+
         return createForOf(matches);
       }
 

@@ -120,7 +120,7 @@ describe('For loops to for-of', () => {
         '  console.log(item, i);\n' +
         '}'
       ).withWarnings([
-        {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+        {line: 1, msg: 'Index variable used in for-loop body', type: 'for-of'}
       ]);
     });
 
@@ -131,7 +131,7 @@ describe('For loops to for-of', () => {
         '  callback(function(){ return i; });\n' +
         '}'
       ).withWarnings([
-        {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+        {line: 1, msg: 'Index variable used in for-loop body', type: 'for-of'}
       ]);
     });
 
