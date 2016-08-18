@@ -145,5 +145,60 @@ describe('For loops to for-of', () => {
         {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
       ]);
     });
+
+    it('should not transform a backwards-loop', () => {
+      expectNoChange(
+        'for (var i = array.length-1; i >= 0; i--) {\n' +
+        '  var item = array[i];\n' +
+        '  console.log(item);\n' +
+        '}'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+      ]);
+    });
+
+    it('should not transform when elements taken from different array', () => {
+      expectNoChange(
+        'for (var i=0; i < array.length; i++) {\n' +
+        '  var item = otherArray[i];\n' +
+        '  console.log(item);\n' +
+        '}'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+      ]);
+    });
+
+    it('should not transform when elements taken from different index', () => {
+      expectNoChange(
+        'for (var i=0; i < array.length; i++) {\n' +
+        '  var item = array[otherIndex];\n' +
+        '  console.log(item);\n' +
+        '}'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+      ]);
+    });
+
+    it('should not transform when incrementing a different index', () => {
+      expectNoChange(
+        'for (var i=0; i < array.length; otherIndex++) {\n' +
+        '  var item = array[i];\n' +
+        '  console.log(item);\n' +
+        '}'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+      ]);
+    });
+
+    it('should not transform when comparing a different index', () => {
+      expectNoChange(
+        'for (var i=0; otherIndex < array.length; i++) {\n' +
+        '  var item = array[i];\n' +
+        '  console.log(item);\n' +
+        '}'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
+      ]);
+    });
   });
 });
