@@ -35,16 +35,9 @@ function consistentArrayVar({array, arrayReference}) {
 }
 
 function indexUsedInBody({body, index}) {
-  let indexFound = false;
-  traverser.traverse(removeFirstBodyElement(body), {
-    enter(node) {
-      if (node.type === 'Identifier' && node.name === index.name) {
-        indexFound = true;
-        return traverser.VisitorOption.Break;
-      }
-    }
+  return traverser.find(removeFirstBodyElement(body), (node) => {
+    return node.type === 'Identifier' && node.name === index.name;
   });
-  return indexFound;
 }
 
 var matchForLoop = matchesAst({
