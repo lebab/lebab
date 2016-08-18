@@ -30,11 +30,22 @@ function consistentIndexVar({index, indexComparison, indexIncrement, indexRefere
 }
 
 function consistentArrayVar({array, arrayReference}) {
-  return identEquals(array, arrayReference);
+  return astEquals(array, arrayReference);
 }
 
 function identEquals(a, b) {
   return a.name === b.name;
+}
+
+function astEquals(a, b) {
+  const metaDataFields = {
+    comments: true,
+    loc: true,
+    start: true,
+    end: true,
+  };
+
+  return _.isEqualWith(a, b, (aValue, bValue, key) => metaDataFields[key]);
 }
 
 function indexUsedInBody({body, index}) {
@@ -76,9 +87,7 @@ var matchForLoop = matchesAst({
     right: {
       type: 'MemberExpression',
       computed: false,
-      object: extract('array', {
-        type: 'Identifier',
-      }),
+      object: extract('array'),
       property: {
         type: 'Identifier',
         name: 'length'
@@ -100,9 +109,7 @@ var matchForLoop = matchesAst({
             init: {
               type: 'MemberExpression',
               computed: true,
-              object: extract('arrayReference', {
-                type: 'Identifier',
-              }),
+              object: extract('arrayReference'),
               property: extract('indexReference', {
                 type: 'Identifier',
               })

@@ -35,6 +35,19 @@ describe('For loops to for-of', () => {
       );
     });
 
+    it('should support complex expressions for array', () => {
+      expectTransform(
+        'for (var i=0; i < store[current].fruits.length; i++) {\n' +
+        '  var item = store[current].fruits[i];\n' +
+        '  console.log(item);\n' +
+        '}'
+      ).toReturn(
+        'for (var item of store[current].fruits) {\n' +
+        '  console.log(item);\n' +
+        '}'
+      );
+    });
+
     it('should preserve original let-kind of loop variable', () => {
       expectTransform(
         'for (var i=0; i < array.length; i++) {\n' +
