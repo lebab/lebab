@@ -69,6 +69,10 @@ The resulting ES2015 code should be almost 100% equivalent of the original code.
     - [x] existing `let`/`const` are not converted
     - [ ] BUG [fails with repeated variable definitions that use destructuring][131]
     - [ ] BUG [fails with closure over a loop variable][145]
+- [x] **for-of** - for loop to for-of loop
+    - [x] uses name `item` for loop variable when loop body begins with `var item = array[i];`
+    - [ ] [does not work when no such alias defined at the start of loop body][166]
+    - [ ] LIMITATION requires let/const variables (run the `let` transform first)
 - [x] **arg-spread** - use of apply() to spread operator
     - [x] recognizes `obj.method.apply(obj, args)`
     - [x] recognizes `func.apply(undefined, args)`
@@ -118,10 +122,6 @@ There are no guarantees that the resulting code is equivalent of the original co
     - [x] recognizes `a = a === undefined ? 2 : a`
     - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
     - [ ] LIMITATION [transforming `a = a || 2` does not produce strictly equivalent code][125]
-- [x] **for-of** - for loop to for-of loop
-    - [x] only works when loop body begins with `var item = array[i];`
-    - [ ] does not check for use of loop variables outside loop body
-    - [ ] WORK IN PROGRESS [see the issue for details][166]
 
 ### ES7 transforms
 
