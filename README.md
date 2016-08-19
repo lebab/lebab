@@ -6,7 +6,7 @@
 
 ![Lebab](https://raw.githubusercontent.com/mohebifar/lebab-logo/master/logo.png)
 
-**Lebab** transpiles your ES5 code to ES2015.
+**Lebab** transpiles your ES5 code to ES2015/ES2016.
 It does exactly the opposite of what [Babel](https://babeljs.io/) does.
 If you want to understand what Lebab exactly does, [try the live demo](http://lebab.io/try-it).
 

@@ -1,7 +1,7 @@
 {
   "name": "lebab",
   "version": "2.1.1",
-  "description": "Turn your ES5 code into readable ES6",
+  "description": "Turn your ES5 code into readable ES6/ES7",
   "main": "index.js",
   "scripts": {
     "prepublish": "rm -rf lib/ && babel src/ --out-dir lib/",
@@ -28,6 +28,9 @@
   "keywords": [
     "es5",
     "es6",
+    "es2015",
+    "es7",
+    "es2016",
     "transpiler",
     "transpile"
   ],
