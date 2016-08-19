@@ -224,5 +224,37 @@ describe('For loops to for-of', () => {
         ]);
       });
     });
+
+    describe('comments', () => {
+      it('should preserve for-loop comments', () => {
+        expectTransform(
+          '// Some comments\n' +
+          'for (let i=0; i < array.length; i++) {\n' +
+          '  let item = array[i];\n' +
+          '  console.log(item.i);\n' +
+          '}'
+        ).toReturn(
+          '// Some comments\n' +
+          'for (let item of array) {\n' +
+          '  console.log(item.i);\n' +
+          '}'
+        );
+      });
+
+      it('should preserve loop variable comments', () => {
+        expectTransform(
+          'for (let i=0; i < array.length; i++) {\n' +
+          '  // Some comments\n' +
+          '  let item = array[i];\n' +
+          '  console.log(item.i);\n' +
+          '}'
+        ).toReturn(
+          '// Some comments\n' +
+          'for (let item of array) {\n' +
+          '  console.log(item.i);\n' +
+          '}'
+        );
+      });
+    });
   });
 });

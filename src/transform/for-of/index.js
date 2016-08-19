@@ -2,6 +2,7 @@ import _ from 'lodash';
 import traverser from '../../traverser';
 import isEqualAst from '../../utils/is-equal-ast';
 import {isReference} from '../../utils/variable-type';
+import copyComments from '../../utils/copy-comments';
 import matchAliasedForLoop from './match-aliased-for-loop';
 
 export default function(ast, logger) {
@@ -20,7 +21,7 @@ export default function(ast, logger) {
           return;
         }
 
-        return createForOf(matches);
+        return withComments(node, createForOf(matches));
       }
 
       if (node.type === 'ForStatement') {
@@ -34,6 +35,12 @@ function indexUsedInBody({body, index}) {
   return traverser.find(removeFirstBodyElement(body), (node, parent) => {
     return isEqualAst(node, index) && isReference(node, parent);
   });
+}
+
+function withComments(node, forOf) {
+  copyComments({from: node, to: forOf});
+  copyComments({from: node.body.body[0], to: forOf});
+  return forOf;
 }
 
 function createForOf({item, itemKind, array, body}) {
