@@ -7,7 +7,6 @@ const transformsDocs = `
   Safe transforms:
 
     + arrow .......... callback to arrow function
-    + let ............ var to let/const
     + for-of ......... for loop to for-of loop
     + arg-spread ..... use of apply() to spread operator
     + obj-method ..... function values in objects to methods
@@ -19,6 +18,7 @@ const transformsDocs = `
 
   Unsafe transforms:
 
+    + let ............ var to let/const
     + class .......... prototype assignments to class declaration
     + template ....... string concatenation to template string
     + default-param .. use of || to default parameters

@@ -59,17 +59,6 @@ The resulting code should be almost 100% equivalent of the original code.
     - [x] converts immediate return `{ return x; }` to `=> x`
     - [ ] does not remove `that = this` assignments
     - [ ] BUG [fails with immediately returning functions that have methods invoked][105]
-- [x] **let** - `var` to `let`/`const`
-    - [x] never modified variables are converted to `const`
-    - [x] properly recognizes block-scoping
-    - [x] splits single var declaration to multiple `let`/`const` declarations if needed
-    - [x] recognizes vars defined/assigned using destructuring
-    - [x] vars that conflict with block-scoping are not converted
-    - [x] repeated declarations of the same var are not converted
-    - [x] existing `let`/`const` are not converted
-    - [ ] BUG [fails with repeated variable definitions that use destructuring][131]
-    - [ ] BUG [fails with closure over a loop variable][145]
-    - [ ] BUG [fails when function closes over variable declared after function is called][168]
 - [x] **for-of** - for loop to for-of loop
     - [x] uses name `item` for loop variable when loop body begins with `var item = array[i];`
     - [ ] [does not work when no such alias defined at the start of loop body][166]
@@ -107,9 +96,20 @@ The resulting code should be almost 100% equivalent of the original code.
 ### Unsafe transforms
 
 These transforms should be applied with caution.
-They use heuristics to detect common patterns that can be expressed with new syntax.
-There are no guarantees that the resulting code is equivalent of the original code.
+They either use heuristics which can't guarantee that the resulting code is equivalent of the original code,
+or they have significant bugs which can result in breaking your code.
 
+- [x] **let** - `var` to `let`/`const`
+    - [x] never modified variables are converted to `const`
+    - [x] properly recognizes block-scoping
+    - [x] splits single var declaration to multiple `let`/`const` declarations if needed
+    - [x] recognizes vars defined/assigned using destructuring
+    - [x] vars that conflict with block-scoping are not converted
+    - [x] repeated declarations of the same var are not converted
+    - [x] existing `let`/`const` are not converted
+    - [ ] BUG [fails with repeated variable definitions that use destructuring][131]
+    - [ ] BUG [fails with closure over a loop variable][145]
+    - [ ] BUG [fails when function closes over variable declared after function is called][168]
 - [x] **class** - function/prototypes to classes
     - [x] recognizes `Foo.prototype.method = function(){ ... };`
     - [x] recognizes `Foo.prototype = { ...methods... };`
