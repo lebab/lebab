@@ -69,6 +69,7 @@ The resulting code should be almost 100% equivalent of the original code.
     - [x] existing `let`/`const` are not converted
     - [ ] BUG [fails with repeated variable definitions that use destructuring][131]
     - [ ] BUG [fails with closure over a loop variable][145]
+    - [ ] BUG [fails when function closes over variable declared after function is called][168]
 - [x] **for-of** - for loop to for-of loop
     - [x] uses name `item` for loop variable when loop body begins with `var item = array[i];`
     - [ ] [does not work when no such alias defined at the start of loop body][166]
@@ -177,3 +178,4 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [131]: https://github.com/mohebifar/lebab/issues/131
 [158]: https://github.com/mohebifar/lebab/issues/158
 [166]: https://github.com/mohebifar/lebab/issues/166
+[168]: https://github.com/mohebifar/lebab/issues/168
