@@ -14,7 +14,7 @@ const transformsDocs = `
     + obj-shorthand .. {foo: foo} to {foo}
     + no-strict ...... remove "use strict" directives
     + commonjs ....... CommonJS module loading to import/export
-    + exponent ....... Math.pow() to ** operator (ES2016)
+    + exponent ....... Math.pow() to ** operator (ES7)
     + multi-var ...... single var x,y; declaration to var x; var y; (refactor)
 
   Unsafe transforms:

@@ -6,7 +6,7 @@
 
 ![Lebab](https://raw.githubusercontent.com/mohebifar/lebab-logo/master/logo.png)
 
-**Lebab** transpiles your ES5 code to ES2015/ES2016.
+**Lebab** transpiles your ES5 code to ES6/ES7.
 It does exactly the opposite of what [Babel](https://babeljs.io/) does.
 If you want to understand what Lebab exactly does, [try the live demo](http://lebab.io/try-it).
 
@@ -97,8 +97,8 @@ The resulting code should be almost 100% equivalent of the original code.
     - [x] converts `exports.foo = bar` to `export {bar as foo}`
     - [ ] does not check if named export conflicts with existing variable names
     - [ ] does not recognize imports/exports inside nested blocks/functions
-- [x] **exponent** - `Math.pow()` to `**` operator (**ES2016**)
-    - [x] Full support for all new syntax from ES2016 (ES7)
+- [x] **exponent** - `Math.pow()` to `**` operator (**ES7**)
+    - [x] Full support for all new syntax from ES7
 - [x] **multi-var** - single `var x,y;` declaration to multiple `var x; var y;` (**refactor**)
     - [x] Not related to any new syntax feature
       [x] EXPERIMENT [to see if Lebab could be a more generic refactoring helper][158]
