@@ -87,6 +87,32 @@ describe('For loops to for-of', () => {
       );
     });
 
+    it('should transform when index identifier used as object literal key', () => {
+      expectTransform(
+        'for (let i=0; i < array.length; i++) {\n' +
+        '  let item = array[i];\n' +
+        '  console.log(item, {i: 123});\n' +
+        '}'
+      ).toReturn(
+        'for (let item of array) {\n' +
+        '  console.log(item, {i: 123});\n' +
+        '}'
+      );
+    });
+
+    it('should transform when index identifier used as object property', () => {
+      expectTransform(
+        'for (let i=0; i < array.length; i++) {\n' +
+        '  let item = array[i];\n' +
+        '  console.log(item.i);\n' +
+        '}'
+      ).toReturn(
+        'for (let item of array) {\n' +
+        '  console.log(item.i);\n' +
+        '}'
+      );
+    });
+
     describe('should not transform', () => {
       it('when index variable used in loop body', () => {
         expectNoChange(

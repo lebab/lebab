@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import traverser from '../../traverser';
 import isEqualAst from '../../utils/is-equal-ast';
+import {isReference} from '../../utils/variable-type';
 import matchAliasedForLoop from './match-aliased-for-loop';
 
 export default function(ast, logger) {
@@ -30,7 +31,9 @@ export default function(ast, logger) {
 }
 
 function indexUsedInBody({body, index}) {
-  return traverser.find(removeFirstBodyElement(body), (node) => isEqualAst(node, index));
+  return traverser.find(removeFirstBodyElement(body), (node, parent) => {
+    return isEqualAst(node, index) && isReference(node, parent);
+  });
 }
 
 function createForOf({item, itemKind, array, body}) {

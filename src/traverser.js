@@ -58,15 +58,15 @@ export default {
   /**
    * Searches in AST tree for node which satisfies the predicate.
    * @param  {Object} tree
-   * @param  {Function} predicate
+   * @param  {Function} predicate Called with `node` and `parent`
    * @return {Object} The found node or undefined when not found
    */
   find(tree, predicate) {
     let found;
 
     this.traverse(tree, {
-      enter(node) {
-        if (predicate(node)) {
+      enter(node, parent) {
+        if (predicate(node, parent)) {
           found = node;
           return estraverse.VisitorOption.Break;
         }
