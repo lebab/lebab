@@ -100,7 +100,8 @@ The resulting code should be almost 100% equivalent of the original code.
 - [x] **exponent** - `Math.pow()` to `**` operator (**ES2016**)
     - [x] Full support for all new syntax from ES2016 (ES7)
 - [x] **multi-var** - single `var x,y;` declaration to multiple `var x; var y;` (**refactor**)
-    - [x] Not related to any new ECMAScript feature, just a refactoring helper
+    - [x] Not related to any new syntax feature
+      [x] EXPERIMENT [to see if Lebab could be a more generic refactoring helper][158]
 
 ### Unsafe transforms
 
@@ -174,4 +175,5 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [125]: https://github.com/mohebifar/lebab/issues/125
 [127]: https://github.com/mohebifar/lebab/issues/127
 [131]: https://github.com/mohebifar/lebab/issues/131
+[158]: https://github.com/mohebifar/lebab/issues/158
 [166]: https://github.com/mohebifar/lebab/issues/166
