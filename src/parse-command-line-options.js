@@ -14,20 +14,14 @@ const transformsDocs = `
     + obj-shorthand .. {foo: foo} to {foo}
     + no-strict ...... remove "use strict" directives
     + commonjs ....... CommonJS module loading to import/export
+    + exponent ....... Math.pow() to ** operator (ES2016)
+    + multi-var ...... single var x,y; declaration to var x; var y; (refactor)
 
   Unsafe transforms:
 
     + class .......... prototype assignments to class declaration
     + template ....... string concatenation to template string
     + default-param .. use of || to default parameters
-
-  ES7 transforms:
-
-    + exponent ....... Math.pow() to ** operator
-
-  Other transforms:
-
-    + multi-var ...... single var x,y; declaration to var x; var y;
 `;
 
 program.usage('-t <transform> <file>');

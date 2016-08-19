@@ -49,7 +49,7 @@ apply it for your code and inspect the diff carefully.
 
 These transforms can be applied with relatively high confidence.
 They use pretty straight-forward and strict rules for changing the code.
-The resulting ES2015 code should be almost 100% equivalent of the original code.
+The resulting code should be almost 100% equivalent of the original code.
 
 - [x] **arrow** - callbacks to arrow functions
     - [x] Converts bound functions like `function(){}.bind(this)`
@@ -97,11 +97,15 @@ The resulting ES2015 code should be almost 100% equivalent of the original code.
     - [x] converts `exports.foo = bar` to `export {bar as foo}`
     - [ ] does not check if named export conflicts with existing variable names
     - [ ] does not recognize imports/exports inside nested blocks/functions
+- [x] **exponent** - `Math.pow()` to `**` operator (**ES2016**)
+    - [x] Full support for all new syntax from ES2016 (ES7)
+- [x] **multi-var** - single `var x,y;` declaration to multiple `var x; var y;` (**refactor**)
+    - [x] Not related to any new ECMAScript feature, just a refactoring helper
 
 ### Unsafe transforms
 
 These transforms should be applied with caution.
-They use heuristics to detect common patterns that can be expressed with ES2015 syntax.
+They use heuristics to detect common patterns that can be expressed with new syntax.
 There are no guarantees that the resulting code is equivalent of the original code.
 
 - [x] **class** - function/prototypes to classes
@@ -122,18 +126,6 @@ There are no guarantees that the resulting code is equivalent of the original co
     - [x] recognizes `a = a === undefined ? 2 : a`
     - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
     - [ ] LIMITATION [transforming `a = a || 2` does not produce strictly equivalent code][125]
-
-### ES7 transforms
-
-A single transform for the single ES7 syntax feature.
-
-- [x] **exponent** - `Math.pow()` to `**` operator
-
-### Other transforms
-
-Other automated refactorings (not converting between ECMAScript versions).
-
-- [x] **multi-var** - single `var x,y;` declaration to `var x; var y;`
 
 
 ## Programming API
