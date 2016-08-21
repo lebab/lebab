@@ -1,4 +1,3 @@
-var Transformer = require('./lib/transformer');
 var builtinTransforms = require('./lib/builtin-transforms');
 
 /**
@@ -12,6 +11,5 @@ var builtinTransforms = require('./lib/builtin-transforms');
  * @return {Object} An object with code and warnings props
  */
 exports.transform = function(code, transformNames) {
-  var transforms = transformNames.map(name => builtinTransforms.get(name));
-  return new Transformer(transforms).run(code);
+  return builtinTransforms.createTransformer(transformNames).run(code);
 };

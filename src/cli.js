@@ -1,6 +1,5 @@
 import glob from 'glob';
 import parseCommandLineOptions from './parse-command-line-options';
-import Transformer from './transformer';
 import builtinTransforms from './builtin-transforms';
 import io from './io';
 
@@ -20,8 +19,7 @@ export default class Cli {
       process.exit(2);
     }
 
-    const transforms = this.options.transforms.map(name => builtinTransforms.get(name));
-    this.transformer = new Transformer(transforms);
+    this.transformer = builtinTransforms.createTransformer(this.options.transforms);
   }
 
   /**

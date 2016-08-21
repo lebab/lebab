@@ -1,3 +1,5 @@
+import Transformer from './transformer';
+
 import classTransform from './transform/class';
 import templateTransform from './transform/template';
 import arrowTransform from './transform/arrow';
@@ -32,6 +34,16 @@ const transformsMap = {
  * Central place for accessing all the builtin transforms
  */
 export default {
+  /**
+   * Factori method for creating a Transformer
+   * by just specifying the names of the transforms.
+   * @param  {String[]} transformNames
+   * @return {Transformer}
+   */
+  createTransformer(transformNames) {
+    return new Transformer(transformNames.map(name => this.get(name)));
+  },
+
   /**
    * Maps transform name to the actual transform function
    * @param  {String} name

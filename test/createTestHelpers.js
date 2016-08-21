@@ -1,5 +1,4 @@
 import {expect} from 'chai';
-import Transformer from './../src/transformer';
 import builtinTransforms from './../src/builtin-transforms';
 
 /**
@@ -8,7 +7,7 @@ import builtinTransforms from './../src/builtin-transforms';
  * @return {Object} functions expectTransform() and expectNoChange()
  */
 export default function(transformNames) {
-  const transformer = new Transformer(transformNames.map(name => builtinTransforms.get(name)));
+  const transformer = builtinTransforms.createTransformer(transformNames);
 
   // Generic transformation asserter, to be called like:
   //
