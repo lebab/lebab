@@ -157,7 +157,7 @@ Most of the time there won't be any warnings and the array will be empty.
 Alternatively one can use Lebab through plugins in the following editors:
 
 - [Atom](https://github.com/ga2mer/atom-lebab)
-- [Sublime](https://github.com/inkless/lebab-sublime) (does not work with Lebab 2.0)
+- [Sublime](https://github.com/inkless/lebab-sublime)
 
 
 ## What's next?
