@@ -2,37 +2,7 @@ import 'babel-polyfill';
 import recast from 'recast';
 import parser from './parser';
 import Logger from './logger';
-
-// Transforms
-import classTransform from './transform/class';
-import templateTransform from './transform/template';
-import arrowTransform from './transform/arrow';
-import letTransform from './transform/let';
-import defaultParamTransform from './transform/default-param';
-import argSpreadTransform from './transform/arg-spread';
-import objMethodTransform from './transform/obj-method';
-import objShorthandTransform from './transform/obj-shorthand';
-import noStrictTransform from './transform/no-strict';
-import commonjsTransform from './transform/commonjs';
-import exponentTransform from './transform/exponent';
-import multiVarTransform from './transform/multi-var';
-import forOfTransform from './transform/for-of';
-
-const transformsMap = {
-  'class': classTransform,
-  'template': templateTransform,
-  'arrow': arrowTransform,
-  'let': letTransform,
-  'default-param': defaultParamTransform,
-  'arg-spread': argSpreadTransform,
-  'obj-method': objMethodTransform,
-  'obj-shorthand': objShorthandTransform,
-  'no-strict': noStrictTransform,
-  'commonjs': commonjsTransform,
-  'exponent': exponentTransform,
-  'multi-var': multiVarTransform,
-  'for-of': forOfTransform,
-};
+import builtinTransforms from './builtin-transforms';
 
 /**
  * Runs transforms on code.
@@ -42,7 +12,7 @@ export default class Transformer {
    * @param {String[]} transformNames List of transforms to enable
    */
   constructor(transformNames = []) {
-    this.transforms = transformNames.map(name => transformsMap[name]);
+    this.transforms = transformNames.map(name => builtinTransforms.get(name));
   }
 
   /**
