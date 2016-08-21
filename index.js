@@ -1,4 +1,4 @@
-var Transformer = require('./lib/transformer');
+var builtinTransforms = require('./lib/builtin-transforms');
 
 /**
  * Exposes API similar to Babel:
@@ -11,5 +11,5 @@ var Transformer = require('./lib/transformer');
  * @return {Object} An object with code and warnings props
  */
 exports.transform = function(code, transformNames) {
-  return new Transformer(transformNames).run(code);
+  return builtinTransforms.createTransformer(transformNames).run(code);
 };
