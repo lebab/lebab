@@ -2,17 +2,16 @@ import 'babel-polyfill';
 import recast from 'recast';
 import parser from './parser';
 import Logger from './logger';
-import builtinTransforms from './builtin-transforms';
 
 /**
  * Runs transforms on code.
  */
 export default class Transformer {
   /**
-   * @param {String[]} transformNames List of transforms to enable
+   * @param {Function[]} transforms List of transforms to perform
    */
-  constructor(transformNames = []) {
-    this.transforms = transformNames.map(name => builtinTransforms.get(name));
+  constructor(transforms = []) {
+    this.transforms = transforms;
   }
 
   /**
