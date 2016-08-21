@@ -35,7 +35,7 @@ export default {
   /**
    * Maps transform name to the actual transform function
    * @param  {String} name
-   * @return {Function}
+   * @return {Function} the transform or undefined when no such transform
    */
   get(name) {
     return transformsMap[name];

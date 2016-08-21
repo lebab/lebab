@@ -2,6 +2,7 @@ import program from 'commander';
 import pkg from '../package.json';
 import fs from 'fs';
 import path from 'path';
+import builtinTransforms from './builtin-transforms';
 
 const transformsDocs = `
   Safe transforms:
@@ -93,24 +94,8 @@ ${transformsDocs}`;
 }
 
 function validateTransforms(transformNames) {
-  const availableTransforms = {
-    'class': true,
-    'template': true,
-    'arrow': true,
-    'let': true,
-    'default-param': true,
-    'arg-spread': true,
-    'obj-method': true,
-    'obj-shorthand': true,
-    'no-strict': true,
-    'commonjs': true,
-    'exponent': true,
-    'multi-var': true,
-    'for-of': true,
-  };
-
   transformNames.forEach(name => {
-    if (!availableTransforms[name]) {
+    if (!builtinTransforms.get(name)) {
       throw `Unknown transform "${name}".`;
     }
   });
