@@ -112,6 +112,24 @@ describe('indexOf() to includes()', () => {
     );
   });
 
+  // Reverse order of operands
+
+  it('should transform reversed order: -1 !== indexOf()', () => {
+    expectTransform(
+      'if (-1 !== array.indexOf(foo)) { /* */ }'
+    ).toReturn(
+      'if (array.includes(foo)) { /* */ }'
+    );
+  });
+
+  it('should transform reversed order: -1 === indexOf()', () => {
+    expectTransform(
+      'if (-1 === array.indexOf(foo)) { /* */ }'
+    ).toReturn(
+      'if (!array.includes(foo)) { /* */ }'
+    );
+  });
+
   // Additional checks
 
   it('should allow complex array expression', () => {

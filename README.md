@@ -132,7 +132,8 @@ or they have significant bugs which can result in breaking your code.
     - [x] works for both strings and arrays
     - [x] converts `!== -1` to `array.includes(foo)`
     - [x] converts `=== -1` to `!array.includes(foo)`
-    - [x] recognizes all kinds of comparisons `>= 0`, `> -1`, etc.
+    - [x] recognizes all kinds of comparisons `>= 0`, `> -1`, etc
+    - [x] recognizes both `indexOf() != -1` and `-1 != indexOf()`
     - [ ] LIMITATION does not detect that indexOf() is called on an actual Array or String.
 
 

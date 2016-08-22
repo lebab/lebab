@@ -4,7 +4,7 @@ import {matchesAst, matchesLength, extract} from '../utils/matchesAst';
 export default function(ast) {
   traverser.replace(ast, {
     enter(node) {
-      const matches = matchesIndexOf(node);
+      const matches = matchesIndexOf(node) || matchesIndexOfReversed(node);
       if (matches && isIncludesComparison(matches)) {
         return createIncludes(matches);
       }
@@ -40,27 +40,6 @@ function isNotIncludesComparison({operator, index}) {
   }
 }
 
-var matchesIndexOf = matchesAst({
-  type: 'BinaryExpression',
-  operator: extract('operator'),
-  left: {
-    type: 'CallExpression',
-    callee: {
-      type: 'MemberExpression',
-      computed: false,
-      object: extract('object'),
-      property: {
-        type: 'Identifier',
-        name: 'indexOf'
-      }
-    },
-    arguments: matchesLength([
-      extract('searchElement')
-    ])
-  },
-  right: extract('index', (v) => isMinusOne(v) || isZero(v))
-});
-
 var isMinusOne = matchesAst({
   type: 'UnaryExpression',
   operator: '-',
@@ -74,6 +53,38 @@ var isMinusOne = matchesAst({
 var isZero = matchesAst({
   type: 'Literal',
   value: 0
+});
+
+var matchesCallIndexOf = matchesAst({
+  type: 'CallExpression',
+  callee: {
+    type: 'MemberExpression',
+    computed: false,
+    object: extract('object'),
+    property: {
+      type: 'Identifier',
+      name: 'indexOf'
+    }
+  },
+  arguments: matchesLength([
+    extract('searchElement')
+  ])
+});
+
+var matchesIndex = extract('index', (v) => isMinusOne(v) || isZero(v));
+
+var matchesIndexOf = matchesAst({
+  type: 'BinaryExpression',
+  operator: extract('operator'),
+  left: matchesCallIndexOf,
+  right: matchesIndex,
+});
+
+var matchesIndexOfReversed = matchesAst({
+  type: 'BinaryExpression',
+  operator: extract('operator'),
+  left: matchesIndex,
+  right: matchesCallIndexOf,
 });
 
 function createNot(argument) {
