@@ -1,7 +1,7 @@
 import traverser from '../traverser';
-import TemplateLiteral from './../syntax/template-literal';
-import TemplateElement from './../syntax/template-element';
-import isString from './../utils/is-string';
+import TemplateLiteral from './../syntax/TemplateLiteral';
+import TemplateElement from './../syntax/TemplateElement';
+import isString from './../utils/isString';
 import _ from 'lodash';
 
 export default function(ast) {

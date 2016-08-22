@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import builtinTransforms from './../src/builtin-transforms';
+import builtinTransforms from './../src/builtinTransforms';
 
 /**
  * Generates functions that are used in all transform-tests.

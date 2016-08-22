@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import traverser from '../traverser';
-import * as functionType from '../utils/function-type';
-import * as variableType from '../utils/variable-type';
+import * as functionType from '../utils/functionType';
+import * as variableType from '../utils/variableType';
 import * as destructuring from '../utils/destructuring.js';
-import multiReplaceStatement from '../utils/multi-replace-statement';
-import ScopeManager from '../scope/scope-manager';
-import VariableMarker from '../scope/variable-marker';
-import FunctionHoister from '../scope/function-hoister';
-import VariableDeclaration from '../syntax/variable-declaration';
+import multiReplaceStatement from '../utils/multiReplaceStatement';
+import ScopeManager from '../scope/ScopeManager';
+import VariableMarker from '../scope/VariableMarker';
+import FunctionHoister from '../scope/FunctionHoister';
+import VariableDeclaration from '../syntax/VariableDeclaration';
 
 let logger;
 let scopeManager;

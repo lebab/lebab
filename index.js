@@ -1,4 +1,4 @@
-var builtinTransforms = require('./lib/builtin-transforms');
+var builtinTransforms = require('./lib/builtinTransforms');
 
 /**
  * Exposes API similar to Babel:
