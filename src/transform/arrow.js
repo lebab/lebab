@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import traverser from '../traverser';
-import ArrowFunctionExpression from '../syntax/arrow-function-expression';
-import {matchesAst, extract} from '../utils/matches-ast';
-import copyComments from '../utils/copy-comments';
+import ArrowFunctionExpression from '../syntax/ArrowFunctionExpression';
+import {matchesAst, extract} from '../utils/matchesAst';
+import copyComments from '../utils/copyComments';
 
 export default function(ast, logger) {
   traverser.replace(ast, {

@@ -1,4 +1,4 @@
-import matchesAst from '../utils/matches-ast';
+import matchesAst from '../utils/matchesAst';
 import traverser from '../traverser';
 
 const isMathPow = matchesAst({
