@@ -128,6 +128,12 @@ or they have significant bugs which can result in breaking your code.
     - [x] recognizes `a = a === undefined ? 2 : a`
     - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
     - [ ] LIMITATION [transforming `a = a || 2` does not produce strictly equivalent code][125]
+- [x] **includes** - `array.indexOf(foo) !== -1` to `array.includes(foo)` (**ES7**)
+    - [x] works for both strings and arrays
+    - [x] converts `!== -1` to `array.includes(foo)`
+    - [x] converts `=== -1` to `!array.includes(foo)`
+    - [x] recognizes all kinds of comparisons `>= 0`, `> -1`, etc.
+    - [ ] LIMITATION does not detect that indexOf() is called on an actual Array or String.
 
 
 ## Programming API
