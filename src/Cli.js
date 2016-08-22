@@ -1,5 +1,5 @@
 import glob from 'glob';
-import parseCommandLineOptions from './parseCommandLineOptions';
+import parseOptions from './parseOptions';
 import builtinTransforms from './builtinTransforms';
 import io from './io';
 
@@ -12,7 +12,7 @@ export default class Cli {
    */
   constructor(argv) {
     try {
-      this.options = parseCommandLineOptions(argv);
+      this.options = parseOptions(argv);
     }
     catch (error) {
       console.error(error); // eslint-disable-line no-console

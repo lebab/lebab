@@ -1,9 +1,9 @@
 import {expect} from 'chai';
 import commander from 'commander';
-import parseCommandLineOptions from './../src/parseCommandLineOptions';
+import parseOptions from './../src/parseOptions';
 
 function parse(argv) {
-  return parseCommandLineOptions(['node', 'script.js'].concat(argv));
+  return parseOptions(['node', 'script.js'].concat(argv));
 }
 
 describe('Command Line Interface', () => {
