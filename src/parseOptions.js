@@ -23,6 +23,7 @@ const transformsDocs = `
     + class .......... prototype assignments to class declaration
     + template ....... string concatenation to template string
     + default-param .. use of || to default parameters
+    + includes ....... indexOf() != -1 to includes() (ES7)
 `;
 
 program.usage('-t <transform> <file>');
