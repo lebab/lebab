@@ -130,6 +130,36 @@ describe('indexOf() to includes()', () => {
     );
   });
 
+  it('should transform reversed order: -1 < indexOf()', () => {
+    expectTransform(
+      'if (-1 < array.indexOf(foo)) { /* */ }'
+    ).toReturn(
+      'if (array.includes(foo)) { /* */ }'
+    );
+  });
+
+  it('should transform reversed order: 0 <= indexOf()', () => {
+    expectTransform(
+      'if (0 <= array.indexOf(foo)) { /* */ }'
+    ).toReturn(
+      'if (array.includes(foo)) { /* */ }'
+    );
+  });
+
+  it('should transform reversed order: 0 > indexOf()', () => {
+    expectTransform(
+      'if (0 > array.indexOf(foo)) { /* */ }'
+    ).toReturn(
+      'if (!array.includes(foo)) { /* */ }'
+    );
+  });
+
+  it('should NOT transform reversed order: 0 >= indexOf()', () => {
+    expectNoChange(
+      'if (0 >= array.indexOf(foo)) { /* */ }'
+    );
+  });
+
   // Additional checks
 
   it('should allow complex array expression', () => {

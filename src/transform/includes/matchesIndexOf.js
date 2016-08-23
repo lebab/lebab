@@ -57,6 +57,21 @@ const matchesIndexOfReversed = matchesAst({
   right: matchesCallIndexOf,
 });
 
+// Reverses the direction of comparison operator
+function reverseOperator(operator) {
+  return operator.replace(/[><]/, (op) => op === '>' ? '<' : '>');
+}
+
+function reverseOperatorField(matches) {
+  if (!matches) {
+    return false;
+  }
+
+  return Object.assign({}, matches, {
+    operator: reverseOperator(matches.operator)
+  });
+}
+
 /**
  * Matches:
  *
@@ -77,5 +92,5 @@ const matchesIndexOfReversed = matchesAst({
  * @return {Object}
  */
 export default function(node) {
-  return matchesIndexOfNormal(node) || matchesIndexOfReversed(node);
+  return matchesIndexOfNormal(node) || reverseOperatorField(matchesIndexOfReversed(node));
 }
