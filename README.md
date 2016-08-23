@@ -91,7 +91,7 @@ The resulting code should be almost 100% equivalent of the original code.
     - [x] Full support for all new syntax from ES7
 - [x] **multi-var** - single `var x,y;` declaration to multiple `var x; var y;` (**refactor**)
     - [x] Not related to any new syntax feature
-      [x] EXPERIMENT [to see if Lebab could be a more generic refactoring helper][158]
+    - [x] EXPERIMENT [to see if Lebab could be a more generic refactoring helper][158]
 
 ### Unsafe transforms
 
