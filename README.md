@@ -183,6 +183,7 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [125]: https://github.com/mohebifar/lebab/issues/125
 [127]: https://github.com/mohebifar/lebab/issues/127
 [131]: https://github.com/mohebifar/lebab/issues/131
+[145]: https://github.com/mohebifar/lebab/issues/145
 [158]: https://github.com/mohebifar/lebab/issues/158
 [166]: https://github.com/mohebifar/lebab/issues/166
 [168]: https://github.com/mohebifar/lebab/issues/168
