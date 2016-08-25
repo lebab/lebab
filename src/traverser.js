@@ -3,19 +3,26 @@ import estraverse from 'estraverse';
 
 // JSX AST types, as documented in:
 // https://github.com/facebook/jsx/blob/master/AST.md
-const jsxExtensions = {
-  keys: {
-    JSXIdentifier: [],
-    JSXMemberExpression: ['object', 'property'],
-    JSXNamespacedName: ['namespace', 'name'],
-    JSXEmptyExpression: [],
-    JSXExpressionContainer: ['expression'],
-    JSXOpeningElement: ['name', 'attributes'],
-    JSXClosingElement: ['name'],
-    JSXAttribute: ['name', 'value'],
-    JSXSpreadAttribute: ['argument'],
-    JSXElement: ['openingElement', 'closingElement', 'children'],
-  }
+const jsxExtensionKeys = {
+  JSXIdentifier: [],
+  JSXMemberExpression: ['object', 'property'],
+  JSXNamespacedName: ['namespace', 'name'],
+  JSXEmptyExpression: [],
+  JSXExpressionContainer: ['expression'],
+  JSXOpeningElement: ['name', 'attributes'],
+  JSXClosingElement: ['name'],
+  JSXAttribute: ['name', 'value'],
+  JSXSpreadAttribute: ['argument'],
+  JSXElement: ['openingElement', 'closingElement', 'children'],
+};
+
+const experimentalExtensionKeys = {
+  ExperimentalRestProperty: ['argument'],
+  ExperimentalSpreadProperty: ['argument'],
+};
+
+const extensions = {
+  keys: _.assign({}, jsxExtensionKeys, experimentalExtensionKeys),
 };
 
 /**
@@ -33,7 +40,7 @@ export default {
    * @return {Object} The transformed tree
    */
   traverse(tree, cfg) {
-    return estraverse.traverse(tree, _.assign(cfg, jsxExtensions));
+    return estraverse.traverse(tree, _.assign(cfg, extensions));
   },
 
   /**
@@ -43,7 +50,7 @@ export default {
    * @return {Object} The transformed tree
    */
   replace(tree, cfg) {
-    return estraverse.replace(tree, _.assign(cfg, jsxExtensions));
+    return estraverse.replace(tree, _.assign(cfg, extensions));
   },
 
   /**
