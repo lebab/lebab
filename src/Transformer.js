@@ -37,7 +37,7 @@ export default class Transformer {
         transformer(ast.program, logger);
       });
 
-      return recast.print(ast).code;
+      return recast.print(ast, {lineTerminator: '\n'}).code;
     });
   }
 
