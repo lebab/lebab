@@ -62,6 +62,19 @@ describe('Arrow functions', () => {
     expectTransform(script).toReturn('foo((x, ...xs) => { });');
   });
 
+  it('should preserve code after return statement', () => {
+    expectTransform(
+      'a(function() {\n' +
+      '  return func;\n' +
+      '  function func() {}\n' +
+      '});'
+    ).toReturn(
+      'a(() => {\n' +
+      '  return func;\n' +
+      '  function func() {}\n' +
+      '});'
+    );
+  });
 
   it('should not convert function declarations', () => {
     expectNoChange('function foo() {};');
