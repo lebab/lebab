@@ -95,7 +95,9 @@ describe('Multi-var', () => {
     it('should not change anything', () => {
       expectNoChange(
         'for (var i=0,j=0; i<j; i++) j++;'
-      );
+      ).withWarnings([
+        {line: 1, msg: 'Unable to replace a multi var statement in a ForStatement', type: 'multi-var'}
+      ]);
     });
   });
 });
