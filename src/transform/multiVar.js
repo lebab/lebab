@@ -2,7 +2,10 @@ import traverser from '../traverser';
 import multiReplaceStatement from '../utils/multiReplaceStatement';
 import VariableDeclaration from '../syntax/VariableDeclaration';
 
-export default function(ast) {
+let logger;
+
+export default function(ast, loggerInstance) {
+  logger = loggerInstance;
   traverser.traverse(ast, {
     enter(node, parent) {
       if (node.type === 'VariableDeclaration' && node.declarations.length > 1) {
@@ -19,10 +22,15 @@ function splitDeclaration(node, parent) {
     return new VariableDeclaration(node.kind, [declarator]);
   });
 
-  multiReplaceStatement({
-    parent,
-    node,
-    replacements: declNodes,
-    preserveComments: true,
-  });
+  try {
+    multiReplaceStatement({
+      parent,
+      node,
+      replacements: declNodes,
+      preserveComments: true,
+    });
+  }
+  catch (e) {
+    logger.warn(parent, `Unable to replace a multi var statement in a ${parent.type}`, 'multi-var');
+  }
 }
