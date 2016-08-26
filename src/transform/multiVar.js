@@ -2,14 +2,11 @@ import traverser from '../traverser';
 import multiReplaceStatement from '../utils/multiReplaceStatement';
 import VariableDeclaration from '../syntax/VariableDeclaration';
 
-let logger;
-
-export default function(ast, loggerInstance) {
-  logger = loggerInstance;
+export default function(ast, logger) {
   traverser.traverse(ast, {
     enter(node, parent) {
       if (node.type === 'VariableDeclaration' && node.declarations.length > 1) {
-        splitDeclaration(node, parent);
+        splitDeclaration(node, parent, logger);
 
         return traverser.VisitorOption.Skip;
       }
@@ -17,7 +14,7 @@ export default function(ast, loggerInstance) {
   });
 }
 
-function splitDeclaration(node, parent) {
+function splitDeclaration(node, parent, logger) {
   const declNodes = node.declarations.map(declarator => {
     return new VariableDeclaration(node.kind, [declarator]);
   });
