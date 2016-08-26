@@ -91,12 +91,37 @@ describe('Multi-var', () => {
     });
   });
 
-  describe('in a for loop', () => {
-    it('should not change anything', () => {
+  describe('inside case statement', () => {
+    it('should split into separate declarations', () => {
+      expectTransform(
+        'switch (nr) {\n' +
+        '  case 1:\n' +
+        '    var a=1, b=2;\n' +
+        '}'
+      ).toReturn(
+        'switch (nr) {\n' +
+        '  case 1:\n' +
+        '    var a=1;\n' +
+        '    var b=2;\n' +
+        '}'
+      );
+    });
+  });
+
+  describe('when var can not be split', () => {
+    it('should not split in for-loop head', () => {
       expectNoChange(
         'for (var i=0,j=0; i<j; i++) j++;'
       ).withWarnings([
         {line: 1, msg: 'Unable to replace a multi var statement in a ForStatement', type: 'multi-var'}
+      ]);
+    });
+
+    it('should not split when not in block statement', () => {
+      expectNoChange(
+        'if (true) var a=1, b=2;'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to replace a multi var statement in a IfStatement', type: 'multi-var'}
       ]);
     });
   });
