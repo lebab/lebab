@@ -1,5 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
-const {expectTransform} = createTestHelpers(['multi-var']);
+const {expectTransform, expectNoChange} = createTestHelpers(['multi-var']);
 
 describe('Multi-var', () => {
   describe('with only one variable per declaration', () => {
@@ -87,6 +87,14 @@ describe('Multi-var', () => {
       ).toReturn(
         'var x;\n' +
         'var /* hello */y=100;'
+      );
+    });
+  });
+
+  describe('in a for loop', () => {
+    it('should not change anything', () => {
+      expectNoChange(
+        'for (var i=0,j=0; i<j; i++) j++;'
       );
     });
   });
