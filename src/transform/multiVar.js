@@ -31,6 +31,6 @@ function splitDeclaration(node, parent) {
     });
   }
   catch (e) {
-    logger.warn(parent, `Unable to replace a multi var statement in a ${parent.type}`, 'multi-var');
+    logger.warn(parent, `Unable to split var statement in a ${parent.type}`, 'multi-var');
   }
 }

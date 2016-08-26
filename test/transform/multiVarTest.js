@@ -113,7 +113,7 @@ describe('Multi-var', () => {
       expectNoChange(
         'for (var i=0,j=0; i<j; i++) j++;'
       ).withWarnings([
-        {line: 1, msg: 'Unable to replace a multi var statement in a ForStatement', type: 'multi-var'}
+        {line: 1, msg: 'Unable to split var statement in a ForStatement', type: 'multi-var'}
       ]);
     });
 
@@ -121,7 +121,7 @@ describe('Multi-var', () => {
       expectNoChange(
         'if (true) var a=1, b=2;'
       ).withWarnings([
-        {line: 1, msg: 'Unable to replace a multi var statement in a IfStatement', type: 'multi-var'}
+        {line: 1, msg: 'Unable to split var statement in a IfStatement', type: 'multi-var'}
       ]);
     });
   });
