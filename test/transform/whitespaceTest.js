@@ -55,4 +55,42 @@ describe('Whitespace', () => {
       '}'
     );
   });
+
+  it('should preserve #! comment using CRLF', () => {
+    expectTransform(
+      '#!/usr/bin/env node\r\n' +
+      'var x = 42;'
+    ).toReturn(
+      '#!/usr/bin/env node\r\n' +
+      'const x = 42;'
+    );
+  });
+
+  it('should preserve CRLF line terminators', () => {
+    expectTransform(
+      'var f = function(x) {\r\n' +
+      '  if (x > 10)\r\n' +
+      '    return 42;\r\n' +
+      '};'
+    ).toReturn(
+      'const f = x => {\r\n' +
+      '  if (x > 10)\r\n' +
+      '    return 42;\r\n' +
+      '};'
+    );
+  });
+
+  it('should use LF in case of mixed line terminators', () => {
+    expectTransform(
+      'var f = function(x) {\n' +
+      '  if (x > 10)\r\n' +
+      '    return 42;\r\n' +
+      '};'
+    ).toReturn(
+      'const f = x => {\n' +
+      '  if (x > 10)\n' +
+      '    return 42;\n' +
+      '};'
+    );
+  });
 });

@@ -37,7 +37,9 @@ export default class Transformer {
         transformer(ast.program, logger);
       });
 
-      return recast.print(ast).code;
+      return recast.print(ast, {
+        lineTerminator: this.detectLineTerminator(code)
+      }).code;
     });
   }
 
@@ -47,5 +49,12 @@ export default class Transformer {
   ignoringHashBangComment(code, callback) {
     const [/* all */, hashBang, js] = code.match(/^(\s*#!.*?\r?\n|)([\s\S]*)$/);
     return hashBang + callback(js);
+  }
+
+  detectLineTerminator(code) {
+    const hasCRLF = /\r\n/.test(code);
+    const hasLF = /[^\r]\n/.test(code);
+
+    return (hasCRLF && !hasLF) ? '\r\n' : '\n';
   }
 }
