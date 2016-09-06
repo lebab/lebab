@@ -9,9 +9,11 @@ import Logger from './Logger';
 export default class Transformer {
   /**
    * @param {Function[]} transforms List of transforms to perform
+   * @param {String} [eol] Line endings to use in transformed code, defaults to OS default.
    */
-  constructor(transforms = []) {
+  constructor(transforms = [], eol = require('os').EOL) {
     this.transforms = transforms;
+    this.eol = eol;
   }
 
   /**
@@ -37,7 +39,7 @@ export default class Transformer {
         transformer(ast.program, logger);
       });
 
-      return recast.print(ast).code;
+      return recast.print(ast, {lineTerminator: this.eol}).code;
     });
   }
 
