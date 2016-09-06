@@ -33,6 +33,7 @@ program.option('-o, --out-file <file>', 'write output to a file');
 program.option('--replace <dir>', `in-place transform all *.js files in a directory
                          <dir> can also be a single file or a glob pattern`);
 program.option('-t, --transform <a,b,c>', 'one or more transformations to perform', v => v.split(','));
+program.option('--eol <cr|lf|crlf|auto>');
 
 /**
  * Parses and validates command line options from argv.
@@ -50,6 +51,7 @@ export default function parseCommandLineOptions(argv) {
     outFile: program.outFile,
     replace: getReplace(),
     transforms: getTransforms(),
+    eol: getEol(),
   };
 }
 
@@ -100,4 +102,24 @@ function validateTransforms(transformNames) {
       throw `Unknown transform "${name}".`;
     }
   });
+}
+
+function getEol() {
+  if (!program.eol) {
+    return;
+  }
+
+  switch (program.eol.toLowerCase()) {
+  case 'cr':
+    return '\r';
+
+  case 'lf':
+    return '\n';
+
+  case 'crlf':
+    return '\r\n';
+
+  default:
+    throw 'Invalid line terminator. Expected cr, lf or crlf';
+  }
 }
