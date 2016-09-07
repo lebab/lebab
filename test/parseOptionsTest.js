@@ -99,6 +99,6 @@ describe('Command Line Interface', () => {
     const options = parse(['-t', 'class', '--replace', 'lib/']);
     expect(options.inFile).to.equal(undefined);
     expect(options.outFile).to.equal(undefined);
-    expect(options.replace).to.equal('lib/**/*.js');
+    expect(options.replace).to.be.oneOf(['lib/**/*.js', 'lib\\**\\*.js']);
   });
 });
