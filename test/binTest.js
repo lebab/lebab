@@ -1,8 +1,10 @@
+/* eslint-disable prefer-arrow-callback */
 import {expect} from 'chai';
 import fs from 'fs';
 import {exec} from 'child_process';
+import os from 'os';
 
-describe('Smoke test for the executable script', () => {
+describe('Smoke test for the executable script', function() {
   beforeEach(() => {
     fs.writeFileSync(
       'test/test-data.js',
@@ -18,7 +20,7 @@ describe('Smoke test for the executable script', () => {
     }
   });
 
-  describe('when valid input and output file given', () => {
+  describe('when valid input and output file given', function() {
     it('transforms input file to output file', done => {
       exec('node ./bin/index.js -t let,arrow test/test-data.js -o test/output.js', (error, stdout, stderr) => {
         expect(error).to.equal(null);
@@ -35,6 +37,15 @@ describe('Smoke test for the executable script', () => {
   });
 
   describe('when no input/output files given', () => {
+    beforeEach(function() {
+      // Skip this test in Windows.
+      // The reading of /dev/stdin does not work in Windows.
+      // Therefore Lebab currently does not support standard input in Windows.
+      if (os.type() === 'Windows_NT') {
+        this.skip(); // eslint-disable-line no-invalid-this
+      }
+    });
+
     it('reads STDIN and writes STDOUT', done => {
       exec('node ./bin/index.js -t let,arrow < test/test-data.js > test/output.js', (error, stdout, stderr) => {
         expect(error).to.equal(null);
