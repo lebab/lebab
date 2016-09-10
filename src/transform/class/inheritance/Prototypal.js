@@ -1,4 +1,4 @@
-import {matchesAst, extract} from '../../../utils/matchesAst';
+import {matchesAst, matchesLength, extract} from '../../../utils/matchesAst';
 
 /**
  * Processes nodes to detect super classes and return information for later
@@ -112,14 +112,14 @@ export default class Prototypal {
               name: 'create'
             }
           },
-          arguments: args => args.length === 1 && matchesAst({
+          arguments: matchesLength([{
             type: 'MemberExpression',
             object: extract('superClass'),
             property: {
               type: 'Identifier',
               name: 'prototype'
             }
-          })(args[0])
+          }])
         }
       }
     })(node);

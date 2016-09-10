@@ -1,4 +1,4 @@
-import {matchesAst, extract} from '../../../utils/matchesAst';
+import {matchesAst, matchesLength, extract} from '../../../utils/matchesAst';
 import {isVarWithRequireCalls} from '../../commonjs/importCommonjs';
 
 /**
@@ -61,7 +61,7 @@ export default class UtilInherits {
           callee: {
             name: 'require'
           },
-          arguments: (args) => args.length === 1 && args[0].value === 'util'
+          arguments: matchesLength([{value: 'util'}])
         }
       })(dec) ||
       matchesAst({
@@ -70,7 +70,7 @@ export default class UtilInherits {
             callee: {
               name: 'require'
             },
-            arguments: (args) => args.length === 1 && args[0].value === 'util'
+            arguments: matchesLength([{value: 'util'}])
           }
         }})(dec)
     )[0];
@@ -85,40 +85,34 @@ export default class UtilInherits {
     }
   }
 
-  /**
-   * Discover variable declarator nodes for:
-   *  var <this.utilNode> = require("util");
-   *  var <this.inheritsNode> = require("util").inherits;
-   *
-   * Will store the discovered nodes in:
-   *  this.utilNode
-   *  this.inheritsNode
-   *
-   * @param {Object} node
-   * @return {Boolean}
-   */
+
   match(node) {
+    const matchesUtil = (callee) => {
+      return this.utilNode && matchesAst({
+        type: 'MemberExpression',
+        object: {
+          type: 'Identifier',
+          name: this.utilNode.name
+        },
+        property: {
+          type: 'Identifier',
+          name: 'inherits'
+        }
+      })(callee);
+    };
+
+    const matchesInherits = (callee) => {
+      return this.inheritsNode && matchesAst({
+        type: 'Identifier',
+        name: this.inheritsNode.name
+      })(callee);
+    };
+
     return matchesAst({
       type: 'ExpressionStatement',
       expression: {
         type: 'CallExpression',
-        callee: (callee) => (
-          (this.utilNode && matchesAst({
-            type: 'MemberExpression',
-            object: {
-              type: 'Identifier',
-              name: this.utilNode.name
-            },
-            property: {
-              type: 'Identifier',
-              name: 'inherits'
-            }
-          })(callee)) ||
-          (this.inheritsNode && matchesAst({
-            type: 'Identifier',
-            name: this.inheritsNode.name
-          })(callee))
-        ),
+        callee: (callee) => matchesUtil(callee) || matchesInherits(callee),
         arguments: [
           {
             type: 'Identifier',
@@ -129,4 +123,6 @@ export default class UtilInherits {
       }
     })(node);
   }
+
 }
+
