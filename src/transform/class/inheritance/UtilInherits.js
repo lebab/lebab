@@ -14,7 +14,7 @@ import {isVarWithRequireCalls} from '../../commonjs/importCommonjs';
 export default class UtilInherits {
   /**
    * @param {Object} cfg
-   *   @param {PotentialClass[]} cfg.potentialClasses Class name
+   *   @param {PotentialClass[]} cfg.potentialClasses
    */
   constructor({potentialClasses}) {
     this.potentialClasses = potentialClasses;
@@ -34,7 +34,7 @@ export default class UtilInherits {
   process(node, parent) {
     var m;
     if (this.discoverIdentifiers(node, parent)) {
-      // Discovered util.inherits identifiers.
+      return null;
     }
     else if ((m = this.match(node))) {
       if (this.potentialClasses[m.className]) {

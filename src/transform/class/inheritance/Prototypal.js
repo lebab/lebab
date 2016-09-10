@@ -18,7 +18,7 @@ import {matchesAst, extract} from '../../../utils/matchesAst';
 export default class Prototypal {
   /**
    * @param {Object} cfg
-   *   @param {PotentialClass[]} cfg.potentialClasses Class name
+   *   @param {PotentialClass[]} cfg.potentialClasses
    */
   constructor({potentialClasses}) {
     this.potentialClasses = potentialClasses;
