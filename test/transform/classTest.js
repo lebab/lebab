@@ -1,6 +1,5 @@
 import createTestHelpers from '../createTestHelpers';
 const {expectTransform, expectNoChange} = createTestHelpers(['class']);
-import classInheritance from './classInheritance';
 
 describe('Classes', () => {
   it('should not convert functions without prototype assignment to class', () => {
@@ -229,8 +228,6 @@ describe('Classes', () => {
       '});'
     );
   });
-
-  classInheritance();
 
   describe('comments', () => {
     it('should preserve class comments', () => {
