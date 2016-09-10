@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import extractComments from './extractComments';
-import {matchesAst} from './../../utils/matches-ast';
+import {matchesAst} from './../../utils/matchesAst';
 import stripLocationInfo from './../../utils/stripLocationInfo';
 import multiReplaceStatement from './../../utils/multiReplaceStatement';
 

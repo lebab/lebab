@@ -1,5 +1,5 @@
-import UtilInherits from './util-inherits';
-import Prototypal from './prototypal';
+import UtilInherits from './UtilInherits';
+import Prototypal from './Prototypal';
 
 /**
  * Processes nodes to detect super classes and return information for later

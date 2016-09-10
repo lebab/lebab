@@ -1,4 +1,4 @@
-import {matchesAst, extract} from '../../../utils/matches-ast';
+import {matchesAst, extract} from '../../../utils/matchesAst';
 
 /**
  * Processes nodes to detect super classes and return information for later
@@ -15,7 +15,7 @@ import {matchesAst, extract} from '../../../utils/matches-ast';
  *   Class1.prototype = new Class2();
  *   Class1.prototype.constructor = Class1;
  */
-export default class UtilInherits {
+export default class Prototypal {
   /**
    * @param {Object} cfg
    *   @param {PotentialClass[]} cfg.potentialClasses Class name

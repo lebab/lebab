@@ -1,5 +1,5 @@
-import {matchesAst, extract} from '../../../utils/matches-ast';
-import {isVarWithRequireCalls} from '../../commonjs/import-commonjs';
+import {matchesAst, extract} from '../../../utils/matchesAst';
+import {isVarWithRequireCalls} from '../../commonjs/importCommonjs';
 
 /**
  * Processes nodes to detect super classes and return information for later
