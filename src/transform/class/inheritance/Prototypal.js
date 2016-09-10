@@ -16,12 +16,7 @@ import {matchesAst, extract} from '../../../utils/matchesAst';
  *   Class1.prototype.constructor = Class1;
  */
 export default class Prototypal {
-  /**
-   * @param {Object} cfg
-   *   @param {PotentialClass[]} cfg.potentialClasses
-   */
-  constructor({potentialClasses}) {
-    this.potentialClasses = potentialClasses;
+  constructor() {
     this.prototypeAssignments = [];
   }
 
@@ -37,17 +32,15 @@ export default class Prototypal {
   process(node, parent) {
     var m;
     if ((m = this.matchPrototypeAssignment(node))) {
-      if (this.potentialClasses[m.className]) {
-        this.prototypeAssignments[m.className] = {
-          node,
-          parent,
-          superClass: m.superClass
-        };
-      }
+      this.prototypeAssignments[m.className] = {
+        node,
+        parent,
+        superClass: m.superClass
+      };
     }
     else if ((m = this.matchConstructorAssignment(node))) {
       var prototypeAssignment = this.prototypeAssignments[m.className];
-      if (this.potentialClasses[m.className] && prototypeAssignment) {
+      if (prototypeAssignment) {
         return {
           className: m.className,
           superClass: prototypeAssignment.superClass,

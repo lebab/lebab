@@ -10,10 +10,9 @@ export default class Inheritance {
    * @param {Object} cfg
    *   @param {PotentialClass[]} cfg.potentialClasses Class name
    */
-  constructor({potentialClasses}) {
-    this.potentialClasses = potentialClasses;
-    this.utilInherits = new UtilInherits(this);
-    this.prototypal = new Prototypal(this);
+  constructor() {
+    this.utilInherits = new UtilInherits();
+    this.prototypal = new Prototypal();
   }
 
   /**

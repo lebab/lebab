@@ -12,12 +12,7 @@ import {isVarWithRequireCalls} from '../../commonjs/importCommonjs';
  *   util.inherits(Class1, Class2);
  */
 export default class UtilInherits {
-  /**
-   * @param {Object} cfg
-   *   @param {PotentialClass[]} cfg.potentialClasses
-   */
-  constructor({potentialClasses}) {
-    this.potentialClasses = potentialClasses;
+  constructor() {
     this.utilNode = null;
     this.inheritsNode = null;
   }
@@ -34,16 +29,14 @@ export default class UtilInherits {
   process(node, parent) {
     var m;
     if (isVarWithRequireCalls(node) && parent.type === 'Program') {
-      this.discoverIdentifiers(node, parent);
+      this.discoverIdentifiers(node);
     }
     else if ((m = this.match(node))) {
-      if (this.potentialClasses[m.className]) {
-        return {
-          className: m.className,
-          superClass: m.superClass,
-          replacements: [{node, parent, replacements: []}]
-        };
-      }
+      return {
+        className: m.className,
+        superClass: m.superClass,
+        replacements: [{node, parent, replacements: []}]
+      };
     }
     return null;
   }
@@ -61,7 +54,7 @@ export default class UtilInherits {
    * @param {Object} parent Immediate parent node (to determine context)
    * @return {Boolean}
    */
-  discoverIdentifiers(node, parent) {
+  discoverIdentifiers(node) {
     var declaration = node.declarations.filter((dec) =>
       matchesAst({
         init: {
