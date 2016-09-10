@@ -9,7 +9,7 @@ describe('Default parameters', () => {
         '  a = a || 2;\n' +
         '}'
       ).toReturn(
-        'function x(a=2) {}'
+        'function x(a = 2) {}'
       );
     });
 
@@ -21,7 +21,7 @@ describe('Default parameters', () => {
         '  c = c || [];\n' +
         '}'
       ).toReturn(
-        'function x(a="salam", b={}, c=[]) {}'
+        'function x(a = "salam", b = {}, c = []) {}'
       );
     });
 
@@ -41,7 +41,7 @@ describe('Default parameters', () => {
         '  a = a ? a : 4;\n' +
         '}'
       ).toReturn(
-        'function x(a=4) {}'
+        'function x(a = 4) {}'
       );
     });
 
@@ -53,7 +53,7 @@ describe('Default parameters', () => {
         '  c = c ? c : [];\n' +
         '}'
       ).toReturn(
-        'function x(a="salam", b={}, c=[]) {}'
+        'function x(a = "salam", b = {}, c = []) {}'
       );
     });
 
@@ -73,7 +73,7 @@ describe('Default parameters', () => {
         '  a = a === undefined ? 4 : a;\n' +
         '}'
       ).toReturn(
-        'function x(a=4) {}'
+        'function x(a = 4) {}'
       );
     });
 
@@ -83,7 +83,7 @@ describe('Default parameters', () => {
         '  a = a !== undefined ? a : 4;\n' +
         '}'
       ).toReturn(
-        'function x(a=4) {}'
+        'function x(a = 4) {}'
       );
     });
 
@@ -93,7 +93,7 @@ describe('Default parameters', () => {
         '  a = a == undefined ? 4 : a;\n' +
         '}'
       ).toReturn(
-        'function x(a=4) {}'
+        'function x(a = 4) {}'
       );
     });
 
@@ -103,7 +103,7 @@ describe('Default parameters', () => {
         '  a = a != undefined ? a : 4;\n' +
         '}'
       ).toReturn(
-        'function x(a=4) {}'
+        'function x(a = 4) {}'
       );
     });
 
@@ -139,7 +139,7 @@ describe('Default parameters', () => {
         '  a = typeof a === "undefined" ? 4 : a;\n' +
         '}'
       ).toReturn(
-        'function x(a=4) {}'
+        'function x(a = 4) {}'
       );
     });
 
@@ -149,7 +149,7 @@ describe('Default parameters', () => {
         '  a = typeof a !== "undefined" ? a : 4;\n' +
         '}'
       ).toReturn(
-        'function x(a=4) {}'
+        'function x(a = 4) {}'
       );
     });
 
@@ -159,7 +159,7 @@ describe('Default parameters', () => {
         '  a = typeof a == "undefined" ? 4 : a;\n' +
         '}'
       ).toReturn(
-        'function x(a=4) {}'
+        'function x(a = 4) {}'
       );
     });
 
@@ -169,7 +169,7 @@ describe('Default parameters', () => {
         '  a = typeof a != "undefined" ? a : 4;\n' +
         '}'
       ).toReturn(
-        'function x(a=4) {}'
+        'function x(a = 4) {}'
       );
     });
 
@@ -204,7 +204,7 @@ describe('Default parameters', () => {
       '  b = b || 3;\n' +
       '}'
     ).toReturn(
-      'function x(a, b=3, c) {}'
+      'function x(a, b = 3, c) {}'
     );
   });
 
@@ -213,8 +213,8 @@ describe('Default parameters', () => {
       'function x(a) { a = a || 2; }\n' +
       'function y(a) { a = a || 3; }'
     ).toReturn(
-      'function x(a=2) {}\n' +
-      'function y(a=3) {}'
+      'function x(a = 2) {}\n' +
+      'function y(a = 3) {}'
     );
   });
 
@@ -228,7 +228,7 @@ describe('Default parameters', () => {
       '}'
     ).toReturn(
       'function x(a) {\n' +
-      '  function y(a=3) {}\n' +
+      '  function y(a = 3) {}\n' +
       '  a = a || 2;\n' +
       '}'
     );
@@ -261,7 +261,7 @@ describe('Default parameters', () => {
       '  a = a || 2;\n' +
       '});'
     ).toReturn(
-      'foo(function(a=2) {});'
+      'foo(function(a = 2) {});'
     );
   });
 
@@ -278,7 +278,7 @@ describe('Default parameters', () => {
 
   it('should preserve existing default parameters', () => {
     expectNoChange(
-      'function x(a="salam", b={}, c=[]) {}'
+      'function x(a = "salam", b = {}, c = []) {}'
     );
   });
 
