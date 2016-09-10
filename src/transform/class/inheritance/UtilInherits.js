@@ -13,8 +13,8 @@ import {isVarWithRequireCalls} from '../../commonjs/importCommonjs';
  */
 export default class UtilInherits {
   constructor() {
-    this.utilNode = null;
-    this.inheritsNode = null;
+    this.utilNode = undefined;
+    this.inheritsNode = undefined;
   }
 
   /**
@@ -103,7 +103,7 @@ export default class UtilInherits {
       expression: {
         type: 'CallExpression',
         callee: (callee) => (
-          (this.utilNode !== null && matchesAst({
+          (this.utilNode && matchesAst({
             type: 'MemberExpression',
             object: {
               type: 'Identifier',
@@ -114,7 +114,7 @@ export default class UtilInherits {
               name: 'inherits'
             }
           })(callee)) ||
-          (this.inheritsNode !== null && matchesAst({
+          (this.inheritsNode && matchesAst({
             type: 'Identifier',
             name: this.inheritsNode.name
           })(callee))
