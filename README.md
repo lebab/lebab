@@ -6,7 +6,7 @@
 
 ![Lebab](https://raw.githubusercontent.com/mohebifar/lebab-logo/master/logo.png)
 
-**Lebab** transpiles your ES5 code to ES2015.
+**Lebab** transpiles your ES5 code to ES6/ES7.
 It does exactly the opposite of what [Babel](https://babeljs.io/) does.
 If you want to understand what Lebab exactly does, [try the live demo](http://lebab.io/try-it).
 
@@ -29,7 +29,10 @@ $ lebab es5.js -o es6.js --transform let
 Or transform an entire directory of files in-place:
 
 ```bash
+# .js files only
 $ lebab --replace src/js/ --transform arrow
+# For other file extensions, use explicit globbing
+$ lebab --replace 'src/js/**/*.jsx' --transform arrow
 ```
 
 For all the possible values for `--transform` option
@@ -46,7 +49,7 @@ apply it for your code and inspect the diff carefully.
 
 These transforms can be applied with relatively high confidence.
 They use pretty straight-forward and strict rules for changing the code.
-The resulting ES2015 code should be almost 100% equivalent of the original code.
+The resulting code should be almost 100% equivalent of the original code.
 
 - [x] **arrow** - callbacks to arrow functions
     - [x] Converts bound functions like `function(){}.bind(this)`
@@ -56,16 +59,10 @@ The resulting ES2015 code should be almost 100% equivalent of the original code.
     - [x] converts immediate return `{ return x; }` to `=> x`
     - [ ] does not remove `that = this` assignments
     - [ ] BUG [fails with immediately returning functions that have methods invoked][105]
-- [x] **let** - `var` to `let`/`const`
-    - [x] never modified variables are converted to `const`
-    - [x] properly recognizes block-scoping
-    - [x] splits single var declaration to multiple `let`/`const` declarations if needed
-    - [x] recognizes vars defined/assigned using destructuring
-    - [x] vars that conflict with block-scoping are not converted
-    - [x] repeated declarations of the same var are not converted
-    - [x] existing `let`/`const` are not converted
-    - [ ] BUG [fails with repeated variable definitions that use destructuring][131]
-    - [ ] BUG [fails with closure over a loop variable][145]
+- [x] **for-of** - for loop to for-of loop
+    - [x] uses name `item` for loop variable when loop body begins with `var item = array[i];`
+    - [ ] [does not work when no such alias defined at the start of loop body][166]
+    - [ ] LIMITATION requires let/const variables (run the `let` transform first)
 - [x] **arg-spread** - use of apply() to spread operator
     - [x] recognizes `obj.method.apply(obj, args)`
     - [x] recognizes `func.apply(undefined, args)`
@@ -90,13 +87,29 @@ The resulting ES2015 code should be almost 100% equivalent of the original code.
     - [x] converts `exports.foo = bar` to `export {bar as foo}`
     - [ ] does not check if named export conflicts with existing variable names
     - [ ] does not recognize imports/exports inside nested blocks/functions
+- [x] **exponent** - `Math.pow()` to `**` operator (**ES7**)
+    - [x] Full support for all new syntax from ES7
+- [x] **multi-var** - single `var x,y;` declaration to multiple `var x; var y;` (**refactor**)
+    - [x] Not related to any new syntax feature
+    - [x] EXPERIMENT [to see if Lebab could be a more generic refactoring helper][158]
 
 ### Unsafe transforms
 
 These transforms should be applied with caution.
-They use heuristics to detect common patterns that can be expressed with ES2015 syntax.
-There are no guarantees that the resulting code is equivalent of the original code.
+They either use heuristics which can't guarantee that the resulting code is equivalent of the original code,
+or they have significant bugs which can result in breaking your code.
 
+- [x] **let** - `var` to `let`/`const`
+    - [x] never modified variables are converted to `const`
+    - [x] properly recognizes block-scoping
+    - [x] splits single var declaration to multiple `let`/`const` declarations if needed
+    - [x] recognizes vars defined/assigned using destructuring
+    - [x] vars that conflict with block-scoping are not converted
+    - [x] repeated declarations of the same var are not converted
+    - [x] existing `let`/`const` are not converted
+    - [ ] BUG [fails with repeated variable definitions that use destructuring][131]
+    - [ ] BUG [fails with closure over a loop variable][145]
+    - [ ] BUG [fails when function closes over variable declared after function is called][168]
 - [x] **class** - function/prototypes to classes
     - [x] recognizes `Foo.prototype.method = function(){ ... };`
     - [x] recognizes `Foo.prototype = { ...methods... };`
@@ -115,12 +128,13 @@ There are no guarantees that the resulting code is equivalent of the original co
     - [x] recognizes `a = a === undefined ? 2 : a`
     - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
     - [ ] LIMITATION [transforming `a = a || 2` does not produce strictly equivalent code][125]
-
-### ES7 transforms
-
-A single transform for the single ES7 syntax feature.
-
-- [x] **exponent** - `Math.pow()` to `**` operator
+- [x] **includes** - `array.indexOf(foo) !== -1` to `array.includes(foo)` (**ES7**)
+    - [x] works for both strings and arrays
+    - [x] converts `!== -1` to `array.includes(foo)`
+    - [x] converts `=== -1` to `!array.includes(foo)`
+    - [x] recognizes all kinds of comparisons `>= 0`, `> -1`, etc
+    - [x] recognizes both `indexOf() != -1` and `-1 != indexOf()`
+    - [ ] LIMITATION does not detect that indexOf() is called on an actual Array or String.
 
 
 ## Programming API
@@ -145,6 +159,14 @@ The warnings will be an array of objects like:
 Most of the time there won't be any warnings and the array will be empty.
 
 
+## Editor plugins
+
+Alternatively one can use Lebab through plugins in the following editors:
+
+- [Atom](https://github.com/ga2mer/atom-lebab)
+- [Sublime](https://github.com/inkless/lebab-sublime)
+
+
 ## What's next?
 
 Which feature should Lebab implement next?
@@ -161,3 +183,7 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [125]: https://github.com/mohebifar/lebab/issues/125
 [127]: https://github.com/mohebifar/lebab/issues/127
 [131]: https://github.com/mohebifar/lebab/issues/131
+[145]: https://github.com/mohebifar/lebab/issues/145
+[158]: https://github.com/mohebifar/lebab/issues/158
+[166]: https://github.com/mohebifar/lebab/issues/166
+[168]: https://github.com/mohebifar/lebab/issues/168

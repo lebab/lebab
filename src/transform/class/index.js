@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import traverser from '../../traverser';
-import PotentialClass from './potential-class';
-import PotentialMethod from './potential-method';
-import matchFunctionDeclaration from './match-function-declaration';
-import matchFunctionVar from './match-function-var';
-import matchFunctionAssignment from './match-function-assignment';
-import matchPrototypeFunctionAssignment from './match-prototype-function-assignment';
-import matchPrototypeObjectAssignment from './match-prototype-object-assignment';
-import matchObjectDefinePropertyCall from './match-object-define-property-call';
+import PotentialClass from './PotentialClass';
+import PotentialMethod from './PotentialMethod';
+import matchFunctionDeclaration from './matchFunctionDeclaration';
+import matchFunctionVar from './matchFunctionVar';
+import matchFunctionAssignment from './matchFunctionAssignment';
+import matchPrototypeFunctionAssignment from './matchPrototypeFunctionAssignment';
+import matchPrototypeObjectAssignment from './matchPrototypeObjectAssignment';
+import matchObjectDefinePropertyCall from './matchObjectDefinePropertyCall';
 import Inheritance from './inheritance';
 
 export default function(ast, logger) {
