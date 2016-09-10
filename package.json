@@ -1,14 +1,17 @@
 {
   "name": "lebab",
-  "version": "2.0.1",
-  "description": "Turn your ES5 code into readable ES6",
+  "version": "2.3.3",
+  "description": "Turn your ES5 code into readable ES6/ES7",
   "main": "index.js",
   "scripts": {
-    "prepublish": "node node_modules/babel/bin/babel src --out-dir lib",
-    "test": "grunt test"
+    "prepublish": "rm -rf lib/ && babel src/ --out-dir lib/",
+    "lint": "eslint src/ test/ bin/ *.js",
+    "test": "npm run prepublish && mocha --compilers js:babel-register \"test/**/*Test.js\"",
+    "watch": "mocha --watch --compilers js:babel-register \"test/transform/**/*Test.js\"",
+    "travis": "npm run lint && npm run test"
   },
   "engines": {
-    "node": ">=0.10"
+    "node": ">=4"
   },
   "files": [
     "lib",
@@ -25,6 +28,9 @@
   "keywords": [
     "es5",
     "es6",
+    "es2015",
+    "es7",
+    "es2016",
     "transpiler",
     "transpile"
   ],
@@ -35,24 +41,21 @@
   },
   "homepage": "https://github.com/mohebifar/lebab",
   "dependencies": {
-    "babel": "^5.8.34",
+    "babel-polyfill": "^6.9.1",
     "commander": "^2.9.0",
     "espree": "^3.1.5",
     "estraverse": "^4.1.1",
     "glob": "^7.0.5",
     "lodash": "^4.5.1",
-    "recast": "^0.11.7"
+    "recast": "^0.11.12"
   },
   "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-register": "^6.11.6",
     "chai": "^3.4.1",
-    "grunt": "^0.4.5",
-    "grunt-babel": "^5.0.3",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-clean": "^0.7.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-eslint": "^18.0.0",
-    "grunt-mocha-test": "^0.12.7",
-    "load-grunt-tasks": "^3.1.0",
+    "eslint": "^3.3.0",
     "mocha": "^2.3.4"
   }
 }
