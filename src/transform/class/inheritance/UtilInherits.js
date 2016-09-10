@@ -21,10 +21,10 @@ export default class UtilInherits {
    * Process a node and return inheritance details if found.
    * @param {Object} node
    * @param {Object} parent
-   * @returns {Object}
-   *            {String}   className
-   *            {Node}     superClass
-   *            {Object[]} replacements
+   * @returns null or {Object} m
+   *                    {String}   m.className
+   *                    {Node}     m.superClass
+   *                    {Object[]} m.replacements
    */
   process(node, parent) {
     var m;
@@ -41,19 +41,15 @@ export default class UtilInherits {
     return null;
   }
 
-  /**
-   * Discover variable declarator nodes for:
-   *  var <this.utilNode> = require("util");
-   *  var <this.inheritsNode> = require("util").inherits;
-   *
-   * Will store the discovered nodes in:
-   *  this.utilNode
-   *  this.inheritsNode
-   *
-   * @param {Object} node
-   * @param {Object} parent Immediate parent node (to determine context)
-   * @return {Boolean}
-   */
+  // Discover variable declarator nodes for:
+  //  var <this.utilNode> = require("util");
+  //  var <this.inheritsNode> = require("util").inherits;
+  //
+  // Will store the discovered nodes in:
+  //  this.utilNode
+  //  this.inheritsNode
+  //
+  // @param {Object} node
   discoverIdentifiers(node) {
     var declaration = node.declarations.filter((dec) =>
       matchesAst({
@@ -85,8 +81,18 @@ export default class UtilInherits {
     }
   }
 
-
+  // Discover usage of this.utilNode or this.inheritsNode
+  //
+  // Examples:
+  //   util.inherits(Class, SuperClass);
+  //   inherits(Class, SuperClass);
+  //
+  // @param {Object} node
+  // @return {Object} m
+  //           {String} m.className
+  //           {Node} m.superClass
   match(node) {
+    // Match example: util.inherits
     const matchesUtil = (callee) => {
       return this.utilNode && matchesAst({
         type: 'MemberExpression',
@@ -101,6 +107,7 @@ export default class UtilInherits {
       })(callee);
     };
 
+    // Match example: inherits
     const matchesInherits = (callee) => {
       return this.inheritsNode && matchesAst({
         type: 'Identifier',
@@ -123,6 +130,4 @@ export default class UtilInherits {
       }
     })(node);
   }
-
 }
-

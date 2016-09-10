@@ -24,10 +24,10 @@ export default class Prototypal {
    * Process a node and return inheritance details if found.
    * @param {Object} node
    * @param {Object} parent
-   * @returns {Object}
-   *            {String}   className
-   *            {Node}     superClass
-   *            {Object[]} replacements
+   * @returns null or {Object} m
+   *                    {String}   m.className
+   *                    {Node}     m.superClass
+   *                    {Object[]} m.replacements
    */
   process(node, parent) {
     var m;
@@ -58,12 +58,19 @@ export default class Prototypal {
     return null;
   }
 
-  /**
-   * @param {Object} node
-   * @return {Boolean}
-   */
+  // Match prototype assignments.
+  //
+  // Examples:
+  //   Class1.prototype = new Class2();
+  //   Class1.prototype = Object.create(Class2);
+  //
+  // @param {Object} node
+  // @return {Object} m
+  //           {String} m.className
+  //           {Node} m.superClass
   matchPrototypeAssignment(node) {
-    return matchesAst({
+    // Match example: Class1.prototype = new Class2();
+    const matchNewAssignment = matchesAst({
       type: 'ExpressionStatement',
       expression: {
         type: 'AssignmentExpression',
@@ -83,8 +90,10 @@ export default class Prototypal {
           callee: extract('superClass')
         }
       }
-    })(node) ||
-    matchesAst({
+    });
+
+    // Match example: Class1.prototype = Object.create(Class2);
+    const matchObjectCreateAssignment = matchesAst({
       type: 'ExpressionStatement',
       expression: {
         type: 'AssignmentExpression',
@@ -122,13 +131,20 @@ export default class Prototypal {
           }])
         }
       }
-    })(node);
+    });
+
+    return matchNewAssignment(node) ||
+           matchObjectCreateAssignment(node);
   }
 
-  /**
-   * @param {Object} node
-   * @return {Boolean}
-   */
+  // Match constructor reassignment.
+  //
+  // Example:
+  //   Class1.prototype.constructor = Class1;
+  //
+  // @param {Object} node
+  // @return {Object} m
+  //           {String} m.className
   matchConstructorAssignment(node) {
     return matchesAst({
       type: 'ExpressionStatement',
