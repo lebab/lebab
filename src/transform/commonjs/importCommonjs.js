@@ -83,7 +83,7 @@ function createImportSpecifier({local, imported}) {
   return new ImportSpecifier({local, imported});
 }
 
-function isVarWithRequireCalls(node) {
+export function isVarWithRequireCalls(node) {
   return node.type === 'VariableDeclaration' &&
     node.declarations.some(dec => matchRequire(dec) || matchRequireWithProperty(dec));
 }
