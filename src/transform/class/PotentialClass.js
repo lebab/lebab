@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import extractComments from './extractComments';
+import isEqualAst from './../../utils/isEqualAst';
 import {matchesAst} from './../../utils/matchesAst';
-import stripLocationInfo from './../../utils/stripLocationInfo';
 import multiReplaceStatement from './../../utils/multiReplaceStatement';
 
 /**
@@ -117,7 +117,7 @@ class PotentialClass {
           type: 'CallExpression',
           callee: {
             type: 'MemberExpression',
-            object: stripLocationInfo(this.superClass),
+            object: obj => isEqualAst(obj, this.superClass),
             property: {
               type: 'Identifier',
               name: 'call'
