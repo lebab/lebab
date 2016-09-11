@@ -39,6 +39,17 @@ describe('Class Inheritance', () => {
       );
     });
 
+    it('ignores util requires which are not top-level', () => {
+      expectNoChange(
+        'function foo() {\n' +
+        '  var util = require("util");\n' +
+        '}\n' +
+        'function MyClass() {\n' +
+        '}\n' +
+        'util.inherits(MyClass, Foo.Bar.OtherClass);'
+      );
+    });
+
     it('should ignore inherits when not from require("util")', () => {
       expectNoChange(
         'var util = require("./util");\n' +
