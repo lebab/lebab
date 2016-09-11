@@ -1,4 +1,4 @@
-import {find} from 'lodash';
+import _ from 'lodash';
 import {matchesAst, matchesLength, extract} from '../../../utils/matchesAst';
 import isVarWithRequireCalls from '../../../utils/isVarWithRequireCalls';
 
@@ -52,7 +52,7 @@ export default class UtilInherits {
   //
   // @param {Object} node
   discoverIdentifiers(node) {
-    var declaration = find(node.declarations, (dec) =>
+    var declaration = _.find(node.declarations, (dec) =>
       matchesAst({
         init: {
           callee: {
