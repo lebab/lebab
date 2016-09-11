@@ -13,7 +13,6 @@ class PotentialClass {
    * @param {Object} cfg
    *   @param {String} cfg.name Class name
    *   @param {PotentialMethod} cfg.constructor
-   *   @param {String} cfg.superClass Super Class name
    *   @param {Object} cfg.fullNode Node to remove after converting to class
    *   @param {Object[]} cfg.commentNodes Nodes to extract comments from
    *   @param {Object} cfg.parent
@@ -22,6 +21,7 @@ class PotentialClass {
     this.name = name;
     this.constructor = constructor;
     this.fullNode = fullNode;
+    this.superClass = undefined;
     this.commentNodes = commentNodes;
     this.parent = parent;
     this.methods = [];
