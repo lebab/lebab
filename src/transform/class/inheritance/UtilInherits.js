@@ -1,3 +1,4 @@
+import {find} from 'lodash';
 import {matchesAst, matchesLength, extract} from '../../../utils/matchesAst';
 import isVarWithRequireCalls from '../../../utils/isVarWithRequireCalls';
 
@@ -51,7 +52,7 @@ export default class UtilInherits {
   //
   // @param {Object} node
   discoverIdentifiers(node) {
-    var declaration = node.declarations.filter((dec) =>
+    var declaration = find(node.declarations, (dec) =>
       matchesAst({
         init: {
           callee: {
@@ -69,7 +70,7 @@ export default class UtilInherits {
             arguments: matchesLength([{value: 'util'}])
           }
         }})(dec)
-    )[0];
+    );
 
     if (declaration) {
       if (matchesAst({init: {property: {name: 'inherits'}}})(declaration)) {
