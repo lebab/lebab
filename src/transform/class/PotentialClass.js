@@ -127,22 +127,24 @@ class PotentialClass {
   }
 
   modifySuperCalls() {
+    const matchSuperConstructorCall = matchesAst({
+      type: 'ExpressionStatement',
+      expression: {
+        type: 'CallExpression',
+        callee: {
+          type: 'MemberExpression',
+          object: obj => isEqualAst(obj, this.superClass),
+          property: {
+            type: 'Identifier',
+            name: 'call'
+          }
+        },
+        arguments: (args) => args.length >= 1 && args[0].type === 'ThisExpression'
+      }
+    });
+
     this.constructor.methodNode.body.body.forEach(body => {
-      if (matchesAst({
-        type: 'ExpressionStatement',
-        expression: {
-          type: 'CallExpression',
-          callee: {
-            type: 'MemberExpression',
-            object: obj => isEqualAst(obj, this.superClass),
-            property: {
-              type: 'Identifier',
-              name: 'call'
-            }
-          },
-          arguments: (args) => args[0].type === 'ThisExpression'
-        }
-      })(body)) {
+      if (matchSuperConstructorCall(body)) {
         body.expression.callee = {
           type: 'Super'
         };
