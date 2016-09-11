@@ -98,11 +98,10 @@ export default function(ast, logger) {
       }
       else if ((m = inheritance.process(node, parent))) {
         if (potentialClasses[m.className]) {
-          potentialClasses[m.className].superClass = m.superClass;
-          potentialClasses[m.className].replacements = [
-            ...potentialClasses[m.className].replacements,
-            ...m.replacements
-          ];
+          potentialClasses[m.className].setSuperClass(
+            m.superClass,
+            m.relatedExpressions
+          );
         }
       }
     },

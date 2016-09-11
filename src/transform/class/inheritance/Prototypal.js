@@ -27,7 +27,7 @@ export default class Prototypal {
    * @returns null or {Object} m
    *                    {String}   m.className
    *                    {Node}     m.superClass
-   *                    {Object[]} m.replacements
+   *                    {Object[]} m.relatedExpressions
    */
   process(node, parent) {
     var m;
@@ -44,12 +44,11 @@ export default class Prototypal {
         return {
           className: m.className,
           superClass: prototypeAssignment.superClass,
-          replacements: [
-            {node, parent, replacements: []},
+          relatedExpressions: [
+            {node, parent},
             {
               node: prototypeAssignment.node,
-              parent: prototypeAssignment.parent,
-              replacements: []
+              parent: prototypeAssignment.parent
             }
           ]
         };

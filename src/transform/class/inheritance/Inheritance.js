@@ -22,7 +22,7 @@ export default class Inheritance {
    * @returns {Object}
    *            {String}   className
    *            {Node}     superClass
-   *            {Object[]} replacements
+   *            {Object[]} relatedExpressions
    */
   process(node, parent) {
     return (

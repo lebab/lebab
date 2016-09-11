@@ -24,7 +24,7 @@ export default class UtilInherits {
    * @returns null or {Object} m
    *                    {String}   m.className
    *                    {Node}     m.superClass
-   *                    {Object[]} m.replacements
+   *                    {Object[]} m.relatedExpressions
    */
   process(node, parent) {
     var m;
@@ -35,7 +35,7 @@ export default class UtilInherits {
       return {
         className: m.className,
         superClass: m.superClass,
-        replacements: [{node, parent, replacements: []}]
+        relatedExpressions: [{node, parent}]
       };
     }
     return null;

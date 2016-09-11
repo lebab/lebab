@@ -18,10 +18,9 @@ class PotentialClass {
    *   @param {Object[]} cfg.commentNodes Nodes to extract comments from
    *   @param {Object} cfg.parent
    */
-  constructor({name, constructor, superClass, fullNode, commentNodes, parent}) {
+  constructor({name, constructor, fullNode, commentNodes, parent}) {
     this.name = name;
     this.constructor = constructor;
-    this.superClass = superClass;
     this.fullNode = fullNode;
     this.commentNodes = commentNodes;
     this.parent = parent;
@@ -43,6 +42,24 @@ class PotentialClass {
    */
   getFullNode() {
     return this.fullNode;
+  }
+
+  /**
+   * Set the superClass and set up the related assignment expressions to be
+   * removed during transformation.
+   * @param {Node} superClass           The super class node.
+   * @param {Node[]} relatedExpressions The related expressions to be removed
+   *                                    during transformation.
+   */
+  setSuperClass(superClass, relatedExpressions) {
+    this.superClass = superClass;
+    for (const {parent, node} of relatedExpressions) {
+      this.replacements.push({
+        parent,
+        node,
+        replacements: []
+      });
+    }
   }
 
   /**
