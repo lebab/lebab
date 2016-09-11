@@ -21,26 +21,32 @@ export default function(ast, logger) {
       if ((m = matchFunctionDeclaration(node))) {
         potentialClasses[m.className] = new PotentialClass({
           name: m.className,
-          constructor: new PotentialMethod({
-            name: 'constructor',
-            methodNode: m.constructorNode,
-          }),
           fullNode: node,
           commentNodes: [node],
           parent,
         });
+        potentialClasses[m.className].setConstructor(
+          new PotentialMethod({
+            name: 'constructor',
+            methodNode: m.constructorNode,
+            potentialClass: potentialClasses[m.className]
+          })
+        );
       }
       else if ((m = matchFunctionVar(node))) {
         potentialClasses[m.className] = new PotentialClass({
           name: m.className,
-          constructor: new PotentialMethod({
-            name: 'constructor',
-            methodNode: m.constructorNode,
-          }),
           fullNode: node,
           commentNodes: [node],
           parent,
         });
+        potentialClasses[m.className].setConstructor(
+          new PotentialMethod({
+            name: 'constructor',
+            methodNode: m.constructorNode,
+            potentialClass: potentialClasses[m.className]
+          })
+        );
       }
       else if ((m = matchFunctionAssignment(node))) {
         if (potentialClasses[m.className]) {

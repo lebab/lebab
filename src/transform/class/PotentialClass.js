@@ -1,7 +1,5 @@
 import _ from 'lodash';
 import extractComments from './extractComments';
-import isEqualAst from './../../utils/isEqualAst';
-import {matchesAst} from './../../utils/matchesAst';
 import multiReplaceStatement from './../../utils/multiReplaceStatement';
 
 /**
@@ -12,14 +10,13 @@ class PotentialClass {
   /**
    * @param {Object} cfg
    *   @param {String} cfg.name Class name
-   *   @param {PotentialMethod} cfg.constructor
    *   @param {Object} cfg.fullNode Node to remove after converting to class
    *   @param {Object[]} cfg.commentNodes Nodes to extract comments from
    *   @param {Object} cfg.parent
    */
-  constructor({name, constructor, fullNode, commentNodes, parent}) {
+  constructor({name, fullNode, commentNodes, parent}) {
     this.name = name;
-    this.constructor = constructor;
+    this.constructor = undefined;
     this.fullNode = fullNode;
     this.superClass = undefined;
     this.commentNodes = commentNodes;
@@ -42,6 +39,14 @@ class PotentialClass {
    */
   getFullNode() {
     return this.fullNode;
+  }
+
+  /**
+   * Set the constructor.
+   * @param {PotentialMethod} method.
+   */
+  setConstructor(method) {
+    this.constructor = method;
   }
 
   /**
@@ -117,40 +122,7 @@ class PotentialClass {
   }
 
   createConstructor() {
-    if (this.constructor.isEmpty()) {
-      return undefined;
-    }
-    else {
-      this.modifySuperCalls();
-      return this.constructor.toMethodDefinition();
-    }
-  }
-
-  modifySuperCalls() {
-    const matchSuperConstructorCall = matchesAst({
-      type: 'ExpressionStatement',
-      expression: {
-        type: 'CallExpression',
-        callee: {
-          type: 'MemberExpression',
-          object: obj => isEqualAst(obj, this.superClass),
-          property: {
-            type: 'Identifier',
-            name: 'call'
-          }
-        },
-        arguments: (args) => args.length >= 1 && args[0].type === 'ThisExpression'
-      }
-    });
-
-    this.constructor.methodNode.body.body.forEach(body => {
-      if (matchSuperConstructorCall(body)) {
-        body.expression.callee = {
-          type: 'Super'
-        };
-        body.expression.arguments = body.expression.arguments.slice(1);
-      }
-    });
+    return this.constructor.isEmpty() ? undefined : this.constructor.toMethodDefinition();
   }
 }
 

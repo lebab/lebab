@@ -1,4 +1,6 @@
 import extractComments from './extractComments';
+import isEqualAst from './../../utils/isEqualAst';
+import {matchesAst} from './../../utils/matchesAst';
 import multiReplaceStatement from './../../utils/multiReplaceStatement';
 
 /**
@@ -15,6 +17,7 @@ class PotentialMethod {
    *   @param {Object} cfg.parent
    *   @param {String} cfg.kind Either 'get' or 'set' (optional)
    *   @param {Boolean} cfg.static True to make static method (optional)
+   *   @param {PotentialClass} cfg.potentialClass The class the method is in
    */
   constructor(cfg) {
     this.name = cfg.name;
@@ -24,6 +27,7 @@ class PotentialMethod {
     this.parent = cfg.parent;
     this.kind = cfg.kind || 'method';
     this.static = cfg.static || false;
+    this.potentialClass = cfg.potentialClass;
   }
 
   /**
@@ -39,6 +43,10 @@ class PotentialMethod {
    * @return {MethodDefinition}
    */
   toMethodDefinition() {
+    if (this.name === 'constructor') {
+      this.modifySuperCalls();
+    }
+
     return {
       type: 'MethodDefinition',
       key: {
@@ -68,6 +76,33 @@ class PotentialMethod {
       parent: this.parent,
       node: this.fullNode,
       replacements: [],
+    });
+  }
+
+  modifySuperCalls() {
+    const matchSuperConstructorCall = matchesAst({
+      type: 'ExpressionStatement',
+      expression: {
+        type: 'CallExpression',
+        callee: {
+          type: 'MemberExpression',
+          object: obj => isEqualAst(obj, this.potentialClass.superClass),
+          property: {
+            type: 'Identifier',
+            name: 'call'
+          }
+        },
+        arguments: (args) => args.length >= 1 && args[0].type === 'ThisExpression'
+      }
+    });
+
+    this.methodNode.body.body.forEach(body => {
+      if (matchSuperConstructorCall(body)) {
+        body.expression.callee = {
+          type: 'Super'
+        };
+        body.expression.arguments = body.expression.arguments.slice(1);
+      }
     });
   }
 }
