@@ -10,18 +10,19 @@ class PotentialClass {
   /**
    * @param {Object} cfg
    *   @param {String} cfg.name Class name
-   *   @param {PotentialMethod} cfg.constructor
    *   @param {Object} cfg.fullNode Node to remove after converting to class
    *   @param {Object[]} cfg.commentNodes Nodes to extract comments from
    *   @param {Object} cfg.parent
    */
-  constructor({name, constructor, fullNode, commentNodes, parent}) {
+  constructor({name, fullNode, commentNodes, parent}) {
     this.name = name;
-    this.constructor = constructor;
+    this.constructor = undefined;
     this.fullNode = fullNode;
+    this.superClass = undefined;
     this.commentNodes = commentNodes;
     this.parent = parent;
     this.methods = [];
+    this.replacements = [];
   }
 
   /**
@@ -41,6 +42,32 @@ class PotentialClass {
   }
 
   /**
+   * Set the constructor.
+   * @param {PotentialMethod} method.
+   */
+  setConstructor(method) {
+    this.constructor = method;
+  }
+
+  /**
+   * Set the superClass and set up the related assignment expressions to be
+   * removed during transformation.
+   * @param {Node} superClass           The super class node.
+   * @param {Node[]} relatedExpressions The related expressions to be removed
+   *                                    during transformation.
+   */
+  setSuperClass(superClass, relatedExpressions) {
+    this.superClass = superClass;
+    for (const {parent, node} of relatedExpressions) {
+      this.replacements.push({
+        parent,
+        node,
+        replacements: []
+      });
+    }
+  }
+
+  /**
    * Adds method to class.
    * @param {PotentialMethod} method
    */
@@ -53,7 +80,7 @@ class PotentialClass {
    * @return {Boolean}
    */
   isTransformable() {
-    return this.methods.length > 0;
+    return this.methods.length > 0 || this.superClass !== undefined;
   }
 
   /**
@@ -66,6 +93,7 @@ class PotentialClass {
       node: this.fullNode,
       replacements: [this.toClassDeclaration()],
     });
+    this.replacements.forEach(multiReplaceStatement);
 
     this.methods.forEach(method => method.remove());
   }
@@ -73,6 +101,7 @@ class PotentialClass {
   toClassDeclaration() {
     return {
       type: 'ClassDeclaration',
+      superClass: this.superClass,
       id: {
         type: 'Identifier',
         name: this.name,
@@ -96,3 +125,4 @@ class PotentialClass {
     return this.constructor.isEmpty() ? undefined : this.constructor.toMethodDefinition();
   }
 }
+

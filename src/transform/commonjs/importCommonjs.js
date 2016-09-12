@@ -1,6 +1,6 @@
 import traverser from '../../traverser';
-import isString from '../../utils/isString';
-import {matchesAst, extract} from '../../utils/matchesAst';
+import isVarWithRequireCalls from '../../utils/isVarWithRequireCalls';
+import {matchRequire, matchRequireWithProperty} from '../../utils/matchRequire';
 import multiReplaceStatement from '../../utils/multiReplaceStatement';
 import ImportDeclaration from '../../syntax/ImportDeclaration';
 import ImportSpecifier from '../../syntax/ImportSpecifier';
@@ -82,59 +82,3 @@ function createImportSpecifier({local, imported}) {
   }
   return new ImportSpecifier({local, imported});
 }
-
-function isVarWithRequireCalls(node) {
-  return node.type === 'VariableDeclaration' &&
-    node.declarations.some(dec => matchRequire(dec) || matchRequireWithProperty(dec));
-}
-
-var isIdentifier = matchesAst({
-  type: 'Identifier'
-});
-
-// matches Property with Identifier key and value (possibly shorthand)
-var isSimpleProperty = matchesAst({
-  type: 'Property',
-  key: isIdentifier,
-  computed: false,
-  value: isIdentifier
-});
-
-// matches: {a, b: myB, c, ...}
-var isObjectPattern = matchesAst({
-  type: 'ObjectPattern',
-  properties: (props) => props.every(isSimpleProperty)
-});
-
-// matches: require(<source>)
-var matchRequireCall = matchesAst({
-  type: 'CallExpression',
-  callee: {
-    type: 'Identifier',
-    name: 'require'
-  },
-  arguments: extract('sources', (args) => {
-    return args.length === 1 && isString(args[0]);
-  })
-});
-
-// Matches: <id> = require(<source>);
-var matchRequire = matchesAst({
-  type: 'VariableDeclarator',
-  id: extract('id', id => isIdentifier(id) || isObjectPattern(id)),
-  init: matchRequireCall
-});
-
-// Matches: <id> = require(<source>).<property>;
-var matchRequireWithProperty = matchesAst({
-  type: 'VariableDeclarator',
-  id: extract('id', isIdentifier),
-  init: {
-    type: 'MemberExpression',
-    computed: false,
-    object: matchRequireCall,
-    property: extract('property', {
-      type: 'Identifier'
-    })
-  }
-});

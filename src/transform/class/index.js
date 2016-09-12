@@ -8,9 +8,11 @@ import matchFunctionAssignment from './matchFunctionAssignment';
 import matchPrototypeFunctionAssignment from './matchPrototypeFunctionAssignment';
 import matchPrototypeObjectAssignment from './matchPrototypeObjectAssignment';
 import matchObjectDefinePropertyCall from './matchObjectDefinePropertyCall';
+import Inheritance from './inheritance';
 
 export default function(ast, logger) {
   const potentialClasses = {};
+  const inheritance = new Inheritance();
 
   traverser.traverse(ast, {
     enter(node, parent) {
@@ -19,26 +21,32 @@ export default function(ast, logger) {
       if ((m = matchFunctionDeclaration(node))) {
         potentialClasses[m.className] = new PotentialClass({
           name: m.className,
-          constructor: new PotentialMethod({
-            name: 'constructor',
-            methodNode: m.constructorNode,
-          }),
           fullNode: node,
           commentNodes: [node],
           parent,
         });
+        potentialClasses[m.className].setConstructor(
+          new PotentialMethod({
+            name: 'constructor',
+            methodNode: m.constructorNode,
+            potentialClass: potentialClasses[m.className]
+          })
+        );
       }
       else if ((m = matchFunctionVar(node))) {
         potentialClasses[m.className] = new PotentialClass({
           name: m.className,
-          constructor: new PotentialMethod({
-            name: 'constructor',
-            methodNode: m.constructorNode,
-          }),
           fullNode: node,
           commentNodes: [node],
           parent,
         });
+        potentialClasses[m.className].setConstructor(
+          new PotentialMethod({
+            name: 'constructor',
+            methodNode: m.constructorNode,
+            potentialClass: potentialClasses[m.className]
+          })
+        );
       }
       else if ((m = matchFunctionAssignment(node))) {
         if (potentialClasses[m.className]) {
@@ -92,6 +100,14 @@ export default function(ast, logger) {
               kind: desc.kind,
             }));
           });
+        }
+      }
+      else if ((m = inheritance.process(node, parent))) {
+        if (potentialClasses[m.className]) {
+          potentialClasses[m.className].setSuperClass(
+            m.superClass,
+            m.relatedExpressions
+          );
         }
       }
     },
