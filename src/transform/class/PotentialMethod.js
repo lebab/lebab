@@ -87,7 +87,20 @@ class PotentialMethod {
   // Transforms constructor body by replacing
   // SuperClass.call(this, ...args) --> super(...args)
   transformSuperCalls(body) {
-    const matchSuperConstructorCall = matchesAst({
+    body.body.forEach(node => {
+      if (this.isSuperConstructorCall(node)) {
+        node.expression.callee = {
+          type: 'Super'
+        };
+        node.expression.arguments = node.expression.arguments.slice(1);
+      }
+    });
+
+    return body;
+  }
+
+  isSuperConstructorCall(node) {
+    return matchesAst({
       type: 'ExpressionStatement',
       expression: {
         type: 'CallExpression',
@@ -105,17 +118,6 @@ class PotentialMethod {
           }
         ]
       }
-    });
-
-    body.body.forEach(node => {
-      if (matchSuperConstructorCall(node)) {
-        node.expression.callee = {
-          type: 'Super'
-        };
-        node.expression.arguments = node.expression.arguments.slice(1);
-      }
-    });
-
-    return body;
+    })(node);
   }
 }
