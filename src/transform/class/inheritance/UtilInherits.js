@@ -93,34 +93,11 @@ export default class UtilInherits {
   //           {String} m.className
   //           {Node} m.superClass
   match(node) {
-    // Match example: util.inherits
-    const matchesUtil = (callee) => {
-      return this.utilNode && matchesAst({
-        type: 'MemberExpression',
-        object: {
-          type: 'Identifier',
-          name: this.utilNode.name
-        },
-        property: {
-          type: 'Identifier',
-          name: 'inherits'
-        }
-      })(callee);
-    };
-
-    // Match example: inherits
-    const matchesInherits = (callee) => {
-      return this.inheritsNode && matchesAst({
-        type: 'Identifier',
-        name: this.inheritsNode.name
-      })(callee);
-    };
-
     return matchesAst({
       type: 'ExpressionStatement',
       expression: {
         type: 'CallExpression',
-        callee: (callee) => matchesUtil(callee) || matchesInherits(callee),
+        callee: (callee) => this.matchesUtil(callee) || this.matchesInherits(callee),
         arguments: [
           {
             type: 'Identifier',
@@ -130,5 +107,28 @@ export default class UtilInherits {
         ]
       }
     })(node);
+  }
+
+  // Match example: inherits
+  matchesInherits(callee) {
+    return this.inheritsNode && matchesAst({
+      type: 'Identifier',
+      name: this.inheritsNode.name
+    })(callee);
+  }
+
+  // Match example: util.inherits
+  matchesUtil(callee) {
+    return this.utilNode && matchesAst({
+      type: 'MemberExpression',
+      object: {
+        type: 'Identifier',
+        name: this.utilNode.name
+      },
+      property: {
+        type: 'Identifier',
+        name: 'inherits'
+      }
+    })(callee);
   }
 }
