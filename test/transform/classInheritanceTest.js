@@ -110,33 +110,23 @@ describe('Class Inheritance', () => {
   describe('prototype', () => {
     it('should preserve inheritance when prototype is created using new', () => {
       expectTransform(
-        'function MyClass(name) {\n' +
-        '  this.name = name;\n' +
+        'function MyClass() {\n' +
         '}\n' +
         'MyClass.prototype = new OtherClass();\n' +
         'MyClass.prototype.constructor = MyClass;'
       ).toReturn(
-        'class MyClass extends OtherClass {\n' +
-        '  constructor(name) {\n' +
-        '    this.name = name;\n' +
-        '  }\n' +
-        '}'
+        'class MyClass extends OtherClass {}'
       );
     });
 
     it('should preserve inheritance when prototype is created using Object.create()', () => {
       expectTransform(
-        'function MyClass(name) {\n' +
-        '  this.name = name;\n' +
+        'function MyClass() {\n' +
         '}\n' +
         'MyClass.prototype = Object.create(OtherClass.prototype);\n' +
         'MyClass.prototype.constructor = MyClass;'
       ).toReturn(
-        'class MyClass extends OtherClass {\n' +
-        '  constructor(name) {\n' +
-        '    this.name = name;\n' +
-        '  }\n' +
-        '}'
+        'class MyClass extends OtherClass {}'
       );
     });
 
