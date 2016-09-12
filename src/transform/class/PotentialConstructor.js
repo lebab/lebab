@@ -1,3 +1,4 @@
+import traverser from '../../traverser';
 import isEqualAst from './../../utils/isEqualAst';
 import {matchesAst} from './../../utils/matchesAst';
 import PotentialMethod from './PotentialMethod';
@@ -25,16 +26,16 @@ class PotentialConstructor extends PotentialMethod {
   // Transforms constructor body by replacing
   // SuperClass.call(this, ...args) --> super(...args)
   transformSuperCalls(body) {
-    body.body.forEach(node => {
-      if (this.isSuperConstructorCall(node)) {
-        node.expression.callee = {
-          type: 'Super'
-        };
-        node.expression.arguments = node.expression.arguments.slice(1);
+    return traverser.replace(body, {
+      enter: (node) => {
+        if (this.isSuperConstructorCall(node)) {
+          node.expression.callee = {
+            type: 'Super'
+          };
+          node.expression.arguments = node.expression.arguments.slice(1);
+        }
       }
     });
-
-    return body;
   }
 
   isSuperConstructorCall(node) {

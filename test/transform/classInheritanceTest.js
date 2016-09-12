@@ -105,6 +105,26 @@ describe('Class Inheritance', () => {
         '}'
       );
     });
+
+    it('should convert nested constructor .call(this, args...) to super()', () => {
+      expectTransform(
+        'var inherits = require("util").inherits;\n' +
+        'function MyClass(name) {\n' +
+        '  if (true)\n' +
+        '    OtherClass.call(this);\n' +
+        '}\n' +
+        'inherits(MyClass, OtherClass);'
+      ).toReturn(
+        'var inherits = require("util").inherits;\n' +
+        '\n' +
+        'class MyClass extends OtherClass {\n' +
+        '  constructor(name) {\n' +
+        '    if (true)\n' +
+        '      super();\n' +
+        '  }\n' +
+        '}'
+      );
+    });
   });
 
   describe('prototype', () => {
