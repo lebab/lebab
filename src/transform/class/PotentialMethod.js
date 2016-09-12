@@ -1,6 +1,4 @@
 import extractComments from './extractComments';
-import isEqualAst from './../../utils/isEqualAst';
-import {matchesAst} from './../../utils/matchesAst';
 import multiReplaceStatement from './../../utils/multiReplaceStatement';
 
 /**
@@ -81,49 +79,8 @@ class PotentialMethod {
     });
   }
 
+  // To be overridden in subclasses
   getBody() {
-    if (this.name === 'constructor') {
-      return this.transformSuperCalls(this.methodNode.body);
-    }
-    else {
-      return this.methodNode.body;
-    }
-  }
-
-  // Transforms constructor body by replacing
-  // SuperClass.call(this, ...args) --> super(...args)
-  transformSuperCalls(body) {
-    body.body.forEach(node => {
-      if (this.isSuperConstructorCall(node)) {
-        node.expression.callee = {
-          type: 'Super'
-        };
-        node.expression.arguments = node.expression.arguments.slice(1);
-      }
-    });
-
-    return body;
-  }
-
-  isSuperConstructorCall(node) {
-    return matchesAst({
-      type: 'ExpressionStatement',
-      expression: {
-        type: 'CallExpression',
-        callee: {
-          type: 'MemberExpression',
-          object: obj => isEqualAst(obj, this.superClass),
-          property: {
-            type: 'Identifier',
-            name: 'call'
-          }
-        },
-        arguments: [
-          {
-            type: 'ThisExpression'
-          }
-        ]
-      }
-    })(node);
+    return this.methodNode.body;
   }
 }

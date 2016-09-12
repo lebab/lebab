@@ -2,6 +2,7 @@ import _ from 'lodash';
 import traverser from '../../traverser';
 import PotentialClass from './PotentialClass';
 import PotentialMethod from './PotentialMethod';
+import PotentialConstructor from './PotentialConstructor';
 import matchFunctionDeclaration from './matchFunctionDeclaration';
 import matchFunctionVar from './matchFunctionVar';
 import matchFunctionAssignment from './matchFunctionAssignment';
@@ -26,8 +27,7 @@ export default function(ast, logger) {
           parent,
         });
         potentialClasses[m.className].setConstructor(
-          new PotentialMethod({
-            name: 'constructor',
+          new PotentialConstructor({
             methodNode: m.constructorNode,
             potentialClass: potentialClasses[m.className]
           })
@@ -41,8 +41,7 @@ export default function(ast, logger) {
           parent,
         });
         potentialClasses[m.className].setConstructor(
-          new PotentialMethod({
-            name: 'constructor',
+          new PotentialConstructor({
             methodNode: m.constructorNode,
             potentialClass: potentialClasses[m.className]
           })
