@@ -65,6 +65,8 @@ class PotentialClass {
         replacements: []
       });
     }
+
+    this.constructor.setSuperClass(superClass);
   }
 
   /**
@@ -125,4 +127,3 @@ class PotentialClass {
     return this.constructor.isEmpty() ? undefined : this.constructor.toMethodDefinition();
   }
 }
-

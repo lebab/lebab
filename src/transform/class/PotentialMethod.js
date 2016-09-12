@@ -17,7 +17,6 @@ class PotentialMethod {
    *   @param {Object} cfg.parent
    *   @param {String} cfg.kind Either 'get' or 'set' (optional)
    *   @param {Boolean} cfg.static True to make static method (optional)
-   *   @param {PotentialClass} cfg.potentialClass The class the method is in
    */
   constructor(cfg) {
     this.name = cfg.name;
@@ -27,7 +26,14 @@ class PotentialMethod {
     this.parent = cfg.parent;
     this.kind = cfg.kind || 'method';
     this.static = cfg.static || false;
-    this.potentialClass = cfg.potentialClass;
+  }
+
+  /**
+   * Sets the superClass node.
+   * @param {Node} superClass
+   */
+  setSuperClass(superClass) {
+    this.superClass = superClass;
   }
 
   /**
@@ -106,7 +112,7 @@ class PotentialMethod {
         type: 'CallExpression',
         callee: {
           type: 'MemberExpression',
-          object: obj => isEqualAst(obj, this.potentialClass.superClass),
+          object: obj => isEqualAst(obj, this.superClass),
           property: {
             type: 'Identifier',
             name: 'call'
