@@ -43,10 +43,6 @@ class PotentialMethod {
    * @return {MethodDefinition}
    */
   toMethodDefinition() {
-    if (this.name === 'constructor') {
-      this.modifySuperCalls();
-    }
-
     return {
       type: 'MethodDefinition',
       key: {
@@ -58,7 +54,7 @@ class PotentialMethod {
         type: 'FunctionExpression',
         params: this.methodNode.params,
         defaults: this.methodNode.defaults,
-        body: this.methodNode.body,
+        body: this.getBody(),
         generator: false,
         expression: false,
       },
@@ -79,7 +75,18 @@ class PotentialMethod {
     });
   }
 
-  modifySuperCalls() {
+  getBody() {
+    if (this.name === 'constructor') {
+      return this.transformSuperCalls(this.methodNode.body);
+    }
+    else {
+      return this.methodNode.body;
+    }
+  }
+
+  // Transforms constructor body by replacing
+  // SuperClass.call(this, ...args) --> super(...args)
+  transformSuperCalls(body) {
     const matchSuperConstructorCall = matchesAst({
       type: 'ExpressionStatement',
       expression: {
@@ -100,13 +107,15 @@ class PotentialMethod {
       }
     });
 
-    this.methodNode.body.body.forEach(body => {
-      if (matchSuperConstructorCall(body)) {
-        body.expression.callee = {
+    body.body.forEach(node => {
+      if (matchSuperConstructorCall(node)) {
+        node.expression.callee = {
           type: 'Super'
         };
-        body.expression.arguments = body.expression.arguments.slice(1);
+        node.expression.arguments = node.expression.arguments.slice(1);
       }
     });
+
+    return body;
   }
 }
