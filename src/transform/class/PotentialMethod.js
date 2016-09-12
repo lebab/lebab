@@ -92,7 +92,11 @@ class PotentialMethod {
             name: 'call'
           }
         },
-        arguments: (args) => args.length >= 1 && args[0].type === 'ThisExpression'
+        arguments: [
+          {
+            type: 'ThisExpression'
+          }
+        ]
       }
     });
 
