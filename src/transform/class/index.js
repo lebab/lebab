@@ -9,7 +9,7 @@ import matchFunctionAssignment from './matchFunctionAssignment';
 import matchPrototypeFunctionAssignment from './matchPrototypeFunctionAssignment';
 import matchPrototypeObjectAssignment from './matchPrototypeObjectAssignment';
 import matchObjectDefinePropertyCall from './matchObjectDefinePropertyCall';
-import Inheritance from './inheritance';
+import Inheritance from './inheritance/Inheritance';
 
 export default function(ast, logger) {
   const potentialClasses = {};
