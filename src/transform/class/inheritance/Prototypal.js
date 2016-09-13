@@ -24,7 +24,7 @@ export default class Prototypal {
    * Process a node and return inheritance details if found.
    * @param {Object} node
    * @param {Object} parent
-   * @returns null or {Object} m
+   * @returns {Object/undefined} m
    *                    {String}   m.className
    *                    {Node}     m.superClass
    *                    {Object[]} m.relatedExpressions
@@ -54,7 +54,6 @@ export default class Prototypal {
         };
       }
     }
-    return null;
   }
 
   // Match prototype assignments.

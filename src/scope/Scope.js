@@ -16,7 +16,7 @@ class Scope {
    */
   constructor(parent) {
     this.parent = parent;
-    this.vars = Object.create(null);
+    this.vars = Object.create(null); // eslint-disable-line no-null/no-null
   }
 
   /**

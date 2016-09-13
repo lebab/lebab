@@ -22,7 +22,7 @@ export default class UtilInherits {
    * Process a node and return inheritance details if found.
    * @param {Object} node
    * @param {Object} parent
-   * @returns null or {Object} m
+   * @returns {Object/undefined} m
    *                    {String}   m.className
    *                    {Node}     m.superClass
    *                    {Object[]} m.relatedExpressions
@@ -39,7 +39,6 @@ export default class UtilInherits {
         relatedExpressions: [{node, parent}]
       };
     }
-    return null;
   }
 
   // Discover variable declarator nodes for:

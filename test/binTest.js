@@ -23,7 +23,7 @@ describe('Smoke test for the executable script', function() {
   describe('when valid input and output file given', function() {
     it('transforms input file to output file', done => {
       exec('node ./bin/index.js -t let,arrow test/test-data.js -o test/output.js', (error, stdout, stderr) => {
-        expect(error).to.equal(null);
+        expect(error).to.equal(null); // eslint-disable-line no-null/no-null
         expect(stderr).to.equal('');
         expect(stdout).to.equal('');
 
@@ -48,7 +48,7 @@ describe('Smoke test for the executable script', function() {
 
     it('reads STDIN and writes STDOUT', done => {
       exec('node ./bin/index.js -t let,arrow < test/test-data.js > test/output.js', (error, stdout, stderr) => {
-        expect(error).to.equal(null);
+        expect(error).to.equal(null); // eslint-disable-line no-null/no-null
         expect(stderr).to.equal('');
         expect(stdout).to.equal('');
 
@@ -64,7 +64,7 @@ describe('Smoke test for the executable script', function() {
   describe('when invalid transform name given', () => {
     it('exits with error message', done => {
       exec('node ./bin/index.js --transform blah test/test-data.js', (error, stdout, stderr) => {
-        expect(error).not.to.equal(null);
+        expect(error).not.to.equal(null); // eslint-disable-line no-null/no-null
         expect(stderr).to.equal('Unknown transform "blah".\n');
         expect(stdout).to.equal('');
 
@@ -88,7 +88,7 @@ describe('Smoke test for the executable script', function() {
 
     it('logs warnings to STDERR', done => {
       exec('node ./bin/index.js --transform let test/test-data-warnings.js', (error, stdout, stderr) => {
-        expect(error).to.equal(null);
+        expect(error).to.equal(null); // eslint-disable-line no-null/no-null
         expect(stderr).to.equal('test/test-data-warnings.js:\n1:  warning  Unable to transform var  (let)\n');
         expect(stdout).to.equal('if (true) { var x = 10; }\n x = 12;\n');
         done();

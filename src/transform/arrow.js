@@ -40,7 +40,7 @@ var matchBoundFunction = matchesAst({
     computed: false,
     object: extract('func', {
       type: 'FunctionExpression',
-      id: null,
+      id: null, // eslint-disable-line no-null/no-null
       body: body => !hasArguments(body),
       generator: false
     }),

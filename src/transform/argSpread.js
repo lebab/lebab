@@ -53,7 +53,7 @@ var isUndefined = matchesAst({
 
 var isNull = matchesAst({
   type: 'Literal',
-  value: null,
+  value: null, // eslint-disable-line no-null/no-null
   raw: 'null'
 });
 

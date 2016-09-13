@@ -52,7 +52,7 @@ function createForOf({item, itemKind, array, body}) {
         {
           type: 'VariableDeclarator',
           id: item,
-          init: null
+          init: null // eslint-disable-line no-null/no-null
         }
       ],
       kind: itemKind

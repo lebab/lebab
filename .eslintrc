@@ -7,6 +7,9 @@
     "node": true,
     "mocha": true
   },
+  "plugins": [
+    "no-null"
+  ],
   "rules": {
     // # Possible errors
     //
@@ -255,6 +258,7 @@
     "space-unary-ops": 2,
     // require a space immediately following the // or /* in a comment
     "spaced-comment": 2,
+    "no-null/no-null": 2,
 
     // # ECMAScript 6
     //

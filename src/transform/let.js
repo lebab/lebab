@@ -40,7 +40,7 @@ export default function(ast, loggerInstance) {
           // Uninitialized variables can never be const.
           // But variables in for-in/of loop heads are actually initialized (although init === null).
           const inForLoopHead = isAnyForStatement(parent) && parent.left === node;
-          if (decl.init === null && !inForLoopHead) {
+          if (decl.init === null && !inForLoopHead) { // eslint-disable-line no-null/no-null
             variableMarker.markModified(decl.id.name);
           }
         });
