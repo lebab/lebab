@@ -19,21 +19,7 @@ export default function(ast, logger) {
     enter(node, parent) {
       let m;
 
-      if ((m = matchFunctionDeclaration(node))) {
-        potentialClasses[m.className] = new PotentialClass({
-          name: m.className,
-          fullNode: node,
-          commentNodes: [node],
-          parent,
-        });
-        potentialClasses[m.className].setConstructor(
-          new PotentialConstructor({
-            methodNode: m.constructorNode,
-            potentialClass: potentialClasses[m.className]
-          })
-        );
-      }
-      else if ((m = matchFunctionVar(node))) {
+      if ((m = matchFunctionDeclaration(node) || matchFunctionVar(node))) {
         potentialClasses[m.className] = new PotentialClass({
           name: m.className,
           fullNode: node,
