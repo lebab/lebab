@@ -5,14 +5,15 @@ import {matchesAst, matchesLength, extract} from '../../../utils/matchesAst';
  * transformation.
  *
  * Detects:
- *   function Class1() {}
- *   function Class2() {}
+ *
  *   Class1.prototype = Object.create(Class2.prototype);
- *   Class1.prototype.constructor = Class1;
- * and:
- *   function Class1() {}
- *   function Class2() {}
+ *
+ * or:
+ *
  *   Class1.prototype = new Class2();
+ *
+ * optionally followed by:
+ *
  *   Class1.prototype.constructor = Class1;
  */
 export default class Prototypal {
