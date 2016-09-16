@@ -2,7 +2,6 @@
 import {expect} from 'chai';
 import fs from 'fs';
 import {exec} from 'child_process';
-import os from 'os';
 
 describe('Smoke test for the executable script', function() {
   beforeEach(() => {
