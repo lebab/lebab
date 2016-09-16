@@ -30,7 +30,7 @@ export default class Prototypal {
    *                    {Object[]} m.relatedExpressions
    */
   process(node, parent) {
-    var m;
+    let m;
     if ((m = this.matchPrototypeAssignment(node))) {
       this.foundSuperclasses[m.className] = m.superClass;
 
@@ -43,7 +43,7 @@ export default class Prototypal {
       };
     }
     else if ((m = this.matchConstructorAssignment(node))) {
-      var superClass = this.foundSuperclasses[m.className];
+      const superClass = this.foundSuperclasses[m.className];
       if (superClass) {
         return {
           className: m.className,

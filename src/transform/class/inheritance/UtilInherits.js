@@ -28,7 +28,7 @@ export default class UtilInherits {
    *                    {Object[]} m.relatedExpressions
    */
   process(node, parent) {
-    var m;
+    let m;
     if (isVarWithRequireCalls(node) && parent.type === 'Program') {
       this.discoverIdentifiers(node);
     }
@@ -51,7 +51,7 @@ export default class UtilInherits {
   //
   // @param {Object} node
   discoverIdentifiers(node) {
-    var declaration = _.find(node.declarations, (dec) =>
+    const declaration = _.find(node.declarations, (dec) =>
       matchesAst({
         init: {
           callee: {
