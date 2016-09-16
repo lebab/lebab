@@ -1,4 +1,4 @@
-[![Build Status](https://img.shields.io/travis/mohebifar/lebab.svg?style=flat-square)](http://travis-ci.org/mohebifar/lebab)
+[![Build Status](https://img.shields.io/travis/lebab/lebab.svg?style=flat-square)](http://travis-ci.org/lebab/lebab)
 [![License](http://img.shields.io/:license-mit-brightgreen.svg?style=flat-square)](http://mohebifar.mit-license.org)
 [![JS.ORG](https://img.shields.io/badge/js.org-xto6-ffb400.svg?style=flat-square)](http://js.org)
 
