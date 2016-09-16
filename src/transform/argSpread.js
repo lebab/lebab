@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import traverser from '../traverser';
-import {matchesAst, extract} from '../utils/matchesAst';
+import {matchesAst, isAstMatch, extract} from '../utils/matchesAst';
 
 export default function(ast) {
   traverser.replace(ast, {
@@ -58,7 +58,7 @@ const isNull = matchesAst({
 });
 
 function matchFunctionApplyCall(node) {
-  return matchesAst({
+  return isAstMatch(node, {
     type: 'CallExpression',
     callee: {
       type: 'MemberExpression',
@@ -75,11 +75,11 @@ function matchFunctionApplyCall(node) {
       arg => isUndefined(arg) || isNull(arg),
       extract('array')
     ]
-  })(node);
+  });
 }
 
 function matchObjectApplyCall(node) {
-  return matchesAst({
+  return isAstMatch(node, {
     type: 'CallExpression',
     callee: {
       type: 'MemberExpression',
@@ -96,5 +96,5 @@ function matchObjectApplyCall(node) {
       extract('thisParam'),
       extract('arrayParam')
     ]
-  })(node);
+  });
 }

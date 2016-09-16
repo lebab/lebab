@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {matchesAst, matchesLength, extract} from '../../../utils/matchesAst';
+import {isAstMatch, matchesLength, extract} from '../../../utils/matchesAst';
 import isVarWithRequireCalls from '../../../utils/isVarWithRequireCalls';
 
 /**
@@ -52,15 +52,15 @@ export default class UtilInherits {
   // @param {Object} node
   discoverIdentifiers(node) {
     const declaration = _.find(node.declarations, (dec) =>
-      matchesAst({
+      isAstMatch(dec, {
         init: {
           callee: {
             name: 'require'
           },
           arguments: matchesLength([{value: 'util'}])
         }
-      })(dec) ||
-      matchesAst({
+      }) ||
+      isAstMatch(dec, {
         init: {
           object: {
             callee: {
@@ -68,11 +68,11 @@ export default class UtilInherits {
             },
             arguments: matchesLength([{value: 'util'}])
           }
-        }})(dec)
+        }})
     );
 
     if (declaration) {
-      if (matchesAst({init: {property: {name: 'inherits'}}})(declaration)) {
+      if (isAstMatch(declaration, {init: {property: {name: 'inherits'}}})) {
         this.inheritsNode = declaration.id;
       }
       else {
@@ -92,7 +92,7 @@ export default class UtilInherits {
   //           {String} m.className
   //           {Node} m.superClass
   match(node) {
-    return matchesAst({
+    return isAstMatch(node, {
       type: 'ExpressionStatement',
       expression: {
         type: 'CallExpression',
@@ -105,20 +105,20 @@ export default class UtilInherits {
           extract('superClass')
         ]
       }
-    })(node);
+    });
   }
 
   // Match example: inherits
   matchesInherits(callee) {
-    return this.inheritsNode && matchesAst({
+    return this.inheritsNode && isAstMatch(callee, {
       type: 'Identifier',
       name: this.inheritsNode.name
-    })(callee);
+    });
   }
 
   // Match example: util.inherits
   matchesUtil(callee) {
-    return this.utilNode && matchesAst({
+    return this.utilNode && isAstMatch(callee, {
       type: 'MemberExpression',
       object: {
         type: 'Identifier',
@@ -128,6 +128,6 @@ export default class UtilInherits {
         type: 'Identifier',
         name: 'inherits'
       }
-    })(callee);
+    });
   }
 }

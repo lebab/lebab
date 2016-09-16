@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import traverser from '../traverser';
 import ArrowFunctionExpression from '../syntax/ArrowFunctionExpression';
-import {matchesAst, matchesLength, extract} from '../utils/matchesAst';
+import {matchesAst, isAstMatch, matchesLength, extract} from '../utils/matchesAst';
 import copyComments from '../utils/copyComments';
 
 export default function(ast, logger) {
@@ -34,7 +34,7 @@ function isFunctionConvertableToArrow(node, parent) {
 
 // Matches: function(){}.bind(this)
 function matchBoundFunction(node) {
-  return matchesAst({
+  return isAstMatch(node, {
     type: 'CallExpression',
     callee: {
       type: 'MemberExpression',
@@ -55,7 +55,7 @@ function matchBoundFunction(node) {
         type: 'ThisExpression'
       }
     ]
-  })(node);
+  });
 }
 
 function hasThis(ast) {

@@ -1,6 +1,6 @@
 import traverser from '../../traverser';
 import isEqualAst from './../../utils/isEqualAst';
-import {matchesAst} from './../../utils/matchesAst';
+import {isAstMatch} from './../../utils/matchesAst';
 import PotentialMethod from './PotentialMethod';
 
 /**
@@ -39,7 +39,7 @@ class PotentialConstructor extends PotentialMethod {
   }
 
   isSuperConstructorCall(node) {
-    return matchesAst({
+    return isAstMatch(node, {
       type: 'ExpressionStatement',
       expression: {
         type: 'CallExpression',
@@ -57,6 +57,6 @@ class PotentialConstructor extends PotentialMethod {
           }
         ]
       }
-    })(node);
+    });
   }
 }

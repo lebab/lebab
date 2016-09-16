@@ -1,4 +1,4 @@
-import {matchesAst, matchesLength, extract} from '../../../utils/matchesAst';
+import {isAstMatch, matchesLength, extract} from '../../../utils/matchesAst';
 
 /**
  * Processes nodes to detect super classes and return information for later
@@ -59,7 +59,7 @@ export default class Prototypal {
 
   // Matches: <className>.prototype = new <superClass>();
   matchNewAssignment(node) {
-    return matchesAst({
+    return isAstMatch(node, {
       type: 'ExpressionStatement',
       expression: {
         type: 'AssignmentExpression',
@@ -79,12 +79,12 @@ export default class Prototypal {
           callee: extract('superClass')
         }
       }
-    })(node);
+    });
   }
 
   // Matches: <className>.prototype = Object.create(<superClass>);
   matchObjectCreateAssignment(node) {
-    return matchesAst({
+    return isAstMatch(node, {
       type: 'ExpressionStatement',
       expression: {
         type: 'AssignmentExpression',
@@ -122,12 +122,12 @@ export default class Prototypal {
           }])
         }
       }
-    })(node);
+    });
   }
 
   // Matches: <className>.prototype.constructor = <constructorClassName>;
   matchConstructorAssignment(node) {
-    return matchesAst({
+    return isAstMatch(node, {
       type: 'ExpressionStatement',
       expression: {
         type: 'AssignmentExpression',
@@ -154,6 +154,6 @@ export default class Prototypal {
           name: extract('constructorClassName')
         }
       }
-    })(node);
+    });
   }
 }
