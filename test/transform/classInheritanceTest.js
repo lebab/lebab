@@ -132,6 +132,16 @@ describe('Class Inheritance', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
+        'MyClass.prototype = new OtherClass();'
+      ).toReturn(
+        'class MyClass extends OtherClass {}'
+      );
+    });
+
+    it('should discard the prototype.constructor assignment', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
         'MyClass.prototype = new OtherClass();\n' +
         'MyClass.prototype.constructor = MyClass;'
       ).toReturn(
@@ -139,12 +149,19 @@ describe('Class Inheritance', () => {
       );
     });
 
+    it('should not detect inheritance from prototype.constructor assignment alone', () => {
+      expectNoChange(
+        'function MyClass() {\n' +
+        '}\n' +
+        'MyClass.prototype.constructor = MyClass;'
+      );
+    });
+
     it('should preserve inheritance when prototype is created using Object.create()', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
-        'MyClass.prototype = Object.create(OtherClass.prototype);\n' +
-        'MyClass.prototype.constructor = MyClass;'
+        'MyClass.prototype = Object.create(OtherClass.prototype);'
       ).toReturn(
         'class MyClass extends OtherClass {}'
       );
@@ -156,8 +173,7 @@ describe('Class Inheritance', () => {
         '  OtherClass.call(this, name);\n' +
         '  this.name = name;\n' +
         '}\n' +
-        'MyClass.prototype = new OtherClass();\n' +
-        'MyClass.prototype.constructor = MyClass;'
+        'MyClass.prototype = new OtherClass();'
       ).toReturn(
         'class MyClass extends OtherClass {\n' +
         '  constructor(name) {\n' +
@@ -175,8 +191,7 @@ describe('Class Inheritance', () => {
         '  OtherClass.call(null, name);\n' +
         '  this.name = name;\n' +
         '}\n' +
-        'MyClass.prototype = new OtherClass();\n' +
-        'MyClass.prototype.constructor = MyClass;'
+        'MyClass.prototype = new OtherClass();'
       ).toReturn(
         'class MyClass extends OtherClass {\n' +
         '  constructor(name) {\n' +

@@ -17,7 +17,7 @@ import {matchesAst, matchesLength, extract} from '../../../utils/matchesAst';
  */
 export default class Prototypal {
   constructor() {
-    this.prototypeAssignments = [];
+    this.foundSuperclasses = {};
   }
 
   /**
@@ -32,24 +32,24 @@ export default class Prototypal {
   process(node, parent) {
     var m;
     if ((m = this.matchPrototypeAssignment(node))) {
-      this.prototypeAssignments[m.className] = {
-        node,
-        parent,
-        superClass: m.superClass
+      this.foundSuperclasses[m.className] = m.superClass;
+
+      return {
+        className: m.className,
+        superClass: m.superClass,
+        relatedExpressions: [
+          {node, parent},
+        ]
       };
     }
     else if ((m = this.matchConstructorAssignment(node))) {
-      var prototypeAssignment = this.prototypeAssignments[m.className];
-      if (prototypeAssignment) {
+      var superClass = this.foundSuperclasses[m.className];
+      if (superClass) {
         return {
           className: m.className,
-          superClass: prototypeAssignment.superClass,
+          superClass: superClass,
           relatedExpressions: [
             {node, parent},
-            {
-              node: prototypeAssignment.node,
-              parent: prototypeAssignment.parent
-            }
           ]
         };
       }
