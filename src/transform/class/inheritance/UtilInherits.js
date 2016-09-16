@@ -7,9 +7,9 @@ import isVarWithRequireCalls from '../../../utils/isVarWithRequireCalls';
  * transformation.
  *
  * Detects:
+ *
  *   var util = require('util');
- *   function Class1() {}
- *   function Class2() {}
+ *   ...
  *   util.inherits(Class1, Class2);
  */
 export default class UtilInherits {
@@ -48,8 +48,6 @@ export default class UtilInherits {
   // Will store the discovered nodes in:
   //  this.utilNode
   //  this.inheritsNode
-  //
-  // @param {Object} node
   discoverIdentifiers(node) {
     const declaration = _.find(node.declarations, (dec) =>
       isAstMatch(dec, {
@@ -83,14 +81,8 @@ export default class UtilInherits {
 
   // Discover usage of this.utilNode or this.inheritsNode
   //
-  // Examples:
-  //   util.inherits(Class, SuperClass);
-  //   inherits(Class, SuperClass);
-  //
-  // @param {Object} node
-  // @return {Object} m
-  //           {String} m.className
-  //           {Node} m.superClass
+  // Matches: util.inherits(<className>, <superClass>);
+  // Matches: inherits(<className>, <superClass>);
   match(node) {
     return isAstMatch(node, {
       type: 'ExpressionStatement',
@@ -108,7 +100,7 @@ export default class UtilInherits {
     });
   }
 
-  // Match example: inherits
+  // Matches: inherits
   matchesInherits(callee) {
     return this.inheritsNode && isAstMatch(callee, {
       type: 'Identifier',
@@ -116,7 +108,7 @@ export default class UtilInherits {
     });
   }
 
-  // Match example: util.inherits
+  // Matches: util.inherits
   matchesUtil(callee) {
     return this.utilNode && isAstMatch(callee, {
       type: 'MemberExpression',
