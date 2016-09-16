@@ -1,5 +1,6 @@
 import fs from 'fs';
 
+// Taken from http://stackoverflow.com/questions/3430939/node-js-readsync-from-stdin/16048083#16048083
 function readStdin() {
   const BUFSIZE = 256;
   const buf = 'alloc' in Buffer ? Buffer.alloc(BUFSIZE) : new Buffer(BUFSIZE);
