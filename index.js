@@ -1,4 +1,4 @@
-var builtinTransforms = require('./lib/builtinTransforms');
+var builtinTransforms = require('./lib/builtinTransforms'); // eslint-disable-line no-var
 
 /**
  * Exposes API similar to Babel:

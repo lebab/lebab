@@ -33,28 +33,30 @@ function isFunctionConvertableToArrow(node, parent) {
 }
 
 // Matches: function(){}.bind(this)
-var matchBoundFunction = matchesAst({
-  type: 'CallExpression',
-  callee: {
-    type: 'MemberExpression',
-    computed: false,
-    object: extract('func', {
-      type: 'FunctionExpression',
-      id: null, // eslint-disable-line no-null/no-null
-      body: body => !hasArguments(body),
-      generator: false
-    }),
-    property: {
-      type: 'Identifier',
-      name: 'bind'
-    }
-  },
-  arguments: [
-    {
-      type: 'ThisExpression'
-    }
-  ]
-});
+function matchBoundFunction(node) {
+  return matchesAst({
+    type: 'CallExpression',
+    callee: {
+      type: 'MemberExpression',
+      computed: false,
+      object: extract('func', {
+        type: 'FunctionExpression',
+        id: null, // eslint-disable-line no-null/no-null
+        body: body => !hasArguments(body),
+        generator: false
+      }),
+      property: {
+        type: 'Identifier',
+        name: 'bind'
+      }
+    },
+    arguments: [
+      {
+        type: 'ThisExpression'
+      }
+    ]
+  })(node);
+}
 
 function hasThis(ast) {
   return hasInFunctionBody(ast, {type: 'ThisExpression'});

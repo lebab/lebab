@@ -278,6 +278,8 @@
     "no-this-before-super": 2,
     // disallow unnecessary constructor
     "no-useless-constructor": 2,
+    // Only allow let/const
+    "no-var": 2,
     // require method shorthand syntax for object literals
     "object-shorthand": [2, "methods"],
     // suggest using arrow functions as callbacks

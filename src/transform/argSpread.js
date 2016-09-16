@@ -46,51 +46,55 @@ function omitLoc(obj) {
   }
 }
 
-var isUndefined = matchesAst({
+const isUndefined = matchesAst({
   type: 'Identifier',
   name: 'undefined'
 });
 
-var isNull = matchesAst({
+const isNull = matchesAst({
   type: 'Literal',
   value: null, // eslint-disable-line no-null/no-null
   raw: 'null'
 });
 
-var matchFunctionApplyCall = matchesAst({
-  type: 'CallExpression',
-  callee: {
-    type: 'MemberExpression',
-    computed: false,
-    object: extract('func', {
-      type: 'Identifier'
-    }),
-    property: {
-      type: 'Identifier',
-      name: 'apply'
-    }
-  },
-  arguments: [
-    node => isUndefined(node) || isNull(node),
-    extract('array')
-  ]
-});
-
-var matchObjectApplyCall = matchesAst({
-  type: 'CallExpression',
-  callee: {
-    type: 'MemberExpression',
-    computed: false,
-    object: extract('memberExpr', {
+function matchFunctionApplyCall(node) {
+  return matchesAst({
+    type: 'CallExpression',
+    callee: {
       type: 'MemberExpression',
-    }),
-    property: {
-      type: 'Identifier',
-      name: 'apply'
-    }
-  },
-  arguments: [
-    extract('thisParam'),
-    extract('arrayParam')
-  ]
-});
+      computed: false,
+      object: extract('func', {
+        type: 'Identifier'
+      }),
+      property: {
+        type: 'Identifier',
+        name: 'apply'
+      }
+    },
+    arguments: [
+      arg => isUndefined(arg) || isNull(arg),
+      extract('array')
+    ]
+  })(node);
+}
+
+function matchObjectApplyCall(node) {
+  return matchesAst({
+    type: 'CallExpression',
+    callee: {
+      type: 'MemberExpression',
+      computed: false,
+      object: extract('memberExpr', {
+        type: 'MemberExpression',
+      }),
+      property: {
+        type: 'Identifier',
+        name: 'apply'
+      }
+    },
+    arguments: [
+      extract('thisParam'),
+      extract('arrayParam')
+    ]
+  })(node);
+}
