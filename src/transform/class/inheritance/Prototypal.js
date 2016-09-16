@@ -45,7 +45,7 @@ export default class Prototypal {
     }
     else if ((m = this.matchConstructorAssignment(node))) {
       const superClass = this.foundSuperclasses[m.className];
-      if (superClass) {
+      if (superClass && m.className === m.constructorClassName) {
         return {
           className: m.className,
           superClass: superClass,
@@ -125,14 +125,7 @@ export default class Prototypal {
     })(node);
   }
 
-  // Match constructor reassignment.
-  //
-  // Example:
-  //   Class1.prototype.constructor = Class1;
-  //
-  // @param {Object} node
-  // @return {Object} m
-  //           {String} m.className
+  // Matches: <className>.prototype.constructor = <constructorClassName>;
   matchConstructorAssignment(node) {
     return matchesAst({
       type: 'ExpressionStatement',
@@ -158,7 +151,7 @@ export default class Prototypal {
         },
         right: {
           type: 'Identifier',
-          name: extract('className')
+          name: extract('constructorClassName')
         }
       }
     })(node);

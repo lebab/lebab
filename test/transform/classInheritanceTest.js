@@ -149,6 +149,20 @@ describe('Class Inheritance', () => {
       );
     });
 
+    it('should ignore bogus prototype.constructor assignments', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        'MyClass.prototype = new OtherClass();\n' +
+        'OtherClass.prototype.constructor = MyClass;\n' +
+        'MyClass.prototype.constructor = OtherClass;'
+      ).toReturn(
+        'class MyClass extends OtherClass {}\n' +
+        'OtherClass.prototype.constructor = MyClass;\n' +
+        'MyClass.prototype.constructor = OtherClass;'
+      );
+    });
+
     it('should not detect inheritance from prototype.constructor assignment alone', () => {
       expectNoChange(
         'function MyClass() {\n' +
