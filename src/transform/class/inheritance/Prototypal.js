@@ -32,7 +32,7 @@ export default class Prototypal {
    */
   process(node, parent) {
     let m;
-    if ((m = this.matchPrototypeAssignment(node))) {
+    if ((m = this.matchNewAssignment(node) || this.matchObjectCreateAssignment(node))) {
       this.foundSuperclasses[m.className] = m.superClass;
 
       return {
@@ -57,19 +57,9 @@ export default class Prototypal {
     }
   }
 
-  // Match prototype assignments.
-  //
-  // Examples:
-  //   Class1.prototype = new Class2();
-  //   Class1.prototype = Object.create(Class2);
-  //
-  // @param {Object} node
-  // @return {Object} m
-  //           {String} m.className
-  //           {Node} m.superClass
-  matchPrototypeAssignment(node) {
-    // Match example: Class1.prototype = new Class2();
-    const matchNewAssignment = matchesAst({
+  // Matches: <className>.prototype = new <superClass>();
+  matchNewAssignment(node) {
+    return matchesAst({
       type: 'ExpressionStatement',
       expression: {
         type: 'AssignmentExpression',
@@ -89,10 +79,12 @@ export default class Prototypal {
           callee: extract('superClass')
         }
       }
-    });
+    })(node);
+  }
 
-    // Match example: Class1.prototype = Object.create(Class2);
-    const matchObjectCreateAssignment = matchesAst({
+  // Matches: <className>.prototype = Object.create(<superClass>);
+  matchObjectCreateAssignment(node) {
+    return matchesAst({
       type: 'ExpressionStatement',
       expression: {
         type: 'AssignmentExpression',
@@ -130,10 +122,7 @@ export default class Prototypal {
           }])
         }
       }
-    });
-
-    return matchNewAssignment(node) ||
-           matchObjectCreateAssignment(node);
+    })(node);
   }
 
   // Match constructor reassignment.
