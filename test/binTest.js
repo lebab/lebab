@@ -37,15 +37,6 @@ describe('Smoke test for the executable script', function() {
   });
 
   describe('when no input/output files given', () => {
-    beforeEach(function() {
-      // Skip this test in Windows.
-      // The reading of /dev/stdin does not work in Windows.
-      // Therefore Lebab currently does not support standard input in Windows.
-      if (os.type() === 'Windows_NT') {
-        this.skip(); // eslint-disable-line no-invalid-this
-      }
-    });
-
     it('reads STDIN and writes STDOUT', done => {
       exec('node ./bin/index.js -t let,arrow < test/test-data.js > test/output.js', (error, stdout, stderr) => {
         expect(error).to.equal(null); // eslint-disable-line no-null/no-null
