@@ -32,7 +32,7 @@ export default class UtilInherits {
     if (isVarWithRequireCalls(node) && parent.type === 'Program') {
       this.discoverIdentifiers(node);
     }
-    else if ((m = this.match(node))) {
+    else if ((m = this.matchUtilInherits(node))) {
       return {
         className: m.className,
         superClass: m.superClass,
@@ -83,12 +83,12 @@ export default class UtilInherits {
   //
   // Matches: util.inherits(<className>, <superClass>);
   // Matches: inherits(<className>, <superClass>);
-  match(node) {
+  matchUtilInherits(node) {
     return isAstMatch(node, {
       type: 'ExpressionStatement',
       expression: {
         type: 'CallExpression',
-        callee: (callee) => this.matchesUtil(callee) || this.matchesInherits(callee),
+        callee: (callee) => this.isUtilInherits(callee) || this.isInherits(callee),
         arguments: [
           {
             type: 'Identifier',
@@ -101,7 +101,7 @@ export default class UtilInherits {
   }
 
   // Matches: inherits
-  matchesInherits(callee) {
+  isInherits(callee) {
     return this.inheritsNode && isAstMatch(callee, {
       type: 'Identifier',
       name: this.inheritsNode.name
@@ -109,7 +109,7 @@ export default class UtilInherits {
   }
 
   // Matches: util.inherits
-  matchesUtil(callee) {
+  isUtilInherits(callee) {
     return this.utilNode && isAstMatch(callee, {
       type: 'MemberExpression',
       object: {
