@@ -3,9 +3,22 @@ import _ from 'lodash';
 /**
  * Creates a function that matches AST against the given pattern,
  *
- * Similar to LoDash.matches(), but with the addition that a Function
- * can be provided to assert various conditions e.g. checking
- * that an array must be of a specific length.
+ * See: isAstMatch()
+ *
+ * @param  {Object} pattern Pattern to test against
+ * @return {Function} Function that returns an object with
+ * extracted fields or false when no match found.
+ */
+export function matchesAst(pattern) {
+  return (ast) => isAstMatch(ast, pattern);
+}
+
+/**
+ * Matches AST against the given pattern,
+ *
+ * Similar to LoDash.isMatch(), but with the addition that a Function
+ * can be provided to assert various conditions e.g. checking that
+ * number is within a certain range.
  *
  * Additionally there are utility functions:
  *
@@ -14,31 +27,30 @@ import _ from 'lodash';
  *
  * - matchesLength() ensures the exact array length is respected.
  *
- * @param  {Object}  pattern
- * @return {Function} Function that returns an object with
- * extracted fields or false when no match found.
+ * @param  {Object} ast The AST node to test
+ * @param {Object} pattern Pattern to test against
+ * @return {Object/Boolean} an object with extracted fields
+ * or false when no match found.
  */
-export function matchesAst(pattern) {
-  return (ast) => {
-    const extractedFields = {};
+export function isAstMatch(ast, pattern) {
+  const extractedFields = {};
 
-    const matches = _.isMatchWith(ast, pattern, (value, matcher) => {
-      if (typeof matcher === 'function') {
-        const result = matcher(value);
-        if (typeof result === 'object') {
-          _.assign(extractedFields, result);
-        }
-        return result;
+  const matches = _.isMatchWith(ast, pattern, (value, matcher) => {
+    if (typeof matcher === 'function') {
+      const result = matcher(value);
+      if (typeof result === 'object') {
+        _.assign(extractedFields, result);
       }
-    });
+      return result;
+    }
+  });
 
-    if (matches) {
-      return extractedFields;
-    }
-    else {
-      return false;
-    }
-  };
+  if (matches) {
+    return extractedFields;
+  }
+  else {
+    return false;
+  }
 }
 
 /**
