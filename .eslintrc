@@ -258,7 +258,6 @@
     "space-unary-ops": 2,
     // require a space immediately following the // or /* in a comment
     "spaced-comment": 2,
-    "no-null/no-null": 2,
 
     // # ECMAScript 6
     //
@@ -296,5 +295,8 @@
     "require-yield": 2,
     // disallow spaces inside template ${curly block}
     "template-curly-spacing": 2,
+
+    // Prefer undefined to null
+    "no-null/no-null": 2,
   }
 }
