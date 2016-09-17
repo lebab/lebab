@@ -49,34 +49,46 @@ export default class UtilInherits {
   //  this.utilNode
   //  this.inheritsNode
   discoverIdentifiers(node) {
-    const declaration = _.find(node.declarations, (dec) =>
-      isAstMatch(dec, {
-        init: {
+    let declaration;
+    if ((declaration = _.find(node.declarations, dec => this.isRequireUtil(dec)))) {
+      this.utilNode = declaration.id;
+    }
+    else if ((declaration = _.find(node.declarations, dec => this.isRequireUtilInherits(dec)))) {
+      this.inheritsNode = declaration.id;
+    }
+  }
+
+  // Matches: <id> = require("util")
+  isRequireUtil(dec) {
+    return isAstMatch(dec, {
+      init: {
+        callee: {
+          name: 'require'
+        },
+        arguments: matchesLength([{
+          value: 'util'
+        }])
+      }
+    });
+  }
+
+  // Matches: <id> = require("util").inherits
+  isRequireUtilInherits(dec) {
+    return isAstMatch(dec, {
+      init: {
+        object: {
           callee: {
             name: 'require'
           },
-          arguments: matchesLength([{value: 'util'}])
+          arguments: matchesLength([{
+            value: 'util'
+          }])
+        },
+        property: {
+          name: 'inherits'
         }
-      }) ||
-      isAstMatch(dec, {
-        init: {
-          object: {
-            callee: {
-              name: 'require'
-            },
-            arguments: matchesLength([{value: 'util'}])
-          }
-        }})
-    );
-
-    if (declaration) {
-      if (isAstMatch(declaration, {init: {property: {name: 'inherits'}}})) {
-        this.inheritsNode = declaration.id;
       }
-      else {
-        this.utilNode = declaration.id;
-      }
-    }
+    });
   }
 
   // Discover usage of this.utilNode or this.inheritsNode
