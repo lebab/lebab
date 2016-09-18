@@ -64,67 +64,6 @@ describe('Class Inheritance', () => {
         'inherits(MyClass, ParentClass);'
       );
     });
-
-    it('converts ParentClass.call(this, args...) in constructor to super()', () => {
-      expectTransform(
-        'var inherits = require("util").inherits;\n' +
-        'function MyClass(name) {\n' +
-        '  ParentClass.call(this, name);\n' +
-        '  this.name = name;\n' +
-        '}\n' +
-        'inherits(MyClass, ParentClass);'
-      ).toReturn(
-        'var inherits = require("util").inherits;\n' +
-        '\n' +
-        'class MyClass extends ParentClass {\n' +
-        '  constructor(name) {\n' +
-        '    super(name);\n' +
-        '    this.name = name;\n' +
-        '  }\n' +
-        '}'
-      );
-    });
-
-    it('does not convert ParentClass.call(args...) in constructor to super() ', () => {
-      // If we call the parent constructor with no `this` then we will not convert to a super call.
-      expectTransform(
-        'var inherits = require("util").inherits;\n' +
-        'function MyClass(name) {\n' +
-        '  ParentClass.call(null, name);\n' +
-        '  this.name = name;\n' +
-        '}\n' +
-        'inherits(MyClass, ParentClass);'
-      ).toReturn(
-        'var inherits = require("util").inherits;\n' +
-        '\n' +
-        'class MyClass extends ParentClass {\n' +
-        '  constructor(name) {\n' +
-        '    ParentClass.call(null, name);\n' +
-        '    this.name = name;\n' +
-        '  }\n' +
-        '}'
-      );
-    });
-
-    it('converts nested ParentClass.call(this, args...) in constructor to super()', () => {
-      expectTransform(
-        'var inherits = require("util").inherits;\n' +
-        'function MyClass(name) {\n' +
-        '  if (true)\n' +
-        '    ParentClass.call(this);\n' +
-        '}\n' +
-        'inherits(MyClass, ParentClass);'
-      ).toReturn(
-        'var inherits = require("util").inherits;\n' +
-        '\n' +
-        'class MyClass extends ParentClass {\n' +
-        '  constructor(name) {\n' +
-        '    if (true)\n' +
-        '      super();\n' +
-        '  }\n' +
-        '}'
-      );
-    });
   });
 
   describe('prototype', () => {
@@ -180,8 +119,10 @@ describe('Class Inheritance', () => {
         'class MyClass extends ParentClass {}'
       );
     });
+  });
 
-    it('converts ParentClass.call(this, args...) in constructor to super()', () => {
+  describe('super() calls in constructor', () => {
+    it('converts ParentClass.call(this, args...) to super()', () => {
       expectTransform(
         'function MyClass(name) {\n' +
         '  ParentClass.call(this, name);\n' +
@@ -198,8 +139,7 @@ describe('Class Inheritance', () => {
       );
     });
 
-    it('does not convert ParentClass.call(args...) in constructor to super() ', () => {
-      // If we call the parent constructor with no `this` then we will not convert to a super call.
+    it('does not convert ParentClass.call(args...) without this to super() ', () => {
       expectTransform(
         'function MyClass(name) {\n' +
         '  ParentClass.call(null, name);\n' +
@@ -211,6 +151,23 @@ describe('Class Inheritance', () => {
         '  constructor(name) {\n' +
         '    ParentClass.call(null, name);\n' +
         '    this.name = name;\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('converts nested ParentClass.call(this, args...) in constructor to super()', () => {
+      expectTransform(
+        'function MyClass(name) {\n' +
+        '  if (true)\n' +
+        '    ParentClass.call(this);\n' +
+        '}\n' +
+        'MyClass.prototype = new ParentClass();'
+      ).toReturn(
+        'class MyClass extends ParentClass {\n' +
+        '  constructor(name) {\n' +
+        '    if (true)\n' +
+        '      super();\n' +
         '  }\n' +
         '}'
       );
