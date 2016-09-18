@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import {isAstMatch, matchesLength} from '../../../utils/matchesAst';
-import isVarWithRequireCalls from '../../../utils/isVarWithRequireCalls';
 
 /**
  * Detects variable name imported from require("util")
@@ -13,7 +12,7 @@ export default class RequireDetector {
    * @return {Object} Identifier
    */
   detectUtil(node) {
-    if (!isVarWithRequireCalls(node)) {
+    if (node.type !== 'VariableDeclaration') {
       return undefined;
     }
 
@@ -28,7 +27,7 @@ export default class RequireDetector {
    * @return {Object} Identifier
    */
   detectUtilInherits(node) {
-    if (!isVarWithRequireCalls(node)) {
+    if (node.type !== 'VariableDeclaration') {
       return undefined;
     }
 
@@ -39,11 +38,18 @@ export default class RequireDetector {
   // Matches: <id> = require("util")
   isRequireUtil(dec) {
     return isAstMatch(dec, {
+      type: 'VariableDeclarator',
+      id: {
+        type: 'Identifier',
+      },
       init: {
+        type: 'VariableDeclarator',
         callee: {
+          type: 'Identifier',
           name: 'require'
         },
         arguments: matchesLength([{
+          type: 'Literal',
           value: 'util'
         }])
       }
@@ -53,16 +59,25 @@ export default class RequireDetector {
   // Matches: <id> = require("util").inherits
   isRequireUtilInherits(dec) {
     return isAstMatch(dec, {
+      type: 'VariableDeclarator',
+      id: {
+        type: 'Identifier',
+      },
       init: {
+        type: 'MemberExpression',
+        computed: false,
         object: {
           callee: {
+            type: 'Identifier',
             name: 'require'
           },
           arguments: matchesLength([{
+            type: 'Literal',
             value: 'util'
           }])
         },
         property: {
+          type: 'Identifier',
           name: 'inherits'
         }
       }
