@@ -7,7 +7,7 @@ import espree from 'espree';
 export default {
   parse(js, opts) {
     return espree.parse(js, _.assign(opts, {
-      ecmaVersion: 7,
+      ecmaVersion: 8,
       ecmaFeatures: {jsx: true, experimentalObjectRestSpread: true}
     }));
   }
