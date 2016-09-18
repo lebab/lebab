@@ -9,15 +9,28 @@ export default class RequireDetector {
    * Detects: var <identifier> = require("util")
    *
    * @param {Object} node
-   * @return {Object} Identifier
+   * @return {Object} MemberExpression of <identifier>.inherits
    */
   detectUtil(node) {
     if (node.type !== 'VariableDeclaration') {
-      return undefined;
+      return;
     }
 
     const declaration = _.find(node.declarations, dec => this.isRequireUtil(dec));
-    return declaration ? declaration.id : undefined;
+    if (declaration) {
+      return {
+        type: 'MemberExpression',
+        computed: false,
+        object: {
+          type: 'Identifier',
+          name: declaration.id.name,
+        },
+        property: {
+          type: 'Identifier',
+          name: 'inherits'
+        }
+      };
+    }
   }
 
   /**
@@ -28,11 +41,16 @@ export default class RequireDetector {
    */
   detectUtilInherits(node) {
     if (node.type !== 'VariableDeclaration') {
-      return undefined;
+      return;
     }
 
     const declaration = _.find(node.declarations, dec => this.isRequireUtilInherits(dec));
-    return declaration ? declaration.id : undefined;
+    if (declaration) {
+      return {
+        type: 'Identifier',
+        name: declaration.id.name,
+      };
+    }
   }
 
   // Matches: <id> = require("util")
@@ -43,7 +61,7 @@ export default class RequireDetector {
         type: 'Identifier',
       },
       init: {
-        type: 'VariableDeclarator',
+        type: 'CallExpression',
         callee: {
           type: 'Identifier',
           name: 'require'
@@ -67,6 +85,7 @@ export default class RequireDetector {
         type: 'MemberExpression',
         computed: false,
         object: {
+          type: 'CallExpression',
           callee: {
             type: 'Identifier',
             name: 'require'

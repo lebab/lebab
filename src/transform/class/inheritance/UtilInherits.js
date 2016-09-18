@@ -1,5 +1,4 @@
 import {isAstMatch, extract} from '../../../utils/matchesAst';
-import isEqualAst from '../../../utils/isEqualAst';
 import RequireDetector from './RequireDetector';
 
 /**
@@ -15,7 +14,6 @@ import RequireDetector from './RequireDetector';
 export default class UtilInherits {
   constructor() {
     this.detector = new RequireDetector();
-    this.utilNode = undefined;
     this.inheritsNode = undefined;
   }
 
@@ -31,12 +29,12 @@ export default class UtilInherits {
   process(node, parent) {
     let m;
     if ((m = this.detector.detectUtil(node)) && parent.type === 'Program') {
-      this.utilNode = m;
+      this.inheritsNode = m;
     }
     else if ((m = this.detector.detectUtilInherits(node)) && parent.type === 'Program') {
       this.inheritsNode = m;
     }
-    else if ((m = this.matchUtilInherits(node))) {
+    else if (this.inheritsNode && (m = this.matchUtilInherits(node))) {
       return {
         className: m.className,
         superClass: m.superClass,
@@ -45,16 +43,15 @@ export default class UtilInherits {
     }
   }
 
-  // Discover usage of this.utilNode or this.inheritsNode
+  // Discover usage of this.inheritsNode
   //
-  // Matches: util.inherits(<className>, <superClass>);
-  // Matches: inherits(<className>, <superClass>);
+  // Matches: <this.utilInherits>(<className>, <superClass>);
   matchUtilInherits(node) {
     return isAstMatch(node, {
       type: 'ExpressionStatement',
       expression: {
         type: 'CallExpression',
-        callee: (callee) => this.isUtilInherits(callee) || this.isInherits(callee),
+        callee: this.inheritsNode,
         arguments: [
           {
             type: 'Identifier',
@@ -62,23 +59,6 @@ export default class UtilInherits {
           },
           extract('superClass')
         ]
-      }
-    });
-  }
-
-  // Matches: inherits
-  isInherits(callee) {
-    return this.inheritsNode && isEqualAst(callee, this.inheritsNode);
-  }
-
-  // Matches: util.inherits
-  isUtilInherits(callee) {
-    return this.utilNode && isAstMatch(callee, {
-      type: 'MemberExpression',
-      object: (obj) => isEqualAst(obj, this.utilNode),
-      property: {
-        type: 'Identifier',
-        name: 'inherits'
       }
     });
   }
