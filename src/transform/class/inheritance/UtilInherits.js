@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {isAstMatch, matchesLength, extract} from '../../../utils/matchesAst';
+import isEqualAst from '../../../utils/isEqualAst';
 import isVarWithRequireCalls from '../../../utils/isVarWithRequireCalls';
 
 /**
@@ -114,20 +115,14 @@ export default class UtilInherits {
 
   // Matches: inherits
   isInherits(callee) {
-    return this.inheritsNode && isAstMatch(callee, {
-      type: 'Identifier',
-      name: this.inheritsNode.name
-    });
+    return this.inheritsNode && isEqualAst(callee, this.inheritsNode);
   }
 
   // Matches: util.inherits
   isUtilInherits(callee) {
     return this.utilNode && isAstMatch(callee, {
       type: 'MemberExpression',
-      object: {
-        type: 'Identifier',
-        name: this.utilNode.name
-      },
+      object: (obj) => isEqualAst(obj, this.utilNode),
       property: {
         type: 'Identifier',
         name: 'inherits'
