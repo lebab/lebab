@@ -1,6 +1,7 @@
 import {isAstMatch, extract} from '../../../utils/matchesAst';
 import RequireUtilDetector from './RequireUtilDetector';
 import RequireUtilInheritsDetector from './RequireUtilInheritsDetector';
+import ImportUtilDetector from './ImportUtilDetector';
 
 /**
  * Processes nodes to detect super classes and return information for later
@@ -18,6 +19,7 @@ export default class UtilInherits {
     this.detectors = [
       new RequireUtilDetector(),
       new RequireUtilInheritsDetector(),
+      new ImportUtilDetector(),
     ];
   }
 

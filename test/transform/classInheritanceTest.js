@@ -27,6 +27,36 @@ describe('Class Inheritance', () => {
       );
     });
 
+    it('supports import from "util"', () => {
+      expectTransform(
+        'import util from "util";\n' +
+        'function MyClass() {\n' +
+        '}\n' +
+        'util.inherits(MyClass, ParentClass);'
+      ).toReturn(
+        'import util from "util";\n' +
+        'class MyClass extends ParentClass {}'
+      );
+    });
+
+    it('ignores import of anything else than "util"', () => {
+      expectNoChange(
+        'import util from "./util";\n' +
+        'function MyClass() {\n' +
+        '}\n' +
+        'util.inherits(MyClass, ParentClass);'
+      );
+    });
+
+    it('ignores named imports from "util"', () => {
+      expectNoChange(
+        'import {util} from "util";\n' +
+        'function MyClass() {\n' +
+        '}\n' +
+        'util.inherits(MyClass, ParentClass);'
+      );
+    });
+
     it('preserves inheritance when the inherited class is a member expression', () => {
       expectTransform(
         'var util = require("util");\n' +
