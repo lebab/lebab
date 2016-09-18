@@ -1,7 +1,6 @@
-import _ from 'lodash';
-import {isAstMatch, matchesLength, extract} from '../../../utils/matchesAst';
+import {isAstMatch, extract} from '../../../utils/matchesAst';
 import isEqualAst from '../../../utils/isEqualAst';
-import isVarWithRequireCalls from '../../../utils/isVarWithRequireCalls';
+import RequireDetector from './RequireDetector';
 
 /**
  * Processes nodes to detect super classes and return information for later
@@ -15,6 +14,7 @@ import isVarWithRequireCalls from '../../../utils/isVarWithRequireCalls';
  */
 export default class UtilInherits {
   constructor() {
+    this.detector = new RequireDetector();
     this.utilNode = undefined;
     this.inheritsNode = undefined;
   }
@@ -30,8 +30,11 @@ export default class UtilInherits {
    */
   process(node, parent) {
     let m;
-    if (isVarWithRequireCalls(node) && parent.type === 'Program') {
-      this.discoverIdentifiers(node);
+    if ((m = this.detector.detectUtil(node)) && parent.type === 'Program') {
+      this.utilNode = m;
+    }
+    else if ((m = this.detector.detectUtilInherits(node)) && parent.type === 'Program') {
+      this.inheritsNode = m;
     }
     else if ((m = this.matchUtilInherits(node))) {
       return {
@@ -40,56 +43,6 @@ export default class UtilInherits {
         relatedExpressions: [{node, parent}]
       };
     }
-  }
-
-  // Discover variable declarator nodes for:
-  //  var <this.utilNode> = require("util");
-  //  var <this.inheritsNode> = require("util").inherits;
-  //
-  // Will store the discovered nodes in:
-  //  this.utilNode
-  //  this.inheritsNode
-  discoverIdentifiers(node) {
-    let declaration;
-    if ((declaration = _.find(node.declarations, dec => this.isRequireUtil(dec)))) {
-      this.utilNode = declaration.id;
-    }
-    else if ((declaration = _.find(node.declarations, dec => this.isRequireUtilInherits(dec)))) {
-      this.inheritsNode = declaration.id;
-    }
-  }
-
-  // Matches: <id> = require("util")
-  isRequireUtil(dec) {
-    return isAstMatch(dec, {
-      init: {
-        callee: {
-          name: 'require'
-        },
-        arguments: matchesLength([{
-          value: 'util'
-        }])
-      }
-    });
-  }
-
-  // Matches: <id> = require("util").inherits
-  isRequireUtilInherits(dec) {
-    return isAstMatch(dec, {
-      init: {
-        object: {
-          callee: {
-            name: 'require'
-          },
-          arguments: matchesLength([{
-            value: 'util'
-          }])
-        },
-        property: {
-          name: 'inherits'
-        }
-      }
-    });
   }
 
   // Discover usage of this.utilNode or this.inheritsNode
