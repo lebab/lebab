@@ -1,5 +1,6 @@
 import {isAstMatch, extract} from '../../../utils/matchesAst';
-import RequireDetector from './RequireDetector';
+import RequireUtilDetector from './RequireUtilDetector';
+import RequireUtilInheritsDetector from './RequireUtilInheritsDetector';
 
 /**
  * Processes nodes to detect super classes and return information for later
@@ -13,7 +14,6 @@ import RequireDetector from './RequireDetector';
  */
 export default class UtilInherits {
   constructor() {
-    this.detector = new RequireDetector();
     this.inheritsNode = undefined;
   }
 
@@ -28,10 +28,10 @@ export default class UtilInherits {
    */
   process(node, parent) {
     let m;
-    if ((m = this.detector.detectUtil(node)) && parent.type === 'Program') {
+    if ((m = new RequireUtilDetector().detect(node)) && parent.type === 'Program') {
       this.inheritsNode = m;
     }
-    else if ((m = this.detector.detectUtilInherits(node)) && parent.type === 'Program') {
+    else if ((m = new RequireUtilInheritsDetector().detect(node)) && parent.type === 'Program') {
       this.inheritsNode = m;
     }
     else if (this.inheritsNode && (m = this.matchUtilInherits(node))) {
