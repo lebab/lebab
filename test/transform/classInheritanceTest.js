@@ -8,10 +8,10 @@ describe('Class Inheritance', () => {
         'var util2 = require("util");\n' +
         'function MyClass() {\n' +
         '}\n' +
-        'util2.inherits(MyClass, OtherClass);'
+        'util2.inherits(MyClass, ParentClass);'
       ).toReturn(
         'var util2 = require("util");\n' +
-        'class MyClass extends OtherClass {}'
+        'class MyClass extends ParentClass {}'
       );
     });
 
@@ -20,10 +20,10 @@ describe('Class Inheritance', () => {
         'var inherits2 = require("util").inherits;\n' +
         'function MyClass() {\n' +
         '}\n' +
-        'inherits2(MyClass, OtherClass);'
+        'inherits2(MyClass, ParentClass);'
       ).toReturn(
         'var inherits2 = require("util").inherits;\n' +
-        'class MyClass extends OtherClass {}'
+        'class MyClass extends ParentClass {}'
       );
     });
 
@@ -32,10 +32,10 @@ describe('Class Inheritance', () => {
         'var util = require("util");\n' +
         'function MyClass() {\n' +
         '}\n' +
-        'util.inherits(MyClass, Foo.Bar.OtherClass);'
+        'util.inherits(MyClass, Foo.Bar.ParentClass);'
       ).toReturn(
         'var util = require("util");\n' +
-        'class MyClass extends Foo.Bar.OtherClass {}'
+        'class MyClass extends Foo.Bar.ParentClass {}'
       );
     });
 
@@ -46,7 +46,7 @@ describe('Class Inheritance', () => {
         '}\n' +
         'function MyClass() {\n' +
         '}\n' +
-        'util.inherits(MyClass, Foo.Bar.OtherClass);'
+        'util.inherits(MyClass, Foo.Bar.ParentClass);'
       );
     });
 
@@ -55,13 +55,13 @@ describe('Class Inheritance', () => {
         'var util = require("./util");\n' +
         'function MyClass() {\n' +
         '}\n' +
-        'util.inherits(MyClass, OtherClass);'
+        'util.inherits(MyClass, ParentClass);'
       );
       expectNoChange(
         'var inherits = require("./util").inherits;\n' +
         'function MyClass() {\n' +
         '}\n' +
-        'inherits(MyClass, OtherClass);'
+        'inherits(MyClass, ParentClass);'
       );
     });
 
@@ -69,14 +69,14 @@ describe('Class Inheritance', () => {
       expectTransform(
         'var inherits = require("util").inherits;\n' +
         'function MyClass(name) {\n' +
-        '  OtherClass.call(this, name);\n' +
+        '  ParentClass.call(this, name);\n' +
         '  this.name = name;\n' +
         '}\n' +
-        'inherits(MyClass, OtherClass);'
+        'inherits(MyClass, ParentClass);'
       ).toReturn(
         'var inherits = require("util").inherits;\n' +
         '\n' +
-        'class MyClass extends OtherClass {\n' +
+        'class MyClass extends ParentClass {\n' +
         '  constructor(name) {\n' +
         '    super(name);\n' +
         '    this.name = name;\n' +
@@ -90,16 +90,16 @@ describe('Class Inheritance', () => {
       expectTransform(
         'var inherits = require("util").inherits;\n' +
         'function MyClass(name) {\n' +
-        '  OtherClass.call(null, name);\n' +
+        '  ParentClass.call(null, name);\n' +
         '  this.name = name;\n' +
         '}\n' +
-        'inherits(MyClass, OtherClass);'
+        'inherits(MyClass, ParentClass);'
       ).toReturn(
         'var inherits = require("util").inherits;\n' +
         '\n' +
-        'class MyClass extends OtherClass {\n' +
+        'class MyClass extends ParentClass {\n' +
         '  constructor(name) {\n' +
-        '    OtherClass.call(null, name);\n' +
+        '    ParentClass.call(null, name);\n' +
         '    this.name = name;\n' +
         '  }\n' +
         '}'
@@ -111,13 +111,13 @@ describe('Class Inheritance', () => {
         'var inherits = require("util").inherits;\n' +
         'function MyClass(name) {\n' +
         '  if (true)\n' +
-        '    OtherClass.call(this);\n' +
+        '    ParentClass.call(this);\n' +
         '}\n' +
-        'inherits(MyClass, OtherClass);'
+        'inherits(MyClass, ParentClass);'
       ).toReturn(
         'var inherits = require("util").inherits;\n' +
         '\n' +
-        'class MyClass extends OtherClass {\n' +
+        'class MyClass extends ParentClass {\n' +
         '  constructor(name) {\n' +
         '    if (true)\n' +
         '      super();\n' +
@@ -132,9 +132,9 @@ describe('Class Inheritance', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
-        'MyClass.prototype = new OtherClass();'
+        'MyClass.prototype = new ParentClass();'
       ).toReturn(
-        'class MyClass extends OtherClass {}'
+        'class MyClass extends ParentClass {}'
       );
     });
 
@@ -142,10 +142,10 @@ describe('Class Inheritance', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
-        'MyClass.prototype = new OtherClass();\n' +
+        'MyClass.prototype = new ParentClass();\n' +
         'MyClass.prototype.constructor = MyClass;'
       ).toReturn(
-        'class MyClass extends OtherClass {}'
+        'class MyClass extends ParentClass {}'
       );
     });
 
@@ -153,13 +153,13 @@ describe('Class Inheritance', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
-        'MyClass.prototype = new OtherClass();\n' +
-        'OtherClass.prototype.constructor = MyClass;\n' +
-        'MyClass.prototype.constructor = OtherClass;'
+        'MyClass.prototype = new ParentClass();\n' +
+        'ParentClass.prototype.constructor = MyClass;\n' +
+        'MyClass.prototype.constructor = ParentClass;'
       ).toReturn(
-        'class MyClass extends OtherClass {}\n' +
-        'OtherClass.prototype.constructor = MyClass;\n' +
-        'MyClass.prototype.constructor = OtherClass;'
+        'class MyClass extends ParentClass {}\n' +
+        'ParentClass.prototype.constructor = MyClass;\n' +
+        'MyClass.prototype.constructor = ParentClass;'
       );
     });
 
@@ -175,21 +175,21 @@ describe('Class Inheritance', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
-        'MyClass.prototype = Object.create(OtherClass.prototype);'
+        'MyClass.prototype = Object.create(ParentClass.prototype);'
       ).toReturn(
-        'class MyClass extends OtherClass {}'
+        'class MyClass extends ParentClass {}'
       );
     });
 
     it('converts ParentClass.call(this, args...) in constructor to super()', () => {
       expectTransform(
         'function MyClass(name) {\n' +
-        '  OtherClass.call(this, name);\n' +
+        '  ParentClass.call(this, name);\n' +
         '  this.name = name;\n' +
         '}\n' +
-        'MyClass.prototype = new OtherClass();'
+        'MyClass.prototype = new ParentClass();'
       ).toReturn(
-        'class MyClass extends OtherClass {\n' +
+        'class MyClass extends ParentClass {\n' +
         '  constructor(name) {\n' +
         '    super(name);\n' +
         '    this.name = name;\n' +
@@ -202,14 +202,14 @@ describe('Class Inheritance', () => {
       // If we call the parent constructor with no `this` then we will not convert to a super call.
       expectTransform(
         'function MyClass(name) {\n' +
-        '  OtherClass.call(null, name);\n' +
+        '  ParentClass.call(null, name);\n' +
         '  this.name = name;\n' +
         '}\n' +
-        'MyClass.prototype = new OtherClass();'
+        'MyClass.prototype = new ParentClass();'
       ).toReturn(
-        'class MyClass extends OtherClass {\n' +
+        'class MyClass extends ParentClass {\n' +
         '  constructor(name) {\n' +
-        '    OtherClass.call(null, name);\n' +
+        '    ParentClass.call(null, name);\n' +
         '    this.name = name;\n' +
         '  }\n' +
         '}'
