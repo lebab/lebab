@@ -66,8 +66,8 @@ describe('Class Inheritance', () => {
     });
   });
 
-  describe('prototype', () => {
-    it('determines a function is a class when new ParentClass is assigned to prototype', () => {
+  describe('prototype = new ParentClass()', () => {
+    it('determines a function is a class', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
@@ -109,12 +109,25 @@ describe('Class Inheritance', () => {
         'MyClass.prototype.constructor = MyClass;'
       );
     });
+  });
 
-    it('determines a function is a class when Object.create(ParentClass.prototype) assigned to prototype', () => {
+  describe('prototype = Object.create(ParentClass.prototype)', () => {
+    it('determines a function is a class', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
         'MyClass.prototype = Object.create(ParentClass.prototype);'
+      ).toReturn(
+        'class MyClass extends ParentClass {}'
+      );
+    });
+
+    it('discards the prototype.constructor assignment', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        'MyClass.prototype = Object.create(ParentClass.prototype);\n' +
+        'MyClass.prototype.constructor = MyClass;'
       ).toReturn(
         'class MyClass extends ParentClass {}'
       );
