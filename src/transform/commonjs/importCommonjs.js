@@ -1,6 +1,6 @@
 import traverser from '../../traverser';
-import isVarWithRequireCalls from '../../utils/isVarWithRequireCalls';
-import {matchRequire, matchRequireWithProperty} from '../../utils/matchRequire';
+import isVarWithRequireCalls from './isVarWithRequireCalls';
+import {matchRequire, matchRequireWithProperty} from './matchRequire';
 import multiReplaceStatement from '../../utils/multiReplaceStatement';
 import ImportDeclaration from '../../syntax/ImportDeclaration';
 import ImportSpecifier from '../../syntax/ImportSpecifier';

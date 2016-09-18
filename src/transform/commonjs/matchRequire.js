@@ -1,5 +1,5 @@
-import isString from './isString';
-import {matchesAst, extract} from './matchesAst';
+import isString from '../../utils/isString';
+import {matchesAst, extract} from '../../utils/matchesAst';
 
 const isIdentifier = matchesAst({
   type: 'Identifier'
