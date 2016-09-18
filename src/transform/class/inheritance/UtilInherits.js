@@ -15,6 +15,10 @@ import RequireUtilInheritsDetector from './RequireUtilInheritsDetector';
 export default class UtilInherits {
   constructor() {
     this.inheritsNode = undefined;
+    this.detectors = [
+      new RequireUtilDetector(),
+      new RequireUtilInheritsDetector(),
+    ];
   }
 
   /**
@@ -28,10 +32,7 @@ export default class UtilInherits {
    */
   process(node, parent) {
     let m;
-    if ((m = new RequireUtilDetector().detect(node)) && parent.type === 'Program') {
-      this.inheritsNode = m;
-    }
-    else if ((m = new RequireUtilInheritsDetector().detect(node)) && parent.type === 'Program') {
+    if (parent && parent.type === 'Program' && (m = this.detectInheritsNode(node))) {
       this.inheritsNode = m;
     }
     else if (this.inheritsNode && (m = this.matchUtilInherits(node))) {
@@ -40,6 +41,15 @@ export default class UtilInherits {
         superClass: m.superClass,
         relatedExpressions: [{node, parent}]
       };
+    }
+  }
+
+  detectInheritsNode(node) {
+    for (const detector of this.detectors) {
+      let inheritsNode;
+      if ((inheritsNode = detector.detect(node))) {
+        return inheritsNode;
+      }
     }
   }
 
