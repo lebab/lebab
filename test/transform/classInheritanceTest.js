@@ -2,8 +2,8 @@ import createTestHelpers from '../createTestHelpers';
 const {expectTransform, expectNoChange} = createTestHelpers(['class']);
 
 describe('Class Inheritance', () => {
-  describe('node.js require("util").inherits', () => {
-    it('determines a function is a class when require("util").inherits is used', () => {
+  describe('node.js util.inherits', () => {
+    it('determines a function is a class when util.inherits() is used', () => {
       expectTransform(
         'var util2 = require("util");\n' +
         'function MyClass() {\n' +
@@ -39,7 +39,7 @@ describe('Class Inheritance', () => {
       );
     });
 
-    it('ignores util requires which are not top-level', () => {
+    it('ignores require("util") which is not top-level', () => {
       expectNoChange(
         'function foo() {\n' +
         '  var util = require("util");\n' +
@@ -50,7 +50,7 @@ describe('Class Inheritance', () => {
       );
     });
 
-    it('should ignore inherits when not from require("util")', () => {
+    it('ignores util.inherits() when not from require("util")', () => {
       expectNoChange(
         'var util = require("./util");\n' +
         'function MyClass() {\n' +
@@ -65,7 +65,7 @@ describe('Class Inheritance', () => {
       );
     });
 
-    it('should convert constructor .call(this, args...) to super()', () => {
+    it('converts ParentClass.call(this, args...) in constructor to super()', () => {
       expectTransform(
         'var inherits = require("util").inherits;\n' +
         'function MyClass(name) {\n' +
@@ -85,7 +85,7 @@ describe('Class Inheritance', () => {
       );
     });
 
-    it('should not convert constructor .call(args...) to super() ', () => {
+    it('does not convert ParentClass.call(args...) in constructor to super() ', () => {
       // If we call the parent constructor with no `this` then we will not convert to a super call.
       expectTransform(
         'var inherits = require("util").inherits;\n' +
@@ -106,7 +106,7 @@ describe('Class Inheritance', () => {
       );
     });
 
-    it('should convert nested constructor .call(this, args...) to super()', () => {
+    it('converts nested ParentClass.call(this, args...) in constructor to super()', () => {
       expectTransform(
         'var inherits = require("util").inherits;\n' +
         'function MyClass(name) {\n' +
@@ -128,7 +128,7 @@ describe('Class Inheritance', () => {
   });
 
   describe('prototype', () => {
-    it('should preserve inheritance when prototype is created using new', () => {
+    it('determines a function is a class when new ParentClass is assigned to prototype', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
@@ -138,7 +138,7 @@ describe('Class Inheritance', () => {
       );
     });
 
-    it('should discard the prototype.constructor assignment', () => {
+    it('discards the prototype.constructor assignment', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
@@ -149,7 +149,7 @@ describe('Class Inheritance', () => {
       );
     });
 
-    it('should ignore bogus prototype.constructor assignments', () => {
+    it('ignores bogus prototype.constructor assignments', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
@@ -163,7 +163,7 @@ describe('Class Inheritance', () => {
       );
     });
 
-    it('should not detect inheritance from prototype.constructor assignment alone', () => {
+    it('does not detect inheritance from prototype.constructor assignment alone', () => {
       expectNoChange(
         'function MyClass() {\n' +
         '}\n' +
@@ -171,7 +171,7 @@ describe('Class Inheritance', () => {
       );
     });
 
-    it('should preserve inheritance when prototype is created using Object.create()', () => {
+    it('determines a function is a class when Object.create(ParentClass.prototype) assigned to prototype', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
@@ -181,7 +181,7 @@ describe('Class Inheritance', () => {
       );
     });
 
-    it('should convert constructor .call(this, args...) to super()', () => {
+    it('converts ParentClass.call(this, args...) in constructor to super()', () => {
       expectTransform(
         'function MyClass(name) {\n' +
         '  OtherClass.call(this, name);\n' +
@@ -198,7 +198,7 @@ describe('Class Inheritance', () => {
       );
     });
 
-    it('should not convert constructor .call(args...) to super() ', () => {
+    it('does not convert ParentClass.call(args...) in constructor to super() ', () => {
       // If we call the parent constructor with no `this` then we will not convert to a super call.
       expectTransform(
         'function MyClass(name) {\n' +
