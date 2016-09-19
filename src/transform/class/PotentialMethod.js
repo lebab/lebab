@@ -1,3 +1,6 @@
+import traverser from '../../traverser';
+import isEqualAst from './../../utils/isEqualAst';
+import {isAstMatch, extract} from './../../utils/matchesAst';
 import extractComments from './extractComments';
 import multiReplaceStatement from './../../utils/multiReplaceStatement';
 
@@ -81,6 +84,71 @@ class PotentialMethod {
 
   // To be overridden in subclasses
   getBody() {
-    return this.methodNode.body;
+    if (this.superClass) {
+      return this.transformSuperCalls(this.methodNode.body);
+    }
+    else {
+      return this.methodNode.body;
+    }
+  }
+
+  // Transforms constructor body by replacing
+  // SuperClass.prototype.foo.call(this, ...args) --> super.foo(...args)
+  transformSuperCalls(body) {
+    return traverser.replace(body, {
+      enter: (node) => {
+        const m = this.matchSuperCall(node);
+        if (m) {
+          node.expression.callee = {
+            type: 'MemberExpression',
+            computed: false,
+            object: {
+              type: 'Super'
+            },
+            property: m.method
+          };
+
+          node.expression.arguments = node.expression.arguments.slice(1);
+        }
+      }
+    });
+  }
+
+  matchSuperCall(node) {
+    return isAstMatch(node, {
+      type: 'ExpressionStatement',
+      expression: {
+        type: 'CallExpression',
+        callee: {
+          type: 'MemberExpression',
+          computed: false,
+          object: {
+            type: 'MemberExpression',
+            computed: false,
+            object: {
+              type: 'MemberExpression',
+              computed: false,
+              object: (obj) => isEqualAst(obj, this.superClass),
+              property: {
+                type: 'Identifier',
+                name: 'prototype'
+              }
+            },
+            property: extract('method', {
+              type: 'Identifier',
+            })
+          },
+          property: {
+            type: 'Identifier',
+            name: 'call'
+          }
+        },
+        arguments: [
+          {
+            type: 'ThisExpression'
+          }
+        ]
+      }
+    });
   }
 }

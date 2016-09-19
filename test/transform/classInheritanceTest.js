@@ -216,4 +216,61 @@ describe('Class Inheritance', () => {
       );
     });
   });
+
+  describe('super.foo() calls in methods', () => {
+    it('converts ParentClass.prototype.foo.call(this, args...) to super.foo()', () => {
+      expectTransform(
+        'function MyClass(name) {\n' +
+        '}\n' +
+        'MyClass.prototype = new ParentClass();\n' +
+        'MyClass.prototype.foo = function(a, b, c) {\n' +
+        '  ParentClass.prototype.foo.call(this, a, b, c);\n' +
+        '  this.doSomethingElse();\n' +
+        '};'
+      ).toReturn(
+        'class MyClass extends ParentClass {\n' +
+        '  foo(a, b, c) {\n' +
+        '    super.foo(a, b, c);\n' +
+        '    this.doSomethingElse();\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('converts nested ParentClass.prototype.foo.call(this, args...) to super.foo()', () => {
+      expectTransform(
+        'function MyClass(name) {\n' +
+        '}\n' +
+        'MyClass.prototype = new ParentClass();\n' +
+        'MyClass.prototype.bar = function() {\n' +
+        '  if (someCondition)\n' +
+        '    ParentClass.prototype.foo.call(this);\n' +
+        '};'
+      ).toReturn(
+        'class MyClass extends ParentClass {\n' +
+        '  bar() {\n' +
+        '    if (someCondition)\n' +
+        '      super.foo();\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('does not convert SomeOtherClass.prototype.foo.call(this, args...) to super.foo()', () => {
+      expectTransform(
+        'function MyClass(name) {\n' +
+        '}\n' +
+        'MyClass.prototype = new ParentClass();\n' +
+        'MyClass.prototype.foo = function() {\n' +
+        '  SomeOtherClass.prototype.foo.call(this);\n' +
+        '};'
+      ).toReturn(
+        'class MyClass extends ParentClass {\n' +
+        '  foo() {\n' +
+        '    SomeOtherClass.prototype.foo.call(this);\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+  });
 });

@@ -119,7 +119,10 @@ class PotentialClass {
   createMethods() {
     return _.compact([
       this.createConstructor(),
-      ...this.methods.map(m => m.toMethodDefinition())
+      ...this.methods.map(method => {
+        method.setSuperClass(this.superClass);
+        return method.toMethodDefinition();
+      })
     ]);
   }
 
