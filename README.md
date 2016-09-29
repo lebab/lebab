@@ -115,8 +115,12 @@ or they have significant bugs which can result in breaking your code.
     - [x] recognizes `Foo.prototype = { ...methods... };`
     - [x] recognizes static methods like `Foo.method = function(){ ... };`
     - [x] recognizes getters/setters defined with `Object.defineProperty()`
-    - [ ] does not recognize classes without methods
-    - [ ] no support for extending classes
+    - [x] recognizes inheritance with `Child.prototype = new Parent()`
+    - [x] recognizes inheritance with `util.inherits(Child, Parent);`
+    - [x] converts superclass constructor calls to `super()`
+    - [x] converts superclass method calls to `super.method()`
+    - [ ] LIMITATION [does not require super() call in subclass constructor][33]
+    - [ ] LIMITATION [does not enforce super() call position in subclass constructor][33]
     - [ ] LIMITATION [does not support namespaced classes][113]
 - [x] **template** - string concatenation to template strings
     - [x] converts variables and arbitrary expressions to `${...}`
@@ -176,6 +180,7 @@ or voicing your opinion in existing one.
 Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][pattern-matching]
 
 [pattern-matching]: http://nene.github.io/2016/04/02/matches-ast
+[88]: https://github.com/mohebifar/lebab/issues/33
 [88]: https://github.com/mohebifar/lebab/issues/88
 [105]: https://github.com/mohebifar/lebab/issues/105
 [107]: https://github.com/mohebifar/lebab/issues/107
