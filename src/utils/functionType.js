@@ -6,6 +6,13 @@ export function isFunction(node) {
 }
 
 /**
+ * True when node is old-style function (not arrow-function)
+ */
+export function isOrdinaryFunction(node) {
+  return node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression';
+}
+
+/**
  * True when node is (arrow) function expression.
  */
 export function isFunctionExpression(node) {
