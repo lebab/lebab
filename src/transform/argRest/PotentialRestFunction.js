@@ -7,6 +7,7 @@ export default class PotentialRestFunction {
    */
   constructor(node) {
     this.node = node;
+    this.argumentsNodes = [];
   }
 
   /**
@@ -18,10 +19,27 @@ export default class PotentialRestFunction {
   }
 
   /**
-   * Marks function to be transformed into version with rest parameter.
+   * Registers use of `arguments`
+   * @param {Object} node
    */
-  addRestParam() {
-    this.hasRestParam = true;
+  addArgumentsNode(node) {
+    this.argumentsNodes.push(node);
+  }
+
+  /**
+   * Returns all nodes that use arguments.
+   * But only when we can transform them.
+   * @return {Object[]}
+   */
+  getTransformableArgumentsNodes() {
+    return this.conflicting ? [] : this.argumentsNodes;
+  }
+
+  /**
+   * Marks that the arguments of this function can't be transformed.
+   */
+  markConflicting() {
+    this.conflicting = true;
   }
 
   /**
@@ -31,7 +49,7 @@ export default class PotentialRestFunction {
    * @return {Object[]}
    */
   getParams() {
-    if (this.hasRestParam) {
+    if (this.argumentsNodes.length > 0 && !this.conflicting) {
       return [
         {
           type: 'RestElement',

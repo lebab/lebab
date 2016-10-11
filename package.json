@@ -43,6 +43,7 @@
   "dependencies": {
     "babel-polyfill": "^6.9.1",
     "commander": "^2.9.0",
+    "escope": "^3.6.0",
     "espree": "^3.2.0",
     "estraverse": "^4.1.1",
     "glob": "^7.0.5",

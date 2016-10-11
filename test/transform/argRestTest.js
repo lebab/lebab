@@ -68,6 +68,16 @@ describe('Arguments variable to ...args', () => {
     );
   });
 
+  // Handling of conflicts with existing variables
+  it('does not replace arguments when args variable already exists', () => {
+    expectNoChange(
+      'function foo() {\n' +
+      '  var args = [];\n' +
+      '  console.log(arguments);\n' +
+      '}'
+    );
+  });
+
   it('does not replace arguments in function declaration with existing formal params', () => {
     expectNoChange(
       'function foo(a, b ,c) {\n' +
