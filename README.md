@@ -185,16 +185,16 @@ or voicing your opinion in existing one.
 Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][pattern-matching]
 
 [pattern-matching]: http://nene.github.io/2016/04/02/matches-ast
-[88]: https://github.com/mohebifar/lebab/issues/88
-[105]: https://github.com/mohebifar/lebab/issues/105
-[107]: https://github.com/mohebifar/lebab/issues/107
-[113]: https://github.com/mohebifar/lebab/issues/113
-[125]: https://github.com/mohebifar/lebab/issues/125
-[127]: https://github.com/mohebifar/lebab/issues/127
-[131]: https://github.com/mohebifar/lebab/issues/131
-[145]: https://github.com/mohebifar/lebab/issues/145
-[158]: https://github.com/mohebifar/lebab/issues/158
-[166]: https://github.com/mohebifar/lebab/issues/166
-[168]: https://github.com/mohebifar/lebab/issues/168
-[186]: https://github.com/mohebifar/lebab/issues/186
-[191]: https://github.com/mohebifar/lebab/issues/191
+[88]: https://github.com/lebab/lebab/issues/88
+[105]: https://github.com/lebab/lebab/issues/105
+[107]: https://github.com/lebab/lebab/issues/107
+[113]: https://github.com/lebab/lebab/issues/113
+[125]: https://github.com/lebab/lebab/issues/125
+[127]: https://github.com/lebab/lebab/issues/127
+[131]: https://github.com/lebab/lebab/issues/131
+[145]: https://github.com/lebab/lebab/issues/145
+[158]: https://github.com/lebab/lebab/issues/158
+[166]: https://github.com/lebab/lebab/issues/166
+[168]: https://github.com/lebab/lebab/issues/168
+[186]: https://github.com/lebab/lebab/issues/186
+[191]: https://github.com/lebab/lebab/issues/191
