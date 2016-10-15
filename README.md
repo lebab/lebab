@@ -66,8 +66,8 @@ The resulting code should be almost 100% equivalent of the original code.
 - [x] **arg-rest** - use of arguments to function(...args)
     - [x] does not perform the transform when `args` variable already exists
     - [ ] always names the rest-parameter to `args`
-    - [ ] only transforms functions that have no formal parameters declared
-    - [ ] does not remove uses of `Array.slice.call(arguments)`
+    - [ ] LIMITATION [does not transform functions with formal parameters][191]
+    - [ ] LIMITATION [does not remove uses of `Array.slice.call(arguments)`][191]
 - [x] **arg-spread** - use of apply() to spread operator
     - [x] recognizes `obj.method.apply(obj, args)`
     - [x] recognizes `func.apply(undefined, args)`
@@ -197,3 +197,4 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [166]: https://github.com/mohebifar/lebab/issues/166
 [168]: https://github.com/mohebifar/lebab/issues/168
 [186]: https://github.com/mohebifar/lebab/issues/186
+[191]: https://github.com/mohebifar/lebab/issues/191
