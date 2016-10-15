@@ -6,6 +6,7 @@ import arrowTransform from './transform/arrow';
 import letTransform from './transform/let';
 import defaultParamTransform from './transform/defaultParam';
 import argSpreadTransform from './transform/argSpread';
+import argRestTransform from './transform/argRest';
 import objMethodTransform from './transform/objMethod';
 import objShorthandTransform from './transform/objShorthand';
 import noStrictTransform from './transform/noStrict';
@@ -22,6 +23,7 @@ const transformsMap = {
   'let': letTransform,
   'default-param': defaultParamTransform,
   'arg-spread': argSpreadTransform,
+  'arg-rest': argRestTransform,
   'obj-method': objMethodTransform,
   'obj-shorthand': objShorthandTransform,
   'no-strict': noStrictTransform,
