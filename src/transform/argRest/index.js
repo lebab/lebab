@@ -4,9 +4,9 @@ import withScope from '../../withScope';
 
 export default function(ast) {
   traverser.replace(ast, withScope(ast, {
-    enter(node, parent, currentScope) {
+    enter(node, parent, scope) {
       if (isES5Function(node) && node.params.length === 0) {
-        const argumentsVar = _.find(currentScope.variables, v => v.name === 'arguments');
+        const argumentsVar = _.find(scope.variables, v => v.name === 'arguments');
         // Look through all the places where arguments is used:
         // Make sure none of these has access to some already existing `args` variable
         if (argumentsVar && !argumentsVar.references.some(ref => hasArgs(ref.from))) {
