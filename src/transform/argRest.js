@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import traverser from '../../traverser';
-import withScope from '../../withScope';
+import traverser from '../traverser';
+import withScope from '../withScope';
 
 export default function(ast) {
   traverser.replace(ast, withScope(ast, {
