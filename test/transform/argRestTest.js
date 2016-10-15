@@ -78,6 +78,36 @@ describe('Arguments variable to ...args', () => {
     );
   });
 
+  it('does not replace arguments when args variable exists in parent scope', () => {
+    expectNoChange(
+      'var args = [];\n' +
+      'function foo() {\n' +
+      '  console.log(args, arguments);\n' +
+      '}'
+    );
+  });
+
+  it('does not replace arguments when args variable exists in parent function param', () => {
+    expectNoChange(
+      'function parent(args) {\n' +
+      '  function foo() {\n' +
+      '    console.log(args, arguments);\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
+  it('does not replace arguments when args variable exists in child block scope that uses arguments', () => {
+    expectNoChange(
+      'function foo() {\n' +
+      '  if (true) {\n' +
+      '    const args = 0;\n' +
+      '    console.log(arguments);\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
   it('does not replace arguments in function declaration with existing formal params', () => {
     expectNoChange(
       'function foo(a, b ,c) {\n' +
