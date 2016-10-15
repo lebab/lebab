@@ -1,12 +1,11 @@
 import _ from 'lodash';
 import traverser from '../../traverser';
-import {isOrdinaryFunction} from '../../utils/functionType';
 import withScope from '../../withScope';
 
 export default function(ast) {
   traverser.replace(ast, withScope(ast, {
     enter(node, parent, currentScope) {
-      if (isOrdinaryFunction(node) && node.params.length === 0) {
+      if (isES5Function(node) && node.params.length === 0) {
         const argumentsVar = _.find(currentScope.variables, v => v.name === 'arguments');
         // Look through all the places where arguments is used:
         // Make sure none of these has access to some already existing `args` variable
@@ -21,6 +20,10 @@ export default function(ast) {
       }
     },
   }));
+}
+
+function isES5Function(node) {
+  return node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression';
 }
 
 function hasArgs(scope) {
