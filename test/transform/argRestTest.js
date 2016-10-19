@@ -115,4 +115,12 @@ describe('Arguments variable to ...args', () => {
       '}'
     );
   });
+
+  it('does not add ...args to function that does not use arguments', () => {
+    expectNoChange(
+      'function foo() {\n' +
+      '  console.log(a, b, c);\n' +
+      '}'
+    );
+  });
 });

@@ -9,7 +9,11 @@ export default function(ast) {
         const argumentsVar = _.find(scope.variables, v => v.name === 'arguments');
         // Look through all the places where arguments is used:
         // Make sure none of these has access to some already existing `args` variable
-        if (argumentsVar && !argumentsVar.references.some(ref => hasArgs(ref.from))) {
+        if (
+          argumentsVar &&
+          argumentsVar.references.length > 0 &&
+           !argumentsVar.references.some(ref => hasArgs(ref.from))
+         ) {
           // Change all arguments --> args
           argumentsVar.references.forEach(ref => {
             ref.identifier.name = 'args';
