@@ -460,7 +460,7 @@ describe('Let/const', () => {
       );
     });
 
-    it('should ignore variable declared inside a block but modified outside', () => {
+    it('should ignore variable declared inside a block but referenced through computed property outside', () => {
       expectNoChange(
         'if (true) {\n' +
         '  var x = 0;\n' +

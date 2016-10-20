@@ -48,7 +48,6 @@ function isDeclaredVariable(node, parent) {
 
 function isPropertyInMemberExpression(node, parent) {
   return parent.type === 'MemberExpression' && parent.property === node && !parent.computed;
-  // return parent.type === 'MemberExpression' && parent.property === node;
 }
 
 function isPropertyInObjectLiteral(node, parent) {
