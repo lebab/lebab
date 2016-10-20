@@ -1,5 +1,5 @@
-import isEqualAst from '../../utils/isEqualAst';
-import {matchesAst, extract, matchesLength} from '../../utils/matchesAst';
+import isEqualAst from './isEqualAst';
+import {matchesAst, extract, matchesLength} from './matchesAst';
 
 // Matches <ident>++ or ++<ident>
 const matchPlusPlus = matchesAst({
