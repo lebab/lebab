@@ -14,6 +14,7 @@ import commonjsTransform from './transform/commonjs';
 import exponentTransform from './transform/exponent';
 import multiVarTransform from './transform/multiVar';
 import forOfTransform from './transform/forOf';
+import forEachTransform from './transform/forEach';
 import includesTransform from './transform/includes';
 
 const transformsMap = {
@@ -31,6 +32,7 @@ const transformsMap = {
   'exponent': exponentTransform,
   'multi-var': multiVarTransform,
   'for-of': forOfTransform,
+  'for-each': forEachTransform,
   'includes': includesTransform,
 };
 
