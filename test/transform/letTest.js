@@ -460,6 +460,15 @@ describe('Let/const', () => {
       );
     });
 
+    it('should ignore variable declared inside a block but modified outside', () => {
+      expectNoChange(
+        'if (true) {\n' +
+        '  var x = 0;\n' +
+        '}\n' +
+        'foo[x]++;'
+      );
+    });
+
     it('should use const when variable name used in object property outside the block', () => {
       expectTransform(
         'if (true) {\n' +
