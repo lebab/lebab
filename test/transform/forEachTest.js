@@ -100,8 +100,8 @@ describe('For loops to Array.forEach()', () => {
       );
     });
 
-    describe('should transform when loop contains a break inside another', () => {
-      it('switch statement', () => {
+    describe('should transform when loop contains', () => {
+      it('break inside another switch statement', () => {
         expectTransform(
           'for (let i=0; i < xs.length; i++) {\n' +
           '  const x = xs[i];\n' +
@@ -126,27 +126,46 @@ describe('For loops to Array.forEach()', () => {
         );
       });
 
-      it('for loop', () => {
+      it('break inside another for loop', () => {
         expectTransform(
           'for (let i = 0; i < array.length; i++) {\n' +
           '  const x = array[i];\n' +
-          '  console.log(x);\n' +
           '  for (let j = 0; j < x.length; j++) {\n' +
           '    const y = x[j];\n' +
-          '    console.log(y);\n' +
-          '    if (item == 2) {\n' +
+          '    if (j == 2) {\n' +
           '      break;\n' +
           '    }\n' +
           '  }\n' +
           '}'
         ).toReturn(
           'array.forEach(x => {\n' +
-          '  console.log(x);\n' +
           '  for (let j = 0; j < x.length; j++) {\n' +
           '    const y = x[j];\n' +
-          '    console.log(y);\n' +
-          '    if (item == 2) {\n' +
+          '    if (j == 2) {\n' +
           '      break;\n' +
+          '    }\n' +
+          '  }\n' +
+          '});'
+        );
+      });
+
+      it('continue inside another for loop', () => {
+        expectTransform(
+          'for (let i = 0; i < array.length; i++) {\n' +
+          '  const x = array[i];\n' +
+          '  for (let j = 0; j < x.length; j++) {\n' +
+          '    const y = x[j];\n' +
+          '    if (j == 2) {\n' +
+          '      continue;\n' +
+          '    }\n' +
+          '  }\n' +
+          '}'
+        ).toReturn(
+          'array.forEach(x => {\n' +
+          '  for (let j = 0; j < x.length; j++) {\n' +
+          '    const y = x[j];\n' +
+          '    if (j == 2) {\n' +
+          '      continue;\n' +
           '    }\n' +
           '  }\n' +
           '});'
