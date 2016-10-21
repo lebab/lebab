@@ -96,7 +96,33 @@ describe('For loops to Array.forEach()', () => {
       );
     });
 
-    it('should transform when index identifier used in loop body', () => {
+    it('should transform without index parameter when index identifier used as object literal key', () => {
+      expectTransform(
+        'for (let i=0; i < array.length; i++) {\n' +
+        '  const item = array[i];\n' +
+        '  console.log(item, {i: 123});\n' +
+        '}'
+      ).toReturn(
+        'array.forEach(item => {\n' +
+        '  console.log(item, {i: 123});\n' +
+        '});'
+      );
+    });
+
+    it('should transform without index parameter when index identifier used as object property', () => {
+      expectTransform(
+        'for (let i=0; i < array.length; i++) {\n' +
+        '  const item = array[i];\n' +
+        '  console.log(item.i);\n' +
+        '}'
+      ).toReturn(
+        'array.forEach(item => {\n' +
+        '  console.log(item.i);\n' +
+        '});'
+      );
+    });
+
+    it('should transform with index parameter when index variable used in loop body', () => {
       expectTransform(
         'for (let i=0; i < array.length; i++) {\n' +
         '  const item = array[i];\n' +
