@@ -66,7 +66,6 @@ function continueWithLabelUsed(body) {
   return statementUsedInBody(body, statement => statement.type === 'ContinueStatement' && statement.label, []);
 }
 
-
 function breakUsed(body) {
   return statementUsedInBody(body, statement => statement.type === 'BreakStatement', [...loopStatements, 'SwitchStatement']);
 }
@@ -96,23 +95,10 @@ function statementUsedInBody(body, statementPredicate, skippedTypes) {
   return statement;
 }
 
-function indexUsedInBody(newBody, index) {
-  return traverser.find(newBody, (node, parent) => {
-    return isEqualAst(node, index) && isReference(node, parent);
-  });
-}
-
 function withComments(node, forEach) {
   copyComments({from: node, to: forEach});
   copyComments({from: node.body.body[0], to: forEach});
   return forEach;
-}
-
-function createForEachParams(newBody, item, index) {
-  if (indexUsedInBody(newBody, index)) {
-    return [item, index];
-  }
-  return [item];
 }
 
 function createForEach({body, item, index, array}) {
@@ -142,5 +128,18 @@ function createForEach({body, item, index, array}) {
 function removeFirstBodyElement(body) {
   return Object.assign({}, body, {
     body: _.tail(body.body)
+  });
+}
+
+function createForEachParams(newBody, item, index) {
+  if (indexUsedInBody(newBody, index)) {
+    return [item, index];
+  }
+  return [item];
+}
+
+function indexUsedInBody(newBody, index) {
+  return traverser.find(newBody, (node, parent) => {
+    return isEqualAst(node, index) && isReference(node, parent);
   });
 }
