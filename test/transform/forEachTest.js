@@ -1,7 +1,7 @@
 import createTestHelpers from '../createTestHelpers';
 const {expectTransform, expectNoChange} = createTestHelpers(['for-each']);
 
-describe('For loops to for-each', () => {
+describe('For loops to Array.forEach()', () => {
   describe('with existing array element alias', () => {
     it('should use the existing alias as loop variable', () => {
       expectTransform(
