@@ -126,22 +126,31 @@ describe('For loops to Array.forEach()', () => {
         );
       });
 
-      ['break', 'continue'].forEach((keyword) => {
-        it(`${keyword} inside another for loop`, () => {
-          expectTransform(
-            'for (let i = 0; i < array.length; i++) {\n' +
-            '  const x = array[i];\n' +
-            '  for (let j = 0; j < 10; j++) {\n' +
-            `    ${keyword};\n` +
-            '  }\n' +
-            '}'
-          ).toReturn(
-            'array.forEach(x => {\n' +
-            '  for (let j = 0; j < 10; j++) {\n' +
-            `    ${keyword};\n` +
-            '  }\n' +
-            '});'
-          );
+      // Ignore break and continue inside all kinds of nested loops
+      [
+        {name: 'for', begin: 'for (let j = 0; j < 10; j++) {', end: '}'},
+        {name: 'for-in', begin: 'for (const key in obj) {', end: '}'},
+        {name: 'for-of', begin: 'for (const item of array) {', end: '}'},
+        {name: 'while', begin: 'while (true) {', end: '}'},
+        {name: 'do-while', begin: 'do {', end: '} while (true);'},
+      ].forEach(({name, begin, end}) => {
+        ['break', 'continue'].forEach((keyword) => {
+          it(`${keyword} inside another ${name} loop`, () => {
+            expectTransform(
+              'for (let i = 0; i < array.length; i++) {\n' +
+              '  const x = array[i];\n' +
+              `  ${begin}\n` +
+              `    ${keyword};\n` +
+              `  ${end}\n` +
+              '}'
+            ).toReturn(
+              'array.forEach(x => {\n' +
+              `  ${begin}\n` +
+              `    ${keyword};\n` +
+              `  ${end}\n` +
+              '});'
+            );
+          });
         });
       });
     });
