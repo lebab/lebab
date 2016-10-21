@@ -1,5 +1,14 @@
+import _ from 'lodash';
 import createTestHelpers from '../createTestHelpers';
 const {expectTransform, expectNoChange} = createTestHelpers(['for-each']);
+
+const LOOP_TYPES = [
+  {name: 'for', begin: 'for (let j = 0; j < 10; j++) {', end: '}'},
+  {name: 'for-in', begin: 'for (const key in obj) {', end: '}'},
+  {name: 'for-of', begin: 'for (const item of array) {', end: '}'},
+  {name: 'while', begin: 'while (true) {', end: '}'},
+  {name: 'do-while', begin: 'do {', end: '} while (true);'},
+];
 
 describe('For loops to Array.forEach()', () => {
   describe('with existing array element alias', () => {
@@ -127,13 +136,7 @@ describe('For loops to Array.forEach()', () => {
       });
 
       // Ignore break and continue inside all kinds of nested loops
-      [
-        {name: 'for', begin: 'for (let j = 0; j < 10; j++) {', end: '}'},
-        {name: 'for-in', begin: 'for (const key in obj) {', end: '}'},
-        {name: 'for-of', begin: 'for (const item of array) {', end: '}'},
-        {name: 'while', begin: 'while (true) {', end: '}'},
-        {name: 'do-while', begin: 'do {', end: '} while (true);'},
-      ].forEach(({name, begin, end}) => {
+      LOOP_TYPES.forEach(({name, begin, end}) => {
         ['break', 'continue'].forEach((keyword) => {
           it(`${keyword} inside nested ${name} loop`, () => {
             expectTransform(
@@ -180,44 +183,26 @@ describe('For loops to Array.forEach()', () => {
         ]);
       });
 
-      it('when nested loop contains a break statement with label', () => {
-        expectNoChange(
-          'loop1:\n' +
-          'for (let i = 0; i < xs.length; i++) {\n' +
-          '  const x = xs[i];\n' +
-          '  loop2:\n' +
-          '  for (let j = 0; j < ys.length; j++) {\n' +
-          '    const y = ys[i];\n' +
-          '    if (i === 1 && j === 1) {\n' +
-          '      break loop1;\n' +
-          '    }\n' +
-          '    console.log("i = " + i + ", j = " + j);\n' +
-          '  }\n' +
-          '}'
-        ).withWarnings([
-          {line: 8, msg: 'Break statement with label used in for-loop body', type: 'for-each'},
-          {line: 5, msg: 'Unable to transform for loop', type: 'for-each'},
-        ]);
-      });
-
-      it('when nested loop contains a continue statement with label', () => {
-        expectNoChange(
-          'loop1:\n' +
-          'for (let i = 0; i < xs.length; i++) {\n' +
-          '  const x = xs[i];\n' +
-          '  loop2:\n' +
-          '  for (let j = 0; j < ys.length; j++) {\n' +
-          '    const y = ys[i];\n' +
-          '    if (i === 1 && j === 1) {\n' +
-          '      continue loop1;\n' +
-          '    }\n' +
-          '    console.log("i = " + i + ", j = " + j);\n' +
-          '  }\n' +
-          '}'
-        ).withWarnings([
-          {line: 8, msg: 'Continue statement with label used in for-loop body', type: 'for-each'},
-          {line: 5, msg: 'Unable to transform for loop', type: 'for-each'},
-        ]);
+      // Watch out for break/continue with label inside all nested loops
+      LOOP_TYPES.forEach(({name, begin, end}) => {
+        ['break', 'continue'].forEach((keyword) => {
+          it(`when nested ${name} loop contains a ${keyword} statement with label`, () => {
+            expectNoChange(
+              'loop1:\n' +
+              'for (let i = 0; i < xs.length; i++) {\n' +
+              '  const x = xs[i];\n' +
+              '  loop2:\n' +
+              `  ${begin}\n` +
+              `    ${keyword} loop1;\n` +
+              `  ${end}\n` +
+              '}'
+            ).withWarnings([
+              {line: 6, msg: `${_.capitalize(keyword)} statement with label used in for-loop body`, type: 'for-each'},
+              {line: 5, msg: 'Unable to transform for loop', type: 'for-each'},
+              // Only expect the second warning in case of for-loop
+            ].filter((warnings, i) => name === 'for' || i === 0));
+          });
+        });
       });
 
       it('when loop index variable defined with var', () => {
