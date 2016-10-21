@@ -154,8 +154,8 @@ describe('For loops to for-each', () => {
       });
     });
 
-    describe('should not transform when loop itself contains a', () => {
-      it('break statement', () => {
+    describe('should not transform', () => {
+      it('when loop itself contains a break statement', () => {
         expectNoChange(
           'for (let i=0; i < array.length; i++) {\n' +
           '  const item = array[i];\n' +
@@ -168,7 +168,7 @@ describe('For loops to for-each', () => {
         ]);
       });
 
-      it('continue statement', () => {
+      it('when loop itself contains a continue statement', () => {
         expectNoChange(
           'for (let i=0; i < array.length; i++) {\n' +
           '  const item = array[i];\n' +
@@ -179,7 +179,7 @@ describe('For loops to for-each', () => {
         ]);
       });
 
-      it('break statement with label', () => {
+      it('when loop itself contains a break statement with label', () => {
         expectNoChange(
           'loop1:\n' +
           'for (let i = 0; i < xs.length; i++) {\n' +
@@ -199,7 +199,7 @@ describe('For loops to for-each', () => {
         ]);
       });
 
-      it('continue statement with label', () => {
+      it('when loop itself contains a continue statement with label', () => {
         expectNoChange(
           'loop1:\n' +
           'for (let i = 0; i < xs.length; i++) {\n' +
