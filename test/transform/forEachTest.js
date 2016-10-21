@@ -207,6 +207,22 @@ describe('For loops to Array.forEach()', () => {
         ]);
       });
 
+      it('when loop itself contains a break statement with label inside switch', () => {
+        expectNoChange(
+          'loop1:\n' +
+          'for (let i=0; i < array.length; i++) {\n' +
+          '  const item = array[i];\n' +
+          '  switch (item) {\n' +
+          '  case 1:\n' +
+          '    console.log(item);\n' +
+          '    break loop1;\n' +
+          '  }\n' +
+          '}'
+        ).withWarnings([
+          {line: 7, msg: 'Break statement with label used in for-loop body', type: 'for-each'}
+        ]);
+      });
+
       // Watch out for break/continue with label inside all nested loops
       LOOP_TYPES.forEach(({name, begin, end}) => {
         ['break', 'continue'].forEach((keyword) => {
