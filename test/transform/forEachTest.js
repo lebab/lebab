@@ -183,6 +183,30 @@ describe('For loops to Array.forEach()', () => {
         ]);
       });
 
+      it('when loop itself contains a break statement with label', () => {
+        expectNoChange(
+          'loop1:\n' +
+          'for (let i=0; i < array.length; i++) {\n' +
+          '  const item = array[i];\n' +
+          '  break loop1;\n' +
+          '}'
+        ).withWarnings([
+          {line: 4, msg: 'Break statement with label used in for-loop body', type: 'for-each'}
+        ]);
+      });
+
+      it('when loop itself contains a continue statement with label', () => {
+        expectNoChange(
+          'loop1:\n' +
+          'for (let i=0; i < array.length; i++) {\n' +
+          '  const item = array[i];\n' +
+          '  continue loop1;\n' +
+          '}'
+        ).withWarnings([
+          {line: 4, msg: 'Continue statement with label used in for-loop body', type: 'for-each'}
+        ]);
+      });
+
       // Watch out for break/continue with label inside all nested loops
       LOOP_TYPES.forEach(({name, begin, end}) => {
         ['break', 'continue'].forEach((keyword) => {
