@@ -101,7 +101,7 @@ describe('For loops to Array.forEach()', () => {
     });
 
     describe('should transform when loop contains', () => {
-      it('break inside another switch statement', () => {
+      it('break inside switch statement', () => {
         expectTransform(
           'for (let i=0; i < xs.length; i++) {\n' +
           '  const x = xs[i];\n' +
@@ -135,7 +135,7 @@ describe('For loops to Array.forEach()', () => {
         {name: 'do-while', begin: 'do {', end: '} while (true);'},
       ].forEach(({name, begin, end}) => {
         ['break', 'continue'].forEach((keyword) => {
-          it(`${keyword} inside another ${name} loop`, () => {
+          it(`${keyword} inside nested ${name} loop`, () => {
             expectTransform(
               'for (let i = 0; i < array.length; i++) {\n' +
               '  const x = array[i];\n' +
@@ -180,7 +180,7 @@ describe('For loops to Array.forEach()', () => {
         ]);
       });
 
-      it('when loop itself contains a break statement with label', () => {
+      it('when nested loop contains a break statement with label', () => {
         expectNoChange(
           'loop1:\n' +
           'for (let i = 0; i < xs.length; i++) {\n' +
@@ -200,7 +200,7 @@ describe('For loops to Array.forEach()', () => {
         ]);
       });
 
-      it('when loop itself contains a continue statement with label', () => {
+      it('when nested loop contains a continue statement with label', () => {
         expectNoChange(
           'loop1:\n' +
           'for (let i = 0; i < xs.length; i++) {\n' +
