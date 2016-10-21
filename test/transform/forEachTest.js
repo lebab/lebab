@@ -126,50 +126,23 @@ describe('For loops to Array.forEach()', () => {
         );
       });
 
-      it('break inside another for loop', () => {
-        expectTransform(
-          'for (let i = 0; i < array.length; i++) {\n' +
-          '  const x = array[i];\n' +
-          '  for (let j = 0; j < x.length; j++) {\n' +
-          '    const y = x[j];\n' +
-          '    if (j == 2) {\n' +
-          '      break;\n' +
-          '    }\n' +
-          '  }\n' +
-          '}'
-        ).toReturn(
-          'array.forEach(x => {\n' +
-          '  for (let j = 0; j < x.length; j++) {\n' +
-          '    const y = x[j];\n' +
-          '    if (j == 2) {\n' +
-          '      break;\n' +
-          '    }\n' +
-          '  }\n' +
-          '});'
-        );
-      });
-
-      it('continue inside another for loop', () => {
-        expectTransform(
-          'for (let i = 0; i < array.length; i++) {\n' +
-          '  const x = array[i];\n' +
-          '  for (let j = 0; j < x.length; j++) {\n' +
-          '    const y = x[j];\n' +
-          '    if (j == 2) {\n' +
-          '      continue;\n' +
-          '    }\n' +
-          '  }\n' +
-          '}'
-        ).toReturn(
-          'array.forEach(x => {\n' +
-          '  for (let j = 0; j < x.length; j++) {\n' +
-          '    const y = x[j];\n' +
-          '    if (j == 2) {\n' +
-          '      continue;\n' +
-          '    }\n' +
-          '  }\n' +
-          '});'
-        );
+      ['break', 'continue'].forEach((keyword) => {
+        it(`${keyword} inside another for loop`, () => {
+          expectTransform(
+            'for (let i = 0; i < array.length; i++) {\n' +
+            '  const x = array[i];\n' +
+            '  for (let j = 0; j < 10; j++) {\n' +
+            `    ${keyword};\n` +
+            '  }\n' +
+            '}'
+          ).toReturn(
+            'array.forEach(x => {\n' +
+            '  for (let j = 0; j < 10; j++) {\n' +
+            `    ${keyword};\n` +
+            '  }\n' +
+            '});'
+          );
+        });
       });
     });
 
