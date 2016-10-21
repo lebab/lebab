@@ -159,73 +159,50 @@ describe('For loops to Array.forEach()', () => {
     });
 
     describe('should not transform', () => {
-      it('when loop itself contains a break statement', () => {
-        expectNoChange(
-          'for (let i=0; i < array.length; i++) {\n' +
-          '  const item = array[i];\n' +
-          '  if (item == 2) {\n' +
-          '    break;\n' +
-          '  }\n' +
-          '}'
-        ).withWarnings([
-          {line: 4, msg: 'Break statement used in for-loop body', type: 'for-each'}
-        ]);
-      });
+      ['break', 'continue'].forEach((keyword) => {
+        const keywordMsg = _.capitalize(keyword);
 
-      it('when loop itself contains a continue statement', () => {
-        expectNoChange(
-          'for (let i=0; i < array.length; i++) {\n' +
-          '  const item = array[i];\n' +
-          '  continue;\n' +
-          '}'
-        ).withWarnings([
-          {line: 3, msg: 'Continue statement used in for-loop body', type: 'for-each'}
-        ]);
-      });
+        it(`when loop itself contains a ${keyword} statement`, () => {
+          expectNoChange(
+            'for (let i=0; i < array.length; i++) {\n' +
+            '  const item = array[i];\n' +
+            `  ${keyword};\n` +
+            '}'
+          ).withWarnings([
+            {line: 3, msg: `${keywordMsg} statement used in for-loop body`, type: 'for-each'}
+          ]);
+        });
 
-      it('when loop itself contains a break statement with label', () => {
-        expectNoChange(
-          'loop1:\n' +
-          'for (let i=0; i < array.length; i++) {\n' +
-          '  const item = array[i];\n' +
-          '  break loop1;\n' +
-          '}'
-        ).withWarnings([
-          {line: 4, msg: 'Break statement with label used in for-loop body', type: 'for-each'}
-        ]);
-      });
+        it('when loop itself contains a ${keyword} statement with label', () => {
+          expectNoChange(
+            'loop1:\n' +
+            'for (let i=0; i < array.length; i++) {\n' +
+            '  const item = array[i];\n' +
+            `  ${keyword} loop1;\n` +
+            '}'
+          ).withWarnings([
+            {line: 4, msg: `${keywordMsg} statement with label used in for-loop body`, type: 'for-each'}
+          ]);
+        });
 
-      it('when loop itself contains a continue statement with label', () => {
-        expectNoChange(
-          'loop1:\n' +
-          'for (let i=0; i < array.length; i++) {\n' +
-          '  const item = array[i];\n' +
-          '  continue loop1;\n' +
-          '}'
-        ).withWarnings([
-          {line: 4, msg: 'Continue statement with label used in for-loop body', type: 'for-each'}
-        ]);
-      });
+        it(`when loop itself contains a ${keyword} statement with label inside switch`, () => {
+          expectNoChange(
+            'loop1:\n' +
+            'for (let i=0; i < array.length; i++) {\n' +
+            '  const item = array[i];\n' +
+            '  switch (item) {\n' +
+            '  case 1:\n' +
+            '    console.log(item);\n' +
+            `    ${keyword} loop1;\n` +
+            '  }\n' +
+            '}'
+          ).withWarnings([
+            {line: 7, msg: `${keywordMsg} statement with label used in for-loop body`, type: 'for-each'}
+          ]);
+        });
 
-      it('when loop itself contains a break statement with label inside switch', () => {
-        expectNoChange(
-          'loop1:\n' +
-          'for (let i=0; i < array.length; i++) {\n' +
-          '  const item = array[i];\n' +
-          '  switch (item) {\n' +
-          '  case 1:\n' +
-          '    console.log(item);\n' +
-          '    break loop1;\n' +
-          '  }\n' +
-          '}'
-        ).withWarnings([
-          {line: 7, msg: 'Break statement with label used in for-loop body', type: 'for-each'}
-        ]);
-      });
-
-      // Watch out for break/continue with label inside all nested loops
-      LOOP_TYPES.forEach(({name, begin, end}) => {
-        ['break', 'continue'].forEach((keyword) => {
+        // Watch out for break/continue with label inside all nested loops
+        LOOP_TYPES.forEach(({name, begin, end}) => {
           it(`when nested ${name} loop contains a ${keyword} statement with label`, () => {
             expectNoChange(
               'loop1:\n' +
@@ -237,7 +214,7 @@ describe('For loops to Array.forEach()', () => {
               `  ${end}\n` +
               '}'
             ).withWarnings([
-              {line: 6, msg: `${_.capitalize(keyword)} statement with label used in for-loop body`, type: 'for-each'},
+              {line: 6, msg: `${keywordMsg} statement with label used in for-loop body`, type: 'for-each'},
               {line: 5, msg: 'Unable to transform for loop', type: 'for-each'},
               // Only expect the second warning in case of for-loop
             ].filter((warnings, i) => name === 'for' || i === 0));
