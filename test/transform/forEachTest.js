@@ -74,33 +74,7 @@ describe('For loops to for-each', () => {
       );
     });
 
-    it('should transform when index identifier used as object literal key', () => {
-      expectTransform(
-        'for (let i=0; i < array.length; i++) {\n' +
-        '  const item = array[i];\n' +
-        '  console.log(item, {i: 123});\n' +
-        '}'
-      ).toReturn(
-        'array.forEach(item => {\n' +
-        '  console.log(item, {i: 123});\n' +
-        '});'
-      );
-    });
-
-    it('should transform when index identifier used as object property', () => {
-      expectTransform(
-        'for (let i=0; i < array.length; i++) {\n' +
-        '  const item = array[i];\n' +
-        '  console.log(item.i);\n' +
-        '}'
-      ).toReturn(
-        'array.forEach(item => {\n' +
-        '  console.log(item.i);\n' +
-        '});'
-      );
-    });
-
-    it('should transform when an array is used in the loop body', () => {
+    it('should transform when the array itself is used in the loop body', () => {
       expectTransform(
         'for (let i=0; i < array.length; i++) {\n' +
         '  const item = array[i];\n' +
