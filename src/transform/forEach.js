@@ -11,34 +11,9 @@ export default function(ast, logger) {
       const matches = matchAliasedForLoop(node);
 
       if (matches) {
-        let statement;
-        const {body} = matches;
-        if ((statement = returnUsed(body))) {
-          logger.warn(statement, 'Return statement used in for-loop body', 'for-each');
-          return;
-        }
-        else if ((statement = breakWithLabelUsed(body))) {
-          logger.warn(statement, 'Break statement with label used in for-loop body', 'for-each');
-          return;
-        }
-        else if ((statement = continueWithLabelUsed(body))) {
-          logger.warn(statement, 'Continue statement with label used in for-loop body', 'for-each');
-          return;
-        }
-        else if ((statement = breakUsed(body))) {
-          logger.warn(statement, 'Break statement used in for-loop body', 'for-each');
-          return;
-        }
-        else if ((statement = continueUsed(body))) {
-          logger.warn(statement, 'Continue statement used in for-loop body', 'for-each');
-          return;
-        }
-        else if (matches.indexKind !== 'let') {
-          logger.warn(node, 'Only for-loops with indexes declared as let can be tranformed (use let transform first)', 'for-each');
-          return;
-        }
-        else if (matches.itemKind !== 'const') {
-          logger.warn(node, 'Only for-loops with const array items can be tranformed (use let transform first)', 'for-each');
+        const warning = validateForLoop(node, matches);
+        if (warning) {
+          logger.warn(...warning, 'for-each');
           return;
         }
 
@@ -50,6 +25,31 @@ export default function(ast, logger) {
       }
     }
   });
+}
+
+function validateForLoop(node, {body, indexKind, itemKind}) {
+  let statement;
+  if ((statement = returnUsed(body))) {
+    return [statement, 'Return statement used in for-loop body'];
+  }
+  else if ((statement = breakWithLabelUsed(body))) {
+    return [statement, 'Break statement with label used in for-loop body'];
+  }
+  else if ((statement = continueWithLabelUsed(body))) {
+    return [statement, 'Continue statement with label used in for-loop body'];
+  }
+  else if ((statement = breakUsed(body))) {
+    return [statement, 'Break statement used in for-loop body'];
+  }
+  else if ((statement = continueUsed(body))) {
+    return [statement, 'Continue statement used in for-loop body'];
+  }
+  else if (indexKind !== 'let') {
+    return [node, 'Only for-loops with indexes declared as let can be tranformed (use let transform first)'];
+  }
+  else if (itemKind !== 'const') {
+    return [node, 'Only for-loops with const array items can be tranformed (use let transform first)'];
+  }
 }
 
 const loopStatements = ['ForStatement', 'ForInStatement', 'ForOfStatement', 'DoWhileStatement', 'WhileStatement'];
