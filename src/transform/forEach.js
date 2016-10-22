@@ -82,7 +82,7 @@ function statementUsedInBody(body, statementPredicate, skippedTypes) {
 
   traverser.traverse(body, {
     enter(node) {
-      if (skippedTypes.indexOf(node.type) !== -1) {
+      if (skippedTypes.includes(node.type)) {
         this.skip();
       }
       if (statementPredicate(node)) {
