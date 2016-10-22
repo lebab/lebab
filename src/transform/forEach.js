@@ -83,11 +83,11 @@ function statementUsedInBody(body, statementPredicate, skippedTypes) {
   traverser.traverse(body, {
     enter(node) {
       if (skippedTypes.includes(node.type)) {
-        this.skip();
+        return traverser.VisitorOption.Skip;
       }
       if (statementPredicate(node)) {
         statement = node;
-        this.break();
+        return traverser.VisitorOption.Break;
       }
     }
   });
