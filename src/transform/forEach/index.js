@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import traverser from '../traverser';
-import isEqualAst from '../utils/isEqualAst';
-import {isReference} from '../utils/variableType';
-import copyComments from '../utils/copyComments';
-import matchAliasedForLoop from '../utils/matchAliasedForLoop';
+import traverser from '../../traverser';
+import isEqualAst from '../../utils/isEqualAst';
+import {isReference} from '../../utils/variableType';
+import copyComments from '../../utils/copyComments';
+import matchAliasedForLoop from '../../utils/matchAliasedForLoop';
 
 export default function(ast, logger) {
   traverser.replace(ast, {
