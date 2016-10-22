@@ -63,6 +63,11 @@ The resulting code should be almost 100% equivalent of the original code.
     - [x] uses name `item` for loop variable when loop body begins with `var item = array[i];`
     - [ ] [does not work when no such alias defined at the start of loop body][166]
     - [ ] LIMITATION requires let/const variables (run the `let` transform first)
+- [x] **for-each** - for loop to `Array.forEach()`
+    - [x] uses name `item` for forEach parameter when loop body begins with `var item = array[i];`
+    - [ ] [does not work when no such alias defined at the start of loop body][166]
+    - [x] adds index parameter when loop body makes use of the index variable.
+    - [ ] LIMITATION requires let/const variables (run the `let` transform first)
 - [x] **arg-rest** - use of arguments to function(...args)
     - [x] does not perform the transform when `args` variable already exists
     - [ ] always names the rest-parameter to `args`

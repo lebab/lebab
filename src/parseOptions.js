@@ -9,6 +9,7 @@ const transformsDocs = `
 
     + arrow .......... callback to arrow function
     + for-of ......... for loop to for-of loop
+    + for-each ....... for loop to Array.forEach()
     + arg-rest ....... use of arguments to function(...args)
     + arg-spread ..... use of apply() to spread operator
     + obj-method ..... function values in objects to methods
