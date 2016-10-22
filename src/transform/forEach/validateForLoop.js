@@ -11,7 +11,7 @@ import traverser from '../../traverser';
  * @param  {String} itemKind
  * @return {Array} Array of node and warnings message or undefined on success.
  */
-export function validateForLoop(node, {body, indexKind, itemKind}) {
+export default function validateForLoop(node, {body, indexKind, itemKind}) {
   let statement;
   if ((statement = returnUsed(body))) {
     return [statement, 'Return statement used in for-loop body'];
