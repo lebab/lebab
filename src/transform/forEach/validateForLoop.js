@@ -39,42 +39,21 @@ export default function validateForLoop(node, {body, indexKind, itemKind}) {
 const loopStatements = ['ForStatement', 'ForInStatement', 'ForOfStatement', 'DoWhileStatement', 'WhileStatement'];
 
 function returnUsed(body) {
-  return statementUsedInBody(body, statement => statement.type === 'ReturnStatement', []);
+  return traverser.find(body, 'ReturnStatement');
 }
 
 function breakWithLabelUsed(body) {
-  return statementUsedInBody(body, statement => statement.type === 'BreakStatement' && statement.label, []);
+  return traverser.find(body, ({type, label}) => type === 'BreakStatement' && label);
 }
 
 function continueWithLabelUsed(body) {
-  return statementUsedInBody(body, statement => statement.type === 'ContinueStatement' && statement.label, []);
+  return traverser.find(body, ({type, label}) => type === 'ContinueStatement' && label);
 }
 
 function breakUsed(body) {
-  return statementUsedInBody(body, statement => statement.type === 'BreakStatement', [...loopStatements, 'SwitchStatement']);
+  return traverser.find(body, 'BreakStatement', {skipTypes: [...loopStatements, 'SwitchStatement']});
 }
 
 function continueUsed(body) {
-  return statementUsedInBody(body, statement => statement.type === 'ContinueStatement', loopStatements);
-}
-
-// Find if a statement is used in the for loop body,
-// skipping certain types of nodes such as nested for loops or switch statements
-// Returns the line of the statement (if found);
-function statementUsedInBody(body, statementPredicate, skippedTypes) {
-  let statement;
-
-  traverser.traverse(body, {
-    enter(node) {
-      if (skippedTypes.includes(node.type)) {
-        return traverser.VisitorOption.Skip;
-      }
-      if (statementPredicate(node)) {
-        statement = node;
-        return traverser.VisitorOption.Break;
-      }
-    }
-  });
-
-  return statement;
+  return traverser.find(body, 'ContinueStatement', {skipTypes: loopStatements});
 }

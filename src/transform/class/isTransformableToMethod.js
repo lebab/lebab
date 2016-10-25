@@ -15,17 +15,7 @@ export default function isTransformableToMethod(node) {
 }
 
 function usesThis(ast) {
-  let found = false;
-  traverser.traverse(ast, {
-    enter(node) {
-      if (node.type === 'FunctionExpression' || node.type === 'FunctionDeclaration') {
-        return traverser.VisitorOption.Skip;
-      }
-      if (node.type === 'ThisExpression') {
-        found = true;
-        return traverser.VisitorOption.Break;
-      }
-    }
+  return traverser.find(ast, 'ThisExpression', {
+    skipTypes: ['FunctionExpression', 'FunctionDeclaration']
   });
-  return found;
 }

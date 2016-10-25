@@ -65,14 +65,20 @@ export default {
   /**
    * Searches in AST tree for node which satisfies the predicate.
    * @param  {Object} tree
-   * @param  {Function} predicate Called with `node` and `parent`
+   * @param  {Function|String} query Search function called with `node` and `parent`
+   *   Alternatively it can be string: the node type to search for.
+   * @param  {String[]} opts.skipTypes List of node types to skip (not traversing into these nodes)
    * @return {Object} The found node or undefined when not found
    */
-  find(tree, predicate) {
+  find(tree, query, {skipTypes = []} = {}) {
+    const predicate = this.createFindPredicate(query);
     let found;
 
     this.traverse(tree, {
       enter(node, parent) {
+        if (skipTypes.includes(node.type)) {
+          return estraverse.VisitorOption.Skip;
+        }
         if (predicate(node, parent)) {
           found = node;
           return estraverse.VisitorOption.Break;
@@ -82,4 +88,13 @@ export default {
 
     return found;
   },
+
+  createFindPredicate(query) {
+    if (_.isString(query)) {
+      return (node) => node.type === query;
+    }
+    else {
+      return query;
+    }
+  }
 };
