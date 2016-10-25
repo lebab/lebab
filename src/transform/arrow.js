@@ -69,22 +69,9 @@ function hasArguments(ast) {
 // Returns true when pattern matches any node in given function body,
 // excluding any nested functions
 function hasInFunctionBody(ast, pattern) {
-  const predicate = _.matches(pattern);
-  let found = false;
-
-  traverser.traverse(ast, {
-    enter(node) {
-      if (predicate(node)) {
-        found = true;
-        this.break();
-      }
-      if (node.type === 'FunctionExpression' || node.type === 'FunctionDeclaration') {
-        this.skip();
-      }
-    }
+  return traverser.find(ast, _.matches(pattern), {
+    skipTypes: ['FunctionExpression', 'FunctionDeclaration']
   });
-
-  return found;
 }
 
 function functionToArrow(func) {
