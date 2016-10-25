@@ -16,10 +16,10 @@ class PotentialConstructor extends PotentialMethod {
   // Override superclass method
   getBody() {
     if (this.superClass) {
-      return this.transformSuperCalls(this.methodNode.body);
+      return this.transformSuperCalls(this.getBodyBlock());
     }
     else {
-      return this.methodNode.body;
+      return this.getBodyBlock();
     }
   }
 

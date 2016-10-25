@@ -71,13 +71,53 @@ describe('Classes', () => {
     );
   });
 
-  it('should not convert arrow-function to method', () => {
+  it('should not convert arrow-function to method when it uses this', () => {
     expectNoChange(
       'function MyClass() {\n' +
       '}\n' +
       'MyClass.prototype.method = () => {\n' +
       '  return this.foo;\n' +
       '};'
+    );
+  });
+
+  it('should not convert arrow-function to method when it uses this inside nested arrow-function', () => {
+    expectNoChange(
+      'function MyClass() {\n' +
+      '}\n' +
+      'MyClass.prototype.method = () => {\n' +
+      '  return () => { this.foo(); };\n' +
+      '};'
+    );
+  });
+
+  it('should convert arrow-function to method when it does not use this', () => {
+    expectTransform(
+      'function MyClass() {\n' +
+      '}\n' +
+      'MyClass.prototype.method = () => {\n' +
+      '  return foo;\n' +
+      '};'
+    ).toReturn(
+      'class MyClass {\n' +
+      '  method() {\n' +
+      '    return foo;\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
+  it('should convert shorthand arrow-function to method when it does not use this', () => {
+    expectTransform(
+      'function MyClass() {\n' +
+      '}\n' +
+      'MyClass.prototype.method = () => foo;'
+    ).toReturn(
+      'class MyClass {\n' +
+      '  method() {\n' +
+      '    return foo;\n' +
+      '  }\n' +
+      '}'
     );
   });
 

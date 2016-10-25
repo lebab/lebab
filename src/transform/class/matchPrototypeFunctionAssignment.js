@@ -1,4 +1,5 @@
 import {matchesAst, extract} from '../../utils/matchesAst';
+import isTransformableToMethod from './isTransformableToMethod';
 
 /**
  * Matches: <className>.prototype.<methodName> = function () { ... }
@@ -37,8 +38,6 @@ export default matchesAst({
       }
     },
     operator: '=',
-    right: extract('methodNode', {
-      type: 'FunctionExpression'
-    })
+    right: extract('methodNode', isTransformableToMethod)
   }
 });

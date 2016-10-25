@@ -42,7 +42,7 @@ class PotentialMethod {
    * @return {Boolean}
    */
   isEmpty() {
-    return this.methodNode.body.body.length === 0;
+    return this.getBodyBlock().body.length === 0;
   }
 
   /**
@@ -85,14 +85,31 @@ class PotentialMethod {
   // To be overridden in subclasses
   getBody() {
     if (this.superClass) {
-      return this.transformSuperCalls(this.methodNode.body);
+      return this.transformSuperCalls(this.getBodyBlock());
     }
     else {
-      return this.methodNode.body;
+      return this.getBodyBlock();
     }
   }
 
-  // Transforms constructor body by replacing
+  getBodyBlock() {
+    if (this.methodNode.body.type === 'BlockStatement') {
+      return this.methodNode.body;
+    }
+    else {
+      return {
+        type: 'BlockStatement',
+        body: [
+          {
+            type: 'ReturnStatement',
+            argument: this.methodNode.body
+          }
+        ]
+      };
+    }
+  }
+
+  // Transforms method body by replacing
   // SuperClass.prototype.foo.call(this, ...args) --> super.foo(...args)
   transformSuperCalls(body) {
     return traverser.replace(body, {
