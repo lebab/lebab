@@ -1,4 +1,5 @@
 import matchesAst from '../../utils/matchesAst';
+import isTransformableToMethod from './isTransformableToMethod';
 
 /**
  * Matches: <ident>: function() { ... }
@@ -13,7 +14,5 @@ export default matchesAst({
     // name: <ident>
   },
   computed: false,
-  value: {
-    type: 'FunctionExpression'
-  }
+  value: isTransformableToMethod,
 });

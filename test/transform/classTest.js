@@ -202,6 +202,32 @@ describe('Classes', () => {
     );
   });
 
+  it('should ignore object assigned directly to prototype when it contains arrow-functions that use this', () => {
+    expectNoChange(
+      'function MyClass() {\n' +
+      '}\n' +
+      'MyClass.prototype = {\n' +
+      '  method: () => this.foo,\n' +
+      '};'
+    );
+  });
+
+  it('should transform object assigned directly to prototype when it contains arrow-functions that do not use this', () => {
+    expectTransform(
+      'function MyClass() {\n' +
+      '}\n' +
+      'MyClass.prototype = {\n' +
+      '  method: () => foo,\n' +
+      '};'
+    ).toReturn(
+      'class MyClass {\n' +
+      '  method() {\n' +
+      '    return foo;\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
   it('should convert Object.defineProperty to setters and getters', () => {
     expectTransform(
       'function MyClass() {\n' +
@@ -259,7 +285,23 @@ describe('Classes', () => {
     );
   });
 
-  it('should ignore Object.defineProperty with arrow-function', () => {
+  it('should transform Object.defineProperty with arrow-function that does not use this', () => {
+    expectTransform(
+      'function MyClass() {\n' +
+      '}\n' +
+      'Object.defineProperty(MyClass.prototype, "getter", {\n' +
+      '  get: () => something\n' +
+      '});'
+    ).toReturn(
+      'class MyClass {\n' +
+      '  get getter() {\n' +
+      '    return something;\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
+  it('should ignore Object.defineProperty with arrow-function that uses this', () => {
     expectNoChange(
       'function MyClass() {\n' +
       '}\n' +
