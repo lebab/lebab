@@ -5,7 +5,8 @@
   },
   "env": {
     "node": true,
-    "mocha": true
+    "mocha": true,
+    "es6": true
   },
   "plugins": [
     "no-null"
