@@ -5,6 +5,7 @@ import templateTransform from './transform/template';
 import arrowTransform from './transform/arrow';
 import letTransform from './transform/let';
 import defaultParamTransform from './transform/defaultParam';
+import destructParamTransform from './transform/destructParam';
 import argSpreadTransform from './transform/argSpread';
 import argRestTransform from './transform/argRest';
 import objMethodTransform from './transform/objMethod';
@@ -23,6 +24,7 @@ const transformsMap = {
   'arrow': arrowTransform,
   'let': letTransform,
   'default-param': defaultParamTransform,
+  'destruct-param': destructParamTransform,
   'arg-spread': argSpreadTransform,
   'arg-rest': argRestTransform,
   'obj-method': objMethodTransform,
