@@ -26,6 +26,15 @@ describe('Destruct function param', () => {
     );
   });
 
+  it('should not transform when re-defined as variable', () => {
+    expectNoChange(
+      'function foo(cfg) {\n' +
+      '  var cfg;\n' +
+      '  console.log(cfg.foo, cfg.bar);\n' +
+      '}'
+    );
+  });
+
   it('should not transform when is used without props-access', () => {
     expectNoChange(
       'function foo(cfg) {\n' +
