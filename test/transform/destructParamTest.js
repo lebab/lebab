@@ -30,10 +30,19 @@ describe('Destruct function param', () => {
     );
   });
 
-  it('should not transform when props are modified', () => {
+  it('should not transform when props are assigned', () => {
     expectNoChange(
       'function foo(cfg) {\n' +
       '  cfg.foo = 1;\n' +
+      '  console.log(cfg.foo, cfg.bar);\n' +
+      '}'
+    );
+  });
+
+  it('should not transform when props are updated', () => {
+    expectNoChange(
+      'function foo(cfg) {\n' +
+      '  cfg.foo++;\n' +
       '  console.log(cfg.foo, cfg.bar);\n' +
       '}'
     );
