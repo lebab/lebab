@@ -3,22 +3,7 @@ import parser from '../Parser';
 import traverser from '../traverser';
 import withScope from '../withScope';
 import * as functionType from '../utils/functionType';
-
-class Hierarchy {
-  constructor(ast) {
-    this.parents = new Map();
-
-    traverser.traverse(ast, {
-      enter: (node, parent) => {
-        this.parents.set(node, parent);
-      }
-    });
-  }
-
-  getParent(node) {
-    return this.parents.get(node);
-  }
-}
+import Hierarchy from '../utils/Hierarchy';
 
 export default function(ast) {
   const hierarchy = new Hierarchy(ast);
