@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import recast from 'recast';
 import parser from '../Parser';
 import traverser from '../traverser';
@@ -79,7 +80,7 @@ function isUpdate(ex, node) {
 // and parsing it with Recast and extracting the ObjectPatter node.
 // Feeding this back to Recast will preserve the formatting.
 function createDestructPattern(exs) {
-  const props = exs.map(({property}) => property.name).join(', ');
+  const props = _(exs).map(({property}) => property.name).uniq().join(', ');
   const js = `function foo({${props}}) {};`;
   const ast = recast.parse(js, {parser});
   return ast.program.body[0].params[0];

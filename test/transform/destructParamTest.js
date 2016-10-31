@@ -14,6 +14,18 @@ describe('Destruct function param', () => {
     );
   });
 
+  it('should transform when the same prop accessed multiple times', () => {
+    expectTransform(
+      'function foo(cfg) {\n' +
+      '  console.log(cfg.foo, cfg.bar, cfg.foo);\n' +
+      '}'
+    ).toReturn(
+      'function foo({foo, bar}) {\n' +
+      '  console.log(foo, bar, foo);\n' +
+      '}'
+    );
+  });
+
   it('should not transform when is used without props-access', () => {
     expectNoChange(
       'function foo(cfg) {\n' +
