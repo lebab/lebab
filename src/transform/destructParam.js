@@ -1,4 +1,5 @@
-// import _ from 'lodash';
+import recast from 'recast';
+import parser from '../Parser';
 import traverser from '../traverser';
 import withScope from '../withScope';
 import * as functionType from '../utils/functionType';
@@ -86,23 +87,15 @@ function isUpdate(ex, node) {
     ex.argument === node;
 }
 
+// By default recast indents the ObjectPattern AST node
+// See: https://github.com/benjamn/recast/issues/240
+//
+// To work around this, we're building the desired string by ourselves,
+// and parsing it with Recast and extracting the ObjectPatter node.
+// Feeding this back to Recast will preserve the formatting.
 function createDestructPattern(exs) {
-  return {
-    type: 'ObjectPattern',
-    properties: exs.map(({property}) => {
-      return {
-        type: 'Property',
-        kind: 'init',
-        shorthand: true,
-        key: {
-          type: 'Identifier',
-          name: property.name,
-        },
-        value: {
-          type: 'Identifier',
-          name: property.name,
-        },
-      };
-    })
-  };
+  const props = exs.map(({property}) => property.name).join(', ');
+  const js = `function foo({${props}}) {};`;
+  const ast = recast.parse(js, {parser});
+  return ast.program.body[0].params[0];
 }

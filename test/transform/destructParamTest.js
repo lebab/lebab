@@ -8,12 +8,7 @@ describe('Destruct function param', () => {
       '  console.log(cfg.foo, cfg.bar);\n' +
       '}'
     ).toReturn(
-      'function foo(\n' +
-      '  {\n' +
-      '    foo,\n' +
-      '    bar\n' +
-      '  }\n' +
-      ') {\n' +
+      'function foo({foo, bar}) {\n' +
       '  console.log(foo, bar);\n' +
       '}'
     );
@@ -63,7 +58,7 @@ describe('Destruct function param', () => {
 
   it('should not transform already destructed param', () => {
     expectNoChange(
-      'function foo({cfg}) {\n' +
+      'function foo({cfg, cfg2}) {\n' +
       '  console.log(cfg.foo, cfg.bar);\n' +
       '}'
     );
