@@ -52,6 +52,10 @@ function getMemberExpressions(variable, hierarchy) {
       return [];
     }
 
+    if (variableExists(memEx.property.name, ref.from)) {
+      return [];
+    }
+
     memberExpressions.push(memEx);
   }
   return memberExpressions;
@@ -71,6 +75,16 @@ function isAssignment(ex, node) {
 function isUpdate(ex, node) {
   return ex.type === 'UpdateExpression' &&
     ex.argument === node;
+}
+
+function variableExists(variableName, scope) {
+  while (scope) {
+    if (scope.set.get(variableName)) {
+      return true;
+    }
+    scope = scope.upper;
+  }
+  return false;
 }
 
 // By default recast indents the ObjectPattern AST node
