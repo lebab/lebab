@@ -118,4 +118,26 @@ describe('Destruct function param', () => {
       '}'
     );
   });
+
+  it('should transform when MAX_PROPS props', () => {
+    expectTransform(
+      'function fn(cfg) {\n' +
+      '  console.log(cfg.p1, cfg.p2, cfg.p3, cfg.p4);\n' +
+      '}'
+    ).toReturn(
+      'function fn({p1, p2, p3, p4}) {\n' +
+      '  console.log(p1, p2, p3, p4);\n' +
+      '}'
+    );
+  });
+
+  it('should not transform more than MAX_PROPS props', () => {
+    expectNoChange(
+      'function fn(cfg) {\n' +
+      '  console.log(cfg.p1, cfg.p2, cfg.p3, cfg.p4, cfg.p5);\n' +
+      '}'
+    ).withWarnings([
+      {line: 1, msg: '5 different props found, will not transform more than 4', type: 'destruct-param'}
+    ]);
+  });
 });

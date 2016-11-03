@@ -6,7 +6,9 @@ import withScope from '../withScope';
 import * as functionType from '../utils/functionType';
 import Hierarchy from '../utils/Hierarchy';
 
-export default function(ast) {
+const MAX_PROPS = 4;
+
+export default function(ast, logger) {
   const hierarchy = new Hierarchy(ast);
 
   traverser.traverse(ast, withScope(ast, {
@@ -22,6 +24,16 @@ export default function(ast) {
             if (index === -1) {
               return;
             }
+
+            if (uniqPropNames(exs).length > MAX_PROPS) {
+              logger.warn(
+                fnNode,
+                `${uniqPropNames(exs).length} different props found, will not transform more than ${MAX_PROPS}`,
+                'destruct-param'
+              );
+              return;
+            }
+
             fnNode.params[index] = createDestructPattern(exs);
 
             // Replace references of obj.foo with simply foo
@@ -96,6 +108,10 @@ function isKeyword(name) {
   return parser.tokenize(name)[0].type === 'Keyword';
 }
 
+function uniqPropNames(exs) {
+  return _(exs).map(({property}) => property.name).uniq().value();
+}
+
 // By default recast indents the ObjectPattern AST node
 // See: https://github.com/benjamn/recast/issues/240
 //
@@ -103,7 +119,7 @@ function isKeyword(name) {
 // and parsing it with Recast and extracting the ObjectPatter node.
 // Feeding this back to Recast will preserve the formatting.
 function createDestructPattern(exs) {
-  const props = _(exs).map(({property}) => property.name).uniq().join(', ');
+  const props = uniqPropNames(exs).join(', ');
   const js = `function foo({${props}}) {};`;
   const ast = recast.parse(js, {parser});
   return ast.program.body[0].params[0];
