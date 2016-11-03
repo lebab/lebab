@@ -48,7 +48,7 @@ function getMemberExpressions(variable, hierarchy) {
     }
 
     const ex = hierarchy.getParent(memEx);
-    if (isAssignment(ex, memEx) || isUpdate(ex, memEx)) {
+    if (isAssignment(ex, memEx) || isUpdate(ex, memEx) || isMethodCall(ex, memEx)) {
       return [];
     }
 
@@ -75,6 +75,11 @@ function isAssignment(ex, node) {
 function isUpdate(ex, node) {
   return ex.type === 'UpdateExpression' &&
     ex.argument === node;
+}
+
+function isMethodCall(ex, node) {
+  return ex.type === 'CallExpression' &&
+    ex.callee === node;
 }
 
 function variableExists(variableName, scope) {

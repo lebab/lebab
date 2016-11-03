@@ -69,6 +69,14 @@ describe('Destruct function param', () => {
     );
   });
 
+  it('should not transform when props are methods', () => {
+    expectNoChange(
+      'function fn(cfg) {\n' +
+      '  console.log(cfg.foo(), cfg.bar);\n' +
+      '}'
+    );
+  });
+
   it('should not transform when param with name of prop already exists', () => {
     expectNoChange(
       'function fn(cfg, bar) {\n' +
