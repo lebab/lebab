@@ -77,6 +77,14 @@ describe('Destruct function param', () => {
     );
   });
 
+  it('should not transform when props are keywords', () => {
+    expectNoChange(
+      'function fn(cfg) {\n' +
+      '  console.log(cfg.let, cfg.for);\n' +
+      '}'
+    );
+  });
+
   it('should not transform when param with name of prop already exists', () => {
     expectNoChange(
       'function fn(cfg, bar) {\n' +

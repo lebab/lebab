@@ -52,7 +52,7 @@ function getMemberExpressions(variable, hierarchy) {
       return [];
     }
 
-    if (variableExists(memEx.property.name, ref.from)) {
+    if (isKeyword(memEx.property.name) || variableExists(memEx.property.name, ref.from)) {
       return [];
     }
 
@@ -90,6 +90,10 @@ function variableExists(variableName, scope) {
     scope = scope.upper;
   }
   return false;
+}
+
+function isKeyword(name) {
+  return parser.tokenize(name)[0].type === 'Keyword';
 }
 
 // By default recast indents the ObjectPattern AST node
