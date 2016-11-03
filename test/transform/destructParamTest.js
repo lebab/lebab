@@ -86,6 +86,15 @@ describe('Destruct function param', () => {
     );
   });
 
+  it('should not transform when import with name of prop already exists', () => {
+    expectNoChange(
+      'import foo from "./myFooModule";\n' +
+      'function fn(cfg) {\n' +
+      '  console.log(cfg.foo, cfg.bar);\n' +
+      '}'
+    );
+  });
+
   it('should not transform already destructed param', () => {
     expectNoChange(
       'function fn({cfg, cfg2}) {\n' +
