@@ -96,6 +96,9 @@ function isMethodCall(ex, node) {
 
 function variableExists(variableName, scope) {
   while (scope) {
+    if (scope.through.some(ref => ref.identifier.name === variableName)) {
+      return true;
+    }
     if (scope.set.get(variableName)) {
       return true;
     }

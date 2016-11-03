@@ -111,6 +111,28 @@ describe('Destruct function param', () => {
     );
   });
 
+  it('should not transform when shadowing a global variable', () => {
+    expectNoChange(
+      'function fn(cfg) {\n' +
+      '  console.log(cfg.window);\n' +
+      '  window.open("_blank");\n' +
+      '}'
+    );
+  });
+
+  it('should not transform when shadowing a global variable in separate fuction', () => {
+    expectNoChange(
+      'function fn(cfg) {\n' +
+      '  function fn1() {\n' +
+      '    console.log(cfg.window);\n' +
+      '  }\n' +
+      '  function fn2() {\n' +
+      '    window.open("_blank");\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
   it('should not transform already destructed param', () => {
     expectNoChange(
       'function fn({cfg, cfg2}) {\n' +
