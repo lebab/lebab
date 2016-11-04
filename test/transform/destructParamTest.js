@@ -141,6 +141,36 @@ describe('Destruct function param', () => {
     );
   });
 
+  it.skip('should not transform second param when this results in conflict', () => {
+    expectTransform(
+      'function fn(a, b) {\n' +
+      '  console.log(a.foo, b.foo);\n' +
+      '}'
+    ).toReturn(
+      'function fn({foo}, b) {\n' +
+      '  console.log(foo, b.foo);\n' +
+      '}'
+    );
+  });
+
+  it.skip('should not perform second transform when it results in conflict', () => {
+    expectTransform(
+      'function fn(a) {\n' +
+      '  console.log(a.foo);\n' +
+      '  function fn(b) {\n' +
+      '    console.log(a.foo, b.foo);\n' +
+      '  }\n' +
+      '}'
+    ).toReturn(
+      'function fn({foo}) {\n' +
+      '  console.log(foo);\n' +
+      '  function fn(b) {\n' +
+      '    console.log(foo, b.foo);\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
   it('should transform when MAX_PROPS props', () => {
     expectTransform(
       'function fn(cfg) {\n' +
