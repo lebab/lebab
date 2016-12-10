@@ -58,7 +58,7 @@ The resulting code should be almost 100% equivalent of the original code.
     - [x] not applied to object properties (use `obj-method` transform)
     - [x] converts immediate return `{ return x; }` to `=> x`
     - [ ] does not remove `that = this` assignments
-    - [ ] BUG [fails with immediately returning functions that have methods invoked][105]
+    - [x] BUG [fails with immediately returning functions that have methods invoked][105]
 - [x] **for-of** - for loop to for-of loop
     - [x] uses name `item` for loop variable when loop body begins with `var item = array[i];`
     - [ ] [does not work when no such alias defined at the start of loop body][166]
