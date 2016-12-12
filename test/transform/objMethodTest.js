@@ -78,4 +78,22 @@ describe('Object methods', () => {
       '});'
     ).withoutWarnings();
   });
+
+  it('should not convert string properties', () => {
+    expectNoChange(
+      '({\n' +
+      '  "foo": function() {\n' +
+      '  }\n' +
+      '});'
+    ).withoutWarnings();
+  });
+
+  it('should not convert numeric properties', () => {
+    expectNoChange(
+      '({\n' +
+      '  123: function() {\n' +
+      '  }\n' +
+      '});'
+    ).withoutWarnings();
+  });
 });

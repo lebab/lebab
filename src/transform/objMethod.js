@@ -3,6 +3,9 @@ import traverser from '../traverser';
 
 const matchTransformableProperty = matchesAst({
   type: 'Property',
+  key: {
+    type: 'Identifier',
+  },
   value: {
     type: 'FunctionExpression',
     id: extract('functionName'),
