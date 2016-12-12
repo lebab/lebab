@@ -38,7 +38,8 @@ export default class Transformer {
       });
 
       return recast.print(ast, {
-        lineTerminator: this.detectLineTerminator(code)
+        lineTerminator: this.detectLineTerminator(code),
+        objectCurlySpacing: false,
       }).code;
     });
   }
