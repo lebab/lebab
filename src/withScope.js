@@ -30,7 +30,7 @@ export default function withScope(ast, {enter = emptyFn, leave = emptyFn}) {
     },
     leave(node, parent) {
       if (isFunction(node)) {
-        currentScope = scopeManager.upper;
+        currentScope = currentScope.upper;
       }
       return leave.call(this, node, parent, currentScope);
     }
