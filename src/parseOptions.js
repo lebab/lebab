@@ -25,6 +25,7 @@ const transformsDocs = `
     + class .......... prototype assignments to class declaration
     + template ....... string concatenation to template string
     + default-param .. use of || to default parameters
+    + destruct-param . use destructuring for objects in function parameters
     + includes ....... indexOf() != -1 to includes() (ES7)
 `;
 

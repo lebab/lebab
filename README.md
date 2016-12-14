@@ -142,6 +142,12 @@ or they have significant bugs which can result in breaking your code.
     - [x] recognizes `a = a === undefined ? 2 : a`
     - [x] recognizes `a = typeof a === 'undefined' ? 2 : a`
     - [ ] LIMITATION [transforming `a = a || 2` does not produce strictly equivalent code][125]
+- [x] **destruct-param** - use destructuring for objects in function parameters
+    - [x] converts `(obj) => obj.a + obj.b` to `({a, b}) => a + b`
+    - [x] does not transform when conflicts with existing variables
+    - [x] does not transform when object properties are modified
+    - [ ] LIMITATION Only objects with maximum of 4 properties are transformed
+    - [ ] BUG Can conflict with variables introduced by the transform itself
 - [x] **includes** - `array.indexOf(foo) !== -1` to `array.includes(foo)` (**ES7**)
     - [x] works for both strings and arrays
     - [x] converts `!== -1` to `array.includes(foo)`
