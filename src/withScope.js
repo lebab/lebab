@@ -14,10 +14,10 @@ const emptyFn = () => {}; // eslint-disable-line no-empty-function
  *     }))
  *
  * @param {Object} ast The AST root node also passed to traverser.
- * @param {Object} cfg Object with enter/leave function as expected by traverser.
- * @return {Object} Object with enter/leave functions to be passed to traverser.
+ * @param {Object} cfg Object with enter function as expected by traverser.
+ * @return {Object} Object with enter function to be passed to traverser.
  */
-export default function withScope(ast, {enter = emptyFn, leave = emptyFn}) {
+export default function withScope(ast, {enter = emptyFn}) {
   const scopeManager = analyze(ast, {ecmaVersion: 6});
   let currentScope = scopeManager.acquire(ast);
 
@@ -27,12 +27,8 @@ export default function withScope(ast, {enter = emptyFn, leave = emptyFn}) {
         currentScope = scopeManager.acquire(node);
       }
       return enter.call(this, node, parent, currentScope);
-    },
-    leave(node, parent) {
-      if (isFunction(node)) {
-        currentScope = currentScope.upper;
-      }
-      return leave.call(this, node, parent, currentScope);
     }
+    // NOTE: leave() is currently not implemented.
+    // See escope docs for supporting it if need arises: https://github.com/estools/escope
   };
 }
