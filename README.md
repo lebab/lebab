@@ -147,7 +147,7 @@ or they have significant bugs which can result in breaking your code.
     - [x] does not transform when conflicts with existing variables
     - [x] does not transform when object properties are modified
     - [ ] LIMITATION Only objects with maximum of 4 properties are transformed
-    - [ ] BUG Can conflict with variables introduced by the transform itself
+    - [ ] BUG [Can conflict with variables introduced by the transform itself][200]
 - [x] **includes** - `array.indexOf(foo) !== -1` to `array.includes(foo)` (**ES7**)
     - [x] works for both strings and arrays
     - [x] converts `!== -1` to `array.includes(foo)`
@@ -209,3 +209,4 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [168]: https://github.com/lebab/lebab/issues/168
 [186]: https://github.com/lebab/lebab/issues/186
 [191]: https://github.com/lebab/lebab/issues/191
+[200]: https://github.com/lebab/lebab/issues/200
