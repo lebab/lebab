@@ -18,7 +18,7 @@ const emptyFn = () => {}; // eslint-disable-line no-empty-function
  * @return {Object} Object with enter function to be passed to traverser.
  */
 export default function withScope(ast, {enter = emptyFn}) {
-  const scopeManager = analyze(ast, {ecmaVersion: 6});
+  const scopeManager = analyze(ast, {ecmaVersion: 6, sourceType: 'module'});
   let currentScope = scopeManager.acquire(ast);
 
   return {
