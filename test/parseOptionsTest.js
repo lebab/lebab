@@ -18,7 +18,7 @@ describe('Command Line Interface', () => {
   it('when no transforms given, throws error', () => {
     expect(() => {
       parse([]);
-    }).to.throw('No transforms specifed :(');
+    }).to.throw('No transforms specified :(');
   });
 
   it('when single transforms given, enables it', () => {
