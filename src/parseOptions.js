@@ -85,7 +85,7 @@ function getReplace() {
 
 function getTransforms() {
   if (!program.transform || program.transform.length === 0) {
-    throw `No transforms specifed :(
+    throw `No transforms specified :(
 
 Use --transform option to pick one of the following:
 ${transformsDocs}`;
