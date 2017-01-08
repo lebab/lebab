@@ -6,8 +6,8 @@
   "scripts": {
     "prepublish": "rm -rf lib/ && babel src/ --out-dir lib/",
     "lint": "eslint src/ test/ bin/ *.js",
-    "test": "npm run prepublish && mocha --compilers js:babel-register \"test/**/*Test.js\"",
-    "watch": "mocha --watch --compilers js:babel-register \"test/transform/**/*Test.js\"",
+    "test": "npm run prepublish && nyc mocha --compilers js:babel-register \"test/**/*Test.js\"",
+    "watch": "mocha --coverage --watch --compilers js:babel-register \"test/transform/**/*Test.js\"",
     "travis": "npm run lint && npm run test"
   },
   "engines": {
@@ -58,6 +58,7 @@
     "chai": "^3.4.1",
     "eslint": "^3.3.0",
     "eslint-plugin-no-null": "^1.0.1",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "nyc": "^10.0.0"
   }
 }
