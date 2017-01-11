@@ -40,7 +40,7 @@ program.option('-s, --replaceSaveOriginal <dir>', `in-place transform all *.js f
                          <dir> can also be a single file or a glob pattern
                          makes a copy of each file for comparison prefixed with _original
                          automatically skips node_modules`);
-program.option('-d, --deleteOriginals <dir>', `removes all files prefixed with _original`);
+program.option('-d, --deleteOriginals <dir>', 'removes all files prefixed with _original');
 
 /**
  * Parses and validates command line options from argv.
