@@ -65,5 +65,16 @@ export default {
     else {
       process.stdout.write(data);
     }
-  }
+  },
+
+  /**
+   * Deletes a file.
+   * When no filename given, no operation occurs.
+   * @param  {String} filename
+   */
+  unlink(filename) {
+    if (filename) {
+      fs.unlinkSync(filename);
+    }
+  },
 };
