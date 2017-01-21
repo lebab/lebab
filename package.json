@@ -10,7 +10,8 @@
     "test": "mocha --compilers js:babel-register \"test/**/*Test.js\"",
     "watch": "mocha --watch --compilers js:babel-register \"test/transform/**/*Test.js\"",
     "coverage": "nyc npm test",
-    "ensure-coverage": "npm run coverage && nyc check-coverage --statements 80 --branches 80 --functions 80",
+    "//": "These are used by Travis to create coverage report. Run 'coverage' script first.",
+    "ensure-coverage": "nyc check-coverage --statements 80 --branches 80 --functions 80",
     "upload-coverage": "nyc report --reporter=lcov && cat coverage/*/lcov.info | codecov"
   },
   "engines": {
