@@ -170,6 +170,16 @@ describe('Arrow functions', () => {
     });
   });
 
+  describe('functions with methods invoked', () => {
+    it('get parentheses added around the arrow function when needed', () => {
+      expectTransform(
+        'x = function(a) { return a; }.call(null, 1);'
+      ).toReturn(
+        'x = (a => a).call(null, 1);'
+      );
+    });
+  });
+
   describe('comments', () => {
     it('should preserve comments when converting to shorthand notation', () => {
       expectTransform(
