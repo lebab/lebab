@@ -12,7 +12,6 @@ before_script:
 - npm run lint
 
 script:
-- npm run test
 - npm run system-test
 - npm run coverage
 - npm run ensure-coverage
