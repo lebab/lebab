@@ -6,10 +6,10 @@
   "scripts": {
     "prepublish": "rm -rf lib/ && babel src/ --out-dir lib/",
     "system-test": "mocha --compilers js:babel-register \"system-test/**/*Test.js\"",
-    "check-coverage": "npm run cover && nyc check-coverage --statements 80 --branches 80 --functions 80",
+    "ensure-coverage": "npm run cover && nyc check-coverage --statements 80 --branches 80 --functions 80",
     "report-coverage": "nyc report --reporter=lcov",
     "cover": "nyc npm t",
-    "codecov": "cat coverage/*/lcov.info | codecov",
+    "upload-coverage": "cat coverage/*/lcov.info | codecov",
     "lint": "eslint src/ test/ bin/ *.js",
     "test": "mocha --compilers js:babel-register \"test/**/*Test.js\"",
     "watch": "mocha --watch --compilers js:babel-register \"test/transform/**/*Test.js\"",

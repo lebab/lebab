@@ -15,8 +15,8 @@ before_script:
 script:
 - npm run test
 - npm run system-test
-- npm run check-coverage
+- npm run ensure-coverage
 - npm run report-coverage
 
 after_script:
-- npm run codecov
+- npm run upload-coverage
