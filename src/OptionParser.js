@@ -15,7 +15,6 @@ const transformsDocs = `
     + obj-method ..... function values in objects to methods
     + obj-shorthand .. {foo: foo} to {foo}
     + no-strict ...... remove "use strict" directives
-    + commonjs ....... CommonJS module loading to import/export
     + exponent ....... Math.pow() to ** operator (ES7)
     + multi-var ...... single var x,y; declaration to var x; var y; (refactor)
 
@@ -23,6 +22,7 @@ const transformsDocs = `
 
     + let ............ var to let/const
     + class .......... prototype assignments to class declaration
+    + commonjs ....... CommonJS module loading to import/export
     + template ....... string concatenation to template string
     + default-param .. use of || to default parameters
     + destruct-param . use destructuring for objects in function parameters
