@@ -1,5 +1,4 @@
 import {expect} from 'chai';
-import commander from 'commander';
 import parseOptions from './../src/parseOptions';
 
 function parse(argv) {
@@ -7,14 +6,6 @@ function parse(argv) {
 }
 
 describe('Command Line Interface', () => {
-  // Command line parser uses commander which has global state.
-  // To be able to test different command-line combinations,
-  // we'll need to reset the state between tests.
-  beforeEach(() => {
-    commander.outFile = undefined;
-    commander.transform = undefined;
-  });
-
   it('when no transforms given, throws error', () => {
     expect(() => {
       parse([]);

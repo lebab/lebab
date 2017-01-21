@@ -1,4 +1,4 @@
-import program from 'commander';
+import {Command} from 'commander';
 import pkg from '../package.json';
 import fs from 'fs';
 import path from 'path';
@@ -29,14 +29,6 @@ const transformsDocs = `
     + includes ....... indexOf() != -1 to includes() (ES7)
 `;
 
-program.usage('-t <transform> <file>');
-program.description(`${pkg.description}\n${transformsDocs}`);
-program.version(pkg.version);
-program.option('-o, --out-file <file>', 'write output to a file');
-program.option('--replace <dir>', `in-place transform all *.js files in a directory
-                         <dir> can also be a single file or a glob pattern`);
-program.option('-t, --transform <a,b,c>', 'one or more transformations to perform', v => v.split(','));
-
 /**
  * Parses and validates command line options from argv.
  *
@@ -47,16 +39,26 @@ program.option('-t, --transform <a,b,c>', 'one or more transformations to perfor
  * @return {Object} options object
  */
 export default function parseCommandLineOptions(argv) {
+  const program = new Command();
+  program.usage('-t <transform> <file>');
+  program.description(`${pkg.description}\n${transformsDocs}`);
+  program.version(pkg.version);
+  program.option('-o, --out-file <file>', 'write output to a file');
+  program.option('--replace <dir>', `in-place transform all *.js files in a directory
+                           <dir> can also be a single file or a glob pattern`);
+  program.option('-t, --transform <a,b,c>', 'one or more transformations to perform', v => v.split(','));
+
   program.parse(argv);
+
   return {
-    inFile: getInputFile(),
+    inFile: getInputFile(program),
     outFile: program.outFile,
-    replace: getReplace(),
-    transforms: getTransforms(),
+    replace: getReplace(program),
+    transforms: getTransforms(program),
   };
 }
 
-function getInputFile() {
+function getInputFile(program) {
   if (program.args.length > 1) {
     throw `Only one input file allowed, but ${program.args.length} given instead.`;
   }
@@ -66,7 +68,7 @@ function getInputFile() {
   return program.args[0];
 }
 
-function getReplace() {
+function getReplace(program) {
   if (!program.replace) {
     return undefined;
   }
@@ -83,7 +85,7 @@ function getReplace() {
   return program.replace;
 }
 
-function getTransforms() {
+function getTransforms(program) {
   if (!program.transform || program.transform.length === 0) {
     throw `No transforms specified :(
 
