@@ -4,14 +4,14 @@
   "description": "Turn your ES5 code into readable ES6/ES7",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint src/ test/ system-test/ bin/ *.js",
     "prepublish": "rm -rf lib/ && babel src/ --out-dir lib/",
     "system-test": "npm run prepublish && mocha --compilers js:babel-register \"system-test/**/*Test.js\"",
-    "ensure-coverage": "npm run coverage && nyc check-coverage --statements 80 --branches 80 --functions 80",
-    "coverage": "nyc npm test",
-    "upload-coverage": "nyc report --reporter=lcov && cat coverage/*/lcov.info | codecov",
-    "lint": "eslint src/ test/ system-test/ bin/ *.js",
     "test": "mocha --compilers js:babel-register \"test/**/*Test.js\"",
-    "watch": "mocha --watch --compilers js:babel-register \"test/transform/**/*Test.js\""
+    "watch": "mocha --watch --compilers js:babel-register \"test/transform/**/*Test.js\"",
+    "coverage": "nyc npm test",
+    "ensure-coverage": "npm run coverage && nyc check-coverage --statements 80 --branches 80 --functions 80",
+    "upload-coverage": "nyc report --reporter=lcov && cat coverage/*/lcov.info | codecov"
   },
   "engines": {
     "node": ">=4"
