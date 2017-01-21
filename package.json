@@ -10,7 +10,7 @@
 
     "//": "Unit tests: a) for single run, b) in watch-mode, c) with coverage.",
     "test": "mocha --compilers js:babel-register \"test/**/*Test.js\"",
-    "watch": "mocha --watch --compilers js:babel-register \"test/transform/**/*Test.js\"",
+    "watch": "mocha --watch --compilers js:babel-register \"test/**/*Test.js\"",
     "coverage": "nyc npm test",
 
     "//": "These are used by Travis to create coverage report. Run 'coverage' script first.",
