@@ -7,9 +7,12 @@
     "lint": "eslint src/ test/ system-test/ bin/ *.js",
     "prepublish": "rm -rf lib/ && babel src/ --out-dir lib/",
     "system-test": "npm run prepublish && mocha --compilers js:babel-register \"system-test/**/*Test.js\"",
+
+    "//": "Unit tests: a) for single run, b) in watch-mode, c) with coverage.",
     "test": "mocha --compilers js:babel-register \"test/**/*Test.js\"",
     "watch": "mocha --watch --compilers js:babel-register \"test/transform/**/*Test.js\"",
     "coverage": "nyc npm test",
+
     "//": "These are used by Travis to create coverage report. Run 'coverage' script first.",
     "ensure-coverage": "nyc check-coverage --statements 80 --branches 80 --functions 80",
     "upload-coverage": "nyc report --reporter=lcov && cat coverage/*/lcov.info | codecov"
