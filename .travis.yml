@@ -3,4 +3,18 @@ node_js:
   - 4
   - 5
   - 6
-script: "npm run travis"
+
+cache:
+  directories:
+  - node_modules
+
+before_script:
+- npm run lint
+
+script:
+- npm run system-test
+- npm run coverage
+- npm run ensure-coverage
+
+after_script:
+- npm run upload-coverage
