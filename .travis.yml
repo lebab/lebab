@@ -15,7 +15,6 @@ script:
 - npm run test
 - npm run system-test
 - npm run ensure-coverage
-- npm run report-coverage
 
 after_script:
 - npm run upload-coverage
