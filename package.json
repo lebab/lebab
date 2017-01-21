@@ -12,8 +12,7 @@
     "upload-coverage": "cat coverage/*/lcov.info | codecov",
     "lint": "eslint src/ test/ system-test/ bin/ *.js",
     "test": "mocha --compilers js:babel-register \"test/**/*Test.js\"",
-    "watch": "mocha --watch --compilers js:babel-register \"test/transform/**/*Test.js\"",
-    "travis": "npm run lint && npm run test"
+    "watch": "mocha --watch --compilers js:babel-register \"test/transform/**/*Test.js\""
   },
   "engines": {
     "node": ">=4"
