@@ -1,6 +1,6 @@
-[![Build Status](https://img.shields.io/travis/lebab/lebab.svg?style=flat-square)](http://travis-ci.org/lebab/lebab)
-[![License](http://img.shields.io/:license-mit-brightgreen.svg?style=flat-square)](http://mohebifar.mit-license.org)
-[![JS.ORG](https://img.shields.io/badge/js.org-xto6-ffb400.svg?style=flat-square)](http://js.org)
+[![Build Status](https://img.shields.io/travis/lebab/lebab.svg)](http://travis-ci.org/lebab/lebab)
+[![License](http://img.shields.io/:license-mit-brightgreen.svg)](http://mohebifar.mit-license.org)
+[![JS.ORG](https://img.shields.io/badge/js.org-xto6-ffb400.svg)](http://js.org)
 [![Coverage Status](https://img.shields.io/codecov/c/github/lebab/lebab/master.svg)](https://codecov.io/github/lebab/lebab)
 
 # Lebab
