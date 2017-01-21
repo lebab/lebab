@@ -86,19 +86,6 @@ The resulting code should be almost 100% equivalent of the original code.
     - [ ] does not convert string properties
 - [x] **no-strict** - removal of `"use strict"` directives
     - [x] does not touch stuff like `x = "use strict";`
-- [x] **commonjs** - CommonJS module definition to ES6 modules
-    - [x] converts `var foo = require("foo")` to `import foo from "foo"`
-    - [x] converts `var bar = require("foo").bar` to `import {bar} from "foo"`
-    - [x] converts `var {bar} = require("foo")` to `import {bar} from "foo"`
-    - [ ] only handles `require()` calls in `var` declarations
-    - [ ] does not ensure that imported variable is treated as `const`
-    - [x] converts `module.exports = <anything>` to `export default <anything>`
-    - [x] converts `exports.foo = function(){}` to `export function foo(){}`
-    - [x] converts `exports.Foo = class {}` to `export class Foo {}`
-    - [x] converts `exports.foo = 123` to `export var foo = 123`
-    - [x] converts `exports.foo = bar` to `export {bar as foo}`
-    - [ ] does not check if named export conflicts with existing variable names
-    - [ ] does not recognize imports/exports inside nested blocks/functions
 - [x] **exponent** - `Math.pow()` to `**` operator (**ES7**)
     - [x] Full support for all new syntax from ES7
 - [x] **multi-var** - single `var x,y;` declaration to multiple `var x; var y;` (**refactor**)
@@ -134,6 +121,20 @@ or they have significant bugs which can result in breaking your code.
     - [ ] LIMITATION [does not require super() call in subclass constructor][186]
     - [ ] LIMITATION [does not enforce super() call position in subclass constructor][186]
     - [ ] LIMITATION [does not support namespaced classes][113]
+- [x] **commonjs** - CommonJS module definition to ES6 modules
+    - [x] converts `var foo = require("foo")` to `import foo from "foo"`
+    - [x] converts `var bar = require("foo").bar` to `import {bar} from "foo"`
+    - [x] converts `var {bar} = require("foo")` to `import {bar} from "foo"`
+    - [x] converts `module.exports = <anything>` to `export default <anything>`
+    - [x] converts `exports.foo = function(){}` to `export function foo(){}`
+    - [x] converts `exports.Foo = class {}` to `export class Foo {}`
+    - [x] converts `exports.foo = 123` to `export var foo = 123`
+    - [x] converts `exports.foo = bar` to `export {bar as foo}`
+    - [ ] LIMITATION does not check if named export conflicts with existing variable names
+    - [ ] LIMITATION Ignores imports/exports inside nested blocks/functions
+    - [ ] LIMITATION only handles `require()` calls in `var` declarations
+    - [ ] LIMITATION does not ensure that imported variable is treated as `const`
+    - [ ] LIMITATION [does not ensure named exports are imported with correct ES6 syntax][215]
 - [x] **template** - string concatenation to template strings
     - [x] converts variables and arbitrary expressions to `${...}`
     - [ ] BUG [removes indentation of multi-line strings][88]
@@ -211,3 +212,4 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [186]: https://github.com/lebab/lebab/issues/186
 [191]: https://github.com/lebab/lebab/issues/191
 [200]: https://github.com/lebab/lebab/issues/200
+[215]: https://github.com/lebab/lebab/issues/215
