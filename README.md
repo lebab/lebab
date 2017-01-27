@@ -188,6 +188,7 @@ Alternatively one can use Lebab through plugins in the following editors:
 
 - [Atom](https://github.com/ga2mer/atom-lebab)
 - [Sublime](https://github.com/inkless/lebab-sublime)
+- [VSCODE] (https://marketplace.visualstudio.com/items?itemName=jeremyrajan.vscode-lebab)
 
 
 ## What's next?
