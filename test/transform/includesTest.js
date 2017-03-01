@@ -192,3 +192,72 @@ describe('indexOf() to includes()', () => {
     });
   });
 });
+
+describe('filter().length to includes()', () => {
+  describe('without a comparison', () => {
+    it('inside an if statement should replace length with includes()', () => {
+      expectTransform(
+        'if (array.filter(foo => foo === bar).length) { /* */ }'
+      ).toReturn(
+        'if (array.includes(bar)) { /* */ }'
+        );
+    });
+
+    it('outside an if statement should NOT transform', () => {
+      expectNoChange(
+        'array.filter(foo => foo === bar).length'
+      );
+    });
+  });
+
+
+  describe('with a comparison', () => {
+    it('> 0 should replace with includes()', () => {
+      expectTransform(
+        'if (array.filter(foo => foo === bar).length > 0) { /* */ }'
+      ).toReturn(
+        'if (array.includes(bar)) { /* */ }'
+        );
+    });
+
+    it('> 0 should replace with includes() in assignments', () => {
+      expectTransform(
+        'const moocow = array.filter(foo => foo === bar).length > 0'
+      ).toReturn(
+        'const moocow = array.includes(bar)'
+        );
+    });
+
+    it('> 0 should replace with includes() in standalone expressions', () => {
+      expectTransform(
+        'array.filter(foo => foo === bar).length > 0'
+      ).toReturn(
+        'array.includes(bar)'
+        );
+    });
+
+    it('> 0 should replace with includes() with comparison swapped', () => {
+      expectTransform(
+        'array.filter(foo => bar === foo).length > 0'
+      ).toReturn(
+        'array.includes(bar)'
+        );
+    });
+
+    it('> 0 should replace with includes() inside objects', () => {
+      expectTransform(
+        'object.attribute.array.filter(foo => bar === foo).length > 0'
+      ).toReturn(
+        'object.attribute.array.includes(bar)'
+        );
+    });
+
+    it('=== 0 should replace with !includes()', () => {
+      expectTransform(
+        'if (array.filter(foo => foo === bar).length === 0) { /* */ }'
+      ).toReturn(
+        'if (!array.includes(bar)) { /* */ }'
+        );
+    });
+  });
+});
