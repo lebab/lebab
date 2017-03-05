@@ -59,6 +59,7 @@ class PotentialMethod {
       computed: false,
       value: {
         type: 'FunctionExpression',
+        async: this.methodNode.async,
         params: this.methodNode.params,
         defaults: this.methodNode.defaults,
         body: this.getBody(),

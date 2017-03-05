@@ -140,6 +140,25 @@ describe('Classes', () => {
     );
   });
 
+  it('should preserve "async" keyword when converting methods', () => {
+    expectTransform(
+      'function MyClass(a, b) {\n' +
+      '  this.params = [a, b];\n' +
+      '}\n' +
+      'MyClass.prototype.method = async function(ma, mb) {\n' +
+      '};'
+    ).toReturn(
+      'class MyClass {\n' +
+      '  constructor(a, b) {\n' +
+      '    this.params = [a, b];\n' +
+      '  }\n' +
+      '\n' +
+      '  async method(ma, mb) {\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
   it('should not convert non-anonymous functions to methods', () => {
     expectNoChange(
       'function MyClass() {\n' +
@@ -222,6 +241,22 @@ describe('Classes', () => {
     ).toReturn(
       'class MyClass {\n' +
       '  method() {\n' +
+      '    return foo;\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
+  it('should preserve "async" when converting arrow-functions', () => {
+    expectTransform(
+      'function MyClass() {\n' +
+      '}\n' +
+      'MyClass.prototype = {\n' +
+      '  method: async () => foo,\n' +
+      '};'
+    ).toReturn(
+      'class MyClass {\n' +
+      '  async method() {\n' +
       '    return foo;\n' +
       '  }\n' +
       '}'
