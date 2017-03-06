@@ -1,6 +1,5 @@
 import traverser from '../../traverser';
 import multiReplaceStatement from '../../utils/multiReplaceStatement';
-import matchOrAssignment from './matchOrAssignment';
 import matchTernaryAssignment from './matchTernaryAssignment';
 import matchIfUndefinedAssignment from './matchIfUndefinedAssignment';
 
@@ -55,7 +54,5 @@ function findDefaults(fnBody) {
 }
 
 function matchDefaultAssignment(node) {
-  return matchOrAssignment(node) ||
-    matchTernaryAssignment(node) ||
-    matchIfUndefinedAssignment(node);
+  return matchTernaryAssignment(node) || matchIfUndefinedAssignment(node);
 }
