@@ -12,6 +12,10 @@ describe('Removal of "use strict"', () => {
     expectTransform('foo();\n"use strict";\nbar();').toReturn('foo();\nbar();');
   });
 
+  it('should not remove comments before "use strict"', () => {
+    expectTransform('// foo();\n"use strict";\nbar();').toReturn('// foo();\nbar();');
+  });
+
   it('should keep "use strict" used inside other code', () => {
     expectNoChange('x = "use strict";');
     expectNoChange('foo("use strict");');
