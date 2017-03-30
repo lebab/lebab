@@ -36,6 +36,15 @@ describe('Removal of "use strict"', () => {
     );
   });
 
+  it('should preserve comments when no other code besides "use strict"', () => {
+    expectTransform(
+      '// some comment\n' +
+      '"use strict";'
+    ).toReturn(
+      '// some comment\n'
+    );
+  });
+
   it('should keep "use strict" used inside other code', () => {
     expectNoChange('x = "use strict";');
     expectNoChange('foo("use strict");');

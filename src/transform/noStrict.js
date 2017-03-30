@@ -6,16 +6,10 @@ export default function(ast) {
   traverser.replace(ast, {
     enter(node, parent) {
       if (node.type === 'ExpressionStatement' && isUseStrictString(node.expression)) {
-        const index = parent.body.indexOf(node);
-        const next = parent.body[index + 1];
-
-        if (next) {
-          copyComments({
-            from: node,
-            to: next,
-            prepend: true,
-          });
-        }
+        copyComments({
+          from: node,
+          to: parent,
+        });
 
         this.remove();
       }
