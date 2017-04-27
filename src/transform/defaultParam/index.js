@@ -14,6 +14,13 @@ export default function(ast) {
   });
 }
 
+function isSiblingParam(value, fn) {
+  if (value.type !== 'Identifier') {
+    return false;
+  }
+  return fn.params.some(param => param.type === 'Identifier' && param.name === value.name);
+}
+
 function transformDefaultParams(fn) {
   const detectedDefaults = findDefaults(fn.body.body);
 
@@ -25,7 +32,8 @@ function transformDefaultParams(fn) {
 
     const detected = detectedDefaults[param.name];
     // Transform when default value detected and no existing default value
-    if (detected && (!fn.defaults || !fn.defaults[i])) {
+    // and default value is not another parameter
+    if (detected && (!fn.defaults || !fn.defaults[i]) && !isSiblingParam(detected.value, fn)) {
       fn.defaults = fn.defaults || [];
       fn.defaults[i] = detected.value;
       multiReplaceStatement({

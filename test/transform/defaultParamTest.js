@@ -296,4 +296,11 @@ describe('Default parameters', () => {
       'function foo(variable1, variable2, variable3, variable4, variable5, variable6, variable7, variable8) {}'
     );
   });
+
+  // Regression test for issue #238 (https://github.com/lebab/lebab/issues/238)
+  it('should not work when default value is another parameter', () => {
+    expectNoChange(
+      'function f(a, b) { a = a || b }'
+    );
+  });
 });
