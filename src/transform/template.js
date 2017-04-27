@@ -13,7 +13,9 @@ export default function(ast) {
         const [operands, isStringConcatenation] = flattenPlusExpression(node);
 
         if (isStringConcatenation && !operands.every(isString)) {
-          return new TemplateLiteral(splitQuasisAndExpressions(operands));
+          const literal = new TemplateLiteral(splitQuasisAndExpressions(operands));
+          literal.comments = operands.comments;
+          return literal;
         }
       }
     }
@@ -29,7 +31,9 @@ function flattenPlusExpression(node) {
     const [right, rightIsString] = flattenPlusExpression(node.right);
 
     if (leftIsString || rightIsString) {
-      return [_.flatten([left, right]), true];
+      const operands = _.flatten([left, right]);
+      operands.comments = node.comments;
+      return [operands, true];
     }
     else {
       return [node, false];

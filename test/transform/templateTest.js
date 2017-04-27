@@ -115,4 +115,22 @@ describe('Template string', () => {
     expectTransform('x = "\\\'" + y;').toReturn('x = `\'${y}`;');
     expectTransform('x = "\\"" + y;').toReturn('x = `"${y}`;');
   });
+
+  it('should preserve comments', () => {
+    expectTransform(
+     'function f (outerCapNames, localCapIndex, outerCapsMap, $4) {\n' +
+     '  return outerCapNames[localCapIndex] ?\n' +
+     '    // Need to preserve the backreference name in case using flag n\n' +
+     '    "\\\\k<" + outerCapNames[localCapIndex] + ">" :\n' +
+     '    "\\\\" + outerCapsMap[+$4];\n' +
+     '}'
+    ).toReturn(
+     'function f (outerCapNames, localCapIndex, outerCapsMap, $4) {\n' +
+     '  return outerCapNames[localCapIndex] ?\n' +
+     '    // Need to preserve the backreference name in case using flag n\n' +
+     '    \`\\\\k<${outerCapNames[localCapIndex]}>\` :\n' +
+     '    \`\\\\${outerCapsMap[+$4]}\`;\n' +
+     '}'
+    );
+  });
 });
