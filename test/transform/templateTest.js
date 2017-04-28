@@ -115,4 +115,18 @@ describe('Template string', () => {
     expectTransform('x = "\\\'" + y;').toReturn('x = `\'${y}`;');
     expectTransform('x = "\\"" + y;').toReturn('x = `"${y}`;');
   });
+
+  it('should preserve comments', () => {
+    expectTransform(
+     'var foo =\n' +
+     '    // First comment\n' +
+     '    "Firstname: " + fname + ' +
+     '    // Second comment\n' + // NOTE: this does not yet get preserved
+     '    " Lastname: " + lname;'
+    ).toReturn(
+     'var foo =\n' +
+     '    // First comment\n' +
+     '    `Firstname: ${fname} Lastname: ${lname}`;'
+    );
+  });
 });
