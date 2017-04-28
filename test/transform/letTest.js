@@ -747,10 +747,10 @@ describe('Let/const', () => {
     it('should use let when object destructuring used', () => {
       expectTransform(
         'var foo = 1;\n' +
-        '({foo}) = {foo: 2};'
+        '({foo} = {foo: 2});'
       ).toReturn(
         'let foo = 1;\n' +
-        '({foo}) = {foo: 2};'
+        '({foo} = {foo: 2});'
       );
     });
 
@@ -781,10 +781,10 @@ describe('Let/const', () => {
     it('should use const when name is used as property key in object destructor', () => {
       expectTransform(
         'var foo = 1;\n' +
-        '({foo: a}) = {foo: 2};'
+        '({foo: a} = {foo: 2});'
       ).toReturn(
         'const foo = 1;\n' +
-        '({foo: a}) = {foo: 2};'
+        '({foo: a} = {foo: 2});'
       );
     });
   });
