@@ -118,19 +118,15 @@ describe('Template string', () => {
 
   it('should preserve comments', () => {
     expectTransform(
-     'function f (outerCapNames, localCapIndex, outerCapsMap, $4) {\n' +
-     '  return outerCapNames[localCapIndex] ?\n' +
-     '    // Need to preserve the backreference name in case using flag n\n' +
-     '    "\\\\k<" + outerCapNames[localCapIndex] + ">" :\n' +
-     '    "\\\\" + outerCapsMap[+$4];\n' +
-     '}'
+     'var foo =\n' +
+     '    // First comment\n' +
+     '    "Firstname: " + fname + ' +
+     '    // Second comment\n' + // NOTE: this does not yet get preserved
+     '    " Lastname: " + lname;'
     ).toReturn(
-     'function f (outerCapNames, localCapIndex, outerCapsMap, $4) {\n' +
-     '  return outerCapNames[localCapIndex] ?\n' +
-     '    // Need to preserve the backreference name in case using flag n\n' +
-     '    \`\\\\k<${outerCapNames[localCapIndex]}>\` :\n' +
-     '    \`\\\\${outerCapsMap[+$4]}\`;\n' +
-     '}'
+     'var foo =\n' +
+     '    // First comment\n' +
+     '    `Firstname: ${fname} Lastname: ${lname}`;'
     );
   });
 });
