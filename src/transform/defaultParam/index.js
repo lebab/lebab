@@ -14,13 +14,6 @@ export default function(ast) {
   });
 }
 
-function isSiblingParam(value, fn) {
-  if (value.type !== 'Identifier') {
-    return false;
-  }
-  return fn.params.some(param => param.type === 'Identifier' && param.name === value.name);
-}
-
 function transformDefaultParams(fn) {
   const detectedDefaults = findDefaults(fn.body.body);
 
@@ -43,6 +36,13 @@ function transformDefaultParams(fn) {
       });
     }
   });
+}
+
+function isSiblingParam(value, fn) {
+  if (value.type !== 'Identifier') {
+    return false;
+  }
+  return fn.params.some(param => param.type === 'Identifier' && param.name === value.name);
 }
 
 // Looks default value assignments at the beginning of a function
