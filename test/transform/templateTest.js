@@ -126,6 +126,7 @@ describe('Template string', () => {
     ).toReturn(
      'var foo =\n' +
      '    // First comment\n' +
+     '    // Second comment\n' +
      '    `Firstname: ${fname} Lastname: ${lname}`;'
     );
   });

@@ -32,7 +32,11 @@ function flattenPlusExpression(node) {
 
     if (leftIsString || rightIsString) {
       const operands = _.flatten([left, right]);
-      operands.comments = node.comments;
+      operands.comments = _.flatten([
+        node.comments || [],
+        left.comments || [],
+        right.comments || []
+      ]);
       return [operands, true];
     }
     else {
