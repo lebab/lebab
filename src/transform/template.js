@@ -8,8 +8,6 @@ export default function(ast) {
   traverser.replace(ast, {
     enter(node) {
       if (isPlusExpression(node)) {
-        this.skip();
-
         const [operands, isStringConcatenation] = flattenPlusExpression(node);
 
         if (isStringConcatenation && !operands.every(isString)) {

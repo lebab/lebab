@@ -129,4 +129,12 @@ describe('Template string', () => {
      '    `Firstname: ${fname} Lastname: ${lname}`;'
     );
   });
+
+  it('should transform nested concatenation', () => {
+    expectTransform(
+      '"" + (() => "a" + 2)'
+    ).toReturn(
+      '`${() => `a${2}`}`'
+    );
+  });
 });
