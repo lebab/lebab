@@ -121,7 +121,7 @@ describe('Template string', () => {
      'var foo =\n' +
      '    // First comment\n' +
      '    "Firstname: " + fname + ' +
-     '    // Second comment\n' + // NOTE: this does not yet get preserved
+     '    // Second comment\n' +
      '    " Lastname: " + lname;'
     ).toReturn(
      'var foo =\n' +
