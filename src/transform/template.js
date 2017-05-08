@@ -8,8 +8,6 @@ export default function(ast) {
   traverser.replace(ast, {
     enter(node) {
       if (isPlusExpression(node)) {
-        this.skip();
-
         const plusExpr = flattenPlusExpression(node);
 
         if (plusExpr.isString && !plusExpr.operands.every(isString)) {
