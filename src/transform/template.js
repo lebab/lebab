@@ -10,11 +10,11 @@ export default function(ast) {
       if (isPlusExpression(node)) {
         this.skip();
 
-        const [operands, isStringConcatenation] = flattenPlusExpression(node);
+        const [operands, isStringConcatenation, comments] = flattenPlusExpression(node);
 
         if (isStringConcatenation && !operands.every(isString)) {
           const literal = new TemplateLiteral(splitQuasisAndExpressions(operands));
-          literal.comments = operands.comments;
+          literal.comments = comments;
           return literal;
         }
       }
@@ -22,29 +22,30 @@ export default function(ast) {
   });
 }
 
-// Returns two items:
+// Returns three items:
 // - flat array of all the plus operation sub-expressions
 // - true when the result of the plus operation is a string
+// - array of comments
 function flattenPlusExpression(node) {
   if (isPlusExpression(node)) {
-    const [left, leftIsString] = flattenPlusExpression(node.left);
-    const [right, rightIsString] = flattenPlusExpression(node.right);
+    const [left, leftIsString, leftComments] = flattenPlusExpression(node.left);
+    const [right, rightIsString, rightComments] = flattenPlusExpression(node.right);
 
     if (leftIsString || rightIsString) {
       const operands = _.flatten([left, right]);
-      operands.comments = _.flatten([
+      const comments = _.flatten([
         node.comments || [],
-        left.comments || [],
-        right.comments || []
+        leftComments,
+        rightComments
       ]);
-      return [operands, true];
+      return [operands, true, comments];
     }
     else {
-      return [node, false];
+      return [node, false, node.comments || []];
     }
   }
   else {
-    return [node, isString(node)];
+    return [node, isString(node), node.comments || []];
   }
 }
 
