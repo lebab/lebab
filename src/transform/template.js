@@ -10,11 +10,11 @@ export default function(ast) {
       if (isPlusExpression(node)) {
         this.skip();
 
-        const [operands, isStringConcatenation, comments] = flattenPlusExpression(node);
+        const plusExpr = flattenPlusExpression(node);
 
-        if (isStringConcatenation && !operands.every(isString)) {
-          const literal = new TemplateLiteral(splitQuasisAndExpressions(operands));
-          literal.comments = comments;
+        if (plusExpr.isString && !plusExpr.operands.every(isString)) {
+          const literal = new TemplateLiteral(splitQuasisAndExpressions(plusExpr.operands));
+          literal.comments = plusExpr.comments;
           return literal;
         }
       }
@@ -22,30 +22,40 @@ export default function(ast) {
   });
 }
 
-// Returns three items:
-// - flat array of all the plus operation sub-expressions
-// - true when the result of the plus operation is a string
-// - array of comments
+// Returns object of three fields:
+// - operands: flat array of all the plus operation sub-expressions
+// - comments: array of comments
+// - isString: true when the result of the whole plus operation is a string
 function flattenPlusExpression(node) {
   if (isPlusExpression(node)) {
-    const [left, leftIsString, leftComments] = flattenPlusExpression(node.left);
-    const [right, rightIsString, rightComments] = flattenPlusExpression(node.right);
+    const left = flattenPlusExpression(node.left);
+    const right = flattenPlusExpression(node.right);
 
-    if (leftIsString || rightIsString) {
-      const operands = _.flatten([left, right]);
-      const comments = _.flatten([
-        node.comments || [],
-        leftComments,
-        rightComments
-      ]);
-      return [operands, true, comments];
+    if (left.isString || right.isString) {
+      return {
+        operands: _.flatten([left.operands, right.operands]),
+        comments: _.flatten([
+          node.comments || [],
+          left.comments,
+          right.comments
+        ]),
+        isString: true,
+      };
     }
     else {
-      return [node, false, node.comments || []];
+      return {
+        operands: [node],
+        comments: node.comments || [],
+        isString: false,
+      };
     }
   }
   else {
-    return [node, isString(node), node.comments || []];
+    return {
+      operands: [node],
+      comments: node.comments || [],
+      isString: isString(node),
+    };
   }
 }
 
