@@ -121,12 +121,16 @@ describe('Template string', () => {
      'var foo =\n' +
      '    // First comment\n' +
      '    "Firstname: " + fname + ' +
-     '    // Second comment\n' + // NOTE: this does not yet get preserved
+     '    // Second comment\n' +
+     '    " Middlename: " + mname +' +
+     '    // Third comment\n' +
      '    " Lastname: " + lname;'
     ).toReturn(
      'var foo =\n' +
      '    // First comment\n' +
-     '    `Firstname: ${fname} Lastname: ${lname}`;'
+     '    // Second comment\n' +
+     '    // Third comment\n' +
+     '    `Firstname: ${fname} Middlename: ${mname} Lastname: ${lname}`;'
     );
   });
 });
