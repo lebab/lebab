@@ -128,8 +128,8 @@ describe('Template string', () => {
     ).toReturn(
      'var foo =\n' +
      '    // First comment\n' +
+     '    // Second comment\n' +
      '    // Third comment\n' +
-     '    // Second comment\n' + // NOTE: for some reason, the 2nd comment is 3rd
      '    `Firstname: ${fname} Middlename: ${mname} Lastname: ${lname}`;'
     );
   });

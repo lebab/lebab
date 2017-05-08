@@ -14,7 +14,8 @@ export default function(ast) {
 
         if (plusExpr.isString && !plusExpr.operands.every(isString)) {
           const literal = new TemplateLiteral(splitQuasisAndExpressions(plusExpr.operands));
-          literal.comments = plusExpr.comments;
+          // Ensure correct order of comments by sorting them by their position in source
+          literal.comments = _.sortBy(plusExpr.comments, 'start');
           return literal;
         }
       }
