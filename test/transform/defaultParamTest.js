@@ -2,38 +2,6 @@ import createTestHelpers from '../createTestHelpers';
 const {expectTransform, expectNoChange} = createTestHelpers(['default-param']);
 
 describe('Default parameters', () => {
-  describe('detected from or-assignment', () => {
-    it('should work for simple case', () => {
-      expectTransform(
-        'function x(a) {\n' +
-        '  a = a || 2;\n' +
-        '}'
-      ).toReturn(
-        'function x(a = 2) {}'
-      );
-    });
-
-    it('should work for different types of parameters', () => {
-      expectTransform(
-        'function x(a, b, c) {\n' +
-        '  a = a || "salam";\n' +
-        '  b = b || {};\n' +
-        '  c = c || [];\n' +
-        '}'
-      ).toReturn(
-        'function x(a = "salam", b = {}, c = []) {}'
-      );
-    });
-
-    it('should not work when variable not in left of ||', () => {
-      expectNoChange(
-        'function x(a) {\n' +
-        '  a = 10 || a;\n' +
-        '}'
-      );
-    });
-  });
-
   describe('detected from ternary-assignment', () => {
     it('should work for simple case', () => {
       expectTransform(
@@ -196,73 +164,6 @@ describe('Default parameters', () => {
         '}'
       );
     });
-  });
-
-  it('should work when only some parameters have defaults', () => {
-    expectTransform(
-      'function x(a, b, c) {\n' +
-      '  b = b || 3;\n' +
-      '}'
-    ).toReturn(
-      'function x(a, b = 3, c) {}'
-    );
-  });
-
-  it('should work for multiple functions', () => {
-    expectTransform(
-      'function x(a) { a = a || 2; }\n' +
-      'function y(a) { a = a || 3; }'
-    ).toReturn(
-      'function x(a = 2) {}\n' +
-      'function y(a = 3) {}'
-    );
-  });
-
-  it('should work for nested functions with similar parameter names', () => {
-    expectTransform(
-      'function x(a) {\n' +
-      '  function y(a) {\n' +
-      '    a = a || 3;\n' +
-      '  }\n' +
-      '  a = a || 2;\n' +
-      '}'
-    ).toReturn(
-      'function x(a) {\n' +
-      '  function y(a = 3) {}\n' +
-      '  a = a || 2;\n' +
-      '}'
-    );
-  });
-
-  it('should ignore parameters modified before assigning default', () => {
-    expectNoChange(
-      'function x(a) {\n' +
-      '  a = foo();\n' +
-      '  a = a || 2;\n' +
-      '}'
-    );
-  });
-
-  it('should ignore parameters when any other code executed before assigning default', () => {
-    expectNoChange(
-      'function x(a) {\n' +
-      '  foo();\n' +
-      '  a = a || 2;\n' +
-      '  function foo() {\n' +
-      '    a++;\n' +
-      '  }\n' +
-      '}'
-    );
-  });
-
-  it('should work for function expressions', () => {
-    expectTransform(
-      'foo(function(a) {\n' +
-      '  a = a || 2;\n' +
-      '});'
-    ).toReturn(
-      'foo(function(a = 2) {});'
-    );
   });
 
   // Unable to make arrow functions work (so disabling them instead)
