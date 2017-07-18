@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint src/ test/ system-test/ bin/ *.js",
     "prepublish": "rm -rf lib/ && babel src/ --out-dir lib/",
+    "posinstall": "npm run prebublish",
     "system-test": "npm run prepublish && mocha --compilers js:babel-register \"system-test/**/*Test.js\"",
     "//": "Unit tests: a) for single run, b) in watch-mode, c) with coverage.",
     "test": "mocha --compilers js:babel-register \"test/**/*Test.js\"",
