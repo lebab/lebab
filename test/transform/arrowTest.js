@@ -20,6 +20,36 @@ describe('Arrow functions', () => {
     expectTransform(script).toReturn('a((b, c) => b);');
   });
 
+  it('should preserve async on anonymous function expression with no argument', () => {
+    const script = 'f = async function() { return 1; };';
+
+    expectTransform(script).toReturn('f = async () => 1;');
+  });
+
+  it('should preserve async on anonymous function expression with single argument', () => {
+    const script = 'f = async function(a) { return a; };';
+
+    expectTransform(script).toReturn('f = async a => a;');
+  });
+
+  it('should preserve async on anonymous function assignment with multiple arguments', () => {
+    const script = 'f = async function(a,b) { return a; };';
+
+    expectTransform(script).toReturn('f = async (a, b) => a;');
+  });
+
+  it('should preserve async on immediate function invocation', () => {
+    const script = '(async function () { await foo(); }());';
+
+    expectTransform(script).toReturn('((async () => { await foo(); })());');
+  });
+
+  it('should preserve async on immediate function invocation with arguments', () => {
+    const script = '(async function (a) { await foo(a); }());';
+
+    expectTransform(script).toReturn('((async a => { await foo(a); })());');
+  });
+
   it('should convert function assignment', () => {
     const script = 'x = function () { foo(); };';
 
