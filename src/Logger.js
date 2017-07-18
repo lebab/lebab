@@ -14,7 +14,7 @@ export default class Logger {
    */
   warn(node, msg, type) {
     this.warnings.push({
-      line: node.loc.start.line,
+      line: node.loc ? node.loc.start.line : 0,
       msg,
       type,
     });
