@@ -14,13 +14,14 @@ class ArrowFunctionExpression extends BaseSyntax {
    * @param {Node[]} cfg.defaults
    * @param {Node} cfg.rest (optional)
    */
-  constructor({body, params, defaults, rest}) {
+  constructor({body, params, defaults, rest, async}) {
     super('ArrowFunctionExpression');
 
     this.body = body;
     this.params = params;
     this.defaults = defaults;
     this.rest = rest;
+    this.async = async;
     this.generator = false;
     this.id = undefined;
   }
