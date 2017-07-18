@@ -80,6 +80,7 @@ function functionToArrow(func) {
     params: func.params,
     defaults: func.defaults,
     rest: func.rest,
+    async: func.async,
   });
 }
 
