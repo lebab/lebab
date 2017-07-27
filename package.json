@@ -8,7 +8,7 @@
     "prepare": "rm -rf lib/ && babel src/ --out-dir lib/",
     "postinstall": "npm run prepare && npm run build",
     "build": "./node_modules/.bin/gulp",
-    "system-test": "node ./system-test/binTest.js",
+    "system-test": "mocha --compilers js:babel-register \"system-test/**/*Test.js\"",
     "//": "Unit tests: a) for single run, b) in watch-mode, c) with coverage.",
     "test": "npm run test:dev && npm run test:prod",
     "test:dev": "mocha --compilers js:babel-register \"test/dev/**/*Test.js\"",
