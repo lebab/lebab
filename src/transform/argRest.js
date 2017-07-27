@@ -12,8 +12,8 @@ export default function(ast) {
         if (
           argumentsVar &&
           argumentsVar.references.length > 0 &&
-           !argumentsVar.references.some(ref => hasArgs(ref.from))
-         ) {
+          !argumentsVar.references.some(ref => hasArgs(ref.from))
+        ) {
           // Change all arguments --> args
           argumentsVar.references.forEach(ref => {
             ref.identifier.name = 'args';

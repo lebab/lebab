@@ -47,7 +47,7 @@ export default class Cli {
     }
 
     warnings.forEach(({line, msg, type}) => {
-      console.error(  // eslint-disable-line no-console
+      console.error( // eslint-disable-line no-console
         `${line}:  warning  ${msg}  (${type})`
       );
     });

@@ -118,19 +118,19 @@ describe('Template string', () => {
 
   it('should preserve comments', () => {
     expectTransform(
-     'var foo =\n' +
-     '    // First comment\n' +
-     '    "Firstname: " + fname + ' +
-     '    // Second comment\n' +
-     '    " Middlename: " + mname +' +
-     '    // Third comment\n' +
-     '    " Lastname: " + lname;'
+      'var foo =\n' +
+      '    // First comment\n' +
+      '    "Firstname: " + fname + ' +
+      '    // Second comment\n' +
+      '    " Middlename: " + mname +' +
+      '    // Third comment\n' +
+      '    " Lastname: " + lname;'
     ).toReturn(
-     'var foo =\n' +
-     '    // First comment\n' +
-     '    // Second comment\n' +
-     '    // Third comment\n' +
-     '    `Firstname: ${fname} Middlename: ${mname} Lastname: ${lname}`;'
+      'var foo =\n' +
+      '    // First comment\n' +
+      '    // Second comment\n' +
+      '    // Third comment\n' +
+      '    `Firstname: ${fname} Middlename: ${mname} Lastname: ${lname}`;'
     );
   });
 
