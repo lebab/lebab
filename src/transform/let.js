@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import chain from '../utils/chainFunc';
 import traverser from '../traverser';
 import * as functionType from '../utils/functionType';
 import * as variableType from '../utils/variableType';
@@ -194,7 +194,7 @@ function hasMultiStatementBody(node) {
 // including from all the nested block-scopes (but not the nested
 // functions).
 function getFunctionVariableGroups() {
-  return _(getScope().getVariables())
+  return chain(getScope().getVariables())
     .map(v => v.getGroup())
     .uniq()
     .compact()

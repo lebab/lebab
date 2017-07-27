@@ -4,3 +4,4 @@ node_modules
 lib
 .nyc_output
 coverage
+package-lock.json
