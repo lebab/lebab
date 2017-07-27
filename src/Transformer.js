@@ -1,4 +1,9 @@
-import 'babel-polyfill';
+/*eslint-disable */
+if ((typeof window !== 'undefined' && !window['_babelPolyfill']) ||
+  (typeof global !== 'undefined' && !global['_babelPolyfill'])) {
+  require('babel-polyfill');
+}
+/*eslint-enable */
 import recast from 'recast';
 import parser from './Parser';
 import Logger from './Logger';
