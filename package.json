@@ -6,18 +6,18 @@
   "scripts": {
     "lint": "eslint src/ test/ system-test/ bin/ *.js",
     "prepare": "rm -rf lib/ && babel src/ --out-dir lib/",
-    "system-test": "npm run prepublish && npm test",
+    "postinstall": "npm run build",
+    "build": "./node_modules/.bin/gulp",
+    "system-test": "npm run prepare && node ./system-test/binTest.js",
     "//": "Unit tests: a) for single run, b) in watch-mode, c) with coverage.",
     "test": "npm run test:dev && npm run test:prod",
     "test:dev": "mocha --compilers js:babel-register \"test/dev/**/*Test.js\"",
     "test:prod": "mocha \"test/prod/**/*Test.js\"",
-    "watch": "mocha --watch --compilers js:babel-register \"test/**/*Test.js\"",
+    "watch": "mocha --watch --compilers js:babel-register \"test/dev/**/*Test.js\"",
     "coverage": "nyc npm test",
     "///": "These are used by Travis to create coverage report. Run 'coverage' script first.",
     "ensure-coverage": "nyc check-coverage --statements 80 --branches 80 --functions 80",
-    "upload-coverage": "nyc report --reporter=lcov && cat coverage/*/lcov.info | codecov",
-    "postinstall": "npm run build",
-    "build": "./node_modules/.bin/gulp"
+    "upload-coverage": "nyc report --reporter=lcov && cat coverage/*/lcov.info | codecov"    
   },
   "engines": {
     "node": ">=4"
