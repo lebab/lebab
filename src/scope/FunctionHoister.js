@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import chain from '../utils/chainFunc';
 import traverser from '../traverser';
 import * as functionType from '../utils/functionType';
 import * as destructuring from '../utils/destructuring.js';
@@ -43,7 +43,7 @@ class FunctionHoister {
   }
 
   hoistFunctionParams(params) {
-    _(params).map(destructuring.extractVariables).flatten().forEach(p => {
+    chain(params).map(destructuring.extractVariables).flatten().forEach(p => {
       this.functionScope.register(p.name, new Variable(p));
     });
   }

@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import recast from 'recast';
 import parser from './Parser';
 import Logger from './Logger';
@@ -25,7 +24,7 @@ export default class Transformer {
 
     return {
       code: this.applyAllTransforms(code, logger),
-      warnings: logger.getWarnings(),
+      warnings: logger.getWarnings()
     };
   }
 
@@ -39,7 +38,7 @@ export default class Transformer {
 
       return recast.print(ast, {
         lineTerminator: this.detectLineTerminator(code),
-        objectCurlySpacing: false,
+        objectCurlySpacing: false
       }).code;
     });
   }

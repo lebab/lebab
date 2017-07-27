@@ -1,0 +1,48 @@
+const {expect} = require('chai');
+console.log('Starting Production Tests..');
+/**
+ * Generates functions that are used in all transform-tests.
+ * @param  {String[]} transformNames Config for Transformer class
+ * @return {Object} functions expectTransform() and expectNoChange()
+ */
+module.exports = transformNames => {
+  const lebab = require('./../dist/lebab.min');
+  const transformer = transformNames;
+  // const transformer = builtinTransforms.createTransformer(transformNames);
+
+  // Generic transformation asserter, to be called like:
+  //
+  //   expectTransform("code")
+  //     .toReturn("transformed code");
+  //     .withWarnings(["My warning"]);
+  //
+  function expectTransform(script) {
+    const {code, warnings} = lebab.transform(script, transformer);
+
+    return {
+      toReturn(expectedValue) {
+        expect(code).to.equal(expectedValue);
+        return this;
+      },
+      withWarnings(expectedWarnings) {
+        expect(warnings).to.deep.equal(expectedWarnings);
+        return this;
+      },
+      withoutWarnings() {
+        return this.withWarnings([]);
+      }
+    };
+  }
+
+  // Asserts that transforming the string has no effect,
+  // and also allows to check for warnings like so:
+  //
+  //   expectNoChange("code")
+  //     .withWarnings(["My warning"]);
+  //
+  function expectNoChange(script) {
+    return expectTransform(script).toReturn(script);
+  }
+
+  return {expectTransform, expectNoChange};
+};
