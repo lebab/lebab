@@ -62,8 +62,8 @@
     "babel-register": "^6.24.1",
     "chai": "^3.4.1",
     "codecov": "^1.0.1",
-    "eslint": "^3.3.0",
-    "eslint-plugin-no-null": "^1.0.1",
+    "eslint": "^4.3.0",
+    "eslint-plugin-no-null": "^1.0.2",
     "mocha": "^3.2.0",
     "nyc": "^10.1.2"
   }
