@@ -47,13 +47,13 @@
   "homepage": "https://github.com/mohebifar/lebab",
   "dependencies": {
     "babel-polyfill": "^6.9.1",
-    "commander": "^2.9.0",
+    "commander": "^2.11.0",
     "escope": "^3.6.0",
-    "espree": "^3.4.2",
+    "espree": "^3.4.3",
     "estraverse": "^4.1.1",
-    "glob": "^7.0.5",
+    "glob": "^7.1.2",
     "lodash": "^4.17.4",
-    "recast": "^0.12.3"
+    "recast": "^0.12.6"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
