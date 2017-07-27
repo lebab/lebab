@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import chain from './chainFunc';
 
 /**
  * Extracts all variables from from destructuring
@@ -16,10 +16,10 @@ export function extractVariables(node) {
   }
 
   if (node.type === 'ArrayPattern') {
-    return _(node.elements).map(extractVariables).flatten().value();
+    return chain(node.elements).map(extractVariables).flatten().value();
   }
   if (node.type === 'ObjectPattern') {
-    return _(node.properties).map(extractVariables).flatten().value();
+    return chain(node.properties).map(extractVariables).flatten().value();
   }
   if (node.type === 'Property') {
     return extractVariables(node.value);
