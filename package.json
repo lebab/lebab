@@ -46,7 +46,7 @@
   },
   "homepage": "https://github.com/mohebifar/lebab",
   "dependencies": {
-    "babel-polyfill": "^6.9.1",
+    "babel-polyfill": "^6.23.0",
     "commander": "^2.11.0",
     "escope": "^3.6.0",
     "espree": "^3.4.3",
@@ -56,10 +56,10 @@
     "recast": "^0.12.6"
   },
   "devDependencies": {
-    "babel-cli": "^6.11.4",
+    "babel-cli": "^6.24.1",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-register": "^6.11.6",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.24.1",
     "chai": "^3.4.1",
     "codecov": "^1.0.1",
     "eslint": "^3.3.0",
