@@ -1,5 +1,5 @@
 const {expect} = require('chai');
-console.log('Starting Production Tests..');
+console.log('Starting Production Tests..'); // eslint-disable-line no-console
 /**
  * Generates functions that are used in all transform-tests.
  * @param  {String[]} transformNames Config for Transformer class

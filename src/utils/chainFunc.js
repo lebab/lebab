@@ -46,7 +46,7 @@ export default function chainFunc(b) {
     return this;
   };
   o.forEach = function(fn) {
-    this.base = forEach(this.base,fn);
+    this.base = forEach(this.base, fn);
     return this;
   };
   o.filter = function(predicate) {

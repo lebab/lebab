@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import builtinTransforms from './../src/builtinTransforms';
-console.log('Starting Development Tests..');
+console.log('Starting Development Tests..'); // eslint-disable-line no-console
 /**
  * Generates functions that are used in all transform-tests.
  * @param  {String[]} transformNames Config for Transformer class
