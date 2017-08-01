@@ -76,7 +76,7 @@ export default {
 
     this.traverse(tree, {
       enter(node, parent) {
-        if (skipTypes.includes(node.type)) {
+        if (_.includes(skipTypes, node.type)) {
           return estraverse.VisitorOption.Skip;
         }
         if (predicate(node, parent)) {
