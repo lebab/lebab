@@ -46,8 +46,8 @@
   },
   "homepage": "https://github.com/mohebifar/lebab",
   "dependencies": {
-    "babel-polyfill": "^6.23.0",
     "commander": "^2.11.0",
+    "core-js": "^2.4.1",
     "escope": "^3.6.0",
     "espree": "^3.4.3",
     "estraverse": "^4.1.1",
