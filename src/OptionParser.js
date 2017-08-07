@@ -66,7 +66,7 @@ export default class OptionParser {
 
   getInputFile() {
     if (this.program.args.length > 1) {
-      throw `Only one input file allowed, but ${this.program.args.length} given instead.`;
+      throw `Only one input file allowed, but ${this.program.args.length} given. Use --replace <dir> instead.`;
     }
     if (this.program.args[0] && !fs.existsSync(this.program.args[0])) {
       throw `File ${this.program.args[0]} does not exist.`;
