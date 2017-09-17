@@ -98,7 +98,7 @@ export default function(ast, logger) {
     },
     leave(node) {
       if (node.type === 'Program') {
-        _(potentialClasses)
+        _.values(potentialClasses)
           .filter(cls => cls.isTransformable() ? true : logWarning(cls))
           .forEach(cls => cls.transform());
       }

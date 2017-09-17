@@ -16,10 +16,10 @@ export function extractVariables(node) {
   }
 
   if (node.type === 'ArrayPattern') {
-    return _(node.elements).map(extractVariables).flatten().value();
+    return _.flatten(node.elements.map(extractVariables));
   }
   if (node.type === 'ObjectPattern') {
-    return _(node.properties).map(extractVariables).flatten().value();
+    return _.flatten(node.properties.map(extractVariables));
   }
   if (node.type === 'Property') {
     return extractVariables(node.value);

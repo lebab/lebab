@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {flow, map, flatten, forEach} from 'lodash/fp';
 import traverser from '../traverser';
 import * as functionType from '../utils/functionType';
 import * as destructuring from '../utils/destructuring.js';
@@ -43,9 +43,15 @@ class FunctionHoister {
   }
 
   hoistFunctionParams(params) {
-    _(params).map(destructuring.extractVariables).flatten().forEach(p => {
-      this.functionScope.register(p.name, new Variable(p));
-    });
+    return flow(
+      map(destructuring.extractVariables),
+      flatten,
+      forEach(this.registerParam.bind(this))
+    )(params);
+  }
+
+  registerParam(p) {
+    this.functionScope.register(p.name, new Variable(p));
   }
 
   hoistVariables(ast) {

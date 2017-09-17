@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {flow, omit, mapValues} from 'lodash/fp';
 import traverser from '../traverser';
 import {matchesAst, isAstMatch, extract} from '../utils/matchesAst';
 
@@ -39,7 +40,10 @@ function omitLoc(obj) {
     return obj.map(omitLoc);
   }
   else if (_.isObjectLike(obj)) {
-    return _(obj).omit('loc', 'start', 'end').mapValues(omitLoc).value();
+    return flow(
+      omit(['loc', 'start', 'end']),
+      mapValues(omitLoc)
+    )(obj);
   }
   else {
     return obj;

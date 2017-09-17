@@ -112,7 +112,7 @@ function isKeyword(name) {
 }
 
 function uniqPropNames(exs) {
-  return _(exs).map(({property}) => property.name).uniq().value();
+  return _.uniq(exs.map(({property}) => property.name));
 }
 
 // By default recast indents the ObjectPattern AST node
