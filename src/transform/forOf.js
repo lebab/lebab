@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {tail} from 'lodash/fp';
 import traverser from '../traverser';
 import isEqualAst from '../utils/isEqualAst';
 import {isReference} from '../utils/variableType';
@@ -64,6 +64,6 @@ function createForOf({item, itemKind, array, body}) {
 
 function removeFirstBodyElement(body) {
   return Object.assign({}, body, {
-    body: _.tail(body.body)
+    body: tail(body.body)
   });
 }

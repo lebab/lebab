@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {find} from 'lodash/fp';
 import {isAstMatch, matchesLength} from '../../../utils/matchesAst';
 
 /**
@@ -16,7 +16,7 @@ export default class RequireUtilDetector {
       return;
     }
 
-    const declaration = _.find(node.declarations, dec => this.isRequireUtil(dec));
+    const declaration = find(dec => this.isRequireUtil(dec), node.declarations);
     if (declaration) {
       return {
         type: 'MemberExpression',

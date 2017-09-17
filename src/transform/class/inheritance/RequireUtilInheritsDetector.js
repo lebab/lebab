@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {find} from 'lodash/fp';
 import {isAstMatch, matchesLength} from '../../../utils/matchesAst';
 
 /**
@@ -16,7 +16,7 @@ export default class RequireUtilInheritsDetector {
       return;
     }
 
-    const declaration = _.find(node.declarations, dec => this.isRequireUtilInherits(dec));
+    const declaration = find(dec => this.isRequireUtilInherits(dec), node.declarations);
     if (declaration) {
       return {
         type: 'Identifier',

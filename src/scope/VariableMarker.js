@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {includes} from 'lodash/fp';
 
 /**
  * Labels variables in relation to their use in block scope.
@@ -38,7 +38,7 @@ class VariableMarker {
       // (which isn't actually real re-declaring) should not cause
       // variable to be marked as declared multiple times and
       // therefore marked as hoisted.
-      if (!_.includes(alreadySeen, blockVar)) {
+      if (!includes(blockVar, alreadySeen)) {
         alreadySeen.push(blockVar);
 
         // Ignore repeated var declarations

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {includes, isString} from 'lodash/fp';
 import estraverse from 'estraverse';
 
 // JSX AST types, as documented in:
@@ -22,7 +22,7 @@ const experimentalExtensionKeys = {
 };
 
 const extensions = {
-  keys: _.assign({}, jsxExtensionKeys, experimentalExtensionKeys),
+  keys: Object.assign({}, jsxExtensionKeys, experimentalExtensionKeys),
 };
 
 /**
@@ -40,7 +40,7 @@ export default {
    * @return {Object} The transformed tree
    */
   traverse(tree, cfg) {
-    return estraverse.traverse(tree, _.assign(cfg, extensions));
+    return estraverse.traverse(tree, Object.assign(cfg, extensions));
   },
 
   /**
@@ -50,7 +50,7 @@ export default {
    * @return {Object} The transformed tree
    */
   replace(tree, cfg) {
-    return estraverse.replace(tree, _.assign(cfg, extensions));
+    return estraverse.replace(tree, Object.assign(cfg, extensions));
   },
 
   /**
@@ -76,7 +76,7 @@ export default {
 
     this.traverse(tree, {
       enter(node, parent) {
-        if (_.includes(skipTypes, node.type)) {
+        if (includes(node.type, skipTypes)) {
           return estraverse.VisitorOption.Skip;
         }
         if (predicate(node, parent)) {
@@ -90,7 +90,7 @@ export default {
   },
 
   createFindPredicate(query) {
-    if (_.isString(query)) {
+    if (isString(query)) {
       return (node) => node.type === query;
     }
     else {

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {isEqualWith} from 'lodash/fp';
 
 const metaDataFields = {
   comments: true,
@@ -16,5 +16,5 @@ const metaDataFields = {
  * @return {Boolean}
  */
 export default function isEqualAst(a, b) {
-  return _.isEqualWith(a, b, (aValue, bValue, key) => metaDataFields[key]);
+  return isEqualWith((aValue, bValue, key) => metaDataFields[key], a, b);
 }

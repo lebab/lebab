@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {values} from 'lodash/fp';
 
 /**
  * Base class for Function- and BlockScope.
@@ -32,6 +32,6 @@ class Scope {
    * @return {Variable[]}
    */
   getVariables() {
-    return _.values(this.vars);
+    return values(this.vars);
   }
 }

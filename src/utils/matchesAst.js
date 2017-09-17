@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {isMatchWith} from 'lodash/fp';
 
 /**
  * Creates a function that matches AST against the given pattern,
@@ -35,15 +35,15 @@ export function matchesAst(pattern) {
 export function isAstMatch(ast, pattern) {
   const extractedFields = {};
 
-  const matches = _.isMatchWith(ast, pattern, (value, matcher) => {
+  const matches = isMatchWith((value, matcher) => {
     if (typeof matcher === 'function') {
       const result = matcher(value);
       if (typeof result === 'object') {
-        _.assign(extractedFields, result);
+        Object.assign(extractedFields, result);
       }
       return result;
     }
-  });
+  }, pattern, ast);
 
   if (matches) {
     return extractedFields;
@@ -71,7 +71,7 @@ export function extract(fieldName, matcher) {
     if (typeof matcher === 'function') {
       const result = matcher(ast);
       if (typeof result === 'object') {
-        return _.assign(extractedFields, result);
+        return Object.assign(extractedFields, result);
       }
       if (!result) {
         return false;

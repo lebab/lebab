@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {capitalize} from 'lodash/fp';
 import createTestHelpers from '../createTestHelpers';
 const {expectTransform, expectNoChange} = createTestHelpers(['for-each']);
 
@@ -186,7 +186,7 @@ describe('For loops to Array.forEach()', () => {
 
     describe('should not transform', () => {
       ['break', 'continue'].forEach((keyword) => {
-        const keywordMsg = _.capitalize(keyword);
+        const keywordMsg = capitalize(keyword);
 
         it(`when loop itself contains a ${keyword} statement`, () => {
           expectNoChange(

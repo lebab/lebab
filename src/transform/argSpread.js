@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {flow, omit, mapValues, isEqual, isArray, isObjectLike} from 'lodash/fp';
 import traverser from '../traverser';
 import {matchesAst, isAstMatch, extract} from '../utils/matchesAst';
 
@@ -11,7 +11,7 @@ export default function(ast) {
       }
 
       const {memberExpr, thisParam, arrayParam} = matchObjectApplyCall(node);
-      if (memberExpr && _.isEqual(omitLoc(memberExpr.object), omitLoc(thisParam))) {
+      if (memberExpr && isEqual(omitLoc(memberExpr.object), omitLoc(thisParam))) {
         return createCallWithSpread(memberExpr, arrayParam);
       }
     }
@@ -35,11 +35,14 @@ function createCallWithSpread(func, array) {
 // removing the location information that we don't care about when comparing
 // AST nodes.
 function omitLoc(obj) {
-  if (_.isArray(obj)) {
+  if (isArray(obj)) {
     return obj.map(omitLoc);
   }
-  else if (_.isObjectLike(obj)) {
-    return _(obj).omit('loc', 'start', 'end').mapValues(omitLoc).value();
+  else if (isObjectLike(obj)) {
+    return flow(
+      omit(['loc', 'start', 'end']),
+      mapValues(omitLoc)
+    )(obj);
   }
   else {
     return obj;

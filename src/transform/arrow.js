@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {matches} from 'lodash/fp';
 import traverser from '../traverser';
 import ArrowFunctionExpression from '../syntax/ArrowFunctionExpression';
 import {matchesAst, isAstMatch, matchesLength, extract} from '../utils/matchesAst';
@@ -69,7 +69,7 @@ function hasArguments(ast) {
 // Returns true when pattern matches any node in given function body,
 // excluding any nested functions
 function hasInFunctionBody(ast, pattern) {
-  return traverser.find(ast, _.matches(pattern), {
+  return traverser.find(ast, matches(pattern), {
     skipTypes: ['FunctionExpression', 'FunctionDeclaration']
   });
 }

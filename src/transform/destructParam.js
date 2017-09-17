@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {uniq} from 'lodash/fp';
 import recast from 'recast';
 import parser from '../Parser';
 import traverser from '../traverser';
@@ -112,7 +112,7 @@ function isKeyword(name) {
 }
 
 function uniqPropNames(exs) {
-  return _(exs).map(({property}) => property.name).uniq().value();
+  return uniq(exs.map(({property}) => property.name));
 }
 
 // By default recast indents the ObjectPattern AST node

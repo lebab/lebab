@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {compact} from 'lodash/fp';
 import extractComments from './extractComments';
 import multiReplaceStatement from './../../utils/multiReplaceStatement';
 
@@ -117,7 +117,7 @@ class PotentialClass {
   }
 
   createMethods() {
-    return _.compact([
+    return compact([
       this.createConstructor(),
       ...this.methods.map(method => {
         method.setSuperClass(this.superClass);
