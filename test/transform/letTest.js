@@ -255,6 +255,19 @@ describe('Let/const', () => {
         {line: 2, msg: 'Unable to transform var', type: 'let'}
       ]);
     });
+
+    // Issue #236
+    it('should not choke for ignored array values', () => {
+      expectTransform(
+        'var [, x, y] = [1, 2, 3];\n' +
+        'y = 2;\n' +
+        'console.log(x);'
+      ).toReturn(
+        'let [, x, y] = [1, 2, 3];\n' +
+        'y = 2;\n' +
+        'console.log(x);'
+      );
+    });
   });
 
   describe('with nested function', () => {
@@ -353,7 +366,7 @@ describe('Let/const', () => {
     });
   });
 
-  describe('with nested function that uses destructured parmaters', () => {
+  describe('with nested function that uses destructured parameters', () => {
     it('should use const when variable redeclared as parameter', () => {
       expectTransform(
         'var a = 0;\n' +

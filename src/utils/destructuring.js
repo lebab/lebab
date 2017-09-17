@@ -1,4 +1,4 @@
-import {flatMap} from 'lodash/fp';
+import {flatMap, compact} from 'lodash/fp';
 
 /**
  * Extracts all variables from from destructuring
@@ -16,7 +16,8 @@ export function extractVariables(node) {
   }
 
   if (node.type === 'ArrayPattern') {
-    return flatMap(extractVariables, node.elements);
+    // Use compact() to ignore missing elements in ArrayPattern
+    return flatMap(extractVariables, compact(node.elements));
   }
   if (node.type === 'ObjectPattern') {
     return flatMap(extractVariables, node.properties);
