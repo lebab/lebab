@@ -14,13 +14,20 @@ It does exactly the opposite of what [Babel](https://babeljs.io/) does.
 If you want to understand what Lebab exactly does, **[try the live demo](https://uniibu.github.io/lebab-ce/).**
 
 
-## Usage
+## Install
 
 Install it using npm:
 
 ```bash
 $ npm install -g lebab
 ```
+
+Full build:
+
+- [latest Browerified version of Lebab](https://wzrd.in/standalone/lebab@latest)
+- [the same, using cdn.rawgit](https://umdfied.herokuapp.com/umdfied/lebab/latest)
+
+## Usage
 
 Convert your old-fashioned code using the `lebab` cli tool,
 enabling a specific transformation:
