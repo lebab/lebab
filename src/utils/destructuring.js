@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {flatMap} from 'lodash/fp';
 
 /**
  * Extracts all variables from from destructuring
@@ -16,10 +16,10 @@ export function extractVariables(node) {
   }
 
   if (node.type === 'ArrayPattern') {
-    return _.flatten(node.elements.map(extractVariables));
+    return flatMap(extractVariables, node.elements);
   }
   if (node.type === 'ObjectPattern') {
-    return _.flatten(node.properties.map(extractVariables));
+    return flatMap(extractVariables, node.properties);
   }
   if (node.type === 'Property') {
     return extractVariables(node.value);

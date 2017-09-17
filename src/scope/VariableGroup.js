@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {min} from 'lodash/fp';
 
 /**
  * Encapsulates a VariableDeclaration node
@@ -73,7 +73,7 @@ class VariableGroup {
       3: 'const',
     };
 
-    const minVal = _.min(this.variables.map(v => kindToVal[v.getKind()]));
+    const minVal = min(this.variables.map(v => kindToVal[v.getKind()]));
     return valToKind[minVal];
   }
 

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {values} from 'lodash/fp';
 import traverser from '../../traverser';
 import PotentialClass from './PotentialClass';
 import PotentialMethod from './PotentialMethod';
@@ -98,7 +98,7 @@ export default function(ast, logger) {
     },
     leave(node) {
       if (node.type === 'Program') {
-        _.values(potentialClasses)
+        values(potentialClasses)
           .filter(cls => cls.isTransformable() ? true : logWarning(cls))
           .forEach(cls => cls.transform());
       }

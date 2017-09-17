@@ -2,7 +2,7 @@ import traverser from '../traverser';
 import TemplateLiteral from './../syntax/TemplateLiteral';
 import TemplateElement from './../syntax/TemplateElement';
 import isString from './../utils/isString';
-import _ from 'lodash';
+import {sortBy, flatten} from 'lodash/fp';
 
 export default function(ast) {
   traverser.replace(ast, {
@@ -13,7 +13,7 @@ export default function(ast) {
         if (plusExpr.isString && !plusExpr.operands.every(isString)) {
           const literal = new TemplateLiteral(splitQuasisAndExpressions(plusExpr.operands));
           // Ensure correct order of comments by sorting them by their position in source
-          literal.comments = _.sortBy(plusExpr.comments, 'start');
+          literal.comments = sortBy('start', plusExpr.comments);
           return literal;
         }
       }
@@ -32,8 +32,8 @@ function flattenPlusExpression(node) {
 
     if (left.isString || right.isString) {
       return {
-        operands: _.flatten([left.operands, right.operands]),
-        comments: _.flatten([
+        operands: flatten([left.operands, right.operands]),
+        comments: flatten([
           node.comments || [],
           left.comments,
           right.comments

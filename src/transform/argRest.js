@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {find} from 'lodash/fp';
 import traverser from '../traverser';
 import withScope from '../withScope';
 
@@ -6,7 +6,7 @@ export default function(ast) {
   traverser.replace(ast, withScope(ast, {
     enter(node, parent, scope) {
       if (isES5Function(node) && node.params.length === 0) {
-        const argumentsVar = _.find(scope.variables, v => v.name === 'arguments');
+        const argumentsVar = find(v => v.name === 'arguments', scope.variables);
         // Look through all the places where arguments is used:
         // Make sure none of these has access to some already existing `args` variable
         if (
