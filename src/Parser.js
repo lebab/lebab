@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import espree from 'espree';
 
 const ESPREE_OPTS = {
@@ -11,9 +10,9 @@ const ESPREE_OPTS = {
  */
 export default {
   parse(js, opts) {
-    return espree.parse(js, _.assign(opts, ESPREE_OPTS));
+    return espree.parse(js, Object.assign({}, opts, ESPREE_OPTS));
   },
   tokenize(js, opts) {
-    return espree.tokenize(js, _.assign(opts, ESPREE_OPTS));
+    return espree.tokenize(js, Object.assign({}, opts, ESPREE_OPTS));
   },
 };

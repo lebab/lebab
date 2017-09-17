@@ -39,7 +39,7 @@ export function isAstMatch(ast, pattern) {
     if (typeof matcher === 'function') {
       const result = matcher(value);
       if (typeof result === 'object') {
-        _.assign(extractedFields, result);
+        Object.assign(extractedFields, result);
       }
       return result;
     }
@@ -71,7 +71,7 @@ export function extract(fieldName, matcher) {
     if (typeof matcher === 'function') {
       const result = matcher(ast);
       if (typeof result === 'object') {
-        return _.assign(extractedFields, result);
+        return Object.assign(extractedFields, result);
       }
       if (!result) {
         return false;
