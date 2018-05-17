@@ -1,8 +1,8 @@
 import espree from 'espree';
 
 const ESPREE_OPTS = {
-  ecmaVersion: 8,
-  ecmaFeatures: {jsx: true, experimentalObjectRestSpread: true}
+  ecmaVersion: 9,
+  ecmaFeatures: {jsx: true}
 };
 
 /**
