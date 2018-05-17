@@ -6,17 +6,17 @@
   "scripts": {
     "lint": "eslint src/ test/ system-test/ bin/ *.js",
     "prepublish": "rm -rf lib/ && babel src/ --out-dir lib/",
-    "system-test": "npm run prepublish && mocha --compilers js:babel-register \"system-test/**/*Test.js\"",
+    "system-test": "npm run prepublish && mocha --require babel-register \"./system-test/**/*Test.js\"",
     "//": "Unit tests: a) for single run, b) in watch-mode, c) with coverage.",
-    "test": "mocha --compilers js:babel-register \"test/**/*Test.js\"",
-    "watch": "mocha --watch --compilers js:babel-register \"test/**/*Test.js\"",
+    "test": "mocha --require babel-register \"./test/**/*Test.js\"",
+    "watch": "mocha --watch --require babel-register \"./test/**/*Test.js\"",
     "coverage": "nyc npm test",
     "///": "These are used by Travis to create coverage report. Run 'coverage' script first.",
     "ensure-coverage": "nyc check-coverage --statements 80 --branches 80 --functions 80",
-    "upload-coverage": "nyc report --reporter=lcov && cat coverage/*/lcov.info | codecov"
+    "upload-coverage": "nyc report --reporter=text-lcov > coverage.lcov codecov"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "files": [
     "lib",
@@ -46,24 +46,24 @@
   },
   "homepage": "https://github.com/mohebifar/lebab",
   "dependencies": {
-    "commander": "^2.11.0",
+    "commander": "^2.15.1",
     "escope": "^3.6.0",
-    "espree": "^3.4.3",
+    "espree": "^3.5.4",
     "estraverse": "^4.1.1",
     "glob": "^7.1.2",
-    "lodash": "^4.17.4",
-    "recast": "^0.12.6"
+    "lodash": "^4.17.10",
+    "recast": "^0.14.7"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
+    "babel-cli": "^6.26.0",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-register": "^6.24.1",
-    "chai": "^4.1.0",
-    "codecov": "^2.2.0",
-    "eslint": "^4.3.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "codecov": "^3.0.2",
+    "eslint": "^4.19.1",
     "eslint-plugin-no-null": "^1.0.2",
-    "mocha": "^3.4.2",
-    "nyc": "^11.1.0"
+    "mocha": "^5.1.1",
+    "nyc": "^11.8.0"
   }
 }
