@@ -1,8 +1,7 @@
 import {matches} from 'lodash/fp';
 import traverser from '../traverser';
 import ArrowFunctionExpression from '../syntax/ArrowFunctionExpression';
-import {matchesAst, isAstMatch, matchesLength, extract} from '../utils/matchesAst';
-import copyComments from '../utils/copyComments';
+import {isAstMatch, extract} from '../utils/matchesAst';
 
 export default function(ast, logger) {
   traverser.replace(ast, {
@@ -76,7 +75,7 @@ function hasInFunctionBody(ast, pattern) {
 
 function functionToArrow(func) {
   return new ArrowFunctionExpression({
-    body: extractArrowBody(func.body),
+    body: func.body,
     params: func.params,
     defaults: func.defaults,
     rest: func.rest,
@@ -84,24 +83,3 @@ function functionToArrow(func) {
   });
 }
 
-const matchesReturnBlock = matchesAst({
-  type: 'BlockStatement',
-  body: matchesLength([
-    extract('returnStatement', {
-      type: 'ReturnStatement',
-      argument: extract('returnVal')
-    })
-  ])
-});
-
-function extractArrowBody(block) {
-  const {returnStatement, returnVal} = matchesReturnBlock(block) || {};
-  if (returnVal) {
-    // preserve return statement comments
-    copyComments({from: returnStatement, to: returnVal});
-    return returnVal;
-  }
-  else {
-    return block;
-  }
-}
