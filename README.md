@@ -193,9 +193,9 @@ Most of the time there won't be any warnings and the array will be empty.
 
 Alternatively one can use Lebab through plugins in the following editors:
 
-- [Atom](https://github.com/ga2mer/atom-lebab)
-- [Sublime](https://github.com/inkless/lebab-sublime)
-- [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=mrmlnc.vscode-lebab)
+- Atom: [atom-lebab](https://github.com/ga2mer/atom-lebab)
+- Sublime: [lebab-sublime](https://github.com/inkless/lebab-sublime) or [Lebab ES6 Transform](https://packagecontrol.io/packages/Lebab%20ES6%20Transform)
+- VSCode: [vscode-lebab](https://marketplace.visualstudio.com/items?itemName=mrmlnc.vscode-lebab)
 
 
 ## What's next?

@@ -4,3 +4,6 @@ node_modules
 lib
 .nyc_output
 coverage
+*.lcov
+yarn.lock
+package-lock.json
