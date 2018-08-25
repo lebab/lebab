@@ -5,57 +5,47 @@ describe('Arrow functions', () => {
   it('should convert simple callbacks', () => {
     const script = 'setTimeout(function() { return 2; });';
 
-    expectTransform(script).toReturn('setTimeout(() => 2);');
+    expectTransform(script).toReturn('setTimeout(() => { return 2; });');
   });
 
   it('should convert callbacks with a single argument', () => {
     const script = 'a(function(b) { return b; });';
 
-    expectTransform(script).toReturn('a(b => b);');
+    expectTransform(script).toReturn('a(b => { return b; });');
   });
 
   it('should convert callbacks with multiple arguments', () => {
     const script = 'a(function(b, c) { return b; });';
 
-    expectTransform(script).toReturn('a((b, c) => b);');
-  });
-
-  it('should handle returning an object', () => {
-    const script = 'var f = function(a) { return {a: 1}; };';
-
-    expectTransform(script).toReturn(
-      'var f = a => ({\n' +
-      '  a: 1\n' +
-      '});'
-    );
+    expectTransform(script).toReturn('a((b, c) => { return b; });');
   });
 
   it.skip('should handle returning an object property access', () => {
     const script = 'var f = function(a) { return {a: 1}[a]; };';
 
     expectTransform(script).toReturn(
-      'var f = a => ({\n' +
+      'var f = a => { return {\n' +
       '  a: 1\n' +
-      '}[a]);'
+      '}[a]; };'
     );
   });
 
   it('should preserve async on anonymous function expression with no argument', () => {
     const script = 'f = async function() { return 1; };';
 
-    expectTransform(script).toReturn('f = async () => 1;');
+    expectTransform(script).toReturn('f = async () => { return 1; };');
   });
 
   it('should preserve async on anonymous function expression with single argument', () => {
     const script = 'f = async function(a) { return a; };';
 
-    expectTransform(script).toReturn('f = async a => a;');
+    expectTransform(script).toReturn('f = async a => { return a; };');
   });
 
   it('should preserve async on anonymous function assignment with multiple arguments', () => {
     const script = 'f = async function(a,b) { return a; };';
 
-    expectTransform(script).toReturn('f = async (a, b) => a;');
+    expectTransform(script).toReturn('f = async (a, b) => { return a; };');
   });
 
   it('should preserve async on immediate function invocation', () => {
@@ -91,13 +81,13 @@ describe('Arrow functions', () => {
   it('should convert functions using `this` keyword inside a nested function', () => {
     const script = 'a(function () { return function() { this; }; });';
 
-    expectTransform(script).toReturn('a(() => function() { this; });');
+    expectTransform(script).toReturn('a(() => { return function() { this; }; });');
   });
 
   it('should convert functions using `arguments` inside a nested function', () => {
     const script = 'a(function () { return function() { arguments; }; });';
 
-    expectTransform(script).toReturn('a(() => function() { arguments; });');
+    expectTransform(script).toReturn('a(() => { return function() { arguments; }; });');
   });
 
   it('should preserve default parameters', () => {
@@ -193,7 +183,7 @@ describe('Arrow functions', () => {
       expectTransform(
         'a(function () { return 123; }.bind(this));'
       ).toReturn(
-        'a(() => 123);'
+        'a(() => { return 123; });'
       );
     });
 
@@ -225,7 +215,7 @@ describe('Arrow functions', () => {
       expectTransform(
         'x = function(a) { return a; }.call(null, 1);'
       ).toReturn(
-        'x = (a => a).call(null, 1);'
+        'x = (a => { return a; }).call(null, 1);'
       );
     });
   });
@@ -238,8 +228,10 @@ describe('Arrow functions', () => {
         '  return b;\n' +
         '});'
       ).toReturn(
-        'a(b => // comment\n' +
-        'b);'
+        'a(b => {\n' +
+        '  // comment\n' +
+        '  return b;\n' +
+        '});'
       );
     });
   });

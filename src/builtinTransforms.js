@@ -3,6 +3,7 @@ import Transformer from './Transformer';
 import classTransform from './transform/class';
 import templateTransform from './transform/template';
 import arrowTransform from './transform/arrow';
+import arrowReturnTransform from './transform/arrowReturn';
 import letTransform from './transform/let';
 import defaultParamTransform from './transform/defaultParam';
 import destructParamTransform from './transform/destructParam';
@@ -22,6 +23,7 @@ const transformsMap = {
   'class': classTransform,
   'template': templateTransform,
   'arrow': arrowTransform,
+  'arrow-return': arrowReturnTransform,
   'let': letTransform,
   'default-param': defaultParamTransform,
   'destruct-param': destructParamTransform,

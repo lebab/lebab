@@ -66,8 +66,12 @@ The resulting code should be almost 100% equivalent of the original code.
     - [x] not applied to unbound functions that use `this`
     - [x] not applied to functions that use `arguments`
     - [x] not applied to object properties (use `obj-method` transform)
-    - [x] converts immediate return `{ return x; }` to `=> x`
+    - [x] does not convert immediate return
     - [ ] does not remove `that = this` assignments
+- [x] **arrow-return** - return statements on arrow functions
+    - [x] converts immediate return { return x; } to => x
+    - [x] applies to arrow functions and nested arrow functions
+    - [ ] LIMITATION only applies to arrow functions (run the `arrow` transform first)
 - [x] **for-of** - for loop to for-of loop
     - [x] uses name `item` for loop variable when loop body begins with `var item = array[i];`
     - [ ] [does not work when no such alias defined at the start of loop body][166]
@@ -173,8 +177,8 @@ Simply import and call `lebab.transform()`:
 
 ```js
 import lebab from 'lebab';
-const {code, warnings} = lebab.transform('var f = function(){};', ['let', 'arrow']);
-console.log(code); // -> "const f = () => {};"
+const {code, warnings} = lebab.transform('var f = function(a) { return a; };', ['let', 'arrow', 'arrow-return']);
+console.log(code); // -> "const f = a => a;"
 ```
 
 The warnings will be an array of objects like:

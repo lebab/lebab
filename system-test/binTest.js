@@ -28,7 +28,7 @@ describe('Smoke test for the executable script', function() {
 
         expect(fs.readFileSync('test/output.js').toString()).to.equal(
           'const foo = 10;\n' +
-          '[1, 2, 3].map(x => x*x);'
+          '[1, 2, 3].map(x => { return x*x });'
         );
         done();
       });
@@ -44,7 +44,7 @@ describe('Smoke test for the executable script', function() {
 
         expect(fs.readFileSync('test/output.js').toString()).to.equal(
           'const foo = 10;\n' +
-          '[1, 2, 3].map(x => x*x);'
+          '[1, 2, 3].map(x => { return x*x });'
         );
         done();
       });
