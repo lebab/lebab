@@ -23,7 +23,8 @@ export default function(ast, logger) {
 }
 
 function isFunctionConvertableToArrow(node, parent) {
-  return node.type === 'FunctionExpression' &&
+  return (node.type === 'FunctionExpression' ||
+    node.type === 'ArrowFunctionExpression') &&
     parent.type !== 'Property' &&
     parent.type !== 'MethodDefinition' &&
     !node.id &&
@@ -69,7 +70,7 @@ function hasArguments(ast) {
 // excluding any nested functions
 function hasInFunctionBody(ast, pattern) {
   return traverser.find(ast, matches(pattern), {
-    skipTypes: ['FunctionExpression', 'FunctionDeclaration']
+    skipTypes: ['FunctionExpression', 'FunctionDeclaration', 'ArrowFunctionExpression']
   });
 }
 
