@@ -5,20 +5,16 @@ import copyComments from '../utils/copyComments';
 export default function(ast) {
   traverser.replace(ast, {
     enter(node) {
-      if (isArrowFunction(node)) {
-        return arrowReturn(node);
+      if (isShortenableArrowFunction(node)) {
+        return shortenReturn(node);
       }
     }
   });
 }
 
-function arrowReturn(node) {
+function shortenReturn(node) {
   node.body = extractArrowBody(node.body);
   return node;
-}
-
-function isArrowFunction(node) {
-  return node.type === 'ArrowFunctionExpression';
 }
 
 const matchesReturnBlock = matchesAst({
@@ -31,14 +27,14 @@ const matchesReturnBlock = matchesAst({
   ])
 });
 
+function isShortenableArrowFunction(node) {
+  return node.type === 'ArrowFunctionExpression' &&
+    matchesReturnBlock(node.body);
+}
+
 function extractArrowBody(block) {
-  const {returnStatement, returnVal} = matchesReturnBlock(block) || {};
-  if (returnVal) {
-    // preserve return statement comments
-    copyComments({from: returnStatement, to: returnVal});
-    return returnVal;
-  }
-  else {
-    return block;
-  }
+  const {returnStatement, returnVal} = matchesReturnBlock(block);
+  // preserve return statement comments
+  copyComments({from: returnStatement, to: returnVal});
+  return returnVal;
 }
