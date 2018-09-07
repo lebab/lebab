@@ -2,6 +2,7 @@ import {matches} from 'lodash/fp';
 import traverser from '../traverser';
 import ArrowFunctionExpression from '../syntax/ArrowFunctionExpression';
 import {isAstMatch, extract} from '../utils/matchesAst';
+import copyComments from '../utils/copyComments';
 
 export default function(ast, logger) {
   traverser.replace(ast, {
@@ -74,12 +75,15 @@ function hasInFunctionBody(ast, pattern) {
 }
 
 function functionToArrow(func) {
-  return new ArrowFunctionExpression({
+  const arrow = new ArrowFunctionExpression({
     body: func.body,
     params: func.params,
     defaults: func.defaults,
     rest: func.rest,
     async: func.async,
   });
-}
 
+  copyComments({from: func, to: arrow});
+
+  return arrow;
+}

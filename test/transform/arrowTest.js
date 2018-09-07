@@ -236,19 +236,23 @@ describe('Arrow functions', () => {
     });
   });
 
-  describe('comments', () => {
-    it('should preserve comments when converting to shorthand notation', () => {
-      expectTransform(
-        'a(function(b) {\n' +
-        '  // comment\n' +
-        '  return b;\n' +
-        '});'
-      ).toReturn(
-        'a(b => {\n' +
-        '  // comment\n' +
-        '  return b;\n' +
-        '});'
-      );
-    });
+  it('should preserve comments', () => {
+    expectTransform(
+      'a(\n' +
+      '  // comment before\n' +
+      '  function(b) {\n' +
+      '    return b;\n' +
+      '  }\n' +
+      '  // comment after\n' +
+      ');'
+    ).toReturn(
+      'a(\n' +
+      '  // comment before\n' +
+      '  b => {\n' +
+      '    return b;\n' +
+      '  }\n' +
+      '  // comment after\n' +
+      ');'
+    );
   });
 });
