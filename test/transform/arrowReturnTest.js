@@ -3,23 +3,35 @@ const {expectTransform, expectNoChange} = createTestHelpers(['arrow-return']);
 
 describe('Arrow functions with return', () => {
   it('should convert basic arrow function', () => {
-    const script = 'a(() => { return 123; });';
-    expectTransform(script).toReturn('a(() => 123);');
+    expectTransform(
+      'a(() => { return 123; });'
+    ).toReturn(
+      'a(() => 123);'
+    );
   });
 
   it('should convert arrow function inside variable declaration', () => {
-    const script = 'const a = () => { return 123; }';
-    expectTransform(script).toReturn('const a = () => 123');
+    expectTransform(
+      'const a = () => { return 123; }'
+    ).toReturn(
+      'const a = () => 123'
+    );
   });
 
   it('should convert arrow function inside object', () => {
-    const script = '({ foo: () => { return 123; } })';
-    expectTransform(script).toReturn('({ foo: () => 123 })');
+    expectTransform(
+      '({ foo: () => { return 123; } })'
+    ).toReturn(
+      '({ foo: () => 123 })'
+    );
   });
 
   it('should convert nested arrow functions', () => {
-    const script = 'a(() => { return () => { const b = c => { return c; } }; })';
-    expectTransform(script).toReturn('a(() => () => { const b = c => c })');
+    expectTransform(
+      'a(() => { return () => { const b = c => { return c; } }; })'
+    ).toReturn(
+      'a(() => () => { const b = c => c })'
+    );
   });
 
   // Even when `this` or `arguments` is used inside arrow function,
@@ -51,8 +63,9 @@ describe('Arrow functions with return', () => {
   });
 
   it('should convert returning an object', () => {
-    const script = 'var f = a => { return {a: 1}; };';
-    expectTransform(script).toReturn(
+    expectTransform(
+      'var f = a => { return {a: 1}; };'
+    ).toReturn(
       'var f = a => ({\n' +
       '  a: 1\n' +
       '});'
@@ -60,9 +73,9 @@ describe('Arrow functions with return', () => {
   });
 
   it.skip('should convert returning an object property access', () => {
-    const script = 'var f = (a) => { return {a: 1}[a]; };';
-
-    expectTransform(script).toReturn(
+    expectTransform(
+      'var f = (a) => { return {a: 1}[a]; };'
+    ).toReturn(
       'var f = a => ({\n' +
       '  a: 1\n' +
       '}[a]);'
@@ -70,8 +83,11 @@ describe('Arrow functions with return', () => {
   });
 
   it('should convert return statements inside a parenthesized arrow function', () => {
-    const script = 'const x = (a => { return a; }).call(null, 1);';
-    expectTransform(script).toReturn('const x = ((a => a)).call(null, 1);');
+    expectTransform(
+      'const x = (a => { return a; }).call(null, 1);'
+    ).toReturn(
+      'const x = ((a => a)).call(null, 1);'
+    );
   });
 
   it('should preserve comments', () => {
@@ -99,7 +115,8 @@ describe('Arrow functions with return', () => {
   });
 
   it('should preserve code after return statement', () => {
-    expectNoChange('a(() => {\n' +
+    expectNoChange(
+      'a(() => {\n' +
       '  return func;\n' +
       '  function func() {}\n' +
       '});'
