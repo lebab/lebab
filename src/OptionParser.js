@@ -8,7 +8,7 @@ const transformsDocs = `
   Safe transforms:
 
     + arrow .......... callback to arrow function
-    + arrow-return ... return statements on arrow functions
+    + arrow-return ... drop return statements in arrow functions
     + for-of ......... for loop to for-of loop
     + for-each ....... for loop to Array.forEach()
     + arg-rest ....... use of arguments to function(...args)

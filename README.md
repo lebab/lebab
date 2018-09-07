@@ -66,10 +66,9 @@ The resulting code should be almost 100% equivalent of the original code.
     - [x] not applied to unbound functions that use `this`
     - [x] not applied to functions that use `arguments`
     - [x] not applied to object properties (use `obj-method` transform)
-    - [x] does not convert immediate return
     - [ ] does not remove `that = this` assignments
-- [x] **arrow-return** - return statements on arrow functions
-    - [x] converts immediate return { return x; } to => x
+- [x] **arrow-return** - drop return statements in arrow functions
+    - [x] converts immediate return `{ return x; }` to `=> x`
     - [x] applies to arrow functions and nested arrow functions
     - [ ] LIMITATION only applies to arrow functions (run the `arrow` transform first)
 - [x] **for-of** - for loop to for-of loop
