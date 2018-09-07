@@ -2,11 +2,6 @@ import createTestHelpers from '../createTestHelpers';
 const {expectTransform, expectNoChange} = createTestHelpers(['arrow-return']);
 
 describe('Arrow functions with return', () => {
-  it('should handle simple return callbacks', () => {
-    const script = 'setTimeout(() => { return 2; });';
-    expectTransform(script).toReturn('setTimeout(() => 2);');
-  });
-
   it('should handle return statements on immediately returning function expressions', () => {
     const script = 'a(() => { return 123; });';
     expectTransform(script).toReturn('a(() => 123);');
@@ -66,6 +61,10 @@ describe('Arrow functions with return', () => {
       'a(b => // comment\n' +
       'b);'
     );
+  });
+
+  it('should not convert arrow functions without return keyword', () => {
+    expectNoChange('a(() => {});');
   });
 
   it('should not convert return statements from non-arrow function', () => {
