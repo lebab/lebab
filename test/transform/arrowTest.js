@@ -20,16 +20,6 @@ describe('Arrow functions', () => {
     expectTransform(script).toReturn('a((b, c) => { return b; });');
   });
 
-  it.skip('should handle returning an object property access', () => {
-    const script = 'var f = function(a) { return {a: 1}[a]; };';
-
-    expectTransform(script).toReturn(
-      'var f = a => { return {\n' +
-      '  a: 1\n' +
-      '}[a]; };'
-    );
-  });
-
   it('should preserve async on anonymous function expression with no argument', () => {
     const script = 'f = async function() { return 1; };';
 

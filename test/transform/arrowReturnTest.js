@@ -41,6 +41,16 @@ describe('Arrow functions with return', () => {
     );
   });
 
+  it.skip('should handle returning an object property access', () => {
+    const script = 'var f = (a) => { return {a: 1}[a]; };';
+
+    expectTransform(script).toReturn(
+      'var f = a => ({\n' +
+      '  a: 1\n' +
+      '}[a]);'
+    );
+  });
+
   it('should handle return statements inside a parenthesized arrow function', () => {
     const script = 'const x = (a => { return a; }).call(null, 1);';
     expectTransform(script).toReturn('const x = ((a => a)).call(null, 1);');
