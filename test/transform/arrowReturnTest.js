@@ -6,6 +6,7 @@ describe('Arrow functions with return', () => {
     const script = 'setTimeout(() => { return 2; });';
     expectTransform(script).toReturn('setTimeout(() => 2);');
   });
+
   it('should handle return statements on immediately returning function expressions', () => {
     const script = 'a(() => { return 123; });';
     expectTransform(script).toReturn('a(() => 123);');
@@ -69,6 +70,7 @@ describe('Arrow functions with return', () => {
     expectNoChange('a(() => {\n' +
       '  return func;\n' +
       '  function func() {}\n' +
-      '});');
+      '});'
+    );
   });
 });
