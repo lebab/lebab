@@ -1,12 +1,11 @@
-import {matches} from 'lodash/fp';
 import traverser from '../traverser';
 import {matchesAst, matchesLength, extract} from '../utils/matchesAst';
 import copyComments from '../utils/copyComments';
 
 export default function(ast) {
   traverser.replace(ast, {
-    enter(node, parent) {
-      if (isArrowFunction(node, parent)) {
+    enter(node) {
+      if (isArrowFunction(node)) {
         return arrowReturn(node);
       }
     }
@@ -18,7 +17,7 @@ function arrowReturn(node) {
   return node;
 }
 
-function isArrowFunction(node, parent) {
+function isArrowFunction(node) {
   return node.type === 'ArrowFunctionExpression';
 }
 
