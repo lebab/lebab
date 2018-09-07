@@ -12,6 +12,11 @@ describe('Arrow functions with return', () => {
     expectTransform(script).toReturn('const a = () => 123');
   });
 
+  it('should convert arrow function inside object', () => {
+    const script = '({ foo: () => { return 123; } })';
+    expectTransform(script).toReturn('({ foo: () => 123 })');
+  });
+
   it('should convert nested arrow functions', () => {
     const script = 'a(() => { return () => { const b = c => { return c; } }; })';
     expectTransform(script).toReturn('a(() => () => { const b = c => c })');

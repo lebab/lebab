@@ -19,11 +19,7 @@ function arrowReturn(node) {
 }
 
 function isArrowFunction(node, parent) {
-  return node.type === 'ArrowFunctionExpression' &&
-    parent.type !== 'Property' &&
-    parent.type !== 'MethodDefinition' &&
-    !node.id &&
-    !node.generator;
+  return node.type === 'ArrowFunctionExpression';
 }
 
 const matchesReturnBlock = matchesAst({
