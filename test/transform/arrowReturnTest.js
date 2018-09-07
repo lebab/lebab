@@ -17,14 +17,32 @@ describe('Arrow functions with return', () => {
     expectTransform(script).toReturn('a(() => () => { const b = c => c })');
   });
 
-  it('should handle returning functions using `this` keyword inside a nested function', () => {
-    const script = 'a(() => { return function() { this; }; });';
-    expectTransform(script).toReturn('a(() => function() { this; });');
+  // Even when `this` or `arguments` is used inside arrow function,
+  // it's still fine to convert it to shorthand syntax.
+  // (We need to watch out for these in `arrow` transform though.)
+
+  it('should convert arrow function using `this` keyword', () => {
+    expectTransform(
+      'function Foo() {\n' +
+      '  setTimeout(() => { return this; });\n' +
+      '}'
+    ).toReturn(
+      'function Foo() {\n' +
+      '  setTimeout(() => this);\n' +
+      '}'
+    );
   });
 
-  it('should handle returning functions using `arguments` inside a nested function', () => {
-    const script = 'a(() => { return function() { arguments; }; });';
-    expectTransform(script).toReturn('a(() => function() { arguments; });');
+  it('should convert arrow function using `arguments` keyword', () => {
+    expectTransform(
+      'function func() {\n' +
+      '  setTimeout(() => { return arguments; });\n' +
+      '}'
+    ).toReturn(
+      'function func() {\n' +
+      '  setTimeout(() => arguments);\n' +
+      '}'
+    );
   });
 
   it('should convert returning an object', () => {

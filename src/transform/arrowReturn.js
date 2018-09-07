@@ -23,18 +23,7 @@ function isArrowFunction(node, parent) {
     parent.type !== 'Property' &&
     parent.type !== 'MethodDefinition' &&
     !node.id &&
-    !node.generator &&
-    !hasThis(node.body);
-}
-
-function hasThis(ast) {
-  return hasInFunctionBody(ast, {type: 'ThisExpression'});
-}
-
-function hasInFunctionBody(ast, pattern) {
-  return traverser.find(ast, matches(pattern), {
-    skipTypes: ['FunctionExpression', 'FunctionDeclaration']
-  });
+    !node.generator;
 }
 
 const matchesReturnBlock = matchesAst({
