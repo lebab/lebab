@@ -3,93 +3,119 @@ const {expectTransform, expectNoChange} = createTestHelpers(['arrow']);
 
 describe('Arrow functions', () => {
   it('should convert simple callbacks', () => {
-    const script = 'setTimeout(function() { return 2; });';
-
-    expectTransform(script).toReturn('setTimeout(() => { return 2; });');
+    expectTransform(
+      'setTimeout(function() { return 2; });'
+    ).toReturn('setTimeout(() => { return 2; });');
   });
 
   it('should convert callbacks with a single argument', () => {
-    const script = 'a(function(b) { return b; });';
-
-    expectTransform(script).toReturn('a(b => { return b; });');
+    expectTransform(
+      'a(function(b) { return b; });'
+    ).toReturn('a(b => { return b; });');
   });
 
   it('should convert callbacks with multiple arguments', () => {
-    const script = 'a(function(b, c) { return b; });';
-
-    expectTransform(script).toReturn('a((b, c) => { return b; });');
+    expectTransform(
+      'a(function(b, c) { return b; });'
+    ).toReturn(
+      'a((b, c) => { return b; });'
+    );
   });
 
   it('should preserve async on anonymous function expression with no argument', () => {
-    const script = 'f = async function() { return 1; };';
-
-    expectTransform(script).toReturn('f = async () => { return 1; };');
+    expectTransform(
+      'f = async function() { return 1; };'
+    ).toReturn(
+      'f = async () => { return 1; };'
+    );
   });
 
   it('should preserve async on anonymous function expression with single argument', () => {
-    const script = 'f = async function(a) { return a; };';
-
-    expectTransform(script).toReturn('f = async a => { return a; };');
+    expectTransform(
+      'f = async function(a) { return a; };'
+    ).toReturn(
+      'f = async a => { return a; };'
+    );
   });
 
   it('should preserve async on anonymous function assignment with multiple arguments', () => {
-    const script = 'f = async function(a,b) { return a; };';
-
-    expectTransform(script).toReturn('f = async (a, b) => { return a; };');
+    expectTransform(
+      'f = async function(a,b) { return a; };'
+    ).toReturn(
+      'f = async (a, b) => { return a; };'
+    );
   });
 
   it('should preserve async on immediate function invocation', () => {
-    const script = '(async function () { await foo(); }());';
-
-    expectTransform(script).toReturn('((async () => { await foo(); })());');
+    expectTransform(
+      '(async function () { await foo(); }());'
+    ).toReturn(
+      '((async () => { await foo(); })());'
+    );
   });
 
   it('should preserve async on immediate function invocation with arguments', () => {
-    const script = '(async function (a) { await foo(a); }());';
-
-    expectTransform(script).toReturn('((async a => { await foo(a); })());');
+    expectTransform(
+      '(async function (a) { await foo(a); }());'
+    ).toReturn(
+      '((async a => { await foo(a); })());'
+    );
   });
 
   it('should convert function assignment', () => {
-    const script = 'x = function () { foo(); };';
-
-    expectTransform(script).toReturn('x = () => { foo(); };');
+    expectTransform(
+      'x = function () { foo(); };'
+    ).toReturn(
+      'x = () => { foo(); };'
+    );
   });
 
   it('should convert immediate function invocation', () => {
-    const script = '(function () { foo(); }());';
-
-    expectTransform(script).toReturn('((() => { foo(); })());');
+    expectTransform(
+      '(function () { foo(); }());'
+    ).toReturn(
+      '((() => { foo(); })());'
+    );
   });
 
   it('should convert returning of a function', () => {
-    const script = 'function foo () { return function() { foo(); }; }';
-
-    expectTransform(script).toReturn('function foo () { return () => { foo(); }; }');
+    expectTransform(
+      'function foo () { return function() { foo(); }; }'
+    ).toReturn(
+      'function foo () { return () => { foo(); }; }'
+    );
   });
 
   it('should convert functions using `this` keyword inside a nested function', () => {
-    const script = 'a(function () { return function() { this; }; });';
-
-    expectTransform(script).toReturn('a(() => { return function() { this; }; });');
+    expectTransform(
+      'a(function () { return function() { this; }; });'
+    ).toReturn(
+      'a(() => { return function() { this; }; });'
+    );
   });
 
   it('should convert functions using `arguments` inside a nested function', () => {
-    const script = 'a(function () { return function() { arguments; }; });';
-
-    expectTransform(script).toReturn('a(() => { return function() { arguments; }; });');
+    expectTransform(
+      'a(function () { return function() { arguments; }; });'
+    ).toReturn(
+      'a(() => { return function() { arguments; }; });'
+    );
   });
 
   it('should preserve default parameters', () => {
-    const script = 'foo(function (a=1, b=2, c) { });';
-
-    expectTransform(script).toReturn('foo((a=1, b=2, c) => { });');
+    expectTransform(
+      'foo(function (a=1, b=2, c) { });'
+    ).toReturn(
+      'foo((a=1, b=2, c) => { });'
+    );
   });
 
   it('should preserve rest parameters', () => {
-    const script = 'foo(function (x, ...xs) { });';
-
-    expectTransform(script).toReturn('foo((x, ...xs) => { });');
+    expectTransform(
+      'foo(function (x, ...xs) { });'
+    ).toReturn(
+      'foo((x, ...xs) => { });'
+    );
   });
 
   it('should preserve code after return statement', () => {
