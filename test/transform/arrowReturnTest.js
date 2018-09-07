@@ -2,17 +2,17 @@ import createTestHelpers from '../createTestHelpers';
 const {expectTransform, expectNoChange} = createTestHelpers(['arrow-return']);
 
 describe('Arrow functions with return', () => {
-  it('should handle return statements on immediately returning function expressions', () => {
+  it('should convert basic arrow function', () => {
     const script = 'a(() => { return 123; });';
     expectTransform(script).toReturn('a(() => 123);');
   });
 
-  it('should handle return statements on immediately returning function declarations', () => {
+  it('should convert arrow function inside variable declaration', () => {
     const script = 'const a = () => { return 123; }';
     expectTransform(script).toReturn('const a = () => 123');
   });
 
-  it('should handle return statements inside a nested arrow function', () => {
+  it('should convert nested arrow functions', () => {
     const script = 'a(() => { return () => { const b = c => { return c; } }; })';
     expectTransform(script).toReturn('a(() => () => { const b = c => c })');
   });
@@ -27,7 +27,7 @@ describe('Arrow functions with return', () => {
     expectTransform(script).toReturn('a(() => function() { arguments; });');
   });
 
-  it('should handle returning an object', () => {
+  it('should convert returning an object', () => {
     const script = 'var f = a => { return {a: 1}; };';
     expectTransform(script).toReturn(
       'var f = a => ({\n' +
@@ -36,7 +36,7 @@ describe('Arrow functions with return', () => {
     );
   });
 
-  it.skip('should handle returning an object property access', () => {
+  it.skip('should convert returning an object property access', () => {
     const script = 'var f = (a) => { return {a: 1}[a]; };';
 
     expectTransform(script).toReturn(
@@ -46,12 +46,12 @@ describe('Arrow functions with return', () => {
     );
   });
 
-  it('should handle return statements inside a parenthesized arrow function', () => {
+  it('should convert return statements inside a parenthesized arrow function', () => {
     const script = 'const x = (a => { return a; }).call(null, 1);';
     expectTransform(script).toReturn('const x = ((a => a)).call(null, 1);');
   });
 
-  it('should handle return statements from shorthand notation and preserving comments', () => {
+  it('should preserve comments', () => {
     expectTransform(
       'a(b => {\n' +
       '  // comment\n' +
