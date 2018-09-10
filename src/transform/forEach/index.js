@@ -59,9 +59,10 @@ function createForEach({body, item, index, array}) {
 }
 
 function removeFirstBodyElement(body) {
-  return Object.assign({}, body, {
-    body: tail(body.body)
-  });
+  return {
+    ...body,
+    body: tail(body.body),
+  };
 }
 
 function createForEachParams(newBody, item, index) {

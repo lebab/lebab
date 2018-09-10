@@ -10,9 +10,9 @@ const ESPREE_OPTS = {
  */
 export default {
   parse(js, opts) {
-    return espree.parse(js, Object.assign({}, opts, ESPREE_OPTS));
+    return espree.parse(js, {...opts, ...ESPREE_OPTS});
   },
   tokenize(js, opts) {
-    return espree.tokenize(js, Object.assign({}, opts, ESPREE_OPTS));
+    return espree.tokenize(js, {...opts, ...ESPREE_OPTS});
   },
 };

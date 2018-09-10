@@ -1,6 +1,6 @@
 {
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
   "env": {
@@ -265,6 +265,8 @@
     "space-unary-ops": 2,
     // require a space immediately following the // or /* in a comment
     "spaced-comment": 2,
+    // prefer the use of object spread over Object.assign
+    "prefer-object-spread": 2,
     // require an empty line between class members
     "lines-between-class-members": 2,
 

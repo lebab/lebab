@@ -63,7 +63,8 @@ function createForOf({item, itemKind, array, body}) {
 }
 
 function removeFirstBodyElement(body) {
-  return Object.assign({}, body, {
-    body: tail(body.body)
-  });
+  return {
+    ...body,
+    body: tail(body.body),
+  };
 }

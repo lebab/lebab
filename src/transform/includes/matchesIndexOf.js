@@ -67,9 +67,10 @@ function reverseOperatorField(matches) {
     return false;
   }
 
-  return Object.assign({}, matches, {
-    operator: reverseOperator(matches.operator)
-  });
+  return {
+    ...matches,
+    operator: reverseOperator(matches.operator),
+  };
 }
 
 /**
