@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint src/ test/ system-test/ bin/ *.js",
-    "prepublish": "rm -rf lib/ && babel src/ --out-dir lib/",
-    "system-test": "npm run prepublish && mocha --require babel-register \"./system-test/**/*Test.js\"",
+    "build": "rm -rf lib/ && babel src/ --out-dir lib/",
+    "prepublishOnly": "npm run build",
+    "system-test": "npm run build && mocha --require babel-register \"./system-test/**/*Test.js\"",
     "//": "Unit tests: a) for single run, b) in watch-mode, c) with coverage.",
     "test": "mocha --require babel-register \"./test/**/*Test.js\"",
     "watch": "mocha --watch --require babel-register \"./test/**/*Test.js\"",
