@@ -209,6 +209,48 @@ describe('Classes', () => {
     );
   });
 
+  it('should detect ES6 methods from object assigned directly to prototype', () => {
+    expectTransform(
+      'function MyClass() {\n' +
+      '}\n' +
+      'MyClass.prototype = {\n' +
+      '  methodA(a) {\n' +
+      '  },\n' +
+      '  methodB(b) {\n' +
+      '  }\n' +
+      '};'
+    ).toReturn(
+      'class MyClass {\n' +
+      '  methodA(a) {\n' +
+      '  }\n' +
+      '\n' +
+      '  methodB(b) {\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
+  it('should detect getters/setters from object assigned directly to prototype', () => {
+    expectTransform(
+      'function MyClass() {\n' +
+      '}\n' +
+      'MyClass.prototype = {\n' +
+      '  get methodA() {\n' +
+      '  },\n' +
+      '  set methodB(b) {\n' +
+      '  }\n' +
+      '};'
+    ).toReturn(
+      'class MyClass {\n' +
+      '  get methodA() {\n' +
+      '  }\n' +
+      '\n' +
+      '  set methodB(b) {\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
   it('should ignore object assigned directly to prototype when it contains non-functions', () => {
     expectNoChange(
       'function MyClass() {\n' +

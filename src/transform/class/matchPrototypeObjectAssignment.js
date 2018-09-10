@@ -38,6 +38,7 @@ const matchPrototypeObjectAssignment = matchesAst({
  *     - propertyNode
  *     - methodName
  *     - methodNode
+ *     - kind
  *
  * @param  {Object} node
  * @return {Object}
@@ -53,6 +54,7 @@ export default function(node) {
           propertyNode: prop,
           methodName: prop.key.name,
           methodNode: prop.value,
+          kind: prop.kind,
         };
       })
     };

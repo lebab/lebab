@@ -67,6 +67,7 @@ export default function(ast, logger) {
               fullNode: node,
               commentNodes: assignmentComments.concat([method.propertyNode]),
               parent,
+              kind: classMethodKind(method.kind),
             }));
           });
         }
@@ -104,6 +105,12 @@ export default function(ast, logger) {
       }
     }
   });
+
+  // Ordinary methods inside class use kind=method,
+  // unlike methods inside object literal, which use kind=init.
+  function classMethodKind(kind) {
+    return kind === 'init' ? 'method' : kind;
+  }
 
   function logWarning(cls) {
     if (/^[A-Z]/.test(cls.getName())) {
