@@ -26,7 +26,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/mohebifar/lebab"
+    "url": "https://github.com/lebab/lebab"
   },
   "bin": {
     "lebab": "./bin/index.js"
@@ -43,9 +43,9 @@
   "author": "Mohamad Mohebifar <mohamad@mohebifar.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mohebifar/lebab/issues"
+    "url": "https://github.com/lebab/lebab/issues"
   },
-  "homepage": "https://github.com/mohebifar/lebab",
+  "homepage": "https://github.com/lebab/lebab",
   "dependencies": {
     "commander": "^2.15.1",
     "escope": "^3.6.0",
