@@ -176,7 +176,10 @@ Simply import and call `lebab.transform()`:
 
 ```js
 import lebab from 'lebab';
-const {code, warnings} = lebab.transform('var f = function(a) { return a; };', ['let', 'arrow', 'arrow-return']);
+const {code, warnings} = lebab.transform(
+  'var f = function(a) { return a; };', // code to transform
+  ['let', 'arrow', 'arrow-return'] // transforms to apply
+);
 console.log(code); // -> "const f = a => a;"
 ```
 
