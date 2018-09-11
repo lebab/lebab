@@ -1,19 +1,19 @@
-import {matchesAst, extract} from '../../utils/matchesAst';
+import {matches, extractAny} from 'f-matches';
 
-const matchEqualsUndefined = matchesAst({
+const matchEqualsUndefined = matches({
   type: 'BinaryExpression',
   left: {
     type: 'Identifier',
-    name: extract('name2')
+    name: extractAny('name2')
   },
-  operator: extract('operator'),
+  operator: extractAny('operator'),
   right: {
     type: 'Identifier',
     name: 'undefined'
   }
 });
 
-const matchTypeofUndefined = matchesAst({
+const matchTypeofUndefined = matches({
   type: 'BinaryExpression',
   left: {
     type: 'UnaryExpression',
@@ -21,30 +21,30 @@ const matchTypeofUndefined = matchesAst({
     prefix: true,
     argument: {
       type: 'Identifier',
-      name: extract('name2')
+      name: extractAny('name2')
     }
   },
-  operator: extract('operator'),
+  operator: extractAny('operator'),
   right: {
     type: 'Literal',
     value: 'undefined'
   }
 });
 
-const matchIfUndefinedAssignment = matchesAst({
+const matchIfUndefinedAssignment = matches({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
     left: {
       type: 'Identifier',
-      name: extract('name')
+      name: extractAny('name')
     },
     operator: '=',
     right: {
       type: 'ConditionalExpression',
       test: (ast) => matchEqualsUndefined(ast) || matchTypeofUndefined(ast),
-      consequent: extract('consequent'),
-      alternate: extract('alternate')
+      consequent: extractAny('consequent'),
+      alternate: extractAny('alternate')
     }
   }
 });

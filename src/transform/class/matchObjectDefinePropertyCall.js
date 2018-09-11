@@ -1,7 +1,7 @@
-import {matchesAst, extract} from '../../utils/matchesAst';
+import {matches, extractAny} from 'f-matches';
 import isFunctionProperty from './isFunctionProperty';
 
-const matchObjectDefinePropertyCall = matchesAst({
+const matchObjectDefinePropertyCall = matches({
   type: 'ExpressionStatement',
   expression: {
     type: 'CallExpression',
@@ -23,7 +23,7 @@ const matchObjectDefinePropertyCall = matchesAst({
         computed: false,
         object: {
           type: 'Identifier',
-          name: extract('className')
+          name: extractAny('className')
         },
         property: {
           type: 'Identifier',
@@ -32,11 +32,11 @@ const matchObjectDefinePropertyCall = matchesAst({
       },
       {
         type: 'Literal',
-        value: extract('methodName')
+        value: extractAny('methodName')
       },
       {
         type: 'ObjectExpression',
-        properties: extract('properties')
+        properties: extractAny('properties')
       }
     ]
   }

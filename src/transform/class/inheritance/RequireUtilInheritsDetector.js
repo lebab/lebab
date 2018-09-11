@@ -1,5 +1,5 @@
 import {find} from 'lodash/fp';
-import {isAstMatch, matchesLength} from '../../../utils/matchesAst';
+import {matches, matchesLength} from 'f-matches';
 
 /**
  * Detects variable name imported from require("util").inherits
@@ -27,7 +27,7 @@ export default class RequireUtilInheritsDetector {
 
   // Matches: <id> = require("util").inherits
   isRequireUtilInherits(dec) {
-    return isAstMatch(dec, {
+    return matches({
       type: 'VariableDeclarator',
       id: {
         type: 'Identifier',
@@ -51,6 +51,6 @@ export default class RequireUtilInheritsDetector {
           name: 'inherits'
         }
       }
-    });
+    }, dec);
   }
 }

@@ -1,25 +1,25 @@
-import {matchesAst, extract} from '../../utils/matchesAst';
+import {matches, extractAny} from 'f-matches';
 
-const matchTernaryAssignment = matchesAst({
+const matchTernaryAssignment = matches({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
     left: {
       type: 'Identifier',
-      name: extract('name')
+      name: extractAny('name')
     },
     operator: '=',
     right: {
       type: 'ConditionalExpression',
       test: {
         type: 'Identifier',
-        name: extract('name2')
+        name: extractAny('name2')
       },
       consequent: {
         type: 'Identifier',
-        name: extract('name3')
+        name: extractAny('name3')
       },
-      alternate: extract('value')
+      alternate: extractAny('value')
     }
   }
 });

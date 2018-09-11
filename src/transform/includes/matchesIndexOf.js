@@ -1,9 +1,9 @@
-import {matchesAst, matchesLength, extract} from '../../utils/matchesAst';
+import {matches, matchesLength, extract, extractAny} from 'f-matches';
 
 /**
  * Matches: -1
  */
-export const isMinusOne = matchesAst({
+export const isMinusOne = matches({
   type: 'UnaryExpression',
   operator: '-',
   argument: {
@@ -16,25 +16,25 @@ export const isMinusOne = matchesAst({
 /**
  * Matches: 0
  */
-export const isZero = matchesAst({
+export const isZero = matches({
   type: 'Literal',
   value: 0
 });
 
 // Matches: object.indexOf(searchElement)
-const matchesCallIndexOf = matchesAst({
+const matchesCallIndexOf = matches({
   type: 'CallExpression',
   callee: {
     type: 'MemberExpression',
     computed: false,
-    object: extract('object'),
+    object: extractAny('object'),
     property: {
       type: 'Identifier',
       name: 'indexOf'
     }
   },
   arguments: matchesLength([
-    extract('searchElement')
+    extractAny('searchElement')
   ])
 });
 
@@ -42,17 +42,17 @@ const matchesCallIndexOf = matchesAst({
 const matchesIndex = extract('index', (v) => isMinusOne(v) || isZero(v));
 
 // Matches: object.indexOf(searchElement) <operator> index
-const matchesIndexOfNormal = matchesAst({
+const matchesIndexOfNormal = matches({
   type: 'BinaryExpression',
-  operator: extract('operator'),
+  operator: extractAny('operator'),
   left: matchesCallIndexOf,
   right: matchesIndex,
 });
 
 // Matches: index <operator> object.indexOf(searchElement)
-const matchesIndexOfReversed = matchesAst({
+const matchesIndexOfReversed = matches({
   type: 'BinaryExpression',
-  operator: extract('operator'),
+  operator: extractAny('operator'),
   left: matchesIndex,
   right: matchesCallIndexOf,
 });
@@ -62,14 +62,14 @@ function reverseOperator(operator) {
   return operator.replace(/[><]/, (op) => op === '>' ? '<' : '>');
 }
 
-function reverseOperatorField(matches) {
-  if (!matches) {
+function reverseOperatorField(match) {
+  if (!match) {
     return false;
   }
 
   return {
-    ...matches,
-    operator: reverseOperator(matches.operator),
+    ...match,
+    operator: reverseOperator(match.operator),
   };
 }
 

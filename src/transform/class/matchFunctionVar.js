@@ -1,10 +1,10 @@
-import matchesAst from '../../utils/matchesAst';
+import {matches} from 'f-matches';
 
-const isFunctionExpression = matchesAst({
+const isFunctionExpression = matches({
   type: 'FunctionExpression'
 });
 
-const isFunctionVariableDeclaration = matchesAst({
+const isFunctionVariableDeclaration = matches({
   type: 'VariableDeclaration',
   declarations: (decs) => decs.length === 1 && isFunctionExpression(decs[0].init)
 });

@@ -1,22 +1,22 @@
-import {matchesAst, extract} from '../../utils/matchesAst';
+import {matches, extractAny} from 'f-matches';
 
-const matchOrAssignment = matchesAst({
+const matchOrAssignment = matches({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
     left: {
       type: 'Identifier',
-      name: extract('name')
+      name: extractAny('name')
     },
     operator: '=',
     right: {
       type: 'LogicalExpression',
       left: {
         type: 'Identifier',
-        name: extract('name2')
+        name: extractAny('name2')
       },
       operator: '||',
-      right: extract('value')
+      right: extractAny('value')
     }
   }
 });

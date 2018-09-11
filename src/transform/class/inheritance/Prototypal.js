@@ -1,4 +1,4 @@
-import {isAstMatch, matchesLength, extract} from '../../../utils/matchesAst';
+import {matches, matchesLength, extractAny} from 'f-matches';
 
 /**
  * Processes nodes to detect super classes and return information for later
@@ -59,7 +59,7 @@ export default class Prototypal {
 
   // Matches: <className>.prototype = new <superClass>();
   matchNewAssignment(node) {
-    return isAstMatch(node, {
+    return matches({
       type: 'ExpressionStatement',
       expression: {
         type: 'AssignmentExpression',
@@ -67,7 +67,7 @@ export default class Prototypal {
           type: 'MemberExpression',
           object: {
             type: 'Identifier',
-            name: extract('className')
+            name: extractAny('className')
           },
           property: {
             type: 'Identifier',
@@ -76,15 +76,15 @@ export default class Prototypal {
         },
         right: {
           type: 'NewExpression',
-          callee: extract('superClass')
+          callee: extractAny('superClass')
         }
       }
-    });
+    }, node);
   }
 
   // Matches: <className>.prototype = Object.create(<superClass>);
   matchObjectCreateAssignment(node) {
-    return isAstMatch(node, {
+    return matches({
       type: 'ExpressionStatement',
       expression: {
         type: 'AssignmentExpression',
@@ -92,7 +92,7 @@ export default class Prototypal {
           type: 'MemberExpression',
           object: {
             type: 'Identifier',
-            name: extract('className')
+            name: extractAny('className')
           },
           property: {
             type: 'Identifier',
@@ -114,7 +114,7 @@ export default class Prototypal {
           },
           arguments: matchesLength([{
             type: 'MemberExpression',
-            object: extract('superClass'),
+            object: extractAny('superClass'),
             property: {
               type: 'Identifier',
               name: 'prototype'
@@ -122,12 +122,12 @@ export default class Prototypal {
           }])
         }
       }
-    });
+    }, node);
   }
 
   // Matches: <className>.prototype.constructor = <constructorClassName>;
   matchConstructorAssignment(node) {
-    return isAstMatch(node, {
+    return matches({
       type: 'ExpressionStatement',
       expression: {
         type: 'AssignmentExpression',
@@ -137,7 +137,7 @@ export default class Prototypal {
             type: 'MemberExpression',
             object: {
               type: 'Identifier',
-              name: extract('className')
+              name: extractAny('className')
             },
             property: {
               type: 'Identifier',
@@ -151,9 +151,9 @@ export default class Prototypal {
         },
         right: {
           type: 'Identifier',
-          name: extract('constructorClassName')
+          name: extractAny('constructorClassName')
         }
       }
-    });
+    }, node);
   }
 }

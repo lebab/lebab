@@ -1,7 +1,7 @@
-import matchesAst from '../utils/matchesAst';
+import {matches} from 'f-matches';
 import traverser from '../traverser';
 
-const isMathPow = matchesAst({
+const isMathPow = matches({
   type: 'CallExpression',
   callee: {
     type: 'MemberExpression',

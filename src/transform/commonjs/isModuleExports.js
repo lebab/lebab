@@ -1,4 +1,4 @@
-import matchesAst from '../../utils/matchesAst';
+import {matches} from 'f-matches';
 import isExports from './isExports';
 
 /**
@@ -6,7 +6,7 @@ import isExports from './isExports';
  * @param  {Object} node
  * @return {Boolean}
  */
-export default matchesAst({
+export default matches({
   type: 'MemberExpression',
   computed: false,
   object: {

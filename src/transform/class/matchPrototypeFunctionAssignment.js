@@ -1,4 +1,4 @@
-import {matchesAst, extract} from '../../utils/matchesAst';
+import {matches, extract, extractAny} from 'f-matches';
 import isTransformableToMethod from './isTransformableToMethod';
 
 /**
@@ -13,7 +13,7 @@ import isTransformableToMethod from './isTransformableToMethod';
  * @param  {Object} node
  * @return {Object}
  */
-export default matchesAst({
+export default matches({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
@@ -25,7 +25,7 @@ export default matchesAst({
         computed: false,
         object: {
           type: 'Identifier',
-          name: extract('className')
+          name: extractAny('className')
         },
         property: {
           type: 'Identifier',
@@ -34,7 +34,7 @@ export default matchesAst({
       },
       property: {
         type: 'Identifier',
-        name: extract('methodName')
+        name: extractAny('methodName')
       }
     },
     operator: '=',

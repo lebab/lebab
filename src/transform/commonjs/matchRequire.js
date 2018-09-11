@@ -1,12 +1,12 @@
 import isString from '../../utils/isString';
-import {matchesAst, extract} from '../../utils/matchesAst';
+import {matches, extract} from 'f-matches';
 
-const isIdentifier = matchesAst({
+const isIdentifier = matches({
   type: 'Identifier'
 });
 
 // matches Property with Identifier key and value (possibly shorthand)
-const isSimpleProperty = matchesAst({
+const isSimpleProperty = matches({
   type: 'Property',
   key: isIdentifier,
   computed: false,
@@ -14,13 +14,13 @@ const isSimpleProperty = matchesAst({
 });
 
 // matches: {a, b: myB, c, ...}
-const isObjectPattern = matchesAst({
+const isObjectPattern = matches({
   type: 'ObjectPattern',
   properties: (props) => props.every(isSimpleProperty)
 });
 
 // matches: require(<source>)
-const matchRequireCall = matchesAst({
+const matchRequireCall = matches({
   type: 'CallExpression',
   callee: {
     type: 'Identifier',
@@ -34,7 +34,7 @@ const matchRequireCall = matchesAst({
 /**
  * Matches: <id> = require(<source>);
  */
-export const matchRequire = matchesAst({
+export const matchRequire = matches({
   type: 'VariableDeclarator',
   id: extract('id', id => isIdentifier(id) || isObjectPattern(id)),
   init: matchRequireCall
@@ -43,7 +43,7 @@ export const matchRequire = matchesAst({
 /**
  * Matches: <id> = require(<source>).<property>;
  */
-export const matchRequireWithProperty = matchesAst({
+export const matchRequireWithProperty = matches({
   type: 'VariableDeclarator',
   id: extract('id', isIdentifier),
   init: {

@@ -1,11 +1,11 @@
-import matchesAst from '../../utils/matchesAst';
+import {matches} from 'f-matches';
 
 /**
  * Matches just identifier `exports`
  * @param  {Object} node
  * @return {Boolean}
  */
-export default matchesAst({
+export default matches({
   type: 'Identifier',
   name: 'exports'
 });

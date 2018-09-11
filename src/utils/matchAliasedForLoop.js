@@ -1,8 +1,8 @@
 import isEqualAst from './isEqualAst';
-import {matchesAst, extract, matchesLength} from './matchesAst';
+import {matches, extract, extractAny, matchesLength} from 'f-matches';
 
 // Matches <ident>++ or ++<ident>
-const matchPlusPlus = matchesAst({
+const matchPlusPlus = matches({
   type: 'UpdateExpression',
   operator: '++',
   argument: extract('indexIncrement', {
@@ -11,7 +11,7 @@ const matchPlusPlus = matchesAst({
 });
 
 // Matches <ident>+=1
-const matchPlusOne = matchesAst({
+const matchPlusOne = matches({
   type: 'AssignmentExpression',
   operator: '+=',
   left: extract('indexIncrement', {
@@ -30,7 +30,7 @@ const matchPlusOne = matchesAst({
 //     let item = arrayReference[indexReference];
 //     ...
 // }
-const matchLooseForLoop = matchesAst({
+const matchLooseForLoop = matches({
   type: 'ForStatement',
   init: {
     type: 'VariableDeclaration',
@@ -46,7 +46,7 @@ const matchLooseForLoop = matchesAst({
         }
       }
     ]),
-    kind: extract('indexKind')
+    kind: extractAny('indexKind')
   },
   test: {
     type: 'BinaryExpression',
@@ -57,7 +57,7 @@ const matchLooseForLoop = matchesAst({
     right: {
       type: 'MemberExpression',
       computed: false,
-      object: extract('array'),
+      object: extractAny('array'),
       property: {
         type: 'Identifier',
         name: 'length'
@@ -79,14 +79,14 @@ const matchLooseForLoop = matchesAst({
             init: {
               type: 'MemberExpression',
               computed: true,
-              object: extract('arrayReference'),
+              object: extractAny('arrayReference'),
               property: extract('indexReference', {
                 type: 'Identifier',
               })
             }
           }
         ],
-        kind: extract('itemKind')
+        kind: extractAny('itemKind')
       }
     ]
   })
@@ -124,8 +124,8 @@ function isConsistentArrayVar({array, arrayReference}) {
  * @return {Object}
  */
 export default function(ast) {
-  const matches = matchLooseForLoop(ast);
-  if (matches && isConsistentIndexVar(matches) && isConsistentArrayVar(matches)) {
-    return matches;
+  const match = matchLooseForLoop(ast);
+  if (match && isConsistentIndexVar(match) && isConsistentArrayVar(match)) {
+    return match;
   }
 }

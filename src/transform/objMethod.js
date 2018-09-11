@@ -1,14 +1,14 @@
-import {matchesAst, extract} from '../utils/matchesAst';
+import {matches, extractAny} from 'f-matches';
 import traverser from '../traverser';
 
-const matchTransformableProperty = matchesAst({
+const matchTransformableProperty = matches({
   type: 'Property',
   key: {
     type: 'Identifier',
   },
   value: {
     type: 'FunctionExpression',
-    id: extract('functionName'),
+    id: extractAny('functionName'),
   },
   method: false,
   computed: false,

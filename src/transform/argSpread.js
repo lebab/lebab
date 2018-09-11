@@ -1,6 +1,6 @@
 import {flow, omit, mapValues, isEqual, isArray, isObjectLike} from 'lodash/fp';
 import traverser from '../traverser';
-import {matchesAst, isAstMatch, extract} from '../utils/matchesAst';
+import {matches, extract, extractAny} from 'f-matches';
 
 export default function(ast) {
   traverser.replace(ast, {
@@ -49,19 +49,19 @@ function omitLoc(obj) {
   }
 }
 
-const isUndefined = matchesAst({
+const isUndefined = matches({
   type: 'Identifier',
   name: 'undefined'
 });
 
-const isNull = matchesAst({
+const isNull = matches({
   type: 'Literal',
   value: null, // eslint-disable-line no-null/no-null
   raw: 'null'
 });
 
 function matchFunctionApplyCall(node) {
-  return isAstMatch(node, {
+  return matches({
     type: 'CallExpression',
     callee: {
       type: 'MemberExpression',
@@ -76,13 +76,13 @@ function matchFunctionApplyCall(node) {
     },
     arguments: [
       arg => isUndefined(arg) || isNull(arg),
-      extract('array')
+      extractAny('array')
     ]
-  });
+  }, node);
 }
 
 function matchObjectApplyCall(node) {
-  return isAstMatch(node, {
+  return matches({
     type: 'CallExpression',
     callee: {
       type: 'MemberExpression',
@@ -96,8 +96,8 @@ function matchObjectApplyCall(node) {
       }
     },
     arguments: [
-      extract('thisParam'),
-      extract('arrayParam')
+      extractAny('thisParam'),
+      extractAny('arrayParam')
     ]
-  });
+  }, node);
 }

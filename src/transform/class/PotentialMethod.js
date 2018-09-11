@@ -1,6 +1,6 @@
 import traverser from '../../traverser';
 import isEqualAst from './../../utils/isEqualAst';
-import {isAstMatch, extract} from './../../utils/matchesAst';
+import {matches, extract} from 'f-matches';
 import extractComments from './extractComments';
 import multiReplaceStatement from './../../utils/multiReplaceStatement';
 
@@ -133,7 +133,7 @@ class PotentialMethod {
   }
 
   matchSuperCall(node) {
-    return isAstMatch(node, {
+    return matches({
       type: 'ExpressionStatement',
       expression: {
         type: 'CallExpression',
@@ -167,6 +167,6 @@ class PotentialMethod {
           }
         ]
       }
-    });
+    }, node);
   }
 }

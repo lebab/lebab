@@ -1,7 +1,7 @@
-import {matches} from 'lodash/fp';
+import {matches as lodashMatches} from 'lodash/fp';
 import traverser from '../traverser';
 import ArrowFunctionExpression from '../syntax/ArrowFunctionExpression';
-import {isAstMatch, extract} from '../utils/matchesAst';
+import {matches, extract} from 'f-matches';
 import copyComments from '../utils/copyComments';
 
 export default function(ast, logger) {
@@ -34,7 +34,7 @@ function isFunctionConvertableToArrow(node, parent) {
 
 // Matches: function(){}.bind(this)
 function matchBoundFunction(node) {
-  return isAstMatch(node, {
+  return matches({
     type: 'CallExpression',
     callee: {
       type: 'MemberExpression',
@@ -55,7 +55,7 @@ function matchBoundFunction(node) {
         type: 'ThisExpression'
       }
     ]
-  });
+  }, node);
 }
 
 function hasThis(ast) {
@@ -69,7 +69,7 @@ function hasArguments(ast) {
 // Returns true when pattern matches any node in given function body,
 // excluding any nested functions
 function hasInFunctionBody(ast, pattern) {
-  return traverser.find(ast, matches(pattern), {
+  return traverser.find(ast, lodashMatches(pattern), {
     skipTypes: ['FunctionExpression', 'FunctionDeclaration']
   });
 }

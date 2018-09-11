@@ -1,5 +1,5 @@
 import traverser from '../traverser';
-import {matchesAst, matchesLength, extract} from '../utils/matchesAst';
+import {matches, matchesLength, extract, extractAny} from 'f-matches';
 import copyComments from '../utils/copyComments';
 
 export default function(ast) {
@@ -17,12 +17,12 @@ function shortenReturn(node) {
   return node;
 }
 
-const matchesReturnBlock = matchesAst({
+const matchesReturnBlock = matches({
   type: 'BlockStatement',
   body: matchesLength([
     extract('returnStatement', {
       type: 'ReturnStatement',
-      argument: extract('returnVal')
+      argument: extractAny('returnVal')
     })
   ])
 });

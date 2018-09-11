@@ -1,4 +1,4 @@
-import {isAstMatch, extract} from '../../../utils/matchesAst';
+import {matches, extractAny} from 'f-matches';
 import RequireUtilDetector from './RequireUtilDetector';
 import RequireUtilInheritsDetector from './RequireUtilInheritsDetector';
 import ImportUtilDetector from './ImportUtilDetector';
@@ -59,7 +59,7 @@ export default class UtilInherits {
   //
   // Matches: <this.utilInherits>(<className>, <superClass>);
   matchUtilInherits(node) {
-    return isAstMatch(node, {
+    return matches({
       type: 'ExpressionStatement',
       expression: {
         type: 'CallExpression',
@@ -67,11 +67,11 @@ export default class UtilInherits {
         arguments: [
           {
             type: 'Identifier',
-            name: extract('className')
+            name: extractAny('className')
           },
-          extract('superClass')
+          extractAny('superClass')
         ]
       }
-    });
+    }, node);
   }
 }

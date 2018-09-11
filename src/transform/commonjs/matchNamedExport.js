@@ -1,4 +1,4 @@
-import {matchesAst, extract} from '../../utils/matchesAst';
+import {matches, extract, extractAny} from 'f-matches';
 import isExports from './isExports';
 import isModuleExports from './isModuleExports';
 
@@ -14,7 +14,7 @@ import isModuleExports from './isModuleExports';
  * @param  {[type]} node [description]
  * @return {[type]}      [description]
  */
-export default matchesAst({
+export default matches({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
@@ -27,6 +27,6 @@ export default matchesAst({
         type: 'Identifier'
       })
     },
-    right: extract('value')
+    right: extractAny('value')
   }
 });

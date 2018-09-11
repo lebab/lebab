@@ -1,4 +1,4 @@
-import matchesAst from '../../utils/matchesAst';
+import {matches} from 'f-matches';
 import isTransformableToMethod from './isTransformableToMethod';
 
 /**
@@ -7,7 +7,7 @@ import isTransformableToMethod from './isTransformableToMethod';
  * @param {Object} node
  * @return {Boolean}
  */
-export default matchesAst({
+export default matches({
   type: 'Property',
   key: {
     type: 'Identifier',

@@ -1,4 +1,4 @@
-import {isAstMatch, extract, matchesLength} from '../../../utils/matchesAst';
+import {matches, extractAny, matchesLength} from 'f-matches';
 
 /**
  * Detects variable name imported from: import <name> from "util"
@@ -30,14 +30,14 @@ export default class ImportUtilDetector {
 
   // Matches: import <name> from "util"
   matchImportUtil(node) {
-    return isAstMatch(node, {
+    return matches({
       type: 'ImportDeclaration',
       specifiers: matchesLength([
         {
           type: 'ImportDefaultSpecifier',
           local: {
             type: 'Identifier',
-            name: extract('name')
+            name: extractAny('name')
           }
         }
       ]),
@@ -45,6 +45,6 @@ export default class ImportUtilDetector {
         type: 'Literal',
         value: 'util'
       }
-    });
+    }, node);
   }
 }

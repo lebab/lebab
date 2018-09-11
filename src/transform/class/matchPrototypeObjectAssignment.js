@@ -1,7 +1,7 @@
-import {matchesAst, extract} from '../../utils/matchesAst';
+import {matches, extract, extractAny} from 'f-matches';
 import isFunctionProperty from './isFunctionProperty';
 
-const matchPrototypeObjectAssignment = matchesAst({
+const matchPrototypeObjectAssignment = matches({
   type: 'ExpressionStatement',
   expression: {
     type: 'AssignmentExpression',
@@ -10,7 +10,7 @@ const matchPrototypeObjectAssignment = matchesAst({
       computed: false,
       object: {
         type: 'Identifier',
-        name: extract('className')
+        name: extractAny('className')
       },
       property: {
         type: 'Identifier',
