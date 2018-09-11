@@ -51,6 +51,7 @@
     "escope": "^3.6.0",
     "espree": "^3.5.4",
     "estraverse": "^4.1.1",
+    "f-matches": "^1.1.0",
     "glob": "^7.1.2",
     "lodash": "^4.17.10",
     "recast": "^0.14.7"
