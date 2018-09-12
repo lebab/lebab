@@ -1,4 +1,5 @@
 import {matches} from 'f-matches';
+import {flow, filter, some} from 'lodash/fp';
 import traverser from '../../traverser';
 import multiReplaceStatement from '../../utils/multiReplaceStatement';
 import matchOrAssignment from './matchOrAssignment';
@@ -40,12 +41,13 @@ function transformDefaultParams(fn) {
 }
 
 function containsParams(defaultValue, params) {
-  return params
-    .filter(param => param.type === 'Identifier')
-    .some(param => traverser.find(defaultValue, matches({
+  return flow(
+    filter(param => param.type === 'Identifier'),
+    some(param => traverser.find(defaultValue, matches({
       type: 'Identifier',
       name: param.name,
-    })));
+    })))
+  )(params);
 }
 
 // Looks default value assignments at the beginning of a function
