@@ -1,4 +1,4 @@
-var createTransformer = require('./lib/createTransformer'); // eslint-disable-line no-var
+var createTransformer = require('./lib/createTransformer').default; // eslint-disable-line no-var
 
 /**
  * Exposes API similar to Babel:
