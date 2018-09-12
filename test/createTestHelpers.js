@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import builtinTransforms from './../src/builtinTransforms';
+import createTransformer from './../src/createTransformer';
 
 /**
  * Generates functions that are used in all transform-tests.
@@ -7,7 +7,7 @@ import builtinTransforms from './../src/builtinTransforms';
  * @return {Object} functions expectTransform() and expectNoChange()
  */
 export default function(transformNames) {
-  const transformer = builtinTransforms.createTransformer(transformNames);
+  const transformer = createTransformer(transformNames);
 
   // Generic transformation asserter, to be called like:
   //

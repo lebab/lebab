@@ -41,25 +41,20 @@ const transformsMap = {
 };
 
 /**
- * Central place for accessing all the builtin transforms
+ * Factory for creating a Transformer
+ * by just specifying the names of the transforms.
+ * @param  {String[]} transformNames
+ * @return {Transformer}
  */
-export default {
-  /**
-   * Factori method for creating a Transformer
-   * by just specifying the names of the transforms.
-   * @param  {String[]} transformNames
-   * @return {Transformer}
-   */
-  createTransformer(transformNames) {
-    this.validate(transformNames);
-    return new Transformer(transformNames.map(name => transformsMap[name]));
-  },
+export default function createTransformer(transformNames) {
+  validate(transformNames);
+  return new Transformer(transformNames.map(name => transformsMap[name]));
+}
 
-  validate(transformNames) {
-    transformNames.forEach(name => {
-      if (!transformsMap[name]) {
-        throw `Unknown transform "${name}".`;
-      }
-    });
-  }
-};
+function validate(transformNames) {
+  transformNames.forEach(name => {
+    if (!transformsMap[name]) {
+      throw `Unknown transform "${name}".`;
+    }
+  });
+}

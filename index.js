@@ -1,4 +1,4 @@
-var builtinTransforms = require('./lib/builtinTransforms'); // eslint-disable-line no-var
+var createTransformer = require('./lib/createTransformer'); // eslint-disable-line no-var
 
 /**
  * Exposes API similar to Babel:
@@ -11,5 +11,5 @@ var builtinTransforms = require('./lib/builtinTransforms'); // eslint-disable-li
  * @return {Object} An object with code and warnings props
  */
 exports.transform = function(code, transformNames) {
-  return builtinTransforms.createTransformer(transformNames).run(code);
+  return createTransformer(transformNames).run(code);
 };

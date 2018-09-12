@@ -1,6 +1,6 @@
 import glob from 'glob';
 import OptionParser from './OptionParser';
-import builtinTransforms from './builtinTransforms';
+import createTransformer from './createTransformer';
 import io from './io';
 
 /**
@@ -13,7 +13,7 @@ export default class Cli {
   constructor(argv) {
     try {
       this.options = new OptionParser().parse(argv);
-      this.transformer = builtinTransforms.createTransformer(this.options.transforms);
+      this.transformer = createTransformer(this.options.transforms);
     }
     catch (error) {
       console.error(error); // eslint-disable-line no-console
