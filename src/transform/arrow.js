@@ -12,12 +12,12 @@ export default function(ast, logger) {
           logger.warn(node, 'Can not use arguments in arrow function', 'arrow');
           return;
         }
-        return functionToArrow(node);
+        return functionToArrow(node, parent);
       }
 
       const {func} = matchBoundFunction(node);
       if (func) {
-        return functionToArrow(func);
+        return functionToArrow(func, parent);
       }
     }
   });
@@ -74,7 +74,7 @@ function hasInFunctionBody(ast, pattern) {
   });
 }
 
-function functionToArrow(func) {
+function functionToArrow(func, parent) {
   const arrow = new ArrowFunctionExpression({
     body: func.body,
     params: func.params,
@@ -85,5 +85,16 @@ function functionToArrow(func) {
 
   copyComments({from: func, to: arrow});
 
+  // Get rid of extra parentheses around IIFE
+  // by forcing Recast to reformat the CallExpression
+  if (isIIFE(func, parent)) {
+    parent.original = null; // eslint-disable-line no-null/no-null
+  }
+
   return arrow;
+}
+
+// Is it immediately invoked function expression?
+function isIIFE(func, parent) {
+  return parent.type === 'CallExpression' && parent.callee === func;
 }

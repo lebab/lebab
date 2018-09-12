@@ -50,7 +50,7 @@ describe('Arrow functions', () => {
     expectTransform(
       '(async function () { await foo(); }());'
     ).toReturn(
-      '((async () => { await foo(); })());'
+      '(async () => { await foo(); })();'
     );
   });
 
@@ -58,7 +58,7 @@ describe('Arrow functions', () => {
     expectTransform(
       '(async function (a) { await foo(a); }());'
     ).toReturn(
-      '((async a => { await foo(a); })());'
+      '(async a => { await foo(a); })();'
     );
   });
 
@@ -70,11 +70,12 @@ describe('Arrow functions', () => {
     );
   });
 
+  // Issue #187
   it('should convert immediate function invocation', () => {
     expectTransform(
       '(function () { foo(); }());'
     ).toReturn(
-      '((() => { foo(); })());'
+      '(() => { foo(); })();'
     );
   });
 
