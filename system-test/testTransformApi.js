@@ -23,7 +23,7 @@ export function testTransformApi(transform) {
   it('throws for invalid transform type', () => {
     expect(() => {
       transform('', ['blah']);
-    }).to.throw('transformer is not a function');
+    }).to.throw('Unknown transform "blah".');
   });
 
   it('throws for syntax error in input code', () => {

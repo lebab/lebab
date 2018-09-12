@@ -28,10 +28,9 @@ describe('Command Line Interface', () => {
     ]);
   });
 
-  it('when --transform=unknown given, raises error', () => {
-    expect(() => {
-      parse(['--transform', 'unknown']);
-    }).to.throw('Unknown transform "unknown".');
+  it('accepts any transform name (transform names are validated later)', () => {
+    const options = parse(['--transform', 'unknown']);
+    expect(options.transforms).to.deep.equal(['unknown']);
   });
 
   it('by default reads STDIN and writes to STDOUT', () => {

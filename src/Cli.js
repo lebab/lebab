@@ -13,13 +13,12 @@ export default class Cli {
   constructor(argv) {
     try {
       this.options = new OptionParser().parse(argv);
+      this.transformer = builtinTransforms.createTransformer(this.options.transforms);
     }
     catch (error) {
       console.error(error); // eslint-disable-line no-console
       process.exit(2);
     }
-
-    this.transformer = builtinTransforms.createTransformer(this.options.transforms);
   }
 
   /**

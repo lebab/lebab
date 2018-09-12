@@ -51,6 +51,7 @@ export default {
    * @return {Transformer}
    */
   createTransformer(transformNames) {
+    this.validate(transformNames);
     return new Transformer(transformNames.map(name => this.get(name)));
   },
 

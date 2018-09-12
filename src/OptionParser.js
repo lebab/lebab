@@ -100,9 +100,6 @@ export default class OptionParser {
   ${transformsDocs}`;
     }
 
-    // Ensure only valid transform names are used
-    builtinTransforms.validate(this.program.transform);
-
     return this.program.transform;
   }
 }
