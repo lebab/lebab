@@ -6,6 +6,7 @@ import multiReplaceStatement from '../../utils/multiReplaceStatement';
 import matchOrAssignment from './matchOrAssignment';
 import matchTernaryAssignment from './matchTernaryAssignment';
 import matchIfUndefinedAssignment from './matchIfUndefinedAssignment';
+import Parameter from './Parameter';
 
 export default function(ast) {
   traverser.replace(ast, {
@@ -20,17 +21,19 @@ export default function(ast) {
 function transformDefaultParams(fn) {
   const detectedDefaults = findDefaults(fn.body.body);
 
-  fn.params.forEach((param, i) => {
+  fn.params.forEach((p) => {
+    const param = new Parameter(fn, p);
+
     // Ignore destructoring, only work with simple variables
-    if (param.type !== 'Identifier') {
+    if (!param.isIdentifier()) {
       return;
     }
 
-    const detected = detectedDefaults[param.name];
+    const detected = detectedDefaults[param.name()];
     // Transform when default value detected and no existing default value
     // and default does not contain this or any of the remaining parameters
-    if (detected && !defaultExists(fn, i) && !containsParams(detected.value, fn.params.slice(i))) {
-      setDefault(fn, i, detected.value);
+    if (detected && !param.hasDefault() && !containsParams(detected.value, param.remainingParams())) {
+      param.setDefault(detected.value);
       multiReplaceStatement({
         parent: fn.body,
         node: detected.node,
@@ -38,16 +41,6 @@ function transformDefaultParams(fn) {
       });
     }
   });
-}
-
-// True when parameter at index i has a default value
-function defaultExists(fn, i) {
-  return fn.defaults && fn.defaults[i];
-}
-
-function setDefault(fn, i, value) {
-  fn.defaults = fn.defaults || [];
-  fn.defaults[i] = value;
 }
 
 function containsParams(defaultValue, params) {
