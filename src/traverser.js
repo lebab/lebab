@@ -15,6 +15,7 @@ const jsxExtensionKeys = {
     JSXAttribute: ['name', 'value'],
     JSXSpreadAttribute: ['argument'],
     JSXElement: ['openingElement', 'closingElement', 'children'],
+    JSXText: [],
   }
 };
 
