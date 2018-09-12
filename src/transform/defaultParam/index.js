@@ -1,5 +1,6 @@
 import {matches} from 'f-matches';
-import {flow, filter, some} from 'lodash/fp';
+import {flow, flatMap, some} from 'lodash/fp';
+import {extractVariables} from '../../utils/destructuring';
 import traverser from '../../traverser';
 import multiReplaceStatement from '../../utils/multiReplaceStatement';
 import matchOrAssignment from './matchOrAssignment';
@@ -42,7 +43,7 @@ function transformDefaultParams(fn) {
 
 function containsParams(defaultValue, params) {
   return flow(
-    filter(param => param.type === 'Identifier'),
+    flatMap(extractVariables),
     some(param => traverser.find(defaultValue, matches({
       type: 'Identifier',
       name: param.name,
