@@ -29,7 +29,7 @@ function transformDefaultParams(fn) {
     const detected = detectedDefaults[param.name];
     // Transform when default value detected and no existing default value
     // and default does not contain this or any of the remaining parameters
-    if (detected && (!fn.defaults || !fn.defaults[i]) && !containsParams(detected.value, fn.params.slice(i))) {
+    if (detected && !defaultExists(fn, i) && !containsParams(detected.value, fn.params.slice(i))) {
       fn.defaults = fn.defaults || [];
       fn.defaults[i] = detected.value;
       multiReplaceStatement({
@@ -39,6 +39,11 @@ function transformDefaultParams(fn) {
       });
     }
   });
+}
+
+// True when parameter at index i has a default value
+function defaultExists(fn, i) {
+  return fn.defaults && fn.defaults[i];
 }
 
 function containsParams(defaultValue, params) {
