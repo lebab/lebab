@@ -297,14 +297,15 @@ describe('Default parameters', () => {
     );
   });
 
-  // Regression test for issue #238 (https://github.com/lebab/lebab/issues/238)
-  it('should not work when default value is another parameter', () => {
+  // Regression tests for issue #238 (https://github.com/lebab/lebab/issues/238)
+
+  it('should not work when default value is next parameter', () => {
     expectNoChange(
       'function f(a, b) { a = a || b }'
     );
   });
 
-  it('should not work when default value contains another parameter', () => {
+  it('should not work when default value contains next parameter', () => {
     expectNoChange(
       'function f(a, b) { a = a || foo(1/b+2) }'
     );
@@ -313,6 +314,14 @@ describe('Default parameters', () => {
   it('should not work when default value contains the parameter itself', () => {
     expectNoChange(
       'function f(a, b) { a = a || foo(1/a+2) }'
+    );
+  });
+
+  it('should work OK when default value is previous parameter', () => {
+    expectTransform(
+      'function f(a, b) { b = b || a }'
+    ).toReturn(
+      'function f(a, b = a) {}'
     );
   });
 });
