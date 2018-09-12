@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-var Cli = require('./../lib/Cli').default; // eslint-disable-line no-var
+const Cli = require('./../lib/Cli').default;
 
 new Cli(process.argv).run();
