@@ -1,3 +1,4 @@
+import {matches} from 'f-matches';
 import traverser from '../../traverser';
 import multiReplaceStatement from '../../utils/multiReplaceStatement';
 import matchOrAssignment from './matchOrAssignment';
@@ -39,10 +40,12 @@ function transformDefaultParams(fn) {
 }
 
 function isExistingParam(defaultValue, allParams) {
-  if (defaultValue.type !== 'Identifier') {
-    return false;
-  }
-  return allParams.some(param => param.type === 'Identifier' && param.name === defaultValue.name);
+  return allParams
+    .filter(param => param.type === 'Identifier')
+    .some(param => traverser.find(defaultValue, matches({
+      type: 'Identifier',
+      name: param.name,
+    })));
 }
 
 // Looks default value assignments at the beginning of a function

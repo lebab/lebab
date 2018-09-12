@@ -303,4 +303,16 @@ describe('Default parameters', () => {
       'function f(a, b) { a = a || b }'
     );
   });
+
+  it('should not work when default value contains another parameter', () => {
+    expectNoChange(
+      'function f(a, b) { a = a || foo(1/b+2) }'
+    );
+  });
+
+  it('should not work when default value contains the parameter itself', () => {
+    expectNoChange(
+      'function f(a, b) { a = a || foo(1/a+2) }'
+    );
+  });
 });
