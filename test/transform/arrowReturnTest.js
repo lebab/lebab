@@ -72,13 +72,11 @@ describe('Arrow functions with return', () => {
     );
   });
 
-  it.skip('should convert returning an object property access', () => {
+  it('should convert returning an object property access', () => {
     expectTransform(
       'var f = (a) => { return {a: 1}[a]; };'
     ).toReturn(
-      'var f = a => ({\n' +
-      '  a: 1\n' +
-      '}[a]);'
+      'var f = a => ({a: 1}[a]);'
     );
   });
 
