@@ -3,9 +3,9 @@ import {expect} from 'chai';
 import fs from 'fs';
 import {exec} from 'child_process';
 
-const INPUT_FILE = 'test/test-data.js';
-const INPUT_WARNINGS_FILE = 'test/test-data-warnings.js';
-const OUTPUT_FILE = 'test/output.js';
+const INPUT_FILE = 'system-test/test-data.js';
+const INPUT_WARNINGS_FILE = 'system-test/test-data-warnings.js';
+const OUTPUT_FILE = 'system-test/output.js';
 
 describe('Smoke test for the executable script', function() {
   beforeEach(() => {
