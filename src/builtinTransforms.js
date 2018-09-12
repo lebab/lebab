@@ -61,5 +61,18 @@ export default {
    */
   get(name) {
     return transformsMap[name];
+  },
+
+  /**
+   * Checks that all transform names are correct.
+   * Throws error when they're not.
+   * @param {String[]} transformNames
+   */
+  validate(transformNames) {
+    transformNames.forEach(name => {
+      if (!this.get(name)) {
+        throw `Unknown transform "${name}".`;
+      }
+    });
   }
 };

@@ -101,16 +101,8 @@ export default class OptionParser {
     }
 
     // Ensure only valid transform names are used
-    this.validateTransforms(this.program.transform);
+    builtinTransforms.validate(this.program.transform);
 
     return this.program.transform;
-  }
-
-  validateTransforms(transformNames) {
-    transformNames.forEach(name => {
-      if (!builtinTransforms.get(name)) {
-        throw `Unknown transform "${name}".`;
-      }
-    });
   }
 }
