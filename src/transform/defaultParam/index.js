@@ -30,8 +30,7 @@ function transformDefaultParams(fn) {
     // Transform when default value detected and no existing default value
     // and default does not contain this or any of the remaining parameters
     if (detected && !defaultExists(fn, i) && !containsParams(detected.value, fn.params.slice(i))) {
-      fn.defaults = fn.defaults || [];
-      fn.defaults[i] = detected.value;
+      setDefault(fn, i, detected.value);
       multiReplaceStatement({
         parent: fn.body,
         node: detected.node,
@@ -44,6 +43,11 @@ function transformDefaultParams(fn) {
 // True when parameter at index i has a default value
 function defaultExists(fn, i) {
   return fn.defaults && fn.defaults[i];
+}
+
+function setDefault(fn, i, value) {
+  fn.defaults = fn.defaults || [];
+  fn.defaults[i] = value;
 }
 
 function containsParams(defaultValue, params) {
