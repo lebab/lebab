@@ -52,26 +52,12 @@ export default {
    */
   createTransformer(transformNames) {
     this.validate(transformNames);
-    return new Transformer(transformNames.map(name => this.get(name)));
+    return new Transformer(transformNames.map(name => transformsMap[name]));
   },
 
-  /**
-   * Maps transform name to the actual transform function
-   * @param  {String} name
-   * @return {Function} the transform or undefined when no such transform
-   */
-  get(name) {
-    return transformsMap[name];
-  },
-
-  /**
-   * Checks that all transform names are correct.
-   * Throws error when they're not.
-   * @param {String[]} transformNames
-   */
   validate(transformNames) {
     transformNames.forEach(name => {
-      if (!this.get(name)) {
+      if (!transformsMap[name]) {
         throw `Unknown transform "${name}".`;
       }
     });
