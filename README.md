@@ -172,11 +172,11 @@ or they have significant bugs which can result in breaking your code.
 
 ## Programming API
 
-Simply import and call `lebab.transform()`:
+Simply import and call the `transform()` function:
 
 ```js
-import lebab from 'lebab';
-const {code, warnings} = lebab.transform(
+import {transform} from 'lebab';
+const {code, warnings} = transform(
   'var f = function(a) { return a; };', // code to transform
   ['let', 'arrow', 'arrow-return'] // transforms to apply
 );
