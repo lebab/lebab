@@ -17,8 +17,11 @@ export default class Parameter {
   }
 
   setDefault(value) {
-    this.fn.defaults = this.fn.defaults || [];
-    this.fn.defaults[this.index] = value;
+    this.fn.params[this.index] = {
+      type: 'AssignmentPattern',
+      left: this.param,
+      right: value,
+    };
   }
 
   remainingParams() {
