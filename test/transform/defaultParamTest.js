@@ -265,14 +265,13 @@ describe('Default parameters', () => {
     );
   });
 
-  // Unable to make arrow functions work (so disabling them instead)
-  // Seems to be a bug in Recast
-  // https://github.com/benjamn/recast/issues/260
-  it('should not work for arrow functions', () => {
-    expectNoChange(
+  it('should work for arrow functions', () => {
+    expectTransform(
       'foo((a) => {\n' +
       '  a = a || 2;\n' +
       '});'
+    ).toReturn(
+      'foo((a = 2) => {});'
     );
   });
 

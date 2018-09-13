@@ -3,6 +3,7 @@ import {flow, flatMap, some} from 'lodash/fp';
 import {extractVariables} from '../../utils/destructuring';
 import traverser from '../../traverser';
 import multiReplaceStatement from '../../utils/multiReplaceStatement';
+import {isFunction} from '../../utils/functionType';
 import matchOrAssignment from './matchOrAssignment';
 import matchTernaryAssignment from './matchTernaryAssignment';
 import matchIfUndefinedAssignment from './matchIfUndefinedAssignment';
@@ -10,7 +11,7 @@ import matchIfUndefinedAssignment from './matchIfUndefinedAssignment';
 export default function(ast) {
   traverser.replace(ast, {
     enter(node) {
-      if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
+      if (isFunction(node)) {
         transformDefaultParams(node);
       }
     }
