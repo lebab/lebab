@@ -6,7 +6,6 @@ import multiReplaceStatement from '../../utils/multiReplaceStatement';
 import matchOrAssignment from './matchOrAssignment';
 import matchTernaryAssignment from './matchTernaryAssignment';
 import matchIfUndefinedAssignment from './matchIfUndefinedAssignment';
-import Parameter from './Parameter';
 
 export default function(ast) {
   traverser.replace(ast, {
@@ -21,19 +20,17 @@ export default function(ast) {
 function transformDefaultParams(fn) {
   const detectedDefaults = findDefaults(fn.body.body);
 
-  fn.params.forEach((p) => {
-    const param = new Parameter(fn, p);
-
+  fn.params.forEach((param, i) => {
     // Ignore params that use destructoring or already have a default
-    if (!param.isIdentifier()) {
+    if (param.type !== 'Identifier') {
       return;
     }
 
-    const detected = detectedDefaults[param.name()];
+    const detected = detectedDefaults[param.name];
     // Transform when default value detected
     // and default does not contain this or any of the remaining parameters
-    if (detected && !containsParams(detected.value, param.remainingParams())) {
-      param.setDefault(detected.value);
+    if (detected && !containsParams(detected.value, remainingParams(fn, i))) {
+      setDefault(fn, i, detected.value);
       multiReplaceStatement({
         parent: fn.body,
         node: detected.node,
@@ -41,6 +38,18 @@ function transformDefaultParams(fn) {
       });
     }
   });
+}
+
+function setDefault(fn, i, value) {
+  fn.params[i] = {
+    type: 'AssignmentPattern',
+    left: fn.params[i],
+    right: value,
+  };
+}
+
+function remainingParams(fn, i) {
+  return fn.params.slice(i);
 }
 
 function containsParams(defaultValue, params) {
