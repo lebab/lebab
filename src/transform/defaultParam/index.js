@@ -20,30 +20,32 @@ export default function(ast) {
 function transformDefaultParams(fn) {
   const detectedDefaults = findDefaults(fn.body.body);
 
-  fn.params.forEach((param, i) => {
+  fn.params = fn.params.map((param, i) => {
     // Ignore params that use destructoring or already have a default
     if (param.type !== 'Identifier') {
-      return;
+      return param;
     }
 
     const detected = detectedDefaults[param.name];
     // Transform when default value detected
     // and default does not contain this or any of the remaining parameters
     if (detected && !containsParams(detected.value, remainingParams(fn, i))) {
-      setDefault(fn, i, detected.value);
       multiReplaceStatement({
         parent: fn.body,
         node: detected.node,
         replacements: []
       });
+      return withDefault(param, detected.value);
     }
+
+    return param;
   });
 }
 
-function setDefault(fn, i, value) {
-  fn.params[i] = {
+function withDefault(param, value) {
+  return {
     type: 'AssignmentPattern',
-    left: fn.params[i],
+    left: param,
     right: value,
   };
 }
