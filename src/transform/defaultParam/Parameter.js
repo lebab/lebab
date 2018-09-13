@@ -16,10 +16,6 @@ export default class Parameter {
     return this.param.type === 'Identifier';
   }
 
-  hasDefault() {
-    return this.fn.defaults && this.fn.defaults[this.index];
-  }
-
   setDefault(value) {
     this.fn.defaults = this.fn.defaults || [];
     this.fn.defaults[this.index] = value;

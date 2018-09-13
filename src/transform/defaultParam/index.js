@@ -24,15 +24,15 @@ function transformDefaultParams(fn) {
   fn.params.forEach((p) => {
     const param = new Parameter(fn, p);
 
-    // Ignore destructoring, only work with simple variables
+    // Ignore params that use destructoring or already have a default
     if (!param.isIdentifier()) {
       return;
     }
 
     const detected = detectedDefaults[param.name()];
-    // Transform when default value detected and no existing default value
+    // Transform when default value detected
     // and default does not contain this or any of the remaining parameters
-    if (detected && !param.hasDefault() && !containsParams(detected.value, param.remainingParams())) {
+    if (detected && !containsParams(detected.value, param.remainingParams())) {
       param.setDefault(detected.value);
       multiReplaceStatement({
         parent: fn.body,
