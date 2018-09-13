@@ -329,4 +329,16 @@ describe('Default parameters', () => {
       'function f(a, [{b}]) { a = a || b }'
     );
   });
+
+  it('should not work when default value is next param with a default', () => {
+    expectNoChange(
+      'function f(a, b = 1) { a = a || b }'
+    );
+  });
+
+  it('should not work when default value is next destructured param with a default', () => {
+    expectNoChange(
+      'function f(a, {b = 1}) { a = a || b }'
+    );
+  });
 });

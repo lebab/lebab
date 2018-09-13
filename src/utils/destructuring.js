@@ -25,6 +25,9 @@ export function extractVariables(node) {
   if (node.type === 'Property') {
     return extractVariables(node.value);
   }
+  if (node.type === 'AssignmentPattern') {
+    return extractVariables(node.left);
+  }
 
   // Ignore stuff like MemberExpressions,
   // we only care about variables.
