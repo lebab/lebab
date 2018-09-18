@@ -344,7 +344,7 @@ describe('Default parameters', () => {
 
   it('should skip transform if function body type is not a BlockStatement', () => {
     expectNoChange(
-      'const f = function(a) { return a }'
+      'const f = (a) => a'
     );
   });
 });
