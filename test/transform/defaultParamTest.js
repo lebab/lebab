@@ -341,4 +341,10 @@ describe('Default parameters', () => {
       'function f(a, {b = 1}) { a = a || b }'
     );
   });
+
+  it('should skip transform if function body type is not a BlockStatement', () => {
+    expectNoChange(
+      'const f = function(a) { return a }'
+    );
+  });
 });
