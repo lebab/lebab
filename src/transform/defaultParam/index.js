@@ -11,7 +11,7 @@ import matchIfUndefinedAssignment from './matchIfUndefinedAssignment';
 export default function(ast) {
   traverser.replace(ast, {
     enter(node) {
-      if (isFunction(node)) {
+      if (isFunction(node) && node.body.type === 'BlockStatement') {
         transformDefaultParams(node);
       }
     }
@@ -70,7 +70,6 @@ function containsParams(defaultValue, params) {
 // Returns a map of variable-name:{name, value, node}
 function findDefaults(fnBody) {
   const defaults = {};
-
   for (const node of fnBody) {
     const def = matchDefaultAssignment(node);
     if (!def) {
