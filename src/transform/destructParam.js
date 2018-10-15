@@ -10,7 +10,7 @@ const MAX_PROPS = 4;
 
 export default function(ast, logger) {
   const hierarchy = new Hierarchy(ast);
-
+  const variableNamesCreated = [];
   traverser.traverse(ast, withScope(ast, {
     enter(fnNode, parent, scope) {
       if (functionType.isFunction(fnNode)) {
@@ -22,6 +22,17 @@ export default function(ast, logger) {
             // Replace parameter with destruct-pattern
             const index = fnNode.params.findIndex(param => param === variable.defs[0].name);
             if (index === -1) {
+              return;
+            }
+
+            // skip destructuring, if one of the destructured variable names is already declared by another destruction
+            const duplicateDetected = exs.some(ex => {
+              if (variableNamesCreated.includes(ex.property.name)) {
+                return true;
+              }
+              return false;
+            });
+            if (duplicateDetected) {
               return;
             }
 
@@ -38,6 +49,7 @@ export default function(ast, logger) {
 
             // Replace references of obj.foo with simply foo
             exs.forEach(ex => {
+              variableNamesCreated.push(ex.property.name);
               ex.type = ex.property.type;
               ex.name = ex.property.name;
             });

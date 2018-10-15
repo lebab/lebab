@@ -141,7 +141,7 @@ describe('Destruct function param', () => {
     );
   });
 
-  it.skip('should not transform second param when this results in conflict', () => {
+  it('should not transform second param when this results in conflict', () => {
     expectTransform(
       'function fn(a, b) {\n' +
       '  console.log(a.foo, b.foo);\n' +
@@ -153,7 +153,7 @@ describe('Destruct function param', () => {
     );
   });
 
-  it.skip('should not perform second transform when it results in conflict', () => {
+  it('should not perform second transform when it results in conflict', () => {
     expectTransform(
       'function fn(a) {\n' +
       '  console.log(a.foo);\n' +
