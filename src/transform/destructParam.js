@@ -27,7 +27,7 @@ export default function(ast, logger) {
 
             // skip destructuring, if one of the destructured variable names is already declared by another destruction
             const duplicateDetected = exs.some(ex => {
-              return variableNamesCreated.includes(ex.property.name)
+              return variableNamesCreated.includes(ex.property.name);
             });
             if (duplicateDetected) {
               return;
