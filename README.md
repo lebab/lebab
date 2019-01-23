@@ -2,7 +2,6 @@
 [![Coverage Status](https://img.shields.io/codecov/c/github/lebab/lebab/master.svg)](https://codecov.io/github/lebab/lebab)
 [![Dependencies](https://img.shields.io/librariesio/github/lebab/lebab.svg)](https://libraries.io/npm/lebab)
 [![License](https://img.shields.io/:license-mit-brightgreen.svg)](https://mohebifar.mit-license.org)
-[![JS.ORG](https://img.shields.io/badge/js.org-xto6-ffb400.svg)](https://js.org)
 [![Version](https://img.shields.io/npm/v/lebab.svg)](https://www.npmjs.com/package/lebab)
 
 # Lebab
