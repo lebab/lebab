@@ -6,4 +6,3 @@ lib
 coverage
 *.lcov
 yarn.lock
-package-lock.json
