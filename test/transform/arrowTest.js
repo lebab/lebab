@@ -225,6 +225,10 @@ describe('Arrow functions', () => {
     it('should not convert named function expressions', () => {
       expectNoChange('a(function foo() { });');
     });
+
+    it('should not convert when arguments also bound', () => {
+      expectNoChange('a(function(a,b,c) { return this; }.bind(this, 1, 2, 3));');
+    });
   });
 
   describe('functions with methods invoked', () => {

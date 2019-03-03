@@ -1,7 +1,7 @@
 import {matches as lodashMatches} from 'lodash/fp';
 import traverser from '../traverser';
 import ArrowFunctionExpression from '../syntax/ArrowFunctionExpression';
-import {matches, extract} from 'f-matches';
+import {matches, matchesLength, extract} from 'f-matches';
 import copyComments from '../utils/copyComments';
 
 export default function(ast, logger) {
@@ -50,11 +50,11 @@ function matchBoundFunction(node) {
         name: 'bind'
       }
     },
-    arguments: [
+    arguments: matchesLength([
       {
         type: 'ThisExpression'
       }
-    ]
+    ])
   }, node);
 }
 
