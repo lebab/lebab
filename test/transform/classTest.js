@@ -32,6 +32,12 @@ describe('Classes', () => {
     );
   });
 
+  it('should ignore anonymous function declaration', () => {
+    expectNoChange(
+      'export default function () {}'
+    );
+  });
+
   describe('assignment to prototype field', () => {
     it('should convert to class (when function declaration used)', () => {
       expectTransform(
