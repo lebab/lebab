@@ -1,4 +1,4 @@
-import recast from 'recast';
+import {parse, print} from 'recast';
 import parser from './Parser';
 import Logger from './Logger';
 
@@ -30,13 +30,13 @@ export default class Transformer {
 
   applyAllTransforms(code, logger) {
     return this.ignoringHashBangComment(code, (js) => {
-      const ast = recast.parse(js, {parser});
+      const ast = parse(js, {parser});
 
       this.transforms.forEach(transformer => {
         transformer(ast.program, logger);
       });
 
-      return recast.print(ast, {
+      return print(ast, {
         lineTerminator: this.detectLineTerminator(code),
         objectCurlySpacing: false,
       }).code;

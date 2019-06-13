@@ -1,5 +1,5 @@
 import {uniq} from 'lodash/fp';
-import recast from 'recast';
+import {parse} from 'recast';
 import parser from '../Parser';
 import traverser from '../traverser';
 import withScope from '../withScope';
@@ -124,6 +124,6 @@ function uniqPropNames(exs) {
 function createDestructPattern(exs) {
   const props = uniqPropNames(exs).join(', ');
   const js = `function foo({${props}}) {};`;
-  const ast = recast.parse(js, {parser});
+  const ast = parse(js, {parser});
   return ast.program.body[0].params[0];
 }
