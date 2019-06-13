@@ -7,10 +7,10 @@
     "lint": "eslint src/ test/ system-test/ bin/ *.js",
     "build": "rm -rf lib/ && babel src/ --out-dir lib/",
     "prepublishOnly": "npm run build",
-    "system-test": "npm run build && mocha --require babel-register \"./system-test/**/*Test.js\"",
+    "system-test": "npm run build && mocha --require @babel/register \"./system-test/**/*Test.js\"",
     "//": "Unit tests: a) for single run, b) in watch-mode, c) with coverage.",
-    "test": "mocha --require babel-register \"./test/**/*Test.js\"",
-    "watch": "mocha --watch --require babel-register \"./test/**/*Test.js\"",
+    "test": "mocha --require @babel/register \"./test/**/*Test.js\"",
+    "watch": "mocha --watch --require @babel/register \"./test/**/*Test.js\"",
     "coverage": "nyc npm test",
     "///": "These are used by Travis to create coverage report. Run 'coverage' script first.",
     "ensure-coverage": "nyc check-coverage --statements 80 --branches 80 --functions 80",
@@ -57,15 +57,16 @@
     "recast": "^0.15.5"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/register": "^7.4.4",
     "chai": "^4.1.2",
-    "codecov": "^3.0.2",
-    "eslint": "^5.5.0",
+    "codecov": "^3.5.0",
+    "eslint": "^5.16.0",
     "eslint-plugin-no-null": "^1.0.2",
     "mocha": "^5.1.1",
-    "nyc": "^13.0.1"
+    "nyc": "^14.1.1"
   }
 }
