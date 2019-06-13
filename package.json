@@ -47,26 +47,25 @@
   },
   "homepage": "https://github.com/lebab/lebab",
   "dependencies": {
-    "commander": "^2.15.1",
+    "commander": "^2.20.0",
     "escope": "^3.6.0",
     "espree": "^5.0.1",
-    "estraverse": "^4.1.1",
+    "estraverse": "^4.2.0",
     "f-matches": "^1.1.0",
-    "glob": "^7.1.2",
+    "glob": "^7.1.4",
     "lodash": "^4.17.11",
     "recast": "^0.18.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.4.4",
-    "chai": "^4.1.2",
+    "chai": "^4.2.0",
     "codecov": "^3.5.0",
     "eslint": "^5.16.0",
     "eslint-plugin-no-null": "^1.0.2",
-    "mocha": "^5.1.1",
+    "mocha": "^6.1.4",
     "nyc": "^14.1.1"
   }
 }
