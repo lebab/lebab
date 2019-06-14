@@ -76,7 +76,9 @@ describe('Arrow functions with return', () => {
     expectTransform(
       'var f = (a) => { return {a: 1}[a]; };'
     ).toReturn(
-      'var f = a => ({a: 1}[a]);'
+      'var f = a => ({\n' +
+      '  a: 1\n' +
+      '})[a];'
     );
   });
 
@@ -84,7 +86,7 @@ describe('Arrow functions with return', () => {
     expectTransform(
       'const x = (a => { return a; }).call(null, 1);'
     ).toReturn(
-      'const x = ((a => a)).call(null, 1);'
+      'const x = (a => a).call(null, 1);'
     );
   });
 
