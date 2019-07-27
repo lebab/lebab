@@ -23,7 +23,7 @@ $ npm install -g lebab
 
 Full build:
 
-- [latest Browerified version of Lebab](https://wzrd.in/standalone/lebab@latest)
+- [latest Browserified version of Lebab](https://wzrd.in/standalone/lebab@latest)
 - [the same, using cdn.rawgit](https://umdfied.herokuapp.com/umdfied/lebab/latest)
 
 ## Usage
