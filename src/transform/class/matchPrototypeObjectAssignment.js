@@ -1,5 +1,6 @@
-import {matches, extract, extractAny} from 'f-matches';
+import {matches, extractAny} from 'f-matches';
 import isFunctionProperty from './isFunctionProperty';
+import isConstructorProperty from './isConstructorProperty';
 
 const matchPrototypeObjectAssignment = matches({
   type: 'ExpressionStatement',
@@ -20,7 +21,7 @@ const matchPrototypeObjectAssignment = matches({
     operator: '=',
     right: {
       type: 'ObjectExpression',
-      properties: extract('properties', props => props.every(isFunctionProperty))
+      properties: extractAny('properties')
     }
   }
 });
@@ -41,22 +42,54 @@ const matchPrototypeObjectAssignment = matches({
  *     - kind
  *
  * @param  {Object} node
+ * @param  {Logger} logger
  * @return {Object}
  */
-export default function(node) {
+export default function(node, logger) {
   const {className, properties} = matchPrototypeObjectAssignment(node);
+  if (!className) {
+    return;
+  }
 
-  if (className) {
+  const methods = [];
+  const props = [];
+  let invalidConstructor = false;
+
+  properties.forEach(prop => {
+    if (isFunctionProperty(prop)) {
+      methods.push({
+        propertyNode: prop,
+        methodName: prop.key.name,
+        methodNode: prop.value,
+        kind: prop.kind,
+      });
+    }
+    else {
+      if (isConstructorProperty(prop)) {
+        invalidConstructor = prop.value.name !== className && prop.value.name;
+      }
+      props.push({
+        node: prop,
+        name: prop.key.name,
+        value: prop.value,
+        kind: prop.kind,
+      });
+    }
+  });
+
+  if (invalidConstructor) {
+    logger.warn(
+      node,
+      `Prototype object assigment for function ${className} looks like class, ` +
+      `but constructor property is ${invalidConstructor}.`,
+      'class'
+    );
+  }
+  else {
     return {
       className: className,
-      methods: properties.map(prop => {
-        return {
-          propertyNode: prop,
-          methodName: prop.key.name,
-          methodNode: prop.value,
-          kind: prop.kind,
-        };
-      })
+      methods: methods,
+      properties: props
     };
   }
 }

@@ -260,25 +260,107 @@ describe('Classes', () => {
       );
     });
 
-    it('should ignore when it contains non-functions', () => {
+    it('should transform plain functions to methods ignoring valid constructor', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        'MyClass.prototype = {\n' +
+        '  methodA: function(a) {\n' +
+        '  },\n' +
+        '  methodB: function(b) {\n' +
+        '  },\n' +
+        '  constructor: MyClass\n' +
+        '};'
+      ).toReturn(
+        'class MyClass {\n' +
+        '  methodA(a) {\n' +
+        '  }\n' +
+        '\n' +
+        '  methodB(b) {\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('should transform object properties assigment to plain properties assigment and plain functions to methods', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        'MyClass.prototype = {\n' +
+        '  methodA: function(a) {\n' +
+        '  },\n' +
+        '  methodB: function(b) {\n' +
+        '  },\n' +
+        '  defaults: {\n' +
+        '    a: 1\n' +
+        '  },\n' +
+        '  b: 2\n' +
+        '};'
+      ).toReturn(
+        'class MyClass {\n' +
+        '  methodA(a) {\n' +
+        '  }\n' +
+        '\n' +
+        '  methodB(b) {\n' +
+        '  }\n' +
+        '}\n\n' +
+        'MyClass.prototype.defaults = {\n' +
+        '  a: 1\n' +
+        '};\n\n' +
+        'MyClass.prototype.b = 2;'
+      );
+    });
+
+
+    it('should transform object properties assigment to plain properties assigment if there is valid constructor', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        'MyClass.prototype = {\n' +
+        '  constructor: MyClass,\n' +
+        '  defaults: {\n' +
+        '    a: 1\n' +
+        '  },\n' +
+        '  b: 2\n' +
+        '};'
+      ).toReturn(
+        'class MyClass {}\n\n' +
+        'MyClass.prototype.defaults = {\n' +
+        '  a: 1\n' +
+        '};\n\n' +
+        'MyClass.prototype.b = 2;'
+      );
+    });
+
+    it('should not transform if constructor not equals class', () => {
       expectNoChange(
         'function MyClass() {\n' +
         '}\n' +
         'MyClass.prototype = {\n' +
-        '  method: function(a) {\n' +
+        '  methodA: function(a) {\n' +
         '  },\n' +
-        '  foo: 10\n' +
+        '  methodB: function(b) {\n' +
+        '  },\n' +
+        '  constructor: MyOtherClass\n' +
         '};'
-      );
+      ).withWarnings([
+        {line: 3, msg: 'Prototype object assigment for function MyClass looks like class, ' +
+            'but constructor property is MyOtherClass.', type: 'class'},
+        {line: 1, msg: 'Function MyClass looks like class, but has no prototype', type: 'class'}
+      ]);
     });
 
-    it('should ignore when it contains arrow-functions that use this', () => {
-      expectNoChange(
+
+    it('should transform arrow-functions that use this as pain properties', () => {
+      expectTransform(
         'function MyClass() {\n' +
         '}\n' +
         'MyClass.prototype = {\n' +
         '  method: () => this.foo,\n' +
         '};'
+      ).toReturn(
+        'class MyClass {}\n' +
+        'MyClass.prototype.method = () => this.foo;'
       );
     });
 

@@ -22,6 +22,7 @@ class PotentialClass {
     this.commentNodes = commentNodes;
     this.parent = parent;
     this.methods = [];
+    this.properties = [];
     this.replacements = [];
   }
 
@@ -78,11 +79,19 @@ class PotentialClass {
   }
 
   /**
+   * Adds properties to class.
+   * @param {PotentialProperties} property
+   */
+  addProperties(property) {
+    this.properties.push(property);
+  }
+
+  /**
    * True when class has at least one method (besides constructor).
    * @return {Boolean}
    */
   isTransformable() {
-    return this.methods.length > 0 || this.superClass !== undefined;
+    return this.methods.length > 0 || this.properties.length > 0 || this.superClass !== undefined;
   }
 
   /**
@@ -96,7 +105,7 @@ class PotentialClass {
       replacements: [this.toClassDeclaration()],
     });
     this.replacements.forEach(multiReplaceStatement);
-
+    this.properties.forEach(multiReplaceStatement);
     this.methods.forEach(method => method.remove());
   }
 

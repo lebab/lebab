@@ -10,6 +10,7 @@ import matchPrototypeFunctionAssignment from './matchPrototypeFunctionAssignment
 import matchPrototypeObjectAssignment from './matchPrototypeObjectAssignment';
 import matchObjectDefinePropertyCall from './matchObjectDefinePropertyCall';
 import Inheritance from './inheritance/Inheritance';
+import PotentialProperties from './PotentialProperties';
 
 export default function(ast, logger) {
   const potentialClasses = {};
@@ -56,19 +57,31 @@ export default function(ast, logger) {
           }));
         }
       }
-      else if ((m = matchPrototypeObjectAssignment(node))) {
+      else if ((m = matchPrototypeObjectAssignment(node, logger))) {
         if (potentialClasses[m.className]) {
-          m.methods.forEach((method, i) => {
-            const assignmentComments = (i === 0) ? [node] : [];
+          let assignmentComments = node;
 
+          if (m.properties.length > 0) {
+            potentialClasses[m.className].addProperties(new PotentialProperties({
+              properties: m.properties,
+              className: m.className,
+              fullNode: node,
+              commentNodes: [assignmentComments],
+              parent,
+            }));
+            assignmentComments = false;
+          }
+
+          m.methods.forEach((method) => {
             potentialClasses[m.className].addMethod(new PotentialMethod({
               name: method.methodName,
               methodNode: method.methodNode,
               fullNode: node,
-              commentNodes: assignmentComments.concat([method.propertyNode]),
+              commentNodes: assignmentComments ? [assignmentComments, method.propertyNode] : [method.propertyNode],
               parent,
               kind: classMethodKind(method.kind),
             }));
+            assignmentComments = false;
           });
         }
       }
