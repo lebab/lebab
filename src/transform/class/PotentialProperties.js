@@ -1,5 +1,4 @@
 import extractComments from './extractComments';
-import multiReplaceStatement from './../../utils/multiReplaceStatement';
 
 /**
  * Represents a potential properties to be created.
