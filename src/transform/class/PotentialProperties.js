@@ -71,15 +71,4 @@ class PotentialProperties {
       comments: extractComments(isFirst ? this.commentNodes.concat(property.node) : [property.node])
     };
   }
-
-  /**
-   * Removes original prototype assignment node from AST.
-   */
-  remove() {
-    multiReplaceStatement({
-      parent: this.parent,
-      node: this.node,
-      replacements: [],
-    });
-  }
 }
