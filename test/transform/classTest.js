@@ -32,6 +32,24 @@ describe('Classes', () => {
     );
   });
 
+  it('should convert static function declarations with static class methods and prototype assignment', () => {
+    expectTransform(
+      'function MyClass() {\n' +
+      '}\n' +
+      'MyClass.method = function(a, b) {\n' +
+      '};\n' +
+      'MyClass.prototype.fn = function(a, b) {\n' +
+      '};'
+    ).toReturn(
+      'class MyClass {\n' +
+      '  static method(a, b) {\n' +
+      '  }\n\n' +
+      '  fn(a, b) {\n' +
+      '  }\n' +
+      '}'
+    );
+  });
+
   it('should ignore anonymous function declaration', () => {
     expectNoChange(
       'export default function () {}'
