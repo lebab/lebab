@@ -18,8 +18,7 @@ describe('Exponentiation operator', () => {
     );
   });
 
-  // Issue #196
-  it.skip('should parenthesize multiplication', () => {
+  it('should parenthesize multiplication', () => {
     expectTransform(
       'Math.pow(x * 2, 2);'
     ).toReturn(
