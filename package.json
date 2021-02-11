@@ -47,14 +47,14 @@
   },
   "homepage": "https://github.com/lebab/lebab",
   "dependencies": {
-    "commander": "^2.20.0",
+    "commander": "^5.1.0",
     "escope": "^3.6.0",
-    "espree": "^5.0.1",
+    "espree": "^6.2.1",
     "estraverse": "^4.2.0",
     "f-matches": "^1.1.0",
     "glob": "^7.1.4",
     "lodash": "^4.17.11",
-    "recast": "^0.18.1"
+    "recast": "^0.19.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
