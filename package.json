@@ -1,6 +1,6 @@
 {
   "name": "lebab",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Turn your ES5 code into readable ES6/ES7",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,7 @@
     "url": "https://github.com/lebab/lebab"
   },
   "bin": {
-    "lebab": "./bin/index.js"
+    "lebab": "bin/index.js"
   },
   "keywords": [
     "es5",
