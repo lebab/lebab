@@ -1,7 +1,7 @@
 import espree from 'espree';
 
 const ESPREE_OPTS = {
-  ecmaVersion: 9,
+  ecmaVersion: 12,
   ecmaFeatures: {jsx: true},
   comment: true,
   tokens: true
