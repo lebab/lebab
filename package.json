@@ -16,6 +16,7 @@
     "ensure-coverage": "nyc check-coverage --statements 80 --branches 80 --functions 80",
     "upload-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
+  "types": "./types/index.d.ts",
   "engines": {
     "node": ">=6"
   },
