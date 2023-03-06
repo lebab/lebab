@@ -62,7 +62,7 @@
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.4.4",
-    "chai": "^4.2.0",
+    "chai": "^4.3.7",
     "codecov": "^3.5.0",
     "eslint": "^5.16.0",
     "eslint-plugin-no-null": "^1.0.2",
