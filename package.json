@@ -51,7 +51,7 @@
     "commander": "^5.1.0",
     "escope": "^4.0.0",
     "espree": "^7.0.0",
-    "estraverse": "^4.3.0",
+    "estraverse": "^5.3.0",
     "f-matches": "^1.1.0",
     "glob": "^7.1.4",
     "lodash": "^4.17.11",
