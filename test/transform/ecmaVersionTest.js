@@ -21,4 +21,8 @@ describe('ECMAScript version', () => {
   it('supports optional chaining in ECMAScript 2020', () => {
     expectNoChange('foo?.bar();');
   });
+
+  it('supports numeric separators in ECMAScript 2021', () => {
+    expectNoChange('const nr = 10_000_000;');
+  });
 });
