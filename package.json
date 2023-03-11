@@ -55,7 +55,7 @@
     "f-matches": "^1.1.0",
     "glob": "^7.1.4",
     "lodash": "^4.17.11",
-    "recast": "^0.19.1"
+    "recast": "^0.22.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
