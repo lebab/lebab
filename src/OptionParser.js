@@ -58,7 +58,7 @@ export default class OptionParser {
 
     return {
       inFile: this.getInputFile(),
-      outFile: this.program.outFile,
+      outFile: this.opts().outFile,
       replace: this.getReplace(),
       transforms: this.getTransforms(),
     };
@@ -75,30 +75,34 @@ export default class OptionParser {
   }
 
   getReplace() {
-    if (!this.program.replace) {
+    if (!this.opts().replace) {
       return undefined;
     }
-    if (this.program.outFile) {
+    if (this.opts().outFile) {
       throw 'The --replace and --out-file options cannot be used together.';
     }
     if (this.program.args[0]) {
       throw 'The --replace and plain input file options cannot be used together.\n' +
         'Did you forget to quote the --replace parameter?';
     }
-    if (fs.existsSync(this.program.replace) && fs.statSync(this.program.replace).isDirectory()) {
-      return path.join(this.program.replace, '/**/*.js');
+    if (fs.existsSync(this.opts().replace) && fs.statSync(this.opts().replace).isDirectory()) {
+      return path.join(this.opts().replace, '/**/*.js');
     }
-    return this.program.replace;
+    return this.opts().replace;
   }
 
   getTransforms() {
-    if (!this.program.transform || this.program.transform.length === 0) {
+    if (!this.opts().transform || this.opts().transform.length === 0) {
       throw `No transforms specified :(
 
   Use --transform option to pick one of the following:
   ${transformsDocs}`;
     }
 
-    return this.program.transform;
+    return this.opts().transform;
+  }
+
+  opts() {
+    return this.program.opts();
   }
 }
