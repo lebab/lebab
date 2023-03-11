@@ -50,7 +50,7 @@
   "dependencies": {
     "commander": "^5.1.0",
     "escope": "^4.0.0",
-    "espree": "^7.0.0",
+    "espree": "^9.5.0",
     "estraverse": "^5.3.0",
     "f-matches": "^1.1.0",
     "glob": "^9.2.1",
