@@ -25,4 +25,8 @@ describe('ECMAScript version', () => {
   it('supports numeric separators in ECMAScript 2021', () => {
     expectNoChange('const nr = 10_000_000;');
   });
+
+  it('supports private class fields ECMAScript 2022', () => {
+    expectNoChange('class Foo { #field = 42; #method() {} }');
+  });
 });
