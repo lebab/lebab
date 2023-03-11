@@ -17,4 +17,8 @@ describe('ECMAScript version', () => {
   it('supports optional catch binding in ECMAScript 2019', () => {
     expectNoChange('try { ohNo(); } catch { console.log("error!"); }');
   });
+
+  it('supports optional chaining in ECMAScript 2020', () => {
+    expectNoChange('foo?.bar();');
+  });
 });
