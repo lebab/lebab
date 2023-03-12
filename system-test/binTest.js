@@ -89,4 +89,26 @@ describe('Smoke test for the executable script', function() {
       });
     });
   });
+
+  describe('when parsing of file fails', () => {
+    beforeEach(() => {
+      fs.writeFileSync(
+        INPUT_WARNINGS_FILE,
+        'if (true) { @unknown!syntax; }\n'
+      );
+    });
+
+    afterEach(() => {
+      fs.unlinkSync(INPUT_WARNINGS_FILE);
+    });
+
+    it('writes error to STDERR', done => {
+      exec(`node ./bin/index.js --transform let ${INPUT_WARNINGS_FILE}`, (error, stdout, stderr) => {
+        expect(error.code).to.equal(1); // eslint-disable-line no-null/no-null
+        expect(stderr).to.contain(`Error transforming: ${INPUT_WARNINGS_FILE}\n`);
+        expect(stdout).to.equal('');
+        done();
+      });
+    });
+  });
 });

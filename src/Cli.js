@@ -38,19 +38,25 @@ export default class Cli {
   }
 
   transformFile(inFile, outFile) {
-    const {code, warnings} = this.transformer.run(io.read(inFile));
+    try {
+      const {code, warnings} = this.transformer.run(io.read(inFile));
 
-    // Log warnings if there are any
-    if (warnings.length > 0 && inFile) {
-      console.error(`${inFile}:`); // eslint-disable-line no-console
+      // Log warnings if there are any
+      if (warnings.length > 0 && inFile) {
+        console.error(`${inFile}:`); // eslint-disable-line no-console
+      }
+
+      warnings.forEach(({line, msg, type}) => {
+        console.error( // eslint-disable-line no-console
+          `${line}:  warning  ${msg}  (${type})`
+        );
+      });
+
+      io.write(outFile, code);
     }
-
-    warnings.forEach(({line, msg, type}) => {
-      console.error( // eslint-disable-line no-console
-        `${line}:  warning  ${msg}  (${type})`
-      );
-    });
-
-    io.write(outFile, code);
+    catch (e) {
+      console.error(`Error transforming: ${inFile}\n`); // eslint-disable-line no-console
+      throw e;
+    }
   }
 }
