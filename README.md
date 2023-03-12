@@ -10,7 +10,7 @@
 
 **Lebab** transpiles your ES5 code to ES6/ES7.
 It does exactly the opposite of what [Babel](https://babeljs.io/) does.
-If you want to understand what Lebab exactly does, **[try the live demo](https://lebabjs.com/).**
+If you want to understand what Lebab exactly does, **[try the live demo](https://lebab.github.io/).**
 
 
 ## Install
