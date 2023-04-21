@@ -21,11 +21,6 @@ Install it using npm:
 $ npm install -g lebab
 ```
 
-Full build:
-
-- [latest Browserified version of Lebab](https://wzrd.in/standalone/lebab@latest)
-- [the same, using cdn.rawgit](https://umdfied.herokuapp.com/umdfied/lebab/latest)
-
 ## Usage
 
 Convert your old-fashioned code using the `lebab` cli tool,
