@@ -72,6 +72,14 @@ describe('Arrow functions with return', () => {
     );
   });
 
+  it('should convert empty return', () => {
+    expectTransform(
+      'var f = () => { return; };'
+    ).toReturn(
+      'var f = () => {};'
+    );
+  });
+
   it('should convert returning an object property access', () => {
     expectTransform(
       'var f = (a) => { return {a: 1}[a]; };'
