@@ -65,6 +65,7 @@ The resulting code should be almost 100% equivalent of the original code.
     - [x] converts immediate return `{ return x; }` to `=> x`
     - [x] applies to arrow functions and nested arrow functions
     - [ ] LIMITATION only applies to arrow functions (run the `arrow` transform first)
+    - [ ] BUG [fails on functions with a single empty return statement][343]
 - [x] **for-of** - for loop to for-of loop
     - [x] uses name `item` for loop variable when loop body begins with `var item = array[i];`
     - [ ] [does not work when no such alias defined at the start of loop body][166]
