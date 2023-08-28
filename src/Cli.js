@@ -1,4 +1,4 @@
-import glob from 'glob';
+import {glob} from 'glob';
 import OptionParser from './OptionParser';
 import createTransformer from './createTransformer';
 import io from './io';
