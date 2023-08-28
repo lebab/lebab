@@ -1,6 +1,7 @@
 import traverser from '../traverser';
-import {matches, matchesLength, extract, extractAny} from 'f-matches';
+import {matches, matchesLength, extract} from 'f-matches';
 import copyComments from '../utils/copyComments';
+import {isNull, negate} from 'lodash/fp';
 
 export default function(ast) {
   traverser.replace(ast, {
@@ -22,7 +23,7 @@ const matchesReturnBlock = matches({
   body: matchesLength([
     extract('returnStatement', {
       type: 'ReturnStatement',
-      argument: extractAny('returnVal')
+      argument: extract('returnVal', negate(isNull))
     })
   ])
 });

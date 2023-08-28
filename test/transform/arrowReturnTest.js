@@ -72,14 +72,6 @@ describe('Arrow functions with return', () => {
     );
   });
 
-  it('should convert empty return', () => {
-    expectTransform(
-      'var f = () => { return; };'
-    ).toReturn(
-      'var f = () => {};'
-    );
-  });
-
   it('should convert returning an object property access', () => {
     expectTransform(
       'var f = (a) => { return {a: 1}[a]; };'
@@ -112,6 +104,12 @@ describe('Arrow functions with return', () => {
 
   it('should not convert arrow functions without return keyword', () => {
     expectNoChange('a(() => {});');
+  });
+
+  it('should not convert empty return', () => {
+    expectNoChange(
+      'var f = () => { return; };'
+    );
   });
 
   it('should not convert return statements from non-arrow function', () => {
