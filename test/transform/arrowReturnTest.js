@@ -106,6 +106,12 @@ describe('Arrow functions with return', () => {
     expectNoChange('a(() => {});');
   });
 
+  it('should not convert empty return', () => {
+    expectNoChange(
+      'var f = () => { return; };'
+    );
+  });
+
   it('should not convert return statements from non-arrow function', () => {
     expectNoChange('const a = function(b) { return b; };');
   });
