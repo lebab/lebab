@@ -84,8 +84,14 @@ function isAnyForStatement(node) {
   node.type === 'ForOfStatement';
 }
 
+// True when dealing with any kind of while-loop
+function isAnyWhileStatement(node) {
+  return node.type === 'WhileStatement' ||
+  node.type === 'DoWhileStatement';
+}
+
 // Program node works almost like a function:
-// it hoists all variables which can be tranformed to block-scoped let/const.
+// it hoists all variables which can be transformed to block-scoped let/const.
 // It just doesn't have name and parameters.
 // So we create an implied FunctionScope and BlockScope.
 function enterProgram(node) {
@@ -143,6 +149,10 @@ function transformVarsToLetOrConst() {
       return;
     }
 
+    if (isWithinProblematicContext(group)) {
+      return;
+    }
+
     const commonKind = group.getCommonKind();
     if (commonKind) {
       // When all variables in group are of the same kind,
@@ -175,6 +185,28 @@ function transformVarsToLetOrConst() {
       logWarningForVarKind(group.getNode());
     }
   });
+}
+
+/**
+ * Determines whether the provided variable group is within a context
+ * that can introduce behavior changes when transforming 'var' to 'let' or 'const'.
+ *
+ * We aim to avoid transforming 'var' declarations that are directly inside
+ * conditionals or loops, as this can change the scoping behavior of the code.
+ */
+function isWithinProblematicContext(group) {
+  const node = group.getNode();
+  const parentNode = group.getParentNode();
+
+  if (parentNode.type === 'IfStatement') {
+    return parentNode.consequent === node || parentNode.alternate === node;
+  }
+
+  if (isAnyForStatement(parentNode) || isAnyWhileStatement(parentNode)) {
+    return parentNode.body === node;
+  }
+
+  return false;
 }
 
 function logWarningForVarKind(node) {
