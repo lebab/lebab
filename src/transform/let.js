@@ -149,7 +149,7 @@ function transformVarsToLetOrConst() {
       return;
     }
 
-    if (isWithinProblematicContext(group)) {
+    if (isLexicalVariableProhibited(group)) {
       logWarningForVarKind(group.getNode());
       return;
     }
@@ -188,14 +188,18 @@ function transformVarsToLetOrConst() {
   });
 }
 
-/**
- * Determines whether the provided variable group is within a context
- * that can introduce behavior changes when transforming 'var' to 'let' or 'const'.
- *
- * We aim to avoid transforming 'var' declarations that are directly inside
- * conditionals or loops, as this can change the scoping behavior of the code.
- */
-function isWithinProblematicContext(group) {
+// let and const declarations aren't allowed in all the same places where
+// var declarations are allowed. Notably, only var-declaration can occur
+// directlt in if-statement (and other similar statements) body:
+//
+//     if (true) var x = 10;
+//
+// let or const can only be used when the variable is declared in inside
+// a block-statement:
+//
+//     if (true) { const x = 10; }
+//
+function isLexicalVariableProhibited(group) {
   const node = group.getNode();
   const parentNode = group.getParentNode();
 
