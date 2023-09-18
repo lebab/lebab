@@ -22,7 +22,7 @@ function transformDefaultParams(fn) {
   const detectedDefaults = findDefaults(fn.body.body);
 
   fn.params = fn.params.map((param, i) => {
-    // Ignore params that use destructoring or already have a default
+    // Ignore params that use destructuring or already have a default
     if (param.type !== 'Identifier') {
       return param;
     }

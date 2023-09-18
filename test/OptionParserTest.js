@@ -19,7 +19,7 @@ describe('Command Line Interface', () => {
     ]);
   });
 
-  it('when --transfrom=let,no-strict,commonjs given, enables only these transforms', () => {
+  it('when --transform=let,no-strict,commonjs given, enables only these transforms', () => {
     const options = parse(['--transform', 'let,no-strict,commonjs']);
     expect(options.transforms).to.deep.equal([
       'let',
@@ -79,7 +79,7 @@ describe('Command Line Interface', () => {
     }).to.throw('The --replace and plain input file options cannot be used together.');
   });
 
-  it('when --replace used together with outout file, raises error', () => {
+  it('when --replace used together with output file, raises error', () => {
     expect(() => {
       parse(['-t', 'class', '--replace', 'lib/', '-o', 'some/file.js']);
     }).to.throw('The --replace and --out-file options cannot be used together.');

@@ -120,7 +120,7 @@ describe('Destruct function param', () => {
     );
   });
 
-  it('should not transform when shadowing a global variable in separate fuction', () => {
+  it('should not transform when shadowing a global variable in separate function', () => {
     expectNoChange(
       'function fn(cfg) {\n' +
       '  function fn1() {\n' +
