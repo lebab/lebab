@@ -153,46 +153,6 @@ describe('Let/const', () => {
         '}'
       );
     });
-  });
-
-  describe('with multi-variable declaration in restrictive parent', () => {
-    it('should use const when all consts in if-statement', () => {
-      expectTransform(
-        'if (true) var x = 1, y = 2'
-      ).toReturn(
-        'if (true) const x = 1, y = 2;'
-      );
-    });
-
-    it('should use let when both let & const in if-statement', () => {
-      expectTransform(
-        'if (true) var x = 1, y = ++x;'
-      ).toReturn(
-        'if (true) let x = 1, y = ++x;'
-      );
-    });
-
-    it('should use var when both var & const in if-statement', () => {
-      expectTransform(
-        'if (false) {\n' +
-        '  if (true) var x = 1, y = ++x;\n' +
-        '}\n' +
-        'foo(x);'
-      ).toReturn(
-        'if (false) {\n' +
-        '  if (true) var x = 1, y = ++x;\n' +
-        '}\n' +
-        'foo(x);'
-      );
-    });
-
-    it('should use let when both let & const in else-side of if-statement', () => {
-      expectTransform(
-        'if (true); else var x = 1, y = ++x;'
-      ).toReturn(
-        'if (true); else let x = 1, y = ++x;'
-      );
-    });
 
     it('should use let when both let & const in for-loop head', () => {
       expectTransform(
@@ -201,13 +161,63 @@ describe('Let/const', () => {
         'for (let i=0, len=arr.length; i<len; i++) {}'
       );
     });
+  });
 
-    it('should use let when both let & const in for-in-loop body', () => {
-      expectTransform(
-        'for (item in array) var x = 1, y = ++x'
-      ).toReturn(
-        'for (item in array) let x = 1, y = ++x'
-      );
+  describe('with variable declaration in restrictive parent', () => {
+    it('should not transform var directly within if-statement body', () => {
+      expectNoChange(
+        'if (true) var x = 1;'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
+
+    it('should not transform var directly within else-side of if-statement body', () => {
+      expectNoChange(
+        'if (true); else var x = 1;'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
+
+    it('should not transform var directly within for-loop body', () => {
+      expectNoChange(
+        'for (item in array) var x = 1;'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
+
+    it('should not transform var directly within for-in-loop body', () => {
+      expectNoChange(
+        'for (item in array) var x = 1;'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
+
+    it('should not transform var directly within for-of-loop body', () => {
+      expectNoChange(
+        'for (item of array) var x = 1;'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
+
+    it('should not transform var directly within while-loop body', () => {
+      expectNoChange(
+        'while (true) var x = 1;'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
+
+    it('should not transform var directly within do-while-loop body', () => {
+      expectNoChange(
+        'do var x = 1; while (true)'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'}
+      ]);
     });
   });
 
@@ -714,7 +724,7 @@ describe('Let/const', () => {
       );
     });
 
-    it('should ignore when re-declaring of destuctured function parameter', () => {
+    it('should ignore when re-declaring of destructured function parameter', () => {
       expectNoChange(
         'function foo({a}) {\n' +
         '  var a = 1;\n' +

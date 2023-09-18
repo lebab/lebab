@@ -84,8 +84,14 @@ function isAnyForStatement(node) {
   node.type === 'ForOfStatement';
 }
 
+// True when dealing with any kind of while-loop
+function isAnyWhileStatement(node) {
+  return node.type === 'WhileStatement' ||
+  node.type === 'DoWhileStatement';
+}
+
 // Program node works almost like a function:
-// it hoists all variables which can be tranformed to block-scoped let/const.
+// it hoists all variables which can be transformed to block-scoped let/const.
 // It just doesn't have name and parameters.
 // So we create an implied FunctionScope and BlockScope.
 function enterProgram(node) {
@@ -143,6 +149,11 @@ function transformVarsToLetOrConst() {
       return;
     }
 
+    if (isLexicalVariableProhibited(group)) {
+      logWarningForVarKind(group.getNode());
+      return;
+    }
+
     const commonKind = group.getCommonKind();
     if (commonKind) {
       // When all variables in group are of the same kind,
@@ -175,6 +186,32 @@ function transformVarsToLetOrConst() {
       logWarningForVarKind(group.getNode());
     }
   });
+}
+
+// let and const declarations aren't allowed in all the same places where
+// var declarations are allowed. Notably, only var-declaration can occur
+// directlt in if-statement (and other similar statements) body:
+//
+//     if (true) var x = 10;
+//
+// let or const can only be used when the variable is declared in inside
+// a block-statement:
+//
+//     if (true) { const x = 10; }
+//
+function isLexicalVariableProhibited(group) {
+  const node = group.getNode();
+  const parentNode = group.getParentNode();
+
+  if (parentNode.type === 'IfStatement') {
+    return parentNode.consequent === node || parentNode.alternate === node;
+  }
+
+  if (isAnyForStatement(parentNode) || isAnyWhileStatement(parentNode)) {
+    return parentNode.body === node;
+  }
+
+  return false;
 }
 
 function logWarningForVarKind(node) {

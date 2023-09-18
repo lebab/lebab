@@ -97,15 +97,17 @@ describe('Whitespace', () => {
   it('should preserve TABs', () => {
     expectTransform(
       'var f = function(x) {\n' +
-      '\tif (x > 10)\n' +
+      '\tif (x > 10) {\n' +
       '\t\tvar y = 42;\n' +
       '\t\treturn {x: x, y: y};\n' +
+      '\t}\n' +
       '};'
     ).toReturn(
       'const f = x => {\n' +
-      '\tif (x > 10)\n' +
+      '\tif (x > 10) {\n' +
       '\t\tconst y = 42;\n' +
       '\t\treturn {x, y};\n' +
+      '\t}\n' +
       '};'
     );
   });
