@@ -150,6 +150,7 @@ function transformVarsToLetOrConst() {
     }
 
     if (isWithinProblematicContext(group)) {
+      logWarningForVarKind(group.getNode());
       return;
     }
 
