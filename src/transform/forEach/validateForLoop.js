@@ -29,10 +29,10 @@ export default function validateForLoop(node, {body, indexKind, itemKind}) {
     return [statement, 'Continue statement used in for-loop body'];
   }
   else if (indexKind !== 'let') {
-    return [node, 'Only for-loops with indexes declared as let can be tranformed (use let transform first)'];
+    return [node, 'Only for-loops with indexes declared as let can be transformed (use let transform first)'];
   }
   else if (itemKind !== 'const') {
-    return [node, 'Only for-loops with const array items can be tranformed (use let transform first)'];
+    return [node, 'Only for-loops with const array items can be transformed (use let transform first)'];
   }
 }
 

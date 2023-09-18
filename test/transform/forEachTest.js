@@ -255,7 +255,7 @@ describe('For loops to Array.forEach()', () => {
           '  console.log(item);\n' +
           '}'
         ).withWarnings([
-          {line: 1, msg: 'Only for-loops with indexes declared as let can be tranformed (use let transform first)', type: 'for-each'}
+          {line: 1, msg: 'Only for-loops with indexes declared as let can be transformed (use let transform first)', type: 'for-each'}
         ]);
       });
 
@@ -266,7 +266,7 @@ describe('For loops to Array.forEach()', () => {
           '  console.log(item);\n' +
           '}'
         ).withWarnings([
-          {line: 1, msg: 'Only for-loops with const array items can be tranformed (use let transform first)', type: 'for-each'}
+          {line: 1, msg: 'Only for-loops with const array items can be transformed (use let transform first)', type: 'for-each'}
         ]);
       });
 
@@ -277,7 +277,7 @@ describe('For loops to Array.forEach()', () => {
           '  console.log(item);\n' +
           '}'
         ).withWarnings([
-          {line: 1, msg: 'Only for-loops with const array items can be tranformed (use let transform first)', type: 'for-each'}
+          {line: 1, msg: 'Only for-loops with const array items can be transformed (use let transform first)', type: 'for-each'}
         ]);
       });
 

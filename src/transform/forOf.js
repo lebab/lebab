@@ -17,7 +17,7 @@ export default function(ast, logger) {
         }
 
         if (matches.itemKind === 'var' || matches.indexKind === 'var') {
-          logger.warn(node, 'Only for-loops with let/const can be tranformed (use let transform first)', 'for-of');
+          logger.warn(node, 'Only for-loops with let/const can be transformed (use let transform first)', 'for-of');
           return;
         }
 

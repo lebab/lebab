@@ -10,7 +10,7 @@ class FunctionScope extends Scope {
    *
    * All variables (including function name and params) are first
    * registered as function scoped, during hoisting phase.
-   * Later thay can also be registered in block scope.
+   * Later they can also be registered in block scope.
    *
    * Ignores attempts to register the same variable twice.
    *
