@@ -153,6 +153,14 @@ describe('Let/const', () => {
         '}'
       );
     });
+
+    it('should use let when both let & const in for-loop head', () => {
+      expectTransform(
+        'for (var i=0, len=arr.length; i<len; i++) {}'
+      ).toReturn(
+        'for (let i=0, len=arr.length; i<len; i++) {}'
+      );
+    });
   });
 
   describe('with variable declaration in restrictive parent', () => {
@@ -170,14 +178,6 @@ describe('Let/const', () => {
       ).withWarnings([
         {line: 1, msg: 'Unable to transform var', type: 'let'}
       ]);
-    });
-
-    it('should use let when both let & const in for-loop head', () => {
-      expectTransform(
-        'for (var i=0, len=arr.length; i<len; i++) {}'
-      ).toReturn(
-        'for (let i=0, len=arr.length; i<len; i++) {}'
-      );
     });
 
     it('should not transform var directly within for-loop body', () => {
