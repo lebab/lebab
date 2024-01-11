@@ -223,6 +223,19 @@ describe('For loops to for-of', () => {
           {line: 1, msg: 'Unable to transform for loop', type: 'for-of'}
         ]);
       });
+
+      // TODO: The error message is incorrect
+      it('when variable declaration is not the first one in loop body', () => {
+        expectNoChange(
+          'for (let i=0; i < array.length; i++) {\n' +
+          '  const x = 1;\n' +
+          '  const item = array[i];\n' +
+          '  console.log(item, x);\n' +
+          '}'
+        ).withWarnings([
+          {line: 1, msg: 'Index variable used in for-loop body', type: 'for-of'}
+        ]);
+      });
     });
 
     describe('comments', () => {
