@@ -23,6 +23,12 @@ const matchPlusOne = matches({
   }
 });
 
+// Matches the first element in array pattern
+// The default matches() tries to match against any array element.
+const matchesFirst = (patterns) => (array) => {
+  return matches(patterns[0], array[0]);
+};
+
 // Matches for-loop
 // without checking the consistency of index and array variables:
 //
@@ -67,7 +73,7 @@ const matchLooseForLoop = matches({
   update: (node) => matchPlusPlus(node) || matchPlusOne(node),
   body: extract('body', {
     type: 'BlockStatement',
-    body: [
+    body: matchesFirst([
       {
         type: 'VariableDeclaration',
         declarations: [
@@ -88,7 +94,7 @@ const matchLooseForLoop = matches({
         ],
         kind: extractAny('itemKind')
       }
-    ]
+    ])
   })
 });
 

@@ -347,7 +347,7 @@ describe('For loops to Array.forEach()', () => {
         ]);
       });
 
-      it.skip('when variable declaration is not the first one in loop body', () => {
+      it('when variable declaration is not the first one in loop body', () => {
         expectNoChange(
           'for (let i=0; i < array.length; i++) {\n' +
           '  const x = 1;\n' +
@@ -355,7 +355,7 @@ describe('For loops to Array.forEach()', () => {
           '  console.log(item, x);\n' +
           '}'
         ).withWarnings([
-          {line: 1, msg: 'Index variable used in for-loop body', type: 'for-each'}
+          {line: 1, msg: 'Unable to transform for loop', type: 'for-each'}
         ]);
       });
     });
