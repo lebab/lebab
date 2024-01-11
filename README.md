@@ -173,6 +173,9 @@ import {transform} from 'lebab';
 const {code, warnings} = transform(
   'var f = function(a) { return a; };', // code to transform
   ['let', 'arrow', 'arrow-return'] // transforms to apply
+  { // options
+    parser: ... // custom parser compatible with recast
+  }
 );
 console.log(code); // -> "const f = a => a;"
 ```

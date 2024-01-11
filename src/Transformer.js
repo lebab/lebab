@@ -8,13 +8,15 @@ import Logger from './Logger';
 export default class Transformer {
   /**
    * @param {Function[]} transforms List of transforms to perform
+   * @param {Object} options Options to configure the transforms
    */
-  constructor(transforms = []) {
+  constructor(transforms = [], options = {}) {
     this.transforms = transforms;
+    this.parser = options.parser || parser;
   }
 
   /**
-   * Tranforms code using all configured transforms.
+   * Transform code using all configured transforms.
    *
    * @param {String} code Input ES5 code
    * @return {Object} Output ES6 code
@@ -30,7 +32,7 @@ export default class Transformer {
 
   applyAllTransforms(code, logger) {
     return this.ignoringHashBangComment(code, (js) => {
-      const ast = parse(js, {parser});
+      const ast = parse(js, {parser: this.parser});
 
       this.transforms.forEach(transformer => {
         transformer(ast.program, logger);

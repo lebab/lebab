@@ -44,11 +44,12 @@ const transformsMap = {
  * Factory for creating a Transformer
  * by just specifying the names of the transforms.
  * @param  {String[]} transformNames
+ * @param  {Object} options
  * @return {Transformer}
  */
-export default function createTransformer(transformNames) {
+export default function createTransformer(transformNames, options) {
   validate(transformNames);
-  return new Transformer(transformNames.map(name => transformsMap[name]));
+  return new Transformer(transformNames.map(name => transformsMap[name]), options);
 }
 
 function validate(transformNames) {
