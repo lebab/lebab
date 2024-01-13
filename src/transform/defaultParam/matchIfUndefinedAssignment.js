@@ -26,7 +26,7 @@ const matchTypeofUndefined = matches({
   },
   operator: extractAny('operator'),
   right: {
-    type: 'Literal',
+    type: 'StringLiteral',
     value: 'undefined'
   }
 });

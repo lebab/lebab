@@ -2,7 +2,7 @@ import {matches, extractAny} from 'f-matches';
 import traverser from '../traverser';
 
 const matchTransformableProperty = matches({
-  type: 'Property',
+  type: 'ObjectProperty',
   key: {
     type: 'Identifier',
   },

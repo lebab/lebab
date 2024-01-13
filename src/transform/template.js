@@ -71,12 +71,12 @@ function splitQuasisAndExpressions(operands) {
 
     if (isString(curr)) {
       let currVal = curr.value;
-      let currRaw = escapeForTemplate(curr.raw);
+      let currRaw = escapeForTemplate(curr.extra.raw);
 
       while (isString(operands[i + 1] || {})) {
         i++;
         currVal += operands[i].value;
-        currRaw += escapeForTemplate(operands[i].raw);
+        currRaw += escapeForTemplate(operands[i].extra.raw);
       }
 
       quasis.push(new TemplateElement({
@@ -93,6 +93,13 @@ function splitQuasisAndExpressions(operands) {
         quasis.push(new TemplateElement({
           tail: operands[i + 1] === undefined
         }));
+      }
+
+      // Get rid of extra parentheses around the expression
+      // by forcing Recast to trigger reformatting
+      curr.original = null; // eslint-disable-line no-null/no-null
+      if (curr.extra) {
+        delete curr.extra.parenthesized;
       }
 
       expressions.push(curr);

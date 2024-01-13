@@ -31,7 +31,7 @@ const matchObjectDefinePropertyCall = matches({
         }
       },
       {
-        type: 'Literal',
+        type: 'StringLiteral',
         value: extractAny('methodName')
       },
       {
