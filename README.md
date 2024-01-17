@@ -61,6 +61,7 @@ The resulting code should be almost 100% equivalent of the original code.
     - [x] not applied to functions that use `arguments`
     - [x] not applied to object properties (use `obj-method` transform)
     - [ ] does not remove `that = this` assignments
+    - [ ] LIMITATION: [can mess up prototype-based classes, run the `class` transform first to prevent this.][356]
 - [x] **arrow-return** - drop return statements in arrow functions
     - [x] converts immediate return `{ return x; }` to `=> x`
     - [x] applies to arrow functions and nested arrow functions
@@ -221,3 +222,4 @@ Want to contribute?  [Read how Lebab looks for patterns in syntax trees.][patter
 [191]: https://github.com/lebab/lebab/issues/191
 [200]: https://github.com/lebab/lebab/issues/200
 [215]: https://github.com/lebab/lebab/issues/215
+[356]: https://github.com/lebab/lebab/issues/356
