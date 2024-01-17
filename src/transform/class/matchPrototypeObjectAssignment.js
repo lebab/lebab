@@ -20,9 +20,18 @@ const matchPrototypeObjectAssignment = matches({
     operator: '=',
     right: {
       type: 'ObjectExpression',
-      properties: extract('properties', props => props.every(isFunctionProperty))
+      properties: extract('properties', props => props.every((node) => isFunctionProperty(node) || isObjectMethod(node)))
     }
   }
+});
+
+const isObjectMethod = matches({
+  type: 'ObjectMethod',
+  key: {
+    type: 'Identifier',
+    // name: <ident>
+  },
+  computed: false,
 });
 
 /**
@@ -50,6 +59,14 @@ export default function(node) {
     return {
       className: className,
       methods: properties.map(prop => {
+        if (prop.type === 'ObjectMethod') {
+          return {
+            propertyNode: prop,
+            methodName: prop.key.name,
+            methodNode: prop,
+            kind: prop.kind,
+          };
+        }
         return {
           propertyNode: prop,
           methodName: prop.key.name,

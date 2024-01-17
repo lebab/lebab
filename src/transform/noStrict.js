@@ -1,11 +1,10 @@
 import traverser from '../traverser';
-import isString from '../utils/isString';
 import copyComments from '../utils/copyComments';
 
 export default function(ast) {
   traverser.replace(ast, {
     enter(node, parent) {
-      if (node.type === 'ExpressionStatement' && isUseStrictString(node.expression)) {
+      if (node.type === 'Directive' && node.value.type === 'DirectiveLiteral' && node.value.value === 'use strict') {
         copyComments({
           from: node,
           to: parent,
@@ -15,8 +14,4 @@ export default function(ast) {
       }
     }
   });
-}
-
-function isUseStrictString(node) {
-  return isString(node) && node.value === 'use strict';
 }

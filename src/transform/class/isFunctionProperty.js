@@ -8,7 +8,7 @@ import isTransformableToMethod from './isTransformableToMethod';
  * @return {Boolean}
  */
 export default matches({
-  type: 'Property',
+  type: 'ObjectProperty',
   key: {
     type: 'Identifier',
     // name: <ident>
