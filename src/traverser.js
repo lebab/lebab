@@ -12,9 +12,12 @@ const jsxExtensionKeys = {
     JSXExpressionContainer: ['expression'],
     JSXOpeningElement: ['name', 'attributes'],
     JSXClosingElement: ['name'],
+    JSXOpeningFragment: [],
+    JSXClosingFragment: [],
     JSXAttribute: ['name', 'value'],
     JSXSpreadAttribute: ['argument'],
     JSXElement: ['openingElement', 'closingElement', 'children'],
+    JSXFragment: ['openingFragment', 'closingFragment', 'children'],
     JSXText: [],
   }
 };
