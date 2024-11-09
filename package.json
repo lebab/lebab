@@ -1,6 +1,6 @@
 {
   "name": "lebab",
-  "version": "3.2.4",
+  "version": "3.2.5",
   "description": "Turn your ES5 code into readable ES6/ES7",
   "main": "index.js",
   "scripts": {
