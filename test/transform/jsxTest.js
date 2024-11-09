@@ -83,4 +83,12 @@ describe('JSX support', () => {
       'const foo = <div> {/* some comments */} </div>;'
     );
   });
+
+  it('should support JSX fragments', () => {
+    expectTransform(
+      'var foo = <>{a}</>;'
+    ).toReturn(
+      'const foo = <>{a}</>;'
+    );
+  });
 });
