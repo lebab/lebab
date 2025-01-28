@@ -333,11 +333,280 @@ describe('Classes', () => {
     });
   });
 
+  describe('Object.defineProperties', () => {
+    it('should convert setters and getters', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        'Object.defineProperties(MyClass.prototype, {\n' +
+        '  /** This is an accessor */\n' +
+        '  someAccessor: {\n' +
+        '    get: function () {\n' +
+        '      return this._some;\n' +
+        '    },\n' +
+        '    set: function (value) {\n' +
+        '      this._some = value;\n' +
+        '    }\n' +
+        '  },' +
+        '  /** This is a different accessor */\n' +
+        '  otherAccessor: {\n' +
+        '    get: function () {\n' +
+        '      return this._other;\n' +
+        '    },\n' +
+        '    set: function (value) {\n' +
+        '      this._other = value;\n' +
+        '    }\n' +
+        '  }' +
+        '});'
+      ).toReturn(
+        'class MyClass {\n' +
+        '  /** This is an accessor */\n' +
+        '  get someAccessor() {\n' +
+        '    return this._some;\n' +
+        '  }\n' +
+        '\n' +
+        '  set someAccessor(value) {\n' +
+        '    this._some = value;\n' +
+        '  }\n' +
+        '\n' +
+        '  /** This is a different accessor */\n' +
+        '  get otherAccessor() {\n' +
+        '    return this._other;\n' +
+        '  }\n' +
+        '\n' +
+        '  set otherAccessor(value) {\n' +
+        '    this._other = value;\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('should convert satic setters and getters', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        'Object.defineProperties(MyClass, {\n' +
+        '  /** This is an accessor */\n' +
+        '  someAccessor: {\n' +
+        '    get: function () {\n' +
+        '      return this._some;\n' +
+        '    },\n' +
+        '    set: function (value) {\n' +
+        '      this._some = value;\n' +
+        '    }\n' +
+        '  },' +
+        '  /** This is a different accessor */\n' +
+        '  otherAccessor: {\n' +
+        '    get: function () {\n' +
+        '      return this._other;\n' +
+        '    },\n' +
+        '    set: function (value) {\n' +
+        '      this._other = value;\n' +
+        '    }\n' +
+        '  }' +
+        '});'
+      ).toReturn(
+        'class MyClass {\n' +
+        '  /** This is an accessor */\n' +
+        '  static get someAccessor() {\n' +
+        '    return this._some;\n' +
+        '  }\n' +
+        '\n' +
+        '  static set someAccessor(value) {\n' +
+        '    this._some = value;\n' +
+        '  }\n' +
+        '\n' +
+        '  /** This is a different accessor */\n' +
+        '  static get otherAccessor() {\n' +
+        '    return this._other;\n' +
+        '  }\n' +
+        '\n' +
+        '  static set otherAccessor(value) {\n' +
+        '    this._other = value;\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('should ignore other options when converting get/set', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        'Object.defineProperties(MyClass.prototype, {\n' +
+        '  someAccessor: {\n' +
+        '    configurable: true,\n' +
+        '    enumerable: true,\n' +
+        '    set: function (value) {\n' +
+        '      this._some = value;\n' +
+        '    }\n' +
+        '  },\n' +
+        '  /** This is a different accessor */\n' +
+        '  otherAccessor: {\n' +
+        '    get: function () {\n' +
+        '      return this._other;\n' +
+        '    },\n' +
+        '  }' +
+        '});'
+      ).toReturn(
+        'class MyClass {\n' +
+        '  set someAccessor(value) {\n' +
+        '    this._some = value;\n' +
+        '  }\n' +
+        '\n' +
+        '  /** This is a different accessor */\n' +
+        '  get otherAccessor() {\n' +
+        '    return this._other;\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('should ignore non-function property', () => {
+      expectNoChange(
+        'function MyClass() {\n' +
+        '}\n' +
+        'Object.defineProperties(MyClass.prototype, {\n' +
+        '  propName: {\n' +
+        '    value: 10,\n' +
+        '    configurable: true,\n' +
+        '    writable: true\n' +
+        '  }\n' +
+        '});'
+      );
+    });
+
+    it('should ignore non-function property even when mixed', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        'Object.defineProperties(MyClass.prototype, {\n' +
+        '  propName: {\n' +
+        '    value: 10,\n' +
+        '    configurable: true,\n' +
+        '    writable: true\n' +
+        '  },\n' +
+        '  /** This is a different accessor */\n' +
+        '  otherAccessor: {\n' +
+        '    get: function () {\n' +
+        '      return this._other;\n' +
+        '    },\n' +
+        '  }' +
+        '});'
+      ).toReturn(
+        'class MyClass {\n' +
+        '  /** This is a different accessor */\n' +
+        '  get otherAccessor() {\n' +
+        '    return this._other;\n' +
+        '  }\n' +
+        '}\n' +
+        '\n' +
+        'Object.defineProperties(MyClass.prototype, {\n' +
+        '  propName: {\n' +
+        '    value: 10,\n' +
+        '    configurable: true,\n' +
+        '    writable: true\n' +
+        '  }\n' +
+        '});'
+      );
+    });
+
+    it('should transform arrow-function that does not use this', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        'Object.defineProperties(MyClass.prototype, {\n' +
+        '  getter: {\n' +
+        '    get: () => something\n' +
+        '  }\n' +
+        '});'
+      ).toReturn(
+        'class MyClass {\n' +
+        '  get getter() {\n' +
+        '    return something;\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('should transform arrow-function that does not use this when mixed', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        'Object.defineProperties(MyClass.prototype, {\n' +
+        '  getter: {\n' +
+        '    get: () => something\n' +
+        '  },\n' +
+        '  /** This is a different accessor */\n' +
+        '  otherAccessor: {\n' +
+        '    get: function () {\n' +
+        '      return this._other;\n' +
+        '    },\n' +
+        '  }\n' +
+        '});'
+      ).toReturn(
+        'class MyClass {\n' +
+        '  get getter() {\n' +
+        '    return something;\n' +
+        '  }\n' +
+        '\n' +
+        '  /** This is a different accessor */\n' +
+        '  get otherAccessor() {\n' +
+        '    return this._other;\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('should ignore arrow-function that uses this', () => {
+      expectNoChange(
+        'function MyClass() {\n' +
+        '}\n' +
+        'Object.defineProperties(MyClass.prototype, {\n' +
+        '  getter: {\n' +
+        '    get: () => this.something\n' +
+        '  }\n' +
+        '});'
+      );
+    });
+
+    it('should ignore arrow-function that uses this when mixed', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        'Object.defineProperties(MyClass.prototype, {\n' +
+        '  getter: {\n' +
+        '    get: () => this.something\n' +
+        '  },\n' +
+        '  /** This is a different accessor */\n' +
+        '  otherAccessor: {\n' +
+        '    get: function () {\n' +
+        '      return this._other;\n' +
+        '    },\n' +
+        '  }\n' +
+        '});'
+      ).toReturn(
+        'class MyClass {\n' +
+        '  /** This is a different accessor */\n' +
+        '  get otherAccessor() {\n' +
+        '    return this._other;\n' +
+        '  }\n' +
+        '}\n' +
+        '\n' +
+        'Object.defineProperties(MyClass.prototype, {\n' +
+        '  getter: {\n' +
+        '    get: () => this.something\n' +
+        '  }\n' +
+        '});'
+      );
+    });
+  });
+
   describe('Object.defineProperty', () => {
     it('should convert setters and getters', () => {
       expectTransform(
         'function MyClass() {\n' +
         '}\n' +
+        '/** This is an accessor */\n' +
         'Object.defineProperty(MyClass.prototype, "someAccessor", {\n' +
         '  get: function () {\n' +
         '    return this._some;\n' +
@@ -348,11 +617,39 @@ describe('Classes', () => {
         '});'
       ).toReturn(
         'class MyClass {\n' +
+        '  /** This is an accessor */\n' +
         '  get someAccessor() {\n' +
         '    return this._some;\n' +
         '  }\n' +
         '\n' +
         '  set someAccessor(value) {\n' +
+        '    this._some = value;\n' +
+        '  }\n' +
+        '}'
+      );
+    });
+
+    it('should convert static setters and getters', () => {
+      expectTransform(
+        'function MyClass() {\n' +
+        '}\n' +
+        '/** This is an accessor */\n' +
+        'Object.defineProperty(MyClass, "someAccessor", {\n' +
+        '  get: function () {\n' +
+        '    return this._some;\n' +
+        '  },\n' +
+        '  set: function (value) {\n' +
+        '    this._some = value;\n' +
+        '  }\n' +
+        '});'
+      ).toReturn(
+        'class MyClass {\n' +
+        '  /** This is an accessor */\n' +
+        '  static get someAccessor() {\n' +
+        '    return this._some;\n' +
+        '  }\n' +
+        '\n' +
+        '  static set someAccessor(value) {\n' +
         '    this._some = value;\n' +
         '  }\n' +
         '}'

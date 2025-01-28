@@ -1,7 +1,7 @@
 import {matches, extractAny} from 'f-matches';
 import isFunctionProperty from './isFunctionProperty';
 
-const matchObjectDefinePropertyCall = matches({
+const matchObjectDefinePropertyCallOnPrototype = matches({
   type: 'ExpressionStatement',
   expression: {
     type: 'CallExpression',
@@ -42,7 +42,40 @@ const matchObjectDefinePropertyCall = matches({
   }
 });
 
-function isAccessorDescriptor(node) {
+const matchObjectDefinePropertyCall = matches({
+  type: 'ExpressionStatement',
+  expression: {
+    type: 'CallExpression',
+    callee: {
+      type: 'MemberExpression',
+      computed: false,
+      object: {
+        type: 'Identifier',
+        name: 'Object'
+      },
+      property: {
+        type: 'Identifier',
+        name: 'defineProperty'
+      }
+    },
+    arguments: [
+      {
+        type: 'Identifier',
+        name: extractAny('className')
+      },
+      {
+        type: 'Literal',
+        value: extractAny('methodName')
+      },
+      {
+        type: 'ObjectExpression',
+        properties: extractAny('properties')
+      }
+    ]
+  }
+});
+
+export function isAccessorDescriptor(node) {
   return isFunctionProperty(node) &&
     (node.key.name === 'get' || node.key.name === 'set');
 }
@@ -66,7 +99,13 @@ function isAccessorDescriptor(node) {
  * @return {Object}
  */
 export default function(node) {
-  const {className, methodName, properties} = matchObjectDefinePropertyCall(node);
+  let {className, methodName, properties} = matchObjectDefinePropertyCallOnPrototype(node);
+
+  let isStatic = false;
+  if (!className) {
+    ({className, methodName, properties} = matchObjectDefinePropertyCall(node));
+    isStatic = true;
+  }
 
   if (className) {
     return {
@@ -79,6 +118,7 @@ export default function(node) {
           kind: prop.key.name,
         };
       }),
+      static: isStatic
     };
   }
 }

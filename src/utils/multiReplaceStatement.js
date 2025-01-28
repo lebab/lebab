@@ -34,6 +34,8 @@ function getBody(node) {
     return node.body;
   case 'SwitchCase':
     return node.consequent;
+  case 'ObjectExpression':
+    return node.properties;
   default:
     throw `Unsupported node type '${node.type}' in multiReplaceStatement()`;
   }
