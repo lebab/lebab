@@ -16,8 +16,8 @@ class PotentialMethod {
    *   @param {Object} cfg.fullNode Node to remove after converting to class
    *   @param {Object[]} cfg.commentNodes Nodes to extract comments from
    *   @param {Object} cfg.parent
-   *   @param {String} cfg.kind Either 'get' or 'set' (optional)
-   *   @param {Boolean} cfg.static True to make static method (optional)
+   *   @param {String} [cfg.kind] Either 'get' or 'set' (optional)
+   *   @param {Boolean} [cfg.static] True to make static method (optional)
    */
   constructor(cfg) {
     this.name = cfg.name;

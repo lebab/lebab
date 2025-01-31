@@ -8,8 +8,9 @@ import matchFunctionVar from './matchFunctionVar';
 import matchFunctionAssignment from './matchFunctionAssignment';
 import matchPrototypeFunctionAssignment from './matchPrototypeFunctionAssignment';
 import matchPrototypeObjectAssignment from './matchPrototypeObjectAssignment';
-import matchObjectDefinePropertyCall from './matchObjectDefinePropertyCall';
+import matchObjectDefinePropertyCall, {isAccessorDescriptor} from './matchObjectDefinePropertyCall';
 import Inheritance from './inheritance/Inheritance';
+import matchObjectDefinePropertiesCall, {matchDefinedProperties} from './matchObjectDefinePropertiesCall.js';
 
 export default function(ast, logger) {
   const potentialClasses = {};
@@ -84,9 +85,48 @@ export default function(ast, logger) {
               commentNodes: parentComments.concat([desc.propertyNode]),
               parent,
               kind: desc.kind,
+              static: m.static
             }));
           });
         }
+      }
+      else if ((m = matchObjectDefinePropertiesCall(node))) {
+        // defineProperties allows mixing method definitions we CAN transform
+        // with ones we CANT. This check looks for whether every property is
+        // one we CAN transform and if they are it removes the whole call
+        // to defineProperties
+        let removeWholeNode = false;
+        if (node.expression.arguments[1].properties.every(propertyNode => {
+          const {properties} = matchDefinedProperties(propertyNode);
+          return properties.some(isAccessorDescriptor);
+        })) {
+          removeWholeNode = true;
+        }
+
+        m.forEach((method, i) => {
+          if (potentialClasses[method.className]) {
+            method.descriptors.forEach((desc, j) => {
+              const parentComments = (j === 0) ? [method.methodNode] : [];
+
+              // by default remove only the single method property of the object passed to defineProperties
+              // otherwise if they should all be remove AND this is the last descriptor set it up
+              // to remove the whole node that's calling defineProperties
+              const lastDescriptor = i === m.length - 1 && j === method.descriptors.length - 1;
+              const fullNode = lastDescriptor && removeWholeNode ? node : method.methodNode;
+              const parentNode = lastDescriptor && removeWholeNode ? parent : node.expression.arguments[1];
+
+              potentialClasses[method.className].addMethod(new PotentialMethod({
+                name: method.methodName,
+                methodNode: desc.methodNode,
+                fullNode: fullNode,
+                commentNodes: parentComments.concat([desc.propertyNode]),
+                parent: parentNode,
+                kind: desc.kind,
+                static: method.static
+              }));
+            });
+          }
+        });
       }
       else if ((m = inheritance.process(node, parent))) {
         if (potentialClasses[m.className]) {
