@@ -51,5 +51,5 @@ function isPropertyInMemberExpression(node, parent) {
 }
 
 function isPropertyInObjectLiteral(node, parent) {
-  return parent.type === 'Property' && parent.key === node;
+  return parent.type === 'ObjectProperty' && parent.key === node;
 }

@@ -5,9 +5,9 @@ const isIdentifier = matches({
   type: 'Identifier'
 });
 
-// matches Property with Identifier key and value (possibly shorthand)
+// matches ObjectProperty with Identifier key and value (possibly shorthand)
 const isSimpleProperty = matches({
-  type: 'Property',
+  type: 'ObjectProperty',
   key: isIdentifier,
   computed: false,
   value: isIdentifier

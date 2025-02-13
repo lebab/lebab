@@ -25,7 +25,7 @@ export default function(ast, logger) {
 
 function isFunctionConvertableToArrow(node, parent) {
   return node.type === 'FunctionExpression' &&
-    parent.type !== 'Property' &&
+    parent.type !== 'ObjectProperty' &&
     parent.type !== 'MethodDefinition' &&
     !node.id &&
     !node.generator &&
@@ -89,6 +89,9 @@ function functionToArrow(func, parent) {
   // by forcing Recast to reformat the CallExpression
   if (isIIFE(func, parent)) {
     parent.original = null; // eslint-disable-line no-null/no-null
+    if (parent.extra) {
+      delete parent.extra.parenthesized;
+    }
   }
 
   return arrow;
