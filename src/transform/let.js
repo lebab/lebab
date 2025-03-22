@@ -44,6 +44,18 @@ export default function(ast, loggerInstance) {
             variableMarker.markModified(decl.id.name);
           }
         });
+
+
+        // Empty destructuring should be converted to const.
+        //
+        //     var [] = foo;
+        //     var {} = foo;
+        //
+        // Mix of empty destructuring and other variable declarations will be handled
+        // by other parts of the transform.
+        if (node.kind === 'var' && node.declarations.every(isEmptyDestructuring)) {
+          node.kind = 'const';
+        }
       }
       else if (node.type === 'AssignmentExpression') {
         destructuring.extractVariableNames(node.left).forEach(name => {
@@ -88,6 +100,16 @@ function isAnyForStatement(node) {
 function isAnyWhileStatement(node) {
   return node.type === 'WhileStatement' ||
   node.type === 'DoWhileStatement';
+}
+
+function isEmptyDestructuring(node) {
+  if (node.id.type === 'ObjectPattern') {
+    return node.id.properties.length === 0;
+  }
+  if (node.id.type === 'ArrayPattern') {
+    return node.id.elements.length === 0;
+  }
+  return false;
 }
 
 // Program node works almost like a function:
@@ -190,7 +212,7 @@ function transformVarsToLetOrConst() {
 
 // let and const declarations aren't allowed in all the same places where
 // var declarations are allowed. Notably, only var-declaration can occur
-// directlt in if-statement (and other similar statements) body:
+// directly in if-statement (and other similar statements) body:
 //
 //     if (true) var x = 10;
 //

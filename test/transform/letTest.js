@@ -161,6 +161,19 @@ describe('Let/const', () => {
         'for (let i=0, len=arr.length; i<len; i++) {}'
       );
     });
+
+    it('should split to let & const when mixed with empty destructuring', () => {
+      expectTransform(
+        'var [] = [1, 2], {} = {foo: 1, bar: 2}, x = 1, y = 2;\n' +
+        'y = 3;'
+      ).toReturn(
+        'const [] = [1, 2];\n' +
+        'const {} = {foo: 1, bar: 2};\n' +
+        'const x = 1;\n' +
+        'let y = 2;\n' +
+        'y = 3;'
+      );
+    });
   });
 
   describe('with variable declaration in restrictive parent', () => {
@@ -276,6 +289,18 @@ describe('Let/const', () => {
         'let [, x, y] = [1, 2, 3];\n' +
         'y = 2;\n' +
         'console.log(x);'
+      );
+    });
+
+    it('should use const when no variables are destructured', () => {
+      expectTransform(
+        'var [] = [1, 2];\n' +
+        'var {} = {foo: 1, bar: 2};\n' +
+        'var [] = [1, 2], {} = {foo: 1, bar: 2};'
+      ).toReturn(
+        'const [] = [1, 2];\n' +
+        'const {} = {foo: 1, bar: 2};\n' +
+        'const [] = [1, 2], {} = {foo: 1, bar: 2};'
       );
     });
   });
