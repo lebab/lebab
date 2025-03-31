@@ -41,9 +41,9 @@ class VariableGroup {
    *
    * @return {String} Either "var", "let", "const" or undefined.
    */
-  getCommonKind() {
-    const firstKind = this.variables[0].getKind();
-    if (this.variables.every(v => v.getKind() === firstKind)) {
+  getCommonKind(scope) {
+    const firstKind = this.variables[0].getKind(scope.findFunctionScoped(this.variables[0].node.id.name));
+    if (this.variables.every(v => v.getKind(scope.findFunctionScoped(v.node.id.name)) === firstKind)) {
       return firstKind;
     }
     else {

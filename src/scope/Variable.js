@@ -47,8 +47,8 @@ class Variable {
    *
    * @return {String} Either "var", "let" or "const".
    */
-  getKind() {
-    if (this.hoisted) {
+  getKind(otherVar) {
+    if (this.hoisted || (otherVar && otherVar.hoisted)) {
       return 'var';
     }
     else if (this.modified) {

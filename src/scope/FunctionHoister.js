@@ -51,7 +51,9 @@ class FunctionHoister {
   }
 
   registerParam(p) {
-    this.functionScope.register(p.name, new Variable(p));
+    const v = new Variable(p)
+    v.markDeclared()
+    this.functionScope.register(p.name, v);
   }
 
   hoistVariables(ast) {

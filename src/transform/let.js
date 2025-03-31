@@ -154,7 +154,7 @@ function transformVarsToLetOrConst() {
       return;
     }
 
-    const commonKind = group.getCommonKind();
+    const commonKind = group.getCommonKind(getScope());
     if (commonKind) {
       // When all variables in group are of the same kind,
       // just set appropriate `kind` value for the existing
@@ -167,7 +167,8 @@ function transformVarsToLetOrConst() {
       // create separate VariableDeclaration nodes for each
       // VariableDeclarator and set their `kind` value appropriately.
       const varNodes = group.getVariables().map(v => {
-        return new VariableDeclaration(v.getKind(), [v.getNode()]);
+        const kind = v.getKind(getScope().findFunctionScoped(v.node.id.name))
+        return new VariableDeclaration(kind, [v.getNode()]);
       });
 
       multiReplaceStatement({

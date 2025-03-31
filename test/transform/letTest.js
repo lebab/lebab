@@ -162,17 +162,56 @@ describe('Let/const', () => {
       );
     });
 
-    it('should not use let in for head when previously initialized with var', () => {
+    it('should use var in multi-variable declaration when a variable was previously initialized', () => {
+      expectTransform(
+        'var x;\n' +
+        'var x, y;'
+      ).toReturn(
+         'var x;\n' +
+         'var x;\n' +
+         'let y;'
+        );
+    });
+
+    it('should use var in multi-variable declaration when a variable was previously initialized in the function parameters', () => {
+      expectTransform(
+        'function func(x) {\n' +
+         '  var x, y;\n' +
+        '}'
+      ).toReturn(
+        'function func(x) {\n' +
+         '  var x;\n' +
+         '  let y;\n' +
+        '}'
+        );
+    });
+
+    it('should use var in multi-variable declaration in a for head when a variable was previously initialized in the function parameters', () => {
       expectNoChange(
-        'var a;\n' +
-        'for (var a;;);'
+        'function func(x) {\n' +
+        '  for (var x, y;;) {}\n' +
+        '}'
       );
     });
 
-    it('should not use let in multi-variable declaration for head when previously initialized with var', () => {
+    it('should not use let in a for head when previously initialized with var', () => {
       expectNoChange(
-        'var a;\n' +
-        'for (var b, a;;);'
+        'var x;\n' +
+        'for (var x;;);'
+      );
+    });
+
+    it('should not use let in multi-variable declaration in a for head when previously initialized with var', () => {
+      expectNoChange(
+        'var x;\n' +
+        'for (var y, x;;);'
+      );
+    });
+
+    it('should not use let in multi-variable declaration in a for head when previously initialized with var and other variable is initialized', () => {
+      expectNoChange(
+        'var x;\n' +
+        'for (var y = 1, x;;);'
       );
     });
   });
