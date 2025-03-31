@@ -182,6 +182,15 @@ function transformVarsToLetOrConst() {
     else {
       // When parent node restricts breaking VariableDeclaration to multiple ones
       // just change the kind of the declaration to the most restrictive possible
+
+      // If any variable is hoisted (was already declared) and is redeclared here,
+      // that must mean that the previous declaration was with var and the current
+      // declaration is with var (it would be a javascript runtime error otherwise)
+      // In that case, we cannot change the type to anything other than var.
+      if (getScope().getVariables().some(v => v.hoisted)) {
+        return;
+      }
+
       group.getNode().kind = group.getMostRestrictiveKind();
       logWarningForVarKind(group.getNode());
     }

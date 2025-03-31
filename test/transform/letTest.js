@@ -161,6 +161,20 @@ describe('Let/const', () => {
         'for (let i=0, len=arr.length; i<len; i++) {}'
       );
     });
+
+    it('should not use let in for head when previously initialized with var', () => {
+      expectNoChange(
+        'var a;\n' +
+        'for (var a;;);'
+      );
+    });
+
+    it('should not use let in multi-variable declaration for head when previously initialized with var', () => {
+      expectNoChange(
+        'var a;\n' +
+        'for (var b, a;;);'
+      );
+    });
   });
 
   describe('with variable declaration in restrictive parent', () => {
