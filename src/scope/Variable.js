@@ -47,8 +47,8 @@ class Variable {
    *
    * @return {String} Either "var", "let" or "const".
    */
-  getKind(otherVar) {
-    if (this.hoisted || (otherVar && otherVar.hoisted)) {
+  getKind() {
+    if (this.hoisted) {
       return 'var';
     }
     else if (this.modified) {
@@ -73,5 +73,13 @@ class Variable {
    */
   getGroup() {
     return this.group;
+  }
+
+  /**
+   * Returns the name of the variable.
+   * @return {String}
+   */
+  getName() {
+    return this.getNode().id.name;
   }
 }

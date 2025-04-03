@@ -39,11 +39,16 @@ class VariableGroup {
    *
    * When not all variables are of the same kind, returns undefined.
    *
+   * @param {Scope} The current scope.
    * @return {String} Either "var", "let", "const" or undefined.
    */
   getCommonKind(scope) {
-    const firstKind = this.variables[0].getKind(scope.findFunctionScoped(this.variables[0].node.id.name));
-    if (this.variables.every(v => v.getKind(scope.findFunctionScoped(v.node.id.name)) === firstKind)) {
+    function get(variable) {
+      const otherVar = scope.findFunctionScoped(variable.getName());
+      return otherVar && otherVar.getKind() === 'var' ? 'var' : variable.getKind();
+    }
+    const firstKind = get(this.variables[0]);
+    if (this.variables.every(v => get(v) === firstKind)) {
       return firstKind;
     }
     else {
@@ -58,10 +63,21 @@ class VariableGroup {
    * - When all vars are const, return "const".
    * - When some vars are "let" and some "const", returns "let".
    * - When some vars are "var", return "var".
+   * - When any var was already declared before, return "var"
    *
+   * @param {Variable[]} currentStatementVariables Variables declared in the currently processed statement
    * @return {String} Either "var", "let" or "const".
    */
-  getMostRestrictiveKind() {
+  getMostRestrictiveKind(currentStatementVariables) {
+    // If any variable has the var type, that means it was declared before and
+    // is also redeclared now. That must mean that the previous declaration
+    // was with var and the current declaration is with var
+    // (it would be a javascript runtime error otherwise)
+    // In that case, we cannot change the type to anything other than var.
+    if (currentStatementVariables.some(v => v.getKind() === 'var')) {
+      return 'var';
+    }
+
     const kindToVal = {
       'var': 1,
       'let': 2,
