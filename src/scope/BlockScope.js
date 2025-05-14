@@ -14,7 +14,10 @@ class BlockScope extends Scope {
    * @param  {Variable} variable Variable object
    */
   register(name, variable) {
-    this.vars[name] = variable;
+    if (!this.vars[name]) {
+      this.vars[name] = [];
+    }
+    this.vars[name].push(variable);
   }
 
   /**
@@ -23,7 +26,7 @@ class BlockScope extends Scope {
    * Traveling up the scope chain until reaching a function scope.
    *
    * @param  {String} name Variable name
-   * @return {Variable} The found variable or false
+   * @return {Variable[]} The found variable or false
    */
   findFunctionScoped(name) {
     return this.parent.findFunctionScoped(name);
@@ -37,7 +40,7 @@ class BlockScope extends Scope {
    * returns false to signify it's not properly block-scoped.
    *
    * @param  {String} name Variable name
-   * @return {Variable} The found variable or false
+   * @return {Variable[]} The found variable or false
    */
   findBlockScoped(name) {
     if (this.vars[name]) {

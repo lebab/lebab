@@ -19,7 +19,7 @@ class FunctionScope extends Scope {
    */
   register(name, variable) {
     if (!this.vars[name]) {
-      this.vars[name] = variable;
+      this.vars[name] = [variable];
     }
   }
 
@@ -28,7 +28,7 @@ class FunctionScope extends Scope {
    * (Either from this function scope or from any parent function scope.)
    *
    * @param  {String} name Variable name
-   * @return {Variable} The found variable or false
+   * @return {Variable[]} The found variable or false
    */
   findFunctionScoped(name) {
     if (this.vars[name]) {
@@ -48,7 +48,7 @@ class FunctionScope extends Scope {
    * returns false to signify it's not properly block-scoped.
    *
    * @param  {String} name Variable name
-   * @return {Variable} The found variable or false
+   * @return {Variable[]} The found variable or false
    */
   findBlockScoped(name) {
     if (this.vars[name]) {

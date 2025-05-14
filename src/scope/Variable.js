@@ -80,6 +80,9 @@ class Variable {
    * @return {String}
    */
   getName() {
-    return this.getNode().id.name;
+    if (this.getNode().id) {
+      return this.getNode().id.name;
+    }
+    return '';
   }
 }

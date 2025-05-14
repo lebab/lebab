@@ -1,4 +1,47 @@
-import {min} from 'lodash/fp';
+import {min, flatten} from 'lodash/fp';
+
+
+/**
+ * Returns all variables in the scope that
+ * share a name with any of the variables.
+ *
+ * @param {Variable[]} Variables
+ * @param {Scope} Current scope
+ * @return {Variable[]} All variables
+ */
+function getAllScopeVariables(variables, scope) {
+  return flatten(variables.map(variable => scope.findFunctionScoped(variable.getName())).filter(Boolean));
+}
+
+/**
+ * Returns the most restrictive possible common `kind` value
+ * for variables defined in this group.
+ *
+ * - When all vars are const, return "const".
+ * - When some vars are "let" and some "const", returns "let".
+ * - When some vars are "var", return "var".
+ * - When any var was already declared before, return "var"
+ *
+ * @param {Variable[]} Variables
+ * @param {Scope} Current scope
+ * @return {String} Either "var", "let" or "const".
+ */
+export function getMostRestrictiveKind(variables, scope) {
+  const kindToVal = {
+    'var': 1,
+    'let': 2,
+    'const': 3,
+  };
+  const valToKind = {
+    1: 'var',
+    2: 'let',
+    3: 'const',
+  };
+
+  const allVariables = getAllScopeVariables(variables, scope);
+  const minVal = min(allVariables.map(v => kindToVal[v.getKind()]));
+  return valToKind[minVal];
+}
 
 /**
  * Encapsulates a VariableDeclaration node
@@ -43,12 +86,10 @@ class VariableGroup {
    * @return {String} Either "var", "let", "const" or undefined.
    */
   getCommonKind(scope) {
-    function get(variable) {
-      const otherVar = scope.findFunctionScoped(variable.getName());
-      return otherVar && otherVar.getKind() === 'var' ? 'var' : variable.getKind();
-    }
-    const firstKind = get(this.variables[0]);
-    if (this.variables.every(v => get(v) === firstKind)) {
+    const allVariables = getAllScopeVariables(this.variables, scope);
+
+    const firstKind = this.variables[0].getKind();
+    if (allVariables.every(v => v.getKind() === firstKind)) {
       return firstKind;
     }
     else {
@@ -65,32 +106,11 @@ class VariableGroup {
    * - When some vars are "var", return "var".
    * - When any var was already declared before, return "var"
    *
-   * @param {Variable[]} currentStatementVariables Variables declared in the currently processed statement
+   * @param {Scope} Current scope
    * @return {String} Either "var", "let" or "const".
    */
-  getMostRestrictiveKind(currentStatementVariables) {
-    // If any variable has the var type, that means it was declared before and
-    // is also redeclared now. That must mean that the previous declaration
-    // was with var and the current declaration is with var
-    // (it would be a javascript runtime error otherwise)
-    // In that case, we cannot change the type to anything other than var.
-    if (currentStatementVariables.some(v => v.getKind() === 'var')) {
-      return 'var';
-    }
-
-    const kindToVal = {
-      'var': 1,
-      'let': 2,
-      'const': 3,
-    };
-    const valToKind = {
-      1: 'var',
-      2: 'let',
-      3: 'const',
-    };
-
-    const minVal = min(this.variables.map(v => kindToVal[v.getKind()]));
-    return valToKind[minVal];
+  getMostRestrictiveKind(scope) {
+    return getMostRestrictiveKind(this.variables, scope);
   }
 
   /**

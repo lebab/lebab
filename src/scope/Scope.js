@@ -29,7 +29,7 @@ class Scope {
 
   /**
    * Returns all variables registered in this scope.
-   * @return {Variable[]}
+   * @return {Variable[][]}
    */
   getVariables() {
     return values(this.vars);

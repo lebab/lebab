@@ -1,4 +1,4 @@
-import {includes} from 'lodash/fp';
+import {intersection} from 'lodash/fp';
 
 /**
  * Labels variables in relation to their use in block scope.
@@ -28,8 +28,8 @@ class VariableMarker {
   markDeclared(varNames) {
     const alreadySeen = [];
 
-    varNames.forEach(varName => {
-      const blockVar = this.getScope().findFunctionScoped(varName);
+    varNames.forEach((varName) => {
+      const blockVars = this.getScope().findFunctionScoped(varName);
 
       // all variable names declared with a destructuring operation
       // reference the same Variable object, so when we mark the
@@ -38,19 +38,27 @@ class VariableMarker {
       // (which isn't actually real re-declaring) should not cause
       // variable to be marked as declared multiple times and
       // therefore marked as hoisted.
-      if (!includes(blockVar, alreadySeen)) {
-        alreadySeen.push(blockVar);
+      if (intersection(blockVars, alreadySeen).length === 0) {
+        alreadySeen.push(...blockVars);
 
         // Ignore repeated var declarations
-        if (blockVar.isDeclared()) {
-          blockVar.markHoisted();
+        if (blockVars.some((variable) => variable.isDeclared())) {
+          for (const variable of blockVars) {
+            variable.markHoisted();
+          }
           return;
         }
       }
 
-      // Remember that it's declared and register in current block scope
-      blockVar.markDeclared();
-      this.getScope().register(varName, blockVar);
+      for (const variable of blockVars) {
+        // Remember that it's declared and register in current block scope
+        variable.markDeclared();
+      }
+
+      const scope = this.getScope();
+      for (const variable of blockVars) {
+        scope.register(varName, variable);
+      }
     });
   }
 
@@ -62,16 +70,20 @@ class VariableMarker {
    * @param  {String} varName
    */
   markModified(varName) {
-    const blockVar = this.getScope().findBlockScoped(varName);
-    if (blockVar) {
-      blockVar.markModified();
+    const blockVars = this.getScope().findBlockScoped(varName);
+    if (blockVars) {
+      for (const variable of blockVars) {
+        variable.markModified();
+      }
       return;
     }
 
-    const funcVar = this.getScope().findFunctionScoped(varName);
-    if (funcVar) {
-      funcVar.markHoisted();
-      funcVar.markModified();
+    const funcVars = this.getScope().findFunctionScoped(varName);
+    if (funcVars) {
+      for (const variable of funcVars) {
+        variable.markHoisted();
+        variable.markModified();
+      }
     }
   }
 
@@ -83,14 +95,16 @@ class VariableMarker {
    * @param  {String} varName
    */
   markReferenced(varName) {
-    const blockVar = this.getScope().findBlockScoped(varName);
-    if (blockVar) {
+    const blockVars = this.getScope().findBlockScoped(varName);
+    if (blockVars) {
       return;
     }
 
-    const funcVar = this.getScope().findFunctionScoped(varName);
-    if (funcVar) {
-      funcVar.markHoisted();
+    const funcVars = this.getScope().findFunctionScoped(varName);
+    if (funcVars) {
+      for (const variable of funcVars) {
+        variable.markHoisted();
+      }
     }
   }
 

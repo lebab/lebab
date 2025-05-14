@@ -1,4 +1,4 @@
-import {flow, map, uniq, compact} from 'lodash/fp';
+import {flow, map, uniq, compact, flatten} from 'lodash/fp';
 import traverser from '../traverser';
 import * as functionType from '../utils/functionType';
 import * as variableType from '../utils/variableType';
@@ -8,6 +8,7 @@ import ScopeManager from '../scope/ScopeManager';
 import VariableMarker from '../scope/VariableMarker';
 import FunctionHoister from '../scope/FunctionHoister';
 import VariableDeclaration from '../syntax/VariableDeclaration';
+import {getMostRestrictiveKind} from '../scope/VariableGroup';
 
 let logger;
 let scopeManager;
@@ -167,8 +168,7 @@ function transformVarsToLetOrConst() {
       // create separate VariableDeclaration nodes for each
       // VariableDeclarator and set their `kind` value appropriately.
       const varNodes = group.getVariables().map(v => {
-        const otherVar = getScope().findFunctionScoped(v.getName());
-        const kind = otherVar.getKind() === 'var' ? 'var' : v.getKind();
+        const kind = getMostRestrictiveKind([v], getScope());
         return new VariableDeclaration(kind, [v.getNode()]);
       });
 
@@ -185,7 +185,7 @@ function transformVarsToLetOrConst() {
       // When parent node restricts breaking VariableDeclaration to multiple ones
       // just change the kind of the declaration to the most restrictive possible
 
-      group.getNode().kind = group.getMostRestrictiveKind(getScope().getVariables());
+      group.getNode().kind = group.getMostRestrictiveKind(getScope());
       logWarningForVarKind(group.getNode());
     }
   });
@@ -238,7 +238,7 @@ function getFunctionVariableGroups() {
     map(v => v.getGroup()),
     uniq,
     compact
-  )(getScope().getVariables());
+  )(flatten(getScope().getVariables()));
 }
 
 function getScope() {
