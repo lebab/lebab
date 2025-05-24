@@ -8,7 +8,6 @@ import ScopeManager from '../scope/ScopeManager';
 import VariableMarker from '../scope/VariableMarker';
 import FunctionHoister from '../scope/FunctionHoister';
 import VariableDeclaration from '../syntax/VariableDeclaration';
-import {getMostRestrictiveKind} from '../scope/VariableGroup';
 
 let logger;
 let scopeManager;
@@ -155,7 +154,7 @@ function transformVarsToLetOrConst() {
       return;
     }
 
-    const commonKind = group.getCommonKind(getScope());
+    const commonKind = group.getCommonKind();
     if (commonKind) {
       // When all variables in group are of the same kind,
       // just set appropriate `kind` value for the existing
@@ -168,8 +167,7 @@ function transformVarsToLetOrConst() {
       // create separate VariableDeclaration nodes for each
       // VariableDeclarator and set their `kind` value appropriately.
       const varNodes = group.getVariables().map(v => {
-        const kind = getMostRestrictiveKind([v], getScope());
-        return new VariableDeclaration(kind, [v.getNode()]);
+        return new VariableDeclaration(v.getKind(), [v.getNode()]);
       });
 
       multiReplaceStatement({
@@ -185,7 +183,7 @@ function transformVarsToLetOrConst() {
       // When parent node restricts breaking VariableDeclaration to multiple ones
       // just change the kind of the declaration to the most restrictive possible
 
-      group.getNode().kind = group.getMostRestrictiveKind(getScope());
+      group.getNode().kind = group.getMostRestrictiveKind();
       logWarningForVarKind(group.getNode());
     }
   });
