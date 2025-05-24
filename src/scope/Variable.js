@@ -74,15 +74,4 @@ class Variable {
   getGroup() {
     return this.group;
   }
-
-  /**
-   * Returns the name of the variable.
-   * @return {String}
-   */
-  getName() {
-    if (this.getNode().id) {
-      return this.getNode().id.name;
-    }
-    return '';
-  }
 }

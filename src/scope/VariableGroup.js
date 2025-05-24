@@ -10,7 +10,10 @@ import {min, flatten} from 'lodash/fp';
  * @return {Variable[]} All variables
  */
 function getAllScopeVariables(variables, scope) {
-  return flatten(variables.map(variable => scope.findFunctionScoped(variable.getName())).filter(Boolean));
+  return flatten(variables
+    .filter(variable => variable.getNode().type === 'VariableDeclarator' && variable.getNode().id.type === 'Identifier')
+    .map(variable => scope.findFunctionScoped(variable.getNode().id.name))
+  );
 }
 
 /**
