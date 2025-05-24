@@ -78,12 +78,9 @@ class VariableMarker {
       return;
     }
 
-    const funcVars = this.getScope().findFunctionScoped(varName);
-    if (funcVars) {
-      for (const variable of funcVars) {
-        variable.markHoisted();
-        variable.markModified();
-      }
+    for (const variable of this.getScope().findFunctionScoped(varName)) {
+      variable.markHoisted();
+      variable.markModified();
     }
   }
 
@@ -95,16 +92,12 @@ class VariableMarker {
    * @param  {String} varName
    */
   markReferenced(varName) {
-    const blockVars = this.getScope().findBlockScoped(varName);
-    if (blockVars) {
+    if (this.getScope().findBlockScoped(varName)) {
       return;
     }
 
-    const funcVars = this.getScope().findFunctionScoped(varName);
-    if (funcVars) {
-      for (const variable of funcVars) {
-        variable.markHoisted();
-      }
+    for (const variable of this.getScope().findFunctionScoped(varName)) {
+      variable.markHoisted();
     }
   }
 
