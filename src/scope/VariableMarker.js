@@ -1,5 +1,3 @@
-import {intersection} from 'lodash/fp';
-
 /**
  * Labels variables in relation to their use in block scope.
  *
@@ -28,7 +26,7 @@ class VariableMarker {
   markDeclared(varNames) {
     const alreadySeen = [];
 
-    varNames.forEach((varName) => {
+    varNames.forEach(varName => {
       const blockVars = this.getScope().findFunctionScoped(varName);
 
       // all variable names declared with a destructuring operation
@@ -38,7 +36,7 @@ class VariableMarker {
       // (which isn't actually real re-declaring) should not cause
       // variable to be marked as declared multiple times and
       // therefore marked as hoisted.
-      if (intersection(blockVars, alreadySeen).length === 0) {
+      if (blockVars.some(v => !alreadySeen.includes(v))) {
         alreadySeen.push(...blockVars);
 
         // Ignore repeated var declarations
@@ -92,7 +90,8 @@ class VariableMarker {
    * @param  {String} varName
    */
   markReferenced(varName) {
-    if (this.getScope().findBlockScoped(varName)) {
+    const blockVars = this.getScope().findBlockScoped(varName);
+    if (blockVars) {
       return;
     }
 

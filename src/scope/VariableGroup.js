@@ -58,7 +58,6 @@ class VariableGroup {
    * - When all vars are const, return "const".
    * - When some vars are "let" and some "const", returns "let".
    * - When some vars are "var", return "var".
-   * - When any var was already declared before, return "var"
    *
    * @return {String} Either "var", "let" or "const".
    */

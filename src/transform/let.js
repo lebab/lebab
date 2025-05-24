@@ -182,7 +182,6 @@ function transformVarsToLetOrConst() {
     else {
       // When parent node restricts breaking VariableDeclaration to multiple ones
       // just change the kind of the declaration to the most restrictive possible
-
       group.getNode().kind = group.getMostRestrictiveKind();
       logWarningForVarKind(group.getNode());
     }
