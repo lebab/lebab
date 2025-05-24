@@ -1,4 +1,4 @@
-import {values} from 'lodash/fp';
+import {values, flatten} from 'lodash/fp';
 
 /**
  * Base class for Function- and BlockScope.
@@ -29,9 +29,9 @@ class Scope {
 
   /**
    * Returns all variables registered in this scope.
-   * @return {Variable[][]}
+   * @return {Variable[]}
    */
   getVariables() {
-    return values(this.vars);
+    return flatten(values(this.vars));
   }
 }

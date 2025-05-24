@@ -1,4 +1,4 @@
-import {flow, map, uniq, compact, flatten} from 'lodash/fp';
+import {flow, map, uniq, compact} from 'lodash/fp';
 import traverser from '../traverser';
 import * as functionType from '../utils/functionType';
 import * as variableType from '../utils/variableType';
@@ -238,7 +238,7 @@ function getFunctionVariableGroups() {
     map(v => v.getGroup()),
     uniq,
     compact
-  )(flatten(getScope().getVariables()));
+  )(getScope().getVariables());
 }
 
 function getScope() {
