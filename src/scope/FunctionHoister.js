@@ -39,7 +39,9 @@ class FunctionHoister {
   }
 
   hoistFunctionId(id) {
-    this.functionScope.register(id.name, new Variable(id));
+    const variable = new Variable(id);
+    this.functionScope.register(id.name, variable);
+    variable.markDeclared();
   }
 
   hoistFunctionParams(params) {
@@ -66,7 +68,9 @@ class FunctionHoister {
         else if (functionType.isFunctionDeclaration(node)) {
           // Register variable for the function if it has a name
           if (node.id) {
-            this.functionScope.register(node.id.name, new Variable(node));
+            const variable = new Variable(node);
+            this.functionScope.register(node.id.name, variable);
+            variable.markDeclared();
           }
           // Skip anything inside the nested function
           return traverser.VisitorOption.Skip;

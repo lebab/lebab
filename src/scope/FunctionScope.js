@@ -12,8 +12,6 @@ class FunctionScope extends Scope {
    * registered as function scoped, during hoisting phase.
    * Later they can also be registered in block scope.
    *
-   * Ignores attempts to register the same variable twice.
-   *
    * @param  {String} name Variable name
    * @param  {Variable} variable Variable object
    */
@@ -21,6 +19,7 @@ class FunctionScope extends Scope {
     if (!this.vars[name]) {
       this.vars[name] = [variable];
     }
+    this.vars[name].push(variable);
   }
 
   /**
