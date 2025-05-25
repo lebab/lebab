@@ -6,7 +6,7 @@ import Scope from './Scope';
 export default
 class BlockScope extends Scope {
   /**
-   * Registers variable in block scope.
+   * Registers variables in block scope.
    *
    * (All variables are first registered in function scope.)
    *

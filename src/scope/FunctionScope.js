@@ -6,7 +6,7 @@ import Scope from './Scope';
 export default
 class FunctionScope extends Scope {
   /**
-   * Registers a variable in function scope.
+   * Registers variables in function scope.
    *
    * All variables (including function name and params) are first
    * registered as function scoped, during hoisting phase.
