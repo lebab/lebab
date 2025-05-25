@@ -44,14 +44,14 @@ class FunctionScope extends Scope {
    * (i.e. the parent block scope of the function scope.)
    *
    * When variable found from function scope instead,
-   * returns false to signify it's not properly block-scoped.
+   * returns an empty array to signify it's not properly block-scoped.
    *
    * @param  {String} name Variable name
    * @return {Variable[]} The found variables (empty array if none found)
    */
   findBlockScoped(name) {
     if (this.vars[name]) {
-      return false;
+      return [];
     }
     if (this.parent) {
       return this.parent.findBlockScoped(name);
