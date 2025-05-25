@@ -37,7 +37,7 @@ class BlockScope extends Scope {
    *
    * Either from the current block, or any parent block.
    * When variable found from function scope instead,
-   * returns false to signify it's not properly block-scoped.
+   * returns empty array to signify it's not properly block-scoped.
    *
    * @param  {String} name Variable name
    * @return {Variable[]} The found variables (empty array if none found)
