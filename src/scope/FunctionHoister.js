@@ -30,7 +30,7 @@ class FunctionHoister {
    */
   hoist({id, params, body}) {
     if (id) {
-      this.hoistFunctionId(id);
+      this.hoistVariable(id);
     }
     if (params) {
       this.hoistFunctionParams(params);
@@ -38,21 +38,15 @@ class FunctionHoister {
     this.hoistVariables(body);
   }
 
-  hoistFunctionId(id) {
-    const variable = new Variable(id);
-    this.functionScope.register(id.name, variable);
-    variable.markDeclared();
-  }
-
   hoistFunctionParams(params) {
     return flow(
       map(destructuring.extractVariables),
       flatten,
-      forEach(this.registerParam.bind(this))
+      forEach(this.hoistVariable.bind(this))
     )(params);
   }
 
-  registerParam(p) {
+  hoistVariable(p) {
     const v = new Variable(p);
     v.markDeclared();
     this.functionScope.register(p.name, v);
@@ -69,8 +63,8 @@ class FunctionHoister {
           // Register variable for the function if it has a name
           if (node.id) {
             const variable = new Variable(node);
-            this.functionScope.register(node.id.name, variable);
             variable.markDeclared();
+            this.functionScope.register(node.id.name, variable);
           }
           // Skip anything inside the nested function
           return traverser.VisitorOption.Skip;
