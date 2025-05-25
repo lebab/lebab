@@ -30,7 +30,7 @@ class FunctionHoister {
    */
   hoist({id, params, body}) {
     if (id) {
-      this.hoistVariable(id);
+      this.declareVariable(id);
     }
     if (params) {
       this.hoistFunctionParams(params);
@@ -42,14 +42,14 @@ class FunctionHoister {
     return flow(
       map(destructuring.extractVariables),
       flatten,
-      forEach(this.hoistVariable.bind(this))
+      forEach(this.declareVariable.bind(this))
     )(params);
   }
 
-  hoistVariable(p) {
-    const v = new Variable(p);
-    v.markDeclared();
-    this.functionScope.register(p.name, v);
+  declareVariable(node) {
+    const variable = new Variable(node);
+    variable.markDeclared();
+    this.functionScope.register(node.name, variable);
   }
 
   hoistVariables(ast) {
