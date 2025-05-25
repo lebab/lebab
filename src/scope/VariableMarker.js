@@ -69,7 +69,7 @@ class VariableMarker {
    */
   markModified(varName) {
     const blockVars = this.getScope().findBlockScoped(varName);
-    if (blockVars) {
+    if (blockVars.length > 0) {
       for (const variable of blockVars) {
         variable.markModified();
       }
@@ -91,7 +91,7 @@ class VariableMarker {
    */
   markReferenced(varName) {
     const blockVars = this.getScope().findBlockScoped(varName);
-    if (blockVars) {
+    if (blockVars.length > 0) {
       return;
     }
 
