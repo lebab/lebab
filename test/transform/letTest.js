@@ -161,6 +161,75 @@ describe('Let/const', () => {
         'for (let i=0, len=arr.length; i<len; i++) {}'
       );
     });
+
+    it('should use var in multi-variable declaration when a variable was previously initialized', () => {
+      expectTransform(
+        'var x;\n' +
+        'var x, y;'
+      ).toReturn(
+        'var x;\n' +
+        'var x;\n' +
+        'let y;'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'},
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
+
+    it('should use var in multi-variable declaration when a variable was previously initialized in the function parameters', () => {
+      expectTransform(
+        'function func(x) {\n' +
+         '  var x, y;\n' +
+        '}'
+      ).toReturn(
+        'function func(x) {\n' +
+         '  var x;\n' +
+         '  let y;\n' +
+        '}'
+      ).withWarnings([
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
+
+    it('should use var in multi-variable declaration in a for head when a variable was previously initialized in the function parameters', () => {
+      expectNoChange(
+        'function func(x) {\n' +
+        '  for (var x, y;;) {}\n' +
+        '}'
+      ).withWarnings([
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
+
+    it('should not use let in a for head when previously initialized with var', () => {
+      expectNoChange(
+        'var x;\n' +
+        'for (var x;;);'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'},
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
+
+    it('should not use let in multi-variable declaration in a for head when previously initialized with var', () => {
+      expectNoChange(
+        'var x;\n' +
+        'for (var y, x;;);'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'},
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
+
+    it('should not use let in multi-variable declaration in a for head when previously initialized with var and other variable is initialized', () => {
+      expectNoChange(
+        'var x;\n' +
+        'for (var y = 1, x;;);'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'},
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
   });
 
   describe('with variable declaration in restrictive parent', () => {
@@ -698,7 +767,8 @@ describe('Let/const', () => {
         'var a = 1;\n' +
         'var a = 2;'
       ).withWarnings([
-        {line: 1, msg: 'Unable to transform var', type: 'let'}
+        {line: 1, msg: 'Unable to transform var', type: 'let'},
+        {line: 2, msg: 'Unable to transform var', type: 'let'}
       ]);
     });
 
@@ -712,7 +782,8 @@ describe('Let/const', () => {
         '  foo(a);\n' +
         '}'
       ).withWarnings([
-        {line: 2, msg: 'Unable to transform var', type: 'let'}
+        {line: 2, msg: 'Unable to transform var', type: 'let'},
+        {line: 5, msg: 'Unable to transform var', type: 'let'}
       ]);
     });
 
