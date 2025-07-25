@@ -5,6 +5,7 @@ import estraverse from 'estraverse';
 // https://github.com/facebook/jsx/blob/master/AST.md
 const jsxExtensionKeys = {
   keys: {
+    ...require('@babel/types').VISITOR_KEYS,
     JSXIdentifier: [],
     JSXMemberExpression: ['object', 'property'],
     JSXNamespacedName: ['namespace', 'name'],

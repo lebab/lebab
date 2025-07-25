@@ -8,7 +8,7 @@ class ImportDeclaration extends BaseSyntax {
   /**
    * @param {Object} cfg
    * @param {ImportSpecifier[]|ImportDefaultSpecifier[]} cfg.specifiers
-   * @param {Literal} cfg.source String literal containing library path
+   * @param {StringLiteral} cfg.source String literal containing library path
    */
   constructor({specifiers, source}) {
     super('ImportDeclaration');

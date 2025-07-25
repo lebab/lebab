@@ -1,5 +1,4 @@
 import {parse, print} from 'recast';
-import parser from './Parser';
 import Logger from './Logger';
 
 /**
@@ -30,7 +29,7 @@ export default class Transformer {
 
   applyAllTransforms(code, logger) {
     return this.ignoringHashBangComment(code, (js) => {
-      const ast = parse(js, {parser});
+      const ast = parse(js, {parser: require('recast/parsers/babel')});
 
       this.transforms.forEach(transformer => {
         transformer(ast.program, logger);

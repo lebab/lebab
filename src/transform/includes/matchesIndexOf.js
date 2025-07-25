@@ -7,7 +7,7 @@ export const isMinusOne = matches({
   type: 'UnaryExpression',
   operator: '-',
   argument: {
-    type: 'Literal',
+    type: 'NumericLiteral',
     value: 1
   },
   prefix: true
@@ -17,7 +17,7 @@ export const isMinusOne = matches({
  * Matches: 0
  */
 export const isZero = matches({
-  type: 'Literal',
+  type: 'NumericLiteral',
   value: 0
 });
 

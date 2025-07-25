@@ -16,12 +16,14 @@ describe('Removal of "use strict"', () => {
     );
 
     expectTransform(
-      'foo();\n' +
-      '"use strict";\n' +
-      'bar();'
+      'function foo() {\n' +
+      '  "use strict";\n' +
+      '  bar();\n' +
+      '}'
     ).toReturn(
-      'foo();\n' +
-      'bar();'
+      'function foo() {\n' +
+      '  bar();\n' +
+      '}'
     );
   });
 
