@@ -23,6 +23,7 @@
   "files": [
     "lib",
     "bin",
+    "types",
     "index.js"
   ],
   "repository": {
