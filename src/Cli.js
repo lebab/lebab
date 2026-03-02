@@ -1,4 +1,4 @@
-import {glob} from 'glob';
+import {globSync} from 'fs';
 import OptionParser from './OptionParser';
 import createTransformer from './createTransformer';
 import io from './io';
@@ -27,7 +27,7 @@ export default class Cli {
   run() {
     if (this.options.replace) {
       // Transform all files in a directory
-      glob.sync(this.options.replace).forEach((file) => {
+      globSync(this.options.replace).forEach((file) => {
         this.transformFile(file, file);
       });
     }
