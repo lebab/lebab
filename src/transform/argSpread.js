@@ -55,9 +55,7 @@ const isUndefined = matches({
 });
 
 const isNull = matches({
-  type: 'Literal',
-  value: null, // eslint-disable-line no-null/no-null
-  raw: 'null'
+  type: 'NullLiteral',
 });
 
 function matchFunctionApplyCall(node) {

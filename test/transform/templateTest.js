@@ -31,7 +31,7 @@ describe('Template string', () => {
     );
   });
 
-  it('should convert parenthized string concatenations', () => {
+  it('should convert parenthesized string concatenations', () => {
     expectTransform(
       '"str1 " + (x + " str2");'
     ).toReturn(
@@ -39,7 +39,7 @@ describe('Template string', () => {
     );
   });
 
-  it('should convert parenthized string concatenations and other concatenations', () => {
+  it('should convert parenthesized string concatenations and other concatenations', () => {
     expectTransform(
       'x + " str1 " + (y + " str2");'
     ).toReturn(
@@ -47,7 +47,7 @@ describe('Template string', () => {
     );
   });
 
-  it('should convert parenthized non-string concatenations', () => {
+  it('should convert parenthesized non-string concatenations', () => {
     expectTransform(
       '(x + y) + " string " + (a + b);'
     ).toReturn(
@@ -55,7 +55,7 @@ describe('Template string', () => {
     );
   });
 
-  it('should convert non-parenthized non-string concatenations', () => {
+  it('should convert non-parenthesized non-string concatenations', () => {
     expectTransform(
       'x + y + " string " + a + b;'
     ).toReturn(

@@ -42,7 +42,7 @@ export default class ImportUtilDetector {
         }
       ]),
       source: {
-        type: 'Literal',
+        type: 'StringLiteral',
         value: 'util'
       }
     }, node);

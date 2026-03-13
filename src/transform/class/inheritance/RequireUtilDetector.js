@@ -47,7 +47,7 @@ export default class RequireUtilDetector {
           name: 'require'
         },
         arguments: matchesLength([{
-          type: 'Literal',
+          type: 'StringLiteral',
           value: 'util'
         }])
       }

@@ -7,7 +7,7 @@ export default function(ast) {
 }
 
 function propertyToShorthand(node) {
-  if (node.type === 'Property' && equalIdentifiers(node.key, node.value)) {
+  if (node.type === 'ObjectProperty' && equalIdentifiers(node.key, node.value)) {
     node.shorthand = true;
   }
 }

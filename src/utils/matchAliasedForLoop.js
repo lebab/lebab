@@ -18,7 +18,7 @@ const matchPlusOne = matches({
     type: 'Identifier',
   }),
   right: {
-    type: 'Literal',
+    type: 'NumericLiteral',
     value: 1
   }
 });
@@ -47,7 +47,7 @@ const matchLooseForLoop = matches({
           type: 'Identifier',
         }),
         init: {
-          type: 'Literal',
+          type: 'NumericLiteral',
           value: 0,
         }
       }

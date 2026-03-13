@@ -22,7 +22,7 @@ export function extractVariables(node) {
   if (node.type === 'ObjectPattern') {
     return flatMap(extractVariables, node.properties);
   }
-  if (node.type === 'Property') {
+  if (node.type === 'ObjectProperty') {
     return extractVariables(node.value);
   }
   if (node.type === 'AssignmentPattern') {

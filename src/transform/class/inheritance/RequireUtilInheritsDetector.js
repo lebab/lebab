@@ -42,7 +42,7 @@ export default class RequireUtilInheritsDetector {
             name: 'require'
           },
           arguments: matchesLength([{
-            type: 'Literal',
+            type: 'StringLiteral',
             value: 'util'
           }])
         },

@@ -4,5 +4,5 @@
  * @return {Boolean}
  */
 export default function isString(node) {
-  return node.type === 'Literal' && typeof node.value === 'string';
+  return node.type === 'StringLiteral';
 }
