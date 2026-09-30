@@ -190,7 +190,7 @@ function transformVarsToLetOrConst() {
 
 // let and const declarations aren't allowed in all the same places where
 // var declarations are allowed. Notably, only var-declaration can occur
-// directlt in if-statement (and other similar statements) body:
+// directly in if-statement (and other similar statements) body:
 //
 //     if (true) var x = 10;
 //

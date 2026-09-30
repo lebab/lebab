@@ -162,6 +162,19 @@ describe('Let/const', () => {
       );
     });
 
+    it('should split to let & const when mixed with empty destructuring', () => {
+      expectTransform(
+        'var [] = [1, 2], {} = {foo: 1, bar: 2}, x = 1, y = 2;\n' +
+        'y = 3;'
+      ).toReturn(
+        'const [] = [1, 2];\n' +
+        'const {} = {foo: 1, bar: 2};\n' +
+        'const x = 1;\n' +
+        'let y = 2;\n' +
+        'y = 3;'
+      );
+    });
+
     it('should use var in multi-variable declaration when a variable was previously initialized', () => {
       expectTransform(
         'var x;\n' +
@@ -333,6 +346,63 @@ describe('Let/const', () => {
       ).withWarnings([
         {line: 2, msg: 'Unable to transform var', type: 'let'}
       ]);
+    });
+
+    // Issue #350
+    it('should use const for empty destructuring', () => {
+      expectTransform(
+        'var [] = arr;\n' +
+        'var {} = obj;'
+      ).toReturn(
+        'const [] = arr;\n' +
+        'const {} = obj;'
+      );
+    });
+
+    it('should use const for empty destructuring inside a function', () => {
+      expectTransform(
+        'function foo() {\n' +
+        '  var [] = arr;\n' +
+        '  var [[], {}] = arr;\n' +
+        '}'
+      ).toReturn(
+        'function foo() {\n' +
+        '  const [] = arr;\n' +
+        '  const [[], {}] = arr;\n' +
+        '}'
+      );
+    });
+
+    it('should use const for multiple empty destructurings in one declaration', () => {
+      expectTransform(
+        'var [] = [1, 2], {} = {foo: 1, bar: 2};'
+      ).toReturn(
+        'const [] = [1, 2], {} = {foo: 1, bar: 2};'
+      );
+    });
+
+    it('should use const for array destructuring with only holes', () => {
+      expectTransform(
+        'var [,] = arr;'
+      ).toReturn(
+        'const [,] = arr;'
+      );
+    });
+
+    it('should not transform empty destructuring directly within if-statement body', () => {
+      expectNoChange(
+        'if (true) var [] = arr;'
+      ).withWarnings([
+        {line: 1, msg: 'Unable to transform var', type: 'let'}
+      ]);
+    });
+
+    it('should use const for empty destructuring in for-of loop head', () => {
+      expectTransform(
+        'for (var [] of arr) {}'
+      ).toReturn(
+        'for (const [] of arr) {}'
+      );
     });
 
     // Issue #236

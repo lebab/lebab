@@ -5,6 +5,11 @@ import Scope from './Scope';
  */
 export default
 class FunctionScope extends Scope {
+  constructor(parent) {
+    super(parent);
+    this.unnamedVars = [];
+  }
+
   /**
    * Registers variables in function scope.
    *
@@ -20,6 +25,27 @@ class FunctionScope extends Scope {
       this.vars[name] = [variable];
     }
     this.vars[name].push(variable);
+  }
+
+  /**
+   * Registers a variable that declares no names,
+   * like the empty destructuring in `var [] = arr;`.
+   *
+   * Such variable can't be looked up by name,
+   * but its declaration still needs to be transformed.
+   *
+   * @param  {Variable} variable Variable object
+   */
+  registerUnnamed(variable) {
+    this.unnamedVars.push(variable);
+  }
+
+  /**
+   * Returns all variables registered in this scope.
+   * @return {Variable[]}
+   */
+  getVariables() {
+    return [...super.getVariables(), ...this.unnamedVars];
   }
 
   /**
